@@ -22,8 +22,8 @@ taxonomy useful. Cards are written on demand, indefinitely.
 
 | # | Phase | Status | Note |
 |---|---|---|---|
-| 0 | Foundation | `in progress` | Documents, controlled vocabularies, pinned standards. No content. |
-| 1 | Schema and validator | `not started` | Machine-checked identifiers, axis slugs, references, and the outline/authored distinction. Cheap now, impossible to retrofit across 350 files. |
+| 0 | Foundation | `done` | Documents, 14 domain codes, 6 axis vocabularies, 36 surface tags, 5 dimensions, WSTG pinned and fully mapped. No content. |
+| 1 | Schema and validator | `done` | Seven schemas, six validation passes, offline suite, CI. Identifiers, axis slugs, every cross-reference and the outline/authored distinction are machine-checked. Cheap now, impossible to retrofit across 350 files. |
 | 2 | Topic map | `not started` | Every topic named, placed in a domain, given its axis and boundaries. `standards/wstg-map.yaml` is the input: every entry must be covered by at least one topic, and every topic must trace back to an entry or be declared beyond-WSTG. |
 | 3 | Unit outline pass | `not started` | Every topic decomposed to units. Identifier, title, objective, surfaces, refs. **This is where the artefact becomes genuinely useful.** |
 | 4 | Two reference topics at depth | `not started` | SQL injection and cross-site scripting. Chosen because one splits on `technique` with a dimension, the other on `context` with two dimensions — between them they exercise every mechanism in the model. |
@@ -46,21 +46,30 @@ absence is invisible to the reader.
 
 ## Coverage
 
-| | Topics | Units | Cards |
-|---|---|---|---|
-| Authored | 0 | 0 | 0 |
-| Outlined | 0 | 0 | — |
-| **WSTG identifiers mapped** | **0 of 109** | | |
+Two different numbers, kept apart because conflating them would let phase 0's
+work read as phase 2's:
 
-These figures are meant to be asserted by the validator, not maintained by hand.
-A stale coverage number is worse than none, because it is the number this project
-asks to be judged on.
+| | Count |
+|---|---|
+| **WSTG identifiers mapped to a domain** | **109 of 109** |
+| **WSTG identifiers covered by a topic** | **0 of 109** |
+| Topics | 0 |
+| Units — outlined | 0 |
+| Units — authored | 0 |
+
+*Mapped* means the ordered procedure resolved the identifier, which phase 0
+finished. *Covered* means a topic exists that claims it, which is phase 2's job
+and the number to watch.
+
+These figures are asserted by the test suite, not maintained by hand. A stale
+coverage number is worse than none, because it is the number this project asks
+to be judged on.
 
 ## What already exists
 
-Phase 0 leaves the repository with the vocabularies settled and four content
-assets in place, so phases 2–4 start against real material rather than an empty
-tree:
+Phases 0 and 1 leave the repository with the vocabularies settled, the machine
+checks in place, and four content assets to start from, so phases 2–4 begin
+against real material rather than an empty tree:
 
 | Asset | State |
 |---|---|
@@ -70,6 +79,8 @@ tree:
 | `payloads/sqli/` | 99 SQL injection payloads across 10 files, covering probe, fingerprint, seven techniques and evasion. |
 | `toolbox/registry.yaml` | 6 tools with per-flag rationale. |
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
+| `harrier/` | Seven schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
+| `tests/` | 73 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until phase 4

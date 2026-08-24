@@ -1,6 +1,9 @@
 # Authoring
 
-The rules, and what each one is protecting.
+The rules, and what each one is protecting. Most are enforced by
+`python -m harrier validate` rather than by review — see
+[`VALIDATION.md`](VALIDATION.md) — because every one of them reads perfectly
+well in a diff.
 
 The governing rule, from which most of the others follow:
 
@@ -105,6 +108,9 @@ stale status makes the coverage figures lie, and those figures are the number
 this project asks to be judged on.
 
 ## 3. Content rules
+
+These are not style preferences. `python -m harrier validate` fails on them, and
+the suite asserts that it still does.
 
 **`objective` is one falsifiable sentence.** It must be possible to be wrong
 about it. "Investigate the parameter", "review the configuration" and "check

@@ -23,12 +23,12 @@ entries:
     note: "The cheapest class, and still effective against naive pattern lists."
 
   - name: inline comment interruption
-    dbms: [mysql, mssql]
+    engine: [mysql, mssql]
     payload: "/**/{{FRAGMENT}}/**/"
     detect: "Comments break a keyword match while the engine still parses the statement."
 
   - name: versioned comment
-    dbms: [mysql]
+    engine: [mysql]
     payload: "/*!50000{{FRAGMENT}}*/"
     detect: "MySQL executes the contents of a versioned comment; a filter that strips comments sees nothing."
     note: "MySQL-specific. On other engines this is inert, which is itself a useful control."
@@ -52,13 +52,13 @@ entries:
     note: "On MySQL, double pipe is logical OR by default; on PostgreSQL and Oracle it concatenates. The substitution is not portable, and using the wrong one changes semantics rather than form."
 
   - name: string literal reconstruction
-    dbms: [mysql, postgresql, mssql]
+    engine: [mysql, postgresql, mssql]
     payload: "{{FRAGMENT}}"
     detect: "Rebuild a blocked literal from character codes or concatenation so no literal appears in the request."
     note: "Verify the reconstructed form still expresses the original condition before recording it as a pass."
 
   - name: hex literal substitution
-    dbms: [mysql, mssql]
+    engine: [mysql, mssql]
     payload: "{{FRAGMENT}}"
     detect: "Replace a quoted string with its hexadecimal literal form, removing the quote the filter matched on."
 

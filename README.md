@@ -6,7 +6,7 @@
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20identifiers%20pinned-informational)](standards/wstg.yaml)
-[![phase](https://img.shields.io/badge/phase-0%20foundation-lightgrey)](docs/ROADMAP.md)
+[![phase](https://img.shields.io/badge/phase-1%20of%207-lightgrey)](docs/ROADMAP.md)
 
 ## What this is
 
@@ -51,6 +51,7 @@ their own.
 | Directory | Holds |
 |---|---|
 | `docs/` | The model, the naming methodology, the authoring rules, the roadmap |
+| `harrier/` | The validator and its schemas — the only executable code here |
 | `standards/` | Pinned WSTG, CWE and ASVS references — generated, never hand-edited |
 | `vocab/` | Controlled vocabularies: domains, axes, surface tags, dimensions |
 | `knowledge/` | The taxonomy: topics and units |
@@ -58,15 +59,31 @@ their own.
 | `payloads/` | The only place a payload is written |
 | `toolbox/` | Tool invocations with per-flag rationale |
 | `mitigations/` | Remediation text, keyed by weakness class |
+| `tests/` | Offline suite; mutation tests copy the repository and break one thing |
 
 Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 [`docs/TAXONOMY.md`](docs/TAXONOMY.md).
 
+## Working on it
+
+```bash
+pip install PyYAML jsonschema
+
+python -m unittest discover -s tests -t .   # 72 tests, offline
+python -m harrier validate                  # the repository
+python -m harrier coverage                  # the counts the roadmap publishes
+```
+
+Both of the first two must pass; CI runs exactly them.
+[`docs/VALIDATION.md`](docs/VALIDATION.md) explains what is checked and why each
+rule is mechanical rather than a review comment.
+
 ## Status
 
-Phase 0 of seven. The model and the vocabularies are settled; no content has been
-written yet. [`docs/ROADMAP.md`](docs/ROADMAP.md) carries the plan and the
-definition of 1.0.
+Phases 0 and 1 of seven: the model, the vocabularies and the machine checks are
+settled. All 109 WSTG identifiers are pinned and resolved to a domain; no content
+has been written yet. [`docs/ROADMAP.md`](docs/ROADMAP.md) carries the plan and
+the definition of 1.0.
 
 ## Licence and attribution
 

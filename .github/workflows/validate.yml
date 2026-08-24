@@ -1,0 +1,36 @@
+# The two commands a contributor runs locally, run again on every change.
+#
+# Deliberately the same two, in the same order, with no CI-only extras: a check
+# that only exists here is one nobody can reproduce before pushing, and it gets
+# worked around rather than fixed.
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Pinned by major version rather than floating: the suite is offline and
+      # deterministic, and an unannounced resolver change in a dependency is the
+      # one thing that could make it stop being either.
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check "PyYAML>=6,<7" "jsonschema>=4,<5"
+
+      - name: Run the test suite
+        run: python -m unittest discover -s tests -t .
+
+      - name: Validate the repository
+        run: python -m harrier validate

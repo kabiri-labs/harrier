@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tool registry",
+  "description": "Tool invocations with per-flag rationale, written once and referenced by id. Repeating a tool's rationale per unit guarantees the copies diverge from the moment the second is written.",
+  "type": "array", "minItems": 1,
+  "items": {
+    "type": "object", "additionalProperties": false,
+    "required": ["id", "name", "purpose", "invocations"],
+    "properties": {
+      "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+      "name": {"type": "string", "minLength": 2},
+      "url": {"type": "string", "pattern": "^https://"},
+      "purpose": {"type": "string", "minLength": 15},
+      "safety": {"type": "string", "minLength": 20},
+      "invocations": {
+        "type": "array", "minItems": 1,
+        "items": {
+          "type": "object", "additionalProperties": false,
+          "required": ["purpose", "cmd"],
+          "properties": {
+            "purpose": {"type": "string", "minLength": 10},
+            "cmd": {"type": "string", "minLength": 3},
+            "flags": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 15}},
+            "safety": {"type": "string", "minLength": 20}
+          }
+        }
+      }
+    }
+  }
+}

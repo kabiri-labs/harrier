@@ -162,7 +162,12 @@ docs/
   ARCHITECTURE.md   this document: the model and why it is shaped this way
   TAXONOMY.md       identifiers, domains, axis vocabularies
   AUTHORING.md      the rules for writing a unit or a card
+  VALIDATION.md     what the validator checks, and why each rule is mechanical
   ROADMAP.md        build state; updated in the same change as the work
+
+harrier/            the validator -- the only executable code in the repository
+  schema/           seven JSON Schemas, selected by a document's location
+tests/              offline suite; mutation tests copy the repository itself
 
 standards/          published standards this project cross-references
   wstg.yaml         pinned identifiers and titles; generated, never hand-edited

