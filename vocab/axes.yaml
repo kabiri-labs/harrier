@@ -48,6 +48,8 @@ axes:
       OOB: Extraction over a channel other than the response body.
       STACK: A second statement executed alongside the first.
       SECOND: A payload stored in one request and interpreted in a later one.
+      RACE: Two or more requests overlapping in time so that one operation is applied more than once.
+      TOCTOU: A gap between the state a decision was taken on and the state it is applied to.
       DIFF: Comparison of two responses that should be identical, or should not be.
       BRUTE: Exhaustive enumeration over a bounded value space.
       REPLAY: Reuse of a captured value outside its intended window or context.

@@ -169,7 +169,8 @@ and block every destination that is not already public.
 
 ### `technique` — alternative routes to the same finding, chosen by evidence
 
-`ERROR` · `BOOL` · `TIME` · `UNION` · `OOB` · `STACK` · `SECOND` · `DIFF` · `BRUTE` · `REPLAY`
+`ERROR` · `BOOL` · `TIME` · `UNION` · `OOB` · `STACK` · `SECOND` · `RACE` · `TOCTOU`
+· `DIFF` · `BRUTE` · `REPLAY`
 
 ### `context` — where the payload lands and is interpreted
 
