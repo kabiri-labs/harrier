@@ -1,0 +1,8 @@
+id: HRR-RCN-07-PROBE
+topic: HRR-RCN-07
+status: outline
+kind: recon
+title: "Whether introspection answers"
+objective: >-
+  Record whether the endpoint answers an introspection query, and if it
+  refuses, on what grounds.

@@ -6,6 +6,11 @@ axis: property
 surfaces:
   always: true
 
+order:
+  - HRR-CFG-05-POLICY
+  - HRR-CFG-05-SCOPE
+  - HRR-CFG-05-VALIDATION
+
 boundaries:
   - subject: "Bypassing a content security policy to land script"
     home: HRR-CLT-01

@@ -1,0 +1,8 @@
+id: HRR-RCN-06-PROBE
+topic: HRR-RCN-06
+status: outline
+kind: recon
+title: "Endpoints beyond those the client uses"
+objective: >-
+  Record endpoints the interface answers that its own client never calls,
+  including superseded versions still routed.

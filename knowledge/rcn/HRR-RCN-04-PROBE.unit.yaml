@@ -1,0 +1,8 @@
+id: HRR-RCN-04-PROBE
+topic: HRR-RCN-04
+status: outline
+kind: recon
+title: "Whether the origin answers without the intermediary"
+objective: >-
+  Record whether the origin answers a request that does not pass through the
+  intermediary in front of it.

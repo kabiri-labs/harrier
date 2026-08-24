@@ -7,6 +7,10 @@ kind: recon
 surfaces:
   always: true
 
+order:
+  - HRR-RCN-08-MAP
+  - HRR-RCN-08-PROBE
+
 boundaries:
   - subject: "Content that should never have been public"
     home: HRR-ERR-04

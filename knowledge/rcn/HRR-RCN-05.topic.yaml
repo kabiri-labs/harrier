@@ -7,6 +7,10 @@ kind: recon
 surfaces:
   always: true
 
+order:
+  - HRR-RCN-05-MAP
+  - HRR-RCN-05-PROBE
+
 boundaries:
   - subject: "Client-pinned or certificate-pinned channels"
     home: null

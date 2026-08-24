@@ -1,0 +1,8 @@
+id: HRR-CFG-01-POLICY
+topic: HRR-CFG-01
+status: outline
+title: "Non-production configuration present in production"
+objective: >-
+  Determine whether settings intended for development survive in the deployed
+  environment, which is a different failure from a setting that was never
+  correct anywhere.

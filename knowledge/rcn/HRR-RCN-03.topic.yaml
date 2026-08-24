@@ -1,11 +1,14 @@
 id: HRR-RCN-03
 title: "Entry point and parameter inventory"
 domain: RCN
-axis: vector
 kind: recon
 
 surfaces:
   always: true
+
+order:
+  - HRR-RCN-03-MAP
+  - HRR-RCN-03-PROBE
 
 boundaries:
   - subject: "Which parameters reach which interpreter"

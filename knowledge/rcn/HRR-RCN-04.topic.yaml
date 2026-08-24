@@ -7,5 +7,10 @@ kind: recon
 surfaces:
   always: true
 
+order:
+  - HRR-RCN-04-MAP
+  - HRR-RCN-04-FPRINT
+  - HRR-RCN-04-PROBE
+
 refs:
   wstg: [WSTG-INFO-07, WSTG-INFO-10]

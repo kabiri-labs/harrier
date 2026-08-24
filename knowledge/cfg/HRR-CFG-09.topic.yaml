@@ -6,6 +6,11 @@ axis: property
 surfaces:
   any_of: [cloud-storage]
 
+order:
+  - HRR-CFG-09-POLICY
+  - HRR-CFG-09-NAMING
+  - HRR-CFG-09-SERVING
+
 boundaries:
   - subject: "Uploads that reach storage"
     home: HRR-RES-02

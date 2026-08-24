@@ -7,6 +7,10 @@ kind: recon
 surfaces:
   always: true
 
+order:
+  - HRR-RCN-01-FPRINT
+  - HRR-RCN-01-VERIFY
+
 boundaries:
   - subject: "Version-specific known vulnerabilities"
     home: null

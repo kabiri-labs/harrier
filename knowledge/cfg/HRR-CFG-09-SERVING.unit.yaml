@@ -1,0 +1,7 @@
+id: HRR-CFG-09-SERVING
+topic: HRR-CFG-09
+status: outline
+title: "Whether objects are served without the application in front"
+objective: >-
+  Determine whether objects are retrievable directly from the store, bypassing
+  whatever authorization the application applies to the same content.

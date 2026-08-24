@@ -7,6 +7,10 @@ kind: recon
 surfaces:
   always: true
 
+order:
+  - HRR-RCN-02-MAP
+  - HRR-RCN-02-PROBE
+
 boundaries:
   - subject: "Administrative interfaces found while enumerating"
     home: HRR-CFG-03

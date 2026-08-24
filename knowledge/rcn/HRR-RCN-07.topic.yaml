@@ -7,6 +7,10 @@ kind: recon
 surfaces:
   any_of: [graphql]
 
+order:
+  - HRR-RCN-07-PROBE
+  - HRR-RCN-07-MAP
+
 boundaries:
   - subject: "Per-field authorization"
     home: HRR-ACL-07
