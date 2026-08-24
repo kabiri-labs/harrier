@@ -7,18 +7,39 @@ from tests.support import REPO_ROOT
 
 
 class TheLoaderNeverExecutesDocumentContent(unittest.TestCase):
-    def test_only_safe_load_is_used(self):
-        # The catalogue is contributor-submitted YAML. Full loading would let a
-        # document construct arbitrary Python objects at parse time, making the
-        # repository a code-execution channel into contributors' machines and CI.
+    """The catalogue is contributor-submitted YAML. Full loading would let a
+    document construct arbitrary Python objects at parse time, making the
+    repository a code-execution channel into contributors' machines and CI."""
+
+    def test_no_call_site_can_reach_an_unsafe_loader(self):
+        # Asserted against the resolved loader rather than the spelling of the
+        # call, because both a safe_load and a load(Loader=SafeLoader) are safe
+        # and only one of them is greppable.
+        import yaml
+
+        from harrier import SAFE_LOADER
+
+        self.assertTrue(
+            issubclass(SAFE_LOADER, yaml.SafeLoader)
+            or SAFE_LOADER.__name__ == "CSafeLoader",
+            f"{SAFE_LOADER!r} is not a safe loader",
+        )
+        self.assertNotIsInstance(SAFE_LOADER(""), yaml.UnsafeLoader)
+
+    def test_the_package_names_no_other_loader(self):
+        allowed = ("SAFE_LOADER", "SafeLoader", "CSafeLoader", "safe_load")
         for path in (REPO_ROOT / "harrier").rglob("*.py"):
-            source = path.read_text(encoding="utf-8")
-            with self.subTest(path=path.name):
-                self.assertNotRegex(
-                    source,
-                    r"yaml\.(?!safe_load)\w*load",
-                    f"{path.name} loads YAML without safe_load",
-                )
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                if "Loader" not in line and "yaml." not in line:
+                    continue
+                if line.lstrip().startswith("#") or "yaml." not in line:
+                    continue
+                if any(token in line for token in allowed):
+                    continue
+                with self.subTest(path=path.name, line=number):
+                    self.assertNotIn(
+                        "load", line, f"{path.name}:{number} loads YAML unsafely"
+                    )
 
 
 class PayloadsStayAtProofOfConceptLevel(unittest.TestCase):

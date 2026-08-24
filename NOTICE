@@ -28,9 +28,31 @@ OWASP Web Security Testing Guide (WSTG)
     repository; all Harrier content is originally written. Harrier is not
     affiliated with, endorsed by, or sponsored by OWASP.
 
+OWASP Application Security Verification Standard (ASVS) 5.0.0
+    https://github.com/OWASP/ASVS
+    Licensed CC BY-SA 4.0.
+
+    Harrier references ASVS requirement identifiers and the names of its
+    chapters and sections, for cross-mapping only. No ASVS requirement text is
+    reproduced; remediation prose under mitigations/ is originally written.
+
+MITRE Common Weakness Enumeration (CWE) 4.20
+    https://cwe.mitre.org
+    Used under the CWE Terms of Use:
+    https://cwe.mitre.org/about/termsofuse.html
+
+    Copyright (c) 2006-2026, The MITRE Corporation
+
+    CWE is a trademark of The MITRE Corporation. MITRE grants a non-exclusive,
+    royalty-free licence to use CWE for research, development and commercial
+    purposes, on the condition that any copy reproduces MITRE's copyright
+    designation and this licence. standards/cwe.yaml records CWE identifiers,
+    names and classifications for cross-mapping; weakness descriptions are not
+    reproduced. This notice is that condition being met, not a courtesy.
+
 The following public bodies of work informed the technique coverage of Harrier's
-payload packs. No text or payload file from them is copied verbatim; entries in
-packs/ are written for this project.
+payload files. No text or payload from them is copied verbatim; entries under
+payloads/ are written for this project.
 
     SecLists                  https://github.com/danielmiessler/SecLists
                               (MIT License)

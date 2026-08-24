@@ -16,7 +16,19 @@ from typing import Any, Dict, Iterator, List, Tuple
 
 import yaml
 
+try:  # pragma: no cover - depends on whether PyYAML was built against libyaml
+    from yaml import CSafeLoader as _SafeLoader
+except ImportError:  # pragma: no cover
+    from yaml import SafeLoader as _SafeLoader
+
+#: The only loader this package ever uses. Both branches are *safe* loaders --
+#: the C one is the same grammar and the same restrictions, implemented in
+#: libyaml, and it parses the pinned standards several times faster. Neither can
+#: construct arbitrary Python objects, which is the property that matters.
+SAFE_LOADER = _SafeLoader
+
 __all__ = [
+    "SAFE_LOADER",
     "STANDARD_SCHEMAS",
     "HarrierError",
     "Repository",
@@ -33,6 +45,7 @@ STANDARD_SCHEMAS = {
     "wstg": "standard",
     "wstg-map": "wstg-map",
     "asvs": "asvs",
+    "cwe": "cwe",
 }
 
 #: Directories that make up a loadable repository. Used to locate the root from

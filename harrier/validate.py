@@ -244,6 +244,7 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
     }
     pinned = {e["id"] for e in repo.standards["wstg"].data["wstg"]} if "wstg" in repo.standards else set()
     asvs = _asvs_shortcodes(repo)
+    cwe = _cwe_index(repo)
     tools = {t["id"] for doc in repo.toolbox for t in doc.data}
     payload_files = {str(d.path.relative_to(repo.root)) for d in repo.payloads}
 
@@ -270,7 +271,7 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
             problems.add(doc.rel, f"unknown axis {doc.data.get('axis')}")
         _check_surface_clause(doc, doc.data.get("surfaces"), surfaces, problems)
         _check_dimensions(doc, doc.data.get("dimensions"), dimensions, problems)
-        _check_refs(doc, doc.data.get("refs"), pinned, asvs, problems)
+        _check_refs(doc, doc.data.get("refs"), pinned, asvs, cwe, problems)
 
     units: Dict[str, Document] = {}
     by_topic: Dict[str, List[str]] = {}
@@ -335,7 +336,7 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
                 problems.add(doc.rel, f"{target} {rel} does not exist")
         _check_surface_clause(doc, doc.data.get("surfaces"), surfaces, problems)
         _check_dimensions(doc, doc.data.get("dimensions"), dimensions, problems)
-        _check_refs(doc, doc.data.get("refs"), pinned, asvs, problems)
+        _check_refs(doc, doc.data.get("refs"), pinned, asvs, cwe, problems)
 
     for doc in repo.units:
         for fed in doc.data.get("feeds") or []:
@@ -362,6 +363,20 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
                     f"unit {uid} is missing from order -- a unit no ordering reaches "
                     "is a silent coverage hole, not a harmless leftover",
                 )
+
+
+def _cwe_index(repo: Repository) -> Dict[int, Dict[str, Any]]:
+    """Every identifier in the pinned CWE catalogue, keyed by number.
+
+    Categories and views are included alongside weaknesses so that citing one can
+    be rejected with a message that says why. CWE-699 is a category and CWE-1000
+    is a view; both are real identifiers, so "not found" would be a misleading
+    thing to say about either.
+    """
+    doc = repo.standards.get("cwe")
+    if doc is None:
+        return {}
+    return {entry["id"]: entry for entry in doc.data["cwe"]}
 
 
 def _asvs_shortcodes(repo: Repository) -> Set[str]:
@@ -408,6 +423,7 @@ def _check_refs(
     refs: Any,
     pinned: Set[str],
     asvs: Set[str],
+    cwe: Dict[int, Dict[str, Any]],
     problems: Problems,
 ) -> None:
     for wid in (refs or {}).get("wstg") or []:
@@ -423,6 +439,21 @@ def _check_refs(
                 doc.rel,
                 f"{shortcode} is not in the pinned ASVS index -- a citation nobody "
                 "can check reads as evidence while being none",
+            )
+    for number in (refs or {}).get("cwe") or []:
+        entry = cwe.get(number)
+        if entry is None:
+            problems.add(doc.rel, f"CWE-{number} is not in the pinned CWE catalogue")
+        elif entry["kind"] != "weakness":
+            problems.add(
+                doc.rel,
+                f"CWE-{number} is a {entry['kind']} ({entry['name']}), not a weakness "
+                "-- refs.cwe names the weakness a unit finds, not the grouping it sits in",
+            )
+        elif entry["status"] == "Deprecated":
+            problems.add(
+                doc.rel,
+                f"CWE-{number} is deprecated in the pinned catalogue; cite its replacement",
             )
 
 

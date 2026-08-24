@@ -239,7 +239,7 @@ and never hand-edited** — a hand-edit would make the verification claim empty.
 | Standard | Role here | Rule |
 |---|---|---|
 | **WSTG** | Coverage skeleton. Confirms the taxonomy is not missing something the profession considers standard. | Identifiers and official titles only. Never write one from memory — verify against the pinned file. |
-| **CWE** | The weakness class. This is what "type of vulnerability" means; it is what mitigations attach to. | Referenced by number, resolved against the pin. |
+| **CWE** | The weakness class. This is what "type of vulnerability" means; it is what mitigations attach to. | Referenced by number, resolved against the pin. Must name a **weakness** — a category or a view is rejected by name. |
 | **ASVS** | Mitigation cross-reference, for report writing and client conversations. | Identifiers and structural names only — **not requirement text**. Remediation prose is written here, originally. |
 
 ASVS 5.0.0 is pinned at its release tag's commit. Note that the repository also
@@ -252,6 +252,22 @@ the verification level — and nothing else. Requirement text is what ASVS *is*,
 and it is CC BY-SA; reproducing it would force share-alike onto this repository.
 A reference here is a pointer for the reader to look up, which is what a
 cross-reference is for.
+
+CWE 4.20 is pinned by its versioned archive URL and the SHA-256 of the extracted
+XML — not `cwec_latest`, which moves, and not the archive's own hash, since a zip
+carries timestamps and two archives of identical content do not hash alike.
+
+The pin records weaknesses, categories and views together, so that citing the
+wrong kind can be rejected with a message that says why: `CWE-699` is a category
+and `CWE-1000` is a view. Both are real identifiers, so "not found" would be a
+misleading thing to say about either. `refs.cwe` names the weakness a unit finds,
+never the grouping it sits in, and a deprecated weakness is rejected in favour of
+its replacement.
+
+Unlike WSTG and ASVS, CWE is not share-alike: MITRE grants royalty-free use **on
+the condition that any copy reproduces its copyright designation and the
+licence**. That is a condition, not a courtesy, and `NOTICE` is where this
+repository meets it — with a test asserting it still does.
 
 **CVE is not a taxonomy and is not pinned.** A CVE names one bug in one product,
 not a class. Where known-vulnerable components are the subject, the unit points
