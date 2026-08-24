@@ -7,11 +7,15 @@ surfaces:
   any_of: [xml-ingest]
 
 boundaries:
-  - subject: "An entity that makes the parser fetch a URL"
+  - subject: "Where the parser's outbound fetch can reach"
     home: HRR-RES-03
     note: >-
-      The injection is here; a parser reaching out to a network location the
-      tester chose is server-side request forgery.
+      That entities resolve at all is an XML finding and stays here -- an
+      out-of-band interaction is how blind resolution is detected. What that
+      fetch can then reach, and whether its body comes back, is server-side
+      request forgery and is recorded once, there. The two are separately
+      recordable: egress filtering can leave resolution confirmed and reach
+      clean.
 
 see_also: [HRR-RES-03]
 
@@ -19,7 +23,8 @@ order:
   - HRR-INJ-03-PROBE
   - HRR-INJ-03-ERROR
   - HRR-INJ-03-OOB
-  - HRR-INJ-03-IMPACT
+  - HRR-INJ-03-READ
+  - HRR-INJ-03-EXHAUST
   - HRR-INJ-03-EVADE
 
 refs:

@@ -22,6 +22,20 @@ axes:
       EVADE: Defeat a filter, encoder or WAF that is masking another unit's result.
       IMPACT: Establish what the confirmed condition actually permits.
 
+  - name: reach
+    universal: true
+    description: >
+      What a confirmed primitive actually permits. Available to every topic
+      because the question recurs wherever something is confirmed, and its
+      answers are separately recordable: a filter can allow a read and stop an
+      execution, or allow a fetch and block every non-public destination.
+    slugs:
+      READ: Data the caller should not receive is returned to it.
+      WRITE: State the caller should not change is changed.
+      EXEC: Code or a command of the attacker's choosing runs.
+      PIVOT: A network location the caller could not otherwise reach is reached.
+      EXHAUST: Resource consumption forced by the content of the input rather than by request volume.
+
   - name: technique
     description: >
       Alternative routes to the same finding, chosen from observed evidence rather
@@ -97,7 +111,9 @@ axes:
       NAMING: How an attacker-supplied identifier or name is handled.
       PARSING: What happens when the accepted content is interpreted.
       SERVING: What happens when the stored content is handed back out.
-      QUOTA: Limits on size, count or rate that the mechanism enforces.
+      SIZE: The limit on a single accepted item.
+      RATE: The limit on how often the mechanism may be exercised.
+      QUOTA: The limit on what one principal may accumulate in total.
 
   - name: asset
     description: >

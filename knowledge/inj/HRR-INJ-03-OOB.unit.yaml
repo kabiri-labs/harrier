@@ -1,7 +1,8 @@
 id: HRR-INJ-03-OOB
 topic: HRR-INJ-03
 status: outline
-title: "Out-of-band entity resolution"
+title: "Blind entity resolution"
 objective: >-
-  Determine whether an external entity causes the parser to initiate a network
-  request to a location the tester chose.
+  Determine whether external entity resolution is enabled at all, when no
+  parser error and no returned content say so, by observing that the declared
+  entity was dereferenced.

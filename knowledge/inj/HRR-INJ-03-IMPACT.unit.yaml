@@ -1,7 +1,0 @@
-id: HRR-INJ-03-IMPACT
-topic: HRR-INJ-03
-status: outline
-title: "Established reach of entity resolution"
-objective: >-
-  Determine which of local file read, internal network access and parser
-  resource exhaustion the confirmed entity resolution actually permits.
