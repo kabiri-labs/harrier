@@ -43,12 +43,12 @@ entries:
     detect: "Must empty the result set in a numeric context; pair with the identity above."
 
   - name: numeric arithmetic identity
-    dbms: [mysql, postgresql, mssql, sqlite]
+    engine: [mysql, postgresql, mssql, sqlite]
     payload: "-0"
     detect: "Appended to a numeric id, an arithmetic no-op returns the same record only if the value is used as a number rather than as a string."
 
   - name: numeric arithmetic identity (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "-0"
     detect: "Same intent as above; listed separately because Oracle's implicit numeric conversion differs and may error where other engines coerce."
     note: "If this errors while the plain id succeeds, the value is being bound rather than concatenated."

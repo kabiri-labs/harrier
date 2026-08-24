@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Unit",
+  "description": "The atomic thing a person performs and records a separate result for. status: outline relaxes every depth field and nothing else -- an outline still needs a falsifiable objective, because that is the entire content of the file and the whole of what breadth buys.",
+  "type": "object",
+  "required": ["id", "topic", "title", "objective"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"$ref": "#/$defs/unit_id"},
+    "topic": {"type": "string", "pattern": "^HRR-[A-Z]{3}-[0-9]{2}$"},
+    "kind": {"enum": ["test", "recon", "inquiry"]},
+    "status": {"enum": ["outline", "authored"]},
+    "title": {"type": "string", "minLength": 5},
+    "objective": {"type": "string", "minLength": 30},
+    "enter_when": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 10}},
+    "oracle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["positive", "negative"],
+      "properties": {
+        "positive": {"type": "string", "minLength": 15},
+        "negative": {"type": "string", "minLength": 15},
+        "inconclusive": {"type": "string", "minLength": 15}
+      }
+    },
+    "questions": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 15}},
+    "done_when": {"type": "string", "minLength": 25},
+    "sequence": {"type": "array", "minItems": 2, "maxItems": 6, "items": {"type": "string", "minLength": 10}},
+    "first_false_positive": {"type": "string", "minLength": 20},
+    "false_positives": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 15}},
+    "preconditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 10}},
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 10}},
+    "safety": {"type": "string", "minLength": 30},
+    "payloads": {"type": "string", "pattern": "^payloads/.+\\.yaml$"},
+    "tools": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/slug"}, "uniqueItems": true},
+    "card": {"type": "string", "pattern": "^cards/.+\\.md$"},
+    "mitigation": {"type": "string", "pattern": "^mitigations/.+\\.md$"},
+    "feeds": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/unit_id"}, "uniqueItems": true},
+    "surfaces": {"$ref": "#/$defs/surface_clause"},
+    "dimensions": {
+      "type": "object", "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-z][a-z_]*$"},
+      "additionalProperties": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/slug"}, "uniqueItems": true}
+    },
+    "refs": {"$ref": "topic.schema.json#/$defs/refs"}
+  },
+  "allOf": [
+    {
+      "description": "kind: test carries an oracle and a completion criterion once authored. Absent kind means test, so nothing written before the field changes meaning.",
+      "if": {
+        "allOf": [
+          {"not": {"required": ["status"], "properties": {"status": {"const": "outline"}}}},
+          {"not": {"required": ["kind"], "properties": {"kind": {"enum": ["recon", "inquiry"]}}}}
+        ]
+      },
+      "then": {"required": ["oracle", "done_when"]}
+    },
+    {
+      "description": "A recon unit establishes a fact rather than judging the target, so it cannot state an oracle. Forbidding the field is the point: while it was merely optional, units wrote 'not applicable' into it and the field stopped meaning anything.",
+      "if": {"required": ["kind"], "properties": {"kind": {"const": "recon"}}},
+      "then": {"not": {"required": ["oracle"]}}
+    },
+    {
+      "description": "An inquiry unit is target-specific by nature; it carries questions to ask of the workflow rather than an oracle or a fixed sequence.",
+      "if": {"required": ["kind"], "properties": {"kind": {"const": "inquiry"}}},
+      "then": {"allOf": [{"not": {"required": ["oracle"]}}, {"not": {"required": ["sequence"]}}]}
+    },
+    {
+      "description": "done_when is required of every authored unit regardless of kind: 'did I finish this' is a question recon and inquiry units answer as much as any other.",
+      "if": {"not": {"required": ["status"], "properties": {"status": {"const": "outline"}}}},
+      "then": {"required": ["done_when"]}
+    }
+  ],
+  "$defs": {
+    "unit_id": {"type": "string", "pattern": "^HRR-[A-Z]{3}-[0-9]{2}-[A-Z0-9]{2,10}$"},
+    "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "surface_clause": {"$ref": "topic.schema.json#/$defs/surface_clause"}
+  }
+}

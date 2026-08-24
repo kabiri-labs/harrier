@@ -11,8 +11,11 @@
 # created must be reachable from an entry here, and every entry must be covered
 # by at least one topic before 1.0.
 #
-# Several identifiers map to more than one domain. That is the model working,
-# not a defect: one published identifier is not assumed to be one test.
+# An identifier resolving to more than one domain is always rule 0, never a
+# numbered rule: the procedure stops at the first rule that fires, so a numbered
+# rule resolves to exactly one domain by construction. More than one domain means
+# the identifier is more than one test, which is the model working rather than a
+# defect -- but it has to be said in the rule field, not only in the note.
 version: 1
 map:
   - id: WSTG-APIT-01
@@ -257,7 +260,7 @@ map:
   - id: WSTG-CLNT-10
     title: "Testing WebSockets"
     domains: [PRT, INJ]
-    rule: 2
+    rule: 0
     note: >-
       Handshake, origin validation and framing are PRT; message content
       interpreted server-side is INJ with the WSMSG vector.
@@ -437,7 +440,7 @@ map:
   - id: WSTG-INFO-01
     title: "Conduct Search Engine Discovery and Reconnaissance for Information Leakage"
     domains: [RCN, ERR]
-    rule: 1
+    rule: 0
     note: >-
       Splits: the discovered surface is a map (RCN); content that should not be
       public is a finding (ERR).
@@ -450,7 +453,7 @@ map:
   - id: WSTG-INFO-03
     title: "Review Webserver Metafiles for Information Leakage"
     domains: [RCN, ERR]
-    rule: 1
+    rule: 0
     note: >-
       Metafiles enumerate paths (RCN); a metafile disclosing internals is a
       finding (ERR).
@@ -658,7 +661,7 @@ map:
   - id: WSTG-SESS-10
     title: "Testing JSON Web Tokens"
     domains: [CRY, SES]
-    rule: 6
+    rule: 0
     note: >-
       Splits cleanly by rule order: signature and key verification is CRY; claim
       lifetime, audience and issuer are property units of the SES token topic.

@@ -44,11 +44,11 @@ entries:
     detect: "For stored values interpolated as a column or table identifier rather than as a string, where double quotes are the delimiter."
 
   - name: computed-value carrier
-    dbms: [mysql, postgresql, mssql, sqlite]
+    engine: [mysql, postgresql, mssql, sqlite]
     payload: "{{MARKER}}' || (SELECT '') || '"
     detect: "A concatenation that is valid SQL and a no-op. If the consumer renders the marker unchanged, the value passed through a query without breaking it -- which localises where the concatenation happens."
 
   - name: computed-value carrier (Oracle)
-    dbms: [oracle]
+    engine: [oracle]
     payload: "{{MARKER}}' || (SELECT '' FROM dual) || '"
     detect: "Oracle form of the same no-op concatenation."

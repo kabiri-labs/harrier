@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Payload file",
+  "description": "The only place a payload is written. Volatile content: entries carry a reviewed date because payload strings, filter bypasses and engine quirks rot on a timescale the durable layer does not.",
+  "type": "object",
+  "required": ["id", "title", "reviewed", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)+$"},
+    "title": {"type": "string", "minLength": 5},
+    "reviewed": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "variables": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"}, "uniqueItems": true},
+    "credits": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 15}},
+    "safety": {"type": "string", "minLength": 30},
+    "entries": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "payload"],
+        "properties": {
+          "name": {"type": "string", "minLength": 3},
+          "payload": {"type": "string", "minLength": 1},
+          "detect": {"type": "string", "minLength": 10},
+          "note": {"type": "string", "minLength": 10}
+        },
+        "patternProperties": {
+                    "^(?!name$|payload$|detect$|note$)[a-z][a-z_]*$": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}, "uniqueItems": true}
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
