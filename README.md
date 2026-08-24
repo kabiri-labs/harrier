@@ -88,8 +88,7 @@ every resolvable WSTG identifier claimed by one, with the boundaries between
 neighbouring topics written down.
 
 The level below — the units a person actually performs — is being written now, in
-batches of two or three domains. **79 units exist under server-side injection and
-resource handling**; the remaining eleven domains are outstanding.
+batches of two or three domains. **159 units exist across four domains**; the remaining eleven domains are outstanding.
 [`docs/ROADMAP.md`](docs/ROADMAP.md) carries the plan and the definition of 1.0.
 
 ## Licence and attribution

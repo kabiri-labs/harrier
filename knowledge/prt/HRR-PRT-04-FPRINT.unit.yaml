@@ -1,0 +1,8 @@
+id: HRR-PRT-04-FPRINT
+topic: HRR-PRT-04
+status: outline
+kind: recon
+title: "Intermediary and normalisation inventory"
+objective: >-
+  Establish which intermediary handles the path and which normalisation each of
+  it and the origin applies before matching.

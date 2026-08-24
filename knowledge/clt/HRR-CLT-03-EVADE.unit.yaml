@@ -1,0 +1,8 @@
+id: HRR-CLT-03-EVADE
+topic: HRR-CLT-03
+status: outline
+kind: recon
+title: "Allow-list evasion"
+objective: >-
+  Determine whether a negative result is caused by a host allow-list that a
+  scheme, userinfo, backslash or prefix variant does not defeat.

@@ -1,0 +1,7 @@
+id: HRR-CLT-01-JSSTR
+topic: HRR-CLT-01
+status: outline
+title: "Script string literal context"
+objective: >-
+  Determine whether a value landing inside a JavaScript string literal can
+  terminate the literal and continue as code.

@@ -1,0 +1,7 @@
+id: HRR-PRT-03-PROBE
+topic: HRR-PRT-03
+status: outline
+title: "Duplicate resolution probe"
+objective: >-
+  Determine whether supplying one name twice changes the response relative to
+  supplying it once.

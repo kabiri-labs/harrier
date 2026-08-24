@@ -73,7 +73,8 @@ class UnitsBelongToTheAxisTheirTopicDeclares(unittest.TestCase):
         for unit in repo.units:
             uid, parent = unit.data["id"], unit.data["topic"]
             slug = uid[len(parent) + 1 :]
-            allowed = axes[topics[parent]["axis"]] | universal
+            declared = topics[parent].get("axis")
+            allowed = (axes[declared] if declared else set()) | universal
             with self.subTest(unit=uid):
                 self.assertIn(slug, allowed)
 

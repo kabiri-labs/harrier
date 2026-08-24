@@ -1,0 +1,7 @@
+id: HRR-CLT-03-PROBE
+topic: HRR-CLT-03
+status: outline
+title: "Destination control probe"
+objective: >-
+  Determine whether the value the page navigates to can be changed to a
+  destination the application did not issue.

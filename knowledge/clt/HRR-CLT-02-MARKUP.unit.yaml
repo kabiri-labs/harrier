@@ -1,0 +1,7 @@
+id: HRR-CLT-02-MARKUP
+topic: HRR-CLT-02
+status: outline
+title: "Document-writing sink"
+objective: >-
+  Determine whether a source reaches a document write that inserts markup into
+  the page while it is still parsing.

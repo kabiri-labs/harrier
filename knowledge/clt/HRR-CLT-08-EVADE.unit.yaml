@@ -1,0 +1,8 @@
+id: HRR-CLT-08-EVADE
+topic: HRR-CLT-08
+status: outline
+kind: recon
+title: "Framing defence evasion"
+objective: >-
+  Determine whether a negative result is caused by a script-based frame-buster
+  that sandboxing or a nested frame defeats.

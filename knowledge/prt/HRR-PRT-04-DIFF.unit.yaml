@@ -1,0 +1,7 @@
+id: HRR-PRT-04-DIFF
+topic: HRR-PRT-04
+status: outline
+title: "Divergent path resolution"
+objective: >-
+  Determine whether a crafted path is matched against one rule set by the
+  intermediary and a different one by the origin.

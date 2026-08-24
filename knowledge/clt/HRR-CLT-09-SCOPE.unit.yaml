@@ -1,0 +1,7 @@
+id: HRR-CLT-09-SCOPE
+topic: HRR-CLT-09
+status: outline
+title: "Outbound target origin"
+objective: >-
+  Determine whether the page sends a message containing anything sensitive with
+  a wildcard target origin.

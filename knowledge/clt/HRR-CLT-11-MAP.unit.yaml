@@ -1,0 +1,8 @@
+id: HRR-CLT-11-MAP
+topic: HRR-CLT-11
+status: outline
+kind: recon
+title: "Script-includable endpoint inventory"
+objective: >-
+  Establish which endpoints return authenticated data in a form a script tag
+  would parse, including callback-wrapped and array-literal responses.

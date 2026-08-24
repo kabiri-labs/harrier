@@ -1,7 +1,6 @@
 id: HRR-INJ-04
 title: "Server-side include injection"
 domain: INJ
-axis: technique
 
 surfaces:
   any_of: [template-param, stored-then-rendered]

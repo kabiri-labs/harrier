@@ -16,6 +16,13 @@ boundaries:
 
 see_also: [HRR-PRT-01, HRR-RES-01]
 
+order:
+  - HRR-PRT-04-FPRINT
+  - HRR-PRT-04-DIFF
+  - HRR-PRT-04-READ
+  - HRR-PRT-04-WRITE
+  - HRR-PRT-04-EVADE
+
 refs:
   wstg: [WSTG-CONF-13]
   cwe: [22]

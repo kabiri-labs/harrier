@@ -35,9 +35,12 @@ class UnitSlugsComeFromTheDeclaredAxis(SandboxCase):
         self.box.add_unit(id="HRR-AUT-01-UNION")
         self.assertAccepted()
 
-    def test_a_universal_phase_slug_is_accepted_on_any_axis(self):
-        self.box.add_topic(axis="technique")
+    def test_a_universal_phase_slug_is_accepted_alongside_an_axis_slug(self):
+        # PROBE belongs to no topic's own vocabulary and is available to all of
+        # them; UNION is what makes the declared axis do its work.
+        self.box.add_topic(axis="technique", order=["HRR-AUT-01-PROBE", "HRR-AUT-01-UNION"])
         self.box.add_unit(id="HRR-AUT-01-PROBE")
+        self.box.add_unit(id="HRR-AUT-01-UNION")
         self.assertAccepted()
 
     def test_a_slug_from_another_axis_is_rejected(self):
@@ -156,3 +159,35 @@ class SurfaceEmissionsMustHoldForEverySurface(SandboxCase):
         # of this vulnerability, and cross-window is the tag that describes it.
         topic = self.box.read("knowledge/clt/HRR-CLT-12.topic.yaml")
         self.assertIn("cross-window", topic["surfaces"]["any_of"])
+
+
+class ADeclaredAxisMustDoWork(SandboxCase):
+    """Declaring an axis no unit draws from states a constraint that constrains
+    nothing, and misdescribes how the topic is decomposed."""
+
+    def test_an_axis_no_unit_draws_from_is_rejected(self):
+        self.box.add_topic(axis="context")
+        self.box.add_unit(id="HRR-AUT-01-PROBE")
+        self.assertRejected("declares axis context but no unit draws a slug from it")
+
+    def test_a_topic_may_omit_the_axis_when_every_unit_is_universal(self):
+        topic = self.box.read(self.box.BASE_TOPIC)
+        topic.pop("axis", None)
+        topic["order"] = ["HRR-AUT-01-PROBE", "HRR-AUT-01-READ"]
+        self.box.write(self.box.BASE_TOPIC, topic)
+        for slug in ("PROBE", "READ"):
+            self.box.add_unit(id=f"HRR-AUT-01-{slug}")
+        self.assertAccepted()
+
+    def test_an_invented_slug_is_still_rejected_without_an_axis(self):
+        topic = self.box.read(self.box.BASE_TOPIC)
+        topic.pop("axis", None)
+        topic["order"] = ["HRR-AUT-01-CLEVER"]
+        self.box.write(self.box.BASE_TOPIC, topic)
+        self.box.add_unit(id="HRR-AUT-01-CLEVER")
+        self.assertRejected("is not in any universal vocabulary")
+
+    def test_an_axis_that_does_work_is_accepted(self):
+        self.box.add_topic(axis="technique", order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(id="HRR-AUT-01-UNION")
+        self.assertAccepted()

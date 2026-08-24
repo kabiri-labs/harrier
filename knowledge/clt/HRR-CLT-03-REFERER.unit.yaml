@@ -1,0 +1,7 @@
+id: HRR-CLT-03-REFERER
+topic: HRR-CLT-03
+status: outline
+title: "Referrer-derived destination"
+objective: >-
+  Determine whether the page navigates to a location taken from the referrer,
+  which the tester sets from a page of their own.

@@ -15,6 +15,12 @@ boundaries:
 
 see_also: [HRR-INJ-11]
 
+order:
+  - HRR-PRT-05-POLICY
+  - HRR-PRT-05-VALIDATION
+  - HRR-PRT-05-BINDING
+  - HRR-PRT-05-TRANSPORT
+
 refs:
   wstg: [WSTG-CLNT-10]
   cwe: [1385]

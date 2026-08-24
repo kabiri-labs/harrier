@@ -1,0 +1,8 @@
+id: HRR-CLT-09-MAP
+topic: HRR-CLT-09
+status: outline
+kind: recon
+title: "Listener and sender inventory"
+objective: >-
+  Establish which message listeners the page registers and which of its own
+  sends specify a target origin.

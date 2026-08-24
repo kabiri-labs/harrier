@@ -1,0 +1,7 @@
+id: HRR-PRT-04-READ
+topic: HRR-PRT-04
+status: outline
+title: "Resource exposed by the divergence"
+objective: >-
+  Determine whether the divergence returns a resource that the intermediary's
+  own rules were meant to keep unreachable.

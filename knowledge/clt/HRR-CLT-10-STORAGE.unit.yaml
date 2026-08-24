@@ -1,0 +1,7 @@
+id: HRR-CLT-10-STORAGE
+topic: HRR-CLT-10
+status: outline
+title: "Sensitive data at rest in the browser"
+objective: >-
+  Determine whether anything persisted client-side would be damaging in the
+  hands of someone with later access to the device.

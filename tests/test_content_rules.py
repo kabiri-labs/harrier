@@ -31,7 +31,8 @@ class KindDecidesWhetherAnOracleIsAllowed(SandboxCase):
         self.assertRejected("HRR-AUT-01-FPRINT.unit.yaml: schema (unit)")
 
     def test_a_recon_unit_without_an_oracle_is_accepted(self):
-        self.box.add_topic(order=["HRR-AUT-01-FPRINT"])
+        self.box.add_topic(order=["HRR-AUT-01-FPRINT", "HRR-AUT-01-UNION"])
+        self.box.add_unit(id="HRR-AUT-01-UNION")
         unit = {
             "id": "HRR-AUT-01-FPRINT", "topic": "HRR-AUT-01", "kind": "recon",
             "title": "Database engine fingerprint",

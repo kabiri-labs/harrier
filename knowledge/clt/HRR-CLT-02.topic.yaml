@@ -14,6 +14,15 @@ boundaries:
 
 see_also: [HRR-CLT-01, HRR-CLT-05, HRR-CLT-09]
 
+order:
+  - HRR-CLT-02-MAP
+  - HRR-CLT-02-HTMLBODY
+  - HRR-CLT-02-HTMLATTR
+  - HRR-CLT-02-HTMLURI
+  - HRR-CLT-02-JSCODE
+  - HRR-CLT-02-MARKUP
+  - HRR-CLT-02-EVADE
+
 refs:
   wstg: [WSTG-CLNT-01, WSTG-CLNT-02]
   cwe: [79]

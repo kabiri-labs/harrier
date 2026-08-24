@@ -300,8 +300,8 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
         directory = doc.path.parent.name
         if doc.data.get("domain") and directory != doc.data["domain"].lower():
             problems.add(doc.rel, f"filed under knowledge/{directory}/ but declares domain {doc.data['domain']}")
-        if doc.data.get("axis") not in axes:
-            problems.add(doc.rel, f"unknown axis {doc.data.get('axis')}")
+        if doc.data.get("axis") is not None and doc.data["axis"] not in axes:
+            problems.add(doc.rel, f"unknown axis {doc.data['axis']}")
         _check_surface_clause(doc, doc.data.get("surfaces"), surfaces, problems)
         _check_dimensions(doc, doc.data.get("dimensions"), dimensions, problems)
         _check_refs(doc, doc.data.get("refs"), pinned, asvs, cwe, problems)
@@ -330,13 +330,13 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
 
         slug = uid[len(parent) + 1 :]
         axis = topics[parent].data.get("axis")
-        allowed = axes.get(axis, set()) | universal
-        if allowed and slug not in allowed:
+        allowed = (axes.get(axis, set()) if axis else set()) | universal
+        if slug not in allowed:
+            named = f"the {axis} vocabulary or the universal one" if axis else "any universal vocabulary"
             problems.add(
                 doc.rel,
-                f"slug {slug} is not in the {axis} vocabulary or the universal one -- "
-                "a unit may not invent a name, which is what stops two topics naming "
-                "one idea differently",
+                f"slug {slug} is not in {named} -- a unit may not invent a name, "
+                "which is what stops two topics naming one idea differently",
             )
 
         objective = doc.data.get("objective", "")
@@ -392,6 +392,20 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
             home = boundary.get("home")
             if home is not None and home not in topics:
                 problems.add(doc.rel, f"boundary home {home} does not exist")
+        # A declared axis must do work. If no unit draws from it, the
+        # declaration constrains nothing and misdescribes the topic; the honest
+        # form is to omit it, which the schema allows.
+        axis = doc.data.get("axis")
+        children = by_topic.get(tid, [])
+        if axis and children:
+            own = axes.get(axis, set()) - universal
+            if own and not any(c.rsplit("-", 1)[1] in own for c in children):
+                problems.add(
+                    doc.rel,
+                    f"declares axis {axis} but no unit draws a slug from it -- omit "
+                    "the axis rather than declaring one that constrains nothing",
+                )
+
         order = doc.data.get("order")
         if order is not None:
             children = set(by_topic.get(tid, []))

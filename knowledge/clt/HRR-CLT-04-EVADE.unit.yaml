@@ -1,0 +1,8 @@
+id: HRR-CLT-04-EVADE
+topic: HRR-CLT-04
+status: outline
+kind: recon
+title: "Style sanitiser evasion"
+objective: >-
+  Determine whether a negative result is caused by a declaration allow-list
+  rather than by the value never reaching a stylesheet.
