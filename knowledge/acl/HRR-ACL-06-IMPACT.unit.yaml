@@ -3,6 +3,6 @@ topic: HRR-ACL-06
 status: outline
 title: "Whether a bound field carries authority"
 objective: >-
-  Determine whether any field that can be bound decides a privilege, a price
-  or an ownership, which is what separates a cosmetic binding from an
-  escalation.
+  Determine whether any field that can be bound decides what the caller is
+  permitted to do or what it is owed, rather than how a record is presented,
+  which is what separates a cosmetic binding from an escalation.

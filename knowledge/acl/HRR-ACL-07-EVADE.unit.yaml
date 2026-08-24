@@ -3,5 +3,7 @@ topic: HRR-ACL-07
 status: outline
 title: "A field reached by a route the top-level check does not inspect"
 objective: >-
-  Determine whether an alias, a fragment or a nested path returns a field that
-  the same query refused at the top level.
+  Determine whether a field the same query was refused at the top level is
+  returned when the query names it another way. Performed once for every
+  selection shape the topic declares as a dimension, because a check that
+  inspects the parsed query walks some of those shapes and not others.

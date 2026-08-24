@@ -6,6 +6,9 @@ axis: principal
 surfaces:
   any_of: [object-id-param, path-param, rest-api, graphql, multi-tenant]
 
+dimensions:
+  operation: [update, delete, create]
+
 order:
   - HRR-ACL-02-MAP
   - HRR-ACL-02-PEER

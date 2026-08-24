@@ -6,6 +6,9 @@ axis: phase
 surfaces:
   any_of: [graphql]
 
+dimensions:
+  selection: [direct, alias, fragment, nested]
+
 order:
   - HRR-ACL-07-MAP
   - HRR-ACL-07-PROBE
