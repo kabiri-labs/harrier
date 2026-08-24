@@ -8,12 +8,12 @@ surfaces:
 
 boundaries:
   - subject: "The same search used to enumerate the surface"
-    home: HRR-RCN-05
+    home: HRR-RCN-08
     note: >-
       Building a map is recon; finding something that should never have been
       public is a disclosure finding.
 
-see_also: [HRR-RCN-05]
+see_also: [HRR-RCN-08]
 
 refs:
   wstg: [WSTG-INFO-01]

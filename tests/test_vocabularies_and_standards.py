@@ -289,7 +289,33 @@ class EveryResolvedIdentifierIsClaimedByATopic(SandboxCase):
         # domain and covered by nothing, which is a coverage hole rather than a
         # decision.
         self.box.path("knowledge/inj/HRR-INJ-01.topic.yaml").unlink()
-        self.assertRejected("WSTG-INPV-05 is mapped to a domain but no topic claims it")
+        self.assertRejected("WSTG-INPV-05 is mapped to INJ but no INJ topic claims it")
+
+    def test_a_domain_claim_cannot_be_masked_by_another_domain(self):
+        # WSTG-INFO-01 resolves to both RCN and ERR: two pieces of work. Checking
+        # identifier presence alone would let the ERR topic report the RCN half
+        # as covered, which reports full coverage over a hole.
+        self.box.path("knowledge/rcn/HRR-RCN-08.topic.yaml").unlink()
+        self.assertRejected("WSTG-INFO-01 is mapped to RCN but no RCN topic claims it")
+
+    def test_the_surviving_domain_is_not_also_reported(self):
+        self.box.path("knowledge/rcn/HRR-RCN-08.topic.yaml").unlink()
+        problems = validate(self.box.root)
+        self.assertNotIn("mapped to ERR but no ERR topic", messages(problems))
+
+    def test_claiming_an_unresolvable_identifier_is_rejected(self):
+        # WSTG-INPV-14 is pinned and resolves to no domain. Claiming it would
+        # count coverage the taxonomy does not have, and would let the numerator
+        # exceed its own denominator.
+        self.box.add_topic(refs={"wstg": ["WSTG-INPV-05", "WSTG-INPV-14"]})
+        self.assertRejected("which the map resolves to no domain")
+
+    def test_the_coverage_numerator_never_exceeds_its_denominator(self):
+        from harrier.validate import coverage
+
+        self.box.add_topic(refs={"wstg": ["WSTG-INPV-05", "WSTG-INPV-14"]})
+        counts = coverage(self.box.root)
+        self.assertLessEqual(counts["wstg_covered"], counts["wstg_coverable"])
 
     def test_an_unresolved_identifier_needs_no_topic(self):
         # WSTG-INPV-14 is rule 0 with no domains: it describes second-order

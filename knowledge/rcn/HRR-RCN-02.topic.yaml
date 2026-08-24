@@ -14,7 +14,7 @@ boundaries:
       Finding them is recon; whether they should be reachable at all is a
       configuration finding.
 
-see_also: [HRR-CFG-03]
+see_also: [HRR-CFG-03, HRR-RCN-08]
 
 refs:
   wstg: [WSTG-INFO-04]

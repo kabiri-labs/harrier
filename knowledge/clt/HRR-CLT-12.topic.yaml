@@ -4,7 +4,7 @@ domain: CLT
 axis: property
 
 surfaces:
-  any_of: [rich-text, stored-then-rendered, redirect-param]
+  any_of: [cross-window, rich-text, stored-then-rendered, redirect-param]
 
 refs:
   wstg: [WSTG-CLNT-14]

@@ -14,7 +14,5 @@ boundaries:
       Interposition may be impossible on some clients; record the limit rather
       than reporting the surface as covered.
 
-see_also: [HRR-ERR-04]
-
 refs:
   wstg: [WSTG-INPV-16]

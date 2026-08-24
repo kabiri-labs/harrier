@@ -208,21 +208,37 @@ def check_standards(repo: Repository, problems: Problems) -> None:
             if code not in domains:
                 problems.add("standards/wstg-map.yaml", f"{wid} names undefined domain {code}")
 
-    covered = {
-        wid
-        for topic in repo.topics
-        for wid in (topic.data.get("refs") or {}).get("wstg") or []
-    }
+    # Claims are (identifier, domain) pairs, not identifiers. An identifier that
+    # resolved to two domains is two pieces of work, and checking presence alone
+    # lets a topic in one domain mask the absence of the other -- which reports
+    # full coverage over a hole, the one thing this instrument must never do.
+    claimed: Set[tuple] = set()
+    for topic in repo.topics:
+        domain = topic.data.get("domain")
+        for wid in (topic.data.get("refs") or {}).get("wstg") or []:
+            claimed.add((wid, domain))
+
+    resolvable = {e["id"] for e in wmap.data["map"] if e["domains"]}
     for entry in wmap.data["map"]:
         # An entry with no domains is one the ordered procedure deliberately did
         # not resolve -- it is not one test, or not a test at all. Requiring a
-        # topic for it would force a topic that should not exist.
-        if entry["domains"] and entry["id"] not in covered:
+        # topic for it would force a topic that should not exist, and claiming
+        # one is a modelling error rather than coverage.
+        for code in entry["domains"]:
+            if (entry["id"], code) not in claimed:
+                problems.add(
+                    "standards/wstg-map.yaml",
+                    f"{entry['id']} is mapped to {code} but no {code} topic claims "
+                    "it -- a resolved identifier with no topic is a coverage hole, "
+                    "not a decision",
+                )
+    for wid, domain in sorted(claimed):
+        if wid in pinned and wid not in resolvable:
             problems.add(
-                "standards/wstg-map.yaml",
-                f"{entry['id']} is mapped to a domain but no topic claims it -- "
-                "a resolved identifier with no topic is a coverage hole, not a "
-                "decision",
+                f"knowledge/{str(domain).lower()}/",
+                f"a topic claims {wid}, which the map resolves to no domain -- it "
+                "is not one test, or not a test at all, so claiming it would count "
+                "coverage the taxonomy does not have",
             )
 
     for wid in sorted(pinned - mapped):
@@ -584,6 +600,10 @@ def coverage(root: Path) -> Dict[str, int]:
         for wid in (doc.data.get("refs") or {}).get("wstg") or []
     }
     coverable = {e["id"] for e in wmap if e["domains"]}
+    # Intersected rather than counted raw: a topic claiming an unresolvable
+    # identifier is rejected by the validator, but the count must not be able to
+    # exceed its own denominator even for a moment.
+    covered &= coverable
     return {
         "wstg_coverable": len(coverable),
         "topics": len(repo.topics),

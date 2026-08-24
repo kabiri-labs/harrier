@@ -323,7 +323,11 @@ surfaces:
       postMessage listeners, window.opener references, named frames, or any
       handler that acts on a message whose origin it did not choose.
     discovery_hint: "addEventListener('message'), window.open, target=_blank links, embedded iframes from another origin."
-    emits: [dom-sink]
+    # Deliberately emits nothing. A postMessage handler that logs the user out or
+    # updates state writes into no sink at all, so implying dom-sink here would be
+    # false of many emitting surfaces -- and an emitted tag must be true of every
+    # one of them. Apply both tags when both behaviours are observed.
+    emits: []
 
   - tag: client-storage
     label: Data persisted in the browser
