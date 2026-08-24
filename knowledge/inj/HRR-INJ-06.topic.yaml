@@ -1,0 +1,11 @@
+id: HRR-INJ-06
+title: "Mail header and command injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [mail-ingest]
+
+refs:
+  wstg: [WSTG-INPV-10]
+  cwe: [93]

@@ -1,0 +1,20 @@
+id: HRR-CLT-07
+title: "Cross-site flashing"
+domain: CLT
+axis: phase
+
+surfaces:
+  any_of: [plugin-policy]
+
+boundaries:
+  - subject: "Current browser-native equivalents"
+    home: HRR-CLT-01
+    note: >-
+      The plugin runtime is retired. Recorded so the coverage claim stays
+      honest, not because it is likely to matter.
+
+see_also: [HRR-CFG-06]
+
+refs:
+  wstg: [WSTG-CLNT-08]
+  cwe: [79]

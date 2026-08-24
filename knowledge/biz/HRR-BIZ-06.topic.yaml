@@ -1,0 +1,14 @@
+id: HRR-BIZ-06
+title: "Workflow sequencing"
+domain: BIZ
+axis: asset
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment]
+
+see_also: [HRR-BIZ-04]
+
+refs:
+  wstg: [WSTG-BUSL-06]
+  cwe: [841]

@@ -1,0 +1,13 @@
+id: HRR-ERR-01
+title: "Error response handling"
+domain: ERR
+axis: technique
+
+surfaces:
+  always: true
+
+see_also: [HRR-ERR-02, HRR-IDN-03]
+
+refs:
+  wstg: [WSTG-ERRH-01]
+  cwe: [209, 755]

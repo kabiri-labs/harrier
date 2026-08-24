@@ -1,0 +1,20 @@
+id: HRR-ACL-05
+title: "Request method and verb handling"
+domain: ACL
+axis: technique
+
+surfaces:
+  any_of: [privileged-function, admin-panel, business-workflow, rest-api, graphql]
+
+boundaries:
+  - subject: "Which methods the server advertises"
+    home: HRR-CFG-04
+    note: >-
+      The oracle here is that a forbidden action succeeded, not that a method
+      is enabled.
+
+see_also: [HRR-CFG-04]
+
+refs:
+  wstg: [WSTG-INPV-03]
+  cwe: [650]

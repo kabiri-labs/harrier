@@ -8,7 +8,7 @@
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
-[![phase](https://img.shields.io/badge/phase-1%20of%207-lightgrey)](docs/ROADMAP.md)
+[![phase](https://img.shields.io/badge/phase-2%20of%207-lightgrey)](docs/ROADMAP.md)
 
 ## What this is
 
@@ -71,7 +71,7 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 90 tests, offline
+python -m unittest discover -s tests -t .   # 95 tests, offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
 ```
@@ -82,10 +82,14 @@ rule is mechanical rather than a review comment.
 
 ## Status
 
-Phases 0 and 1 of seven: the model, the vocabularies and the machine checks are
-settled. All 109 WSTG identifiers are pinned and resolved to a domain; no content
-has been written yet. [`docs/ROADMAP.md`](docs/ROADMAP.md) carries the plan and
-the definition of 1.0.
+Phases 0 to 2 of seven. The model, the vocabularies and the machine checks are
+settled, and the taxonomy's top level exists: **98 topics across 13 domains**,
+every resolvable WSTG identifier claimed by one, with the boundaries between
+neighbouring topics written down.
+
+What does not exist yet is the level below — the units a person actually
+performs. That is phase 3, and it is where the artefact becomes useful.
+[`docs/ROADMAP.md`](docs/ROADMAP.md) carries the plan and the definition of 1.0.
 
 ## Licence and attribution
 

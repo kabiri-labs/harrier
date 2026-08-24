@@ -1,0 +1,13 @@
+id: HRR-ACL-04
+title: "Privilege escalation"
+domain: ACL
+axis: technique
+
+surfaces:
+  any_of: [privileged-function, admin-panel, impersonation, multi-tenant]
+
+see_also: [HRR-IDN-02]
+
+refs:
+  wstg: [WSTG-ATHZ-03]
+  cwe: [269]

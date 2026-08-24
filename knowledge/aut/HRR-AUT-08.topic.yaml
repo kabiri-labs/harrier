@@ -1,0 +1,11 @@
+id: HRR-AUT-08
+title: "Alternative authentication channels"
+domain: AUT
+axis: asset
+
+surfaces:
+  any_of: [alternative-channel]
+
+refs:
+  wstg: [WSTG-ATHN-10]
+  cwe: [287]

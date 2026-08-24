@@ -50,21 +50,38 @@ class Sandbox:
         result = mutate(data)
         self.write(rel, data if result is None else result)
 
-    def add_topic(self, **overrides: Any) -> str:
-        """Write a minimal valid topic and return its id."""
-        topic = {
-            "id": "HRR-INJ-01",
-            "title": "SQL injection",
-            "domain": "INJ",
-            "axis": "technique",
-            "surfaces": {"any_of": ["sql-backed-param"]},
-        }
+    #: The topic every mutation test starts from. A real one rather than an
+    #: invented one: it is the file the SQL injection tests already talk about,
+    #: and starting from it means a test changes exactly the field under test
+    #: while everything else stays as the repository has it.
+    BASE_TOPIC = "knowledge/inj/HRR-INJ-01.topic.yaml"
+
+    #: A topic nothing else links to. Tests that rewrite cross-references start
+    #: here, because rewriting them on a topic other topics point back to would
+    #: break their symmetry and fail on the wrong rule.
+    UNLINKED_TOPIC = "knowledge/aut/HRR-AUT-01.topic.yaml"
+
+    def add_topic(self, base: str | None = None, **overrides: Any) -> str:
+        """Overwrite the base topic with one field changed, and return its id.
+
+        Reading the real file rather than building a miniature is what keeps the
+        fixture honest: a miniature would need its own copy of every field the
+        validator checks, and would drift from the repository the moment one of
+        them changed. Here, an override is the only difference.
+        """
+        topic = self.read(base or self.BASE_TOPIC)
+        # refs merges key by key rather than replacing the block. A test that
+        # sets refs.cwe is not saying the topic has no WSTG reference, and
+        # dropping one would trip the coverage gate instead of the rule under
+        # test -- a failure that names the wrong thing.
+        refs = {**topic.get("refs", {}), **overrides.pop("refs", {})}
         topic.update(overrides)
+        topic["refs"] = refs
         self.write(f"knowledge/{topic['domain'].lower()}/{topic['id']}.topic.yaml", topic)
         return topic["id"]
 
     def add_unit(self, **overrides: Any) -> str:
-        """Write a minimal valid authored unit and return its id."""
+        """Write a minimal valid authored unit under the base topic."""
         unit = {
             "id": "HRR-INJ-01-UNION",
             "topic": "HRR-INJ-01",

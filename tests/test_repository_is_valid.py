@@ -27,14 +27,20 @@ class TheRealRepository(unittest.TestCase):
             "a stale coverage number is worse than none: it is the number this "
             "project asks to be judged on"
         )
-        for label, value in (
-            ("WSTG identifiers mapped to a domain", counts["wstg_mapped"]),
-            ("WSTG identifiers covered by a topic", counts["wstg_covered"]),
-        ):
-            with self.subTest(label=label):
-                self.assertIn(
-                    f"| **{label}** | **{value} of {counts['wstg_pinned']}** |", roadmap, why
-                )
+        with self.subTest(label="mapped"):
+            self.assertIn(
+                f"| **WSTG identifiers mapped to a domain** | "
+                f"**{counts['wstg_mapped']} of {counts['wstg_pinned']}** |",
+                roadmap,
+                why,
+            )
+        with self.subTest(label="covered"):
+            self.assertIn(
+                f"| **WSTG identifiers covered by a topic** | "
+                f"**{counts['wstg_covered']} of {counts['wstg_coverable']}** |",
+                roadmap,
+                why,
+            )
         for label, value in (
             ("Topics", counts["topics"]),
             ("Units — outlined", counts["units"] - counts["units_authored"]),

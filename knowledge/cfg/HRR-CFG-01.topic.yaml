@@ -1,0 +1,11 @@
+id: HRR-CFG-01
+title: "Network and platform configuration"
+domain: CFG
+axis: property
+
+surfaces:
+  always: true
+
+refs:
+  wstg: [WSTG-CONF-01, WSTG-CONF-02]
+  cwe: [1188]

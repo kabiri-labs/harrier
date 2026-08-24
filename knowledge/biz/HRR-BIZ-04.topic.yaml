@@ -1,0 +1,13 @@
+id: HRR-BIZ-04
+title: "Process timing and race conditions"
+domain: BIZ
+axis: technique
+
+surfaces:
+  any_of: [business-workflow, payment, file-upload]
+
+see_also: [HRR-BIZ-06]
+
+refs:
+  wstg: [WSTG-BUSL-04]
+  cwe: [367, 362]

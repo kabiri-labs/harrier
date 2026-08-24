@@ -6,6 +6,8 @@ later as many failures with no obvious common cause.
 
 import unittest
 
+from harrier.validate import validate
+from tests.support import messages
 from tests.test_identifiers_and_axes import SandboxCase
 
 
@@ -277,3 +279,21 @@ class TheCwePinCarriesItsLicenceCondition(SandboxCase):
             "the CWE grant is conditional on reproducing MITRE's copyright "
             "designation; NOTICE is where this repository does that",
         )
+
+
+class EveryResolvedIdentifierIsClaimedByATopic(SandboxCase):
+    """The gate that defines phase 2 as finished."""
+
+    def test_a_resolved_identifier_with_no_topic_is_rejected(self):
+        # Deleting the only topic claiming an identifier leaves it mapped to a
+        # domain and covered by nothing, which is a coverage hole rather than a
+        # decision.
+        self.box.path("knowledge/inj/HRR-INJ-01.topic.yaml").unlink()
+        self.assertRejected("WSTG-INPV-05 is mapped to a domain but no topic claims it")
+
+    def test_an_unresolved_identifier_needs_no_topic(self):
+        # WSTG-INPV-14 is rule 0 with no domains: it describes second-order
+        # delivery, which this model expresses as a dimension. Requiring a topic
+        # for it would force a topic that should not exist.
+        problems = validate(self.box.root)
+        self.assertNotIn("WSTG-INPV-14", messages(problems))

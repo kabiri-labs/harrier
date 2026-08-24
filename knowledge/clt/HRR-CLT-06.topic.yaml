@@ -1,0 +1,21 @@
+id: HRR-CLT-06
+title: "Cross-origin resource sharing"
+domain: CLT
+axis: property
+
+surfaces:
+  any_of: [cors-enabled, rest-api]
+
+boundaries:
+  - subject: "The header read off a response with no victim involved"
+    home: HRR-CFG-05
+    note: >-
+      Reading a permissive policy is configuration; demonstrating a
+      cross-origin read of authenticated data needs a victim's browser, so it
+      is filed where the impact lands.
+
+see_also: [HRR-CFG-05, HRR-CFG-06, HRR-CLT-11, HRR-SES-05]
+
+refs:
+  wstg: [WSTG-CLNT-07]
+  cwe: [942]

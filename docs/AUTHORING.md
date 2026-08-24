@@ -51,6 +51,14 @@ refs:
 nobody has written yet is still worth recording — it is the difference between a
 known gap and an invisible one.
 
+**`see_also` runs both ways; `boundaries` does not.** A cross-reference is a peer
+relationship: if a topic is worth knowing about from here, this one is worth
+knowing about from there, and a reader arriving from the other direction would
+otherwise never learn it exists. The validator rejects a link that is not
+returned. A boundary is directional by design — *the thing I am not covering
+lives over there* obliges the other topic to say nothing — so if a relationship
+genuinely runs one way, it is a boundary, not a `see_also`.
+
 ## 2. A unit file
 
 ```yaml

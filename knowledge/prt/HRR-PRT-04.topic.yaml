@@ -1,0 +1,21 @@
+id: HRR-PRT-04
+title: "Path confusion and normalisation"
+domain: PRT
+axis: technique
+
+surfaces:
+  any_of: [reverse-proxy, cache-fronted, path-param]
+
+boundaries:
+  - subject: "The server resolving a path the attacker wrote"
+    home: HRR-RES-01
+    note: >-
+      Two components disagreeing about what the path means is here; one
+      component resolving it to a file outside the intended root is resource
+      handling.
+
+see_also: [HRR-PRT-01, HRR-RES-01]
+
+refs:
+  wstg: [WSTG-CONF-13]
+  cwe: [22]

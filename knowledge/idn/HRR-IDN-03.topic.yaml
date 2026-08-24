@@ -1,0 +1,20 @@
+id: HRR-IDN-03
+title: "Account enumeration"
+domain: IDN
+axis: technique
+
+surfaces:
+  any_of: [login-form, registration, password-reset, search]
+
+boundaries:
+  - subject: "Verbose errors that disclose other internals"
+    home: HRR-ERR-01
+    note: >-
+      A differential that reveals whether an account exists is an identity
+      finding, whatever mechanism leaks it.
+
+see_also: [HRR-ERR-01]
+
+refs:
+  wstg: [WSTG-IDNT-04]
+  cwe: [204]

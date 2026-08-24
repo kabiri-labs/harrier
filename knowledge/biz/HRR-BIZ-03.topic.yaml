@@ -1,0 +1,14 @@
+id: HRR-BIZ-03
+title: "Integrity of client-supplied state"
+domain: BIZ
+axis: asset
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment, object-id-param]
+
+see_also: [HRR-ACL-06, HRR-BIZ-01, HRR-BIZ-08]
+
+refs:
+  wstg: [WSTG-BUSL-03]
+  cwe: [565]

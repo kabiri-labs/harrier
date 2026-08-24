@@ -1,0 +1,11 @@
+id: HRR-CRY-03
+title: "Cryptographic primitive selection"
+domain: CRY
+axis: property
+
+surfaces:
+  any_of: [shared-secret-config, token-bearing, payment]
+
+refs:
+  wstg: [WSTG-CRYP-04]
+  cwe: [327, 330]

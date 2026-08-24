@@ -1,0 +1,12 @@
+id: HRR-BIZ-07
+title: "Application misuse detection"
+domain: BIZ
+axis: asset
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, privileged-function]
+
+refs:
+  wstg: [WSTG-BUSL-07]
+  cwe: [778]

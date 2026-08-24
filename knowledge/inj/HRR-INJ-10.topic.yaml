@@ -1,0 +1,21 @@
+id: HRR-INJ-10
+title: "Server-side template injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [template-param, stored-then-rendered, rich-text]
+
+boundaries:
+  - subject: "A reflected expression evaluated by the browser"
+    home: HRR-CLT-01
+    note: >-
+      A template engine evaluating an expression server-side is here; the
+      same-looking payload rendered as script in the client is cross-site
+      scripting.
+
+see_also: [HRR-CLT-01]
+
+refs:
+  wstg: [WSTG-INPV-18]
+  cwe: [1336]

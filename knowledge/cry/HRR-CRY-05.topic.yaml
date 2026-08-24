@@ -1,0 +1,25 @@
+id: HRR-CRY-05
+title: "Signed token verification"
+domain: CRY
+axis: technique
+
+surfaces:
+  any_of: [token-bearing]
+
+boundaries:
+  - subject: "Claim lifetime, audience and issuer"
+    home: HRR-SES-10
+    note: >-
+      Whether the signature is checked at all is here; what the accepted
+      claims then say is a session property. The two fail independently.
+  - subject: "A key fetched from a URL in the token header"
+    home: HRR-RES-03
+    note: >-
+      Verification is here; the verifier reaching out to a location the token
+      named is server-side request forgery.
+
+see_also: [HRR-SES-10, HRR-AUT-10]
+
+refs:
+  wstg: [WSTG-SESS-10]
+  cwe: [347]

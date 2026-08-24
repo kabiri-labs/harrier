@@ -1,0 +1,13 @@
+id: HRR-CLT-08
+title: "Clickjacking and UI redress"
+domain: CLT
+axis: property
+
+surfaces:
+  any_of: [framed-ui, privileged-function, business-workflow]
+
+see_also: [HRR-CFG-05]
+
+refs:
+  wstg: [WSTG-CLNT-09]
+  cwe: [1021]

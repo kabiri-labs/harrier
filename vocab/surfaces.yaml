@@ -307,3 +307,133 @@ surfaces:
       server may trust the client to sequence them.
     discovery_hint: "Wizards, checkout funnels, approval chains, onboarding flows, step parameters in requests."
     emits: []
+
+  - tag: dom-sink
+    label: Client script writing attacker-influenced data into a sink
+    description: >
+      Any place where browser-side script assigns request-, storage- or
+      message-derived data into innerHTML, document.write, eval, a URL
+      attribute, or a framework's raw-HTML escape hatch.
+    discovery_hint: "Grep bundled script for innerHTML, document.write, eval, setAttribute on href/src, dangerouslySetInnerHTML, v-html."
+    emits: []
+
+  - tag: cross-window
+    label: Communication between browsing contexts
+    description: >
+      postMessage listeners, window.opener references, named frames, or any
+      handler that acts on a message whose origin it did not choose.
+    discovery_hint: "addEventListener('message'), window.open, target=_blank links, embedded iframes from another origin."
+    emits: [dom-sink]
+
+  - tag: client-storage
+    label: Data persisted in the browser
+    description: >
+      localStorage, sessionStorage, IndexedDB, or a response the browser is
+      permitted to cache, holding anything the application would not print on a
+      billboard.
+    discovery_hint: "Inspect storage after login; check Cache-Control on authenticated responses."
+    emits: []
+
+  - tag: cors-enabled
+    label: Response carrying a cross-origin sharing header
+    description: >
+      Any endpoint answering with Access-Control-Allow-Origin, whether static or
+      reflected from the request.
+    discovery_hint: "Send an Origin header and look for Access-Control-Allow-Origin in the response."
+    emits: []
+
+  - tag: framed-ui
+    label: Interactive surface that can be placed in a frame
+    description: >
+      A page carrying a state-changing control and no framing restriction, so a
+      third-party document can overlay or disguise it.
+    discovery_hint: "Check for absent frame-ancestors and X-Frame-Options on pages with buttons that do something."
+    emits: []
+
+  - tag: cache-fronted
+    label: Shared cache between the client and the origin
+    description: >
+      A CDN, reverse proxy or gateway cache serving responses to more than one
+      client, so a poisoned entry reaches users who never sent the request.
+    discovery_hint: "Age, X-Cache, CF-Cache-Status or Via headers; differing responses for the same URL."
+    emits: []
+
+  - tag: tls-endpoint
+    label: TLS-terminating endpoint
+    description: >
+      Any hostname and port that completes a TLS handshake, including those
+      terminated at a load balancer rather than the application.
+    discovery_hint: "Every https listener found during mapping, not only the main site."
+    emits: []
+
+  - tag: cloud-storage
+    label: Object storage reachable from the application
+    description: >
+      A bucket or container whose objects the application serves, links to, or
+      accepts uploads into.
+    discovery_hint: "Asset URLs on a storage provider's domain; pre-signed upload endpoints."
+    emits: []
+
+  - tag: dns-delegated
+    label: Hostname delegated to a third-party service
+    description: >
+      A subdomain whose DNS record points at a platform the organisation may no
+      longer own a claim on.
+    discovery_hint: "CNAME or NS records aimed at a hosting, CDN or SaaS provider; records resolving to nothing."
+    emits: []
+
+  - tag: plugin-policy
+    label: Cross-domain policy file for a browser plugin
+    description: >
+      crossdomain.xml or clientaccesspolicy.xml. Legacy: the plugins that read
+      these are retired, so this is recorded for completeness rather than impact.
+    discovery_hint: "Request /crossdomain.xml and /clientaccesspolicy.xml at the web root."
+    emits: []
+
+  - tag: mail-ingest
+    label: Input reaching a mail message
+    description: >
+      Any field whose value is placed into a message envelope, header or body --
+      contact forms, invitations, notification preferences, share-by-email.
+    discovery_hint: "Anything that causes mail to be sent, especially where the tester controls a name, subject or recipient."
+    emits: []
+
+  - tag: os-command
+    label: Input reaching a command interpreter
+    description: >
+      A parameter plausibly reaching a shell, an exec call, or a wrapper around a
+      command-line tool -- conversion, archiving, imaging, network diagnostics.
+    discovery_hint: "Features that convert, resize, compress, ping, or shell out to a named binary."
+    emits: []
+
+  - tag: ldap-backed-param
+    label: Parameter reaching a directory service
+    description: >
+      Any value composed into an LDAP search filter or distinguished name --
+      directory login, people search, group membership lookup.
+    discovery_hint: "Enterprise sign-in, staff directory search, group or organisational-unit pickers."
+    emits: []
+
+  - tag: xpath-backed-param
+    label: Parameter reaching an XPath or XQuery expression
+    description: >
+      A value composed into a query over an XML document rather than a relational
+      store.
+    discovery_hint: "Search over XML-backed content, configuration lookups, legacy document stores."
+    emits: []
+
+  - tag: code-eval
+    label: Input reaching a language evaluator
+    description: >
+      A value passed to eval, a dynamic import, a deserializer that instantiates
+      types, or a rules engine that compiles expressions.
+    discovery_hint: "Formula fields, scripted rules, plugin or extension points, saved query expressions."
+    emits: []
+
+  - tag: shared-secret-config
+    label: Configuration holding keys, secrets or credentials
+    description: >
+      Any surface that exposes, accepts or manages cryptographic material --
+      key rotation screens, integration setup, exported configuration.
+    discovery_hint: "Integration and webhook settings, API key management, exported or downloadable configuration."
+    emits: []

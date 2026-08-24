@@ -1,0 +1,18 @@
+id: HRR-ACL-01
+title: "Role and permission model"
+domain: ACL
+axis: phase
+kind: recon
+
+surfaces:
+  always: true
+
+boundaries:
+  - subject: "Whether each role's grant is actually enforced"
+    home: HRR-ACL-03
+    note: >-
+      The model is recorded here as the input every access-control test reads;
+      enforcement is tested against it.
+
+refs:
+  wstg: [WSTG-IDNT-01]

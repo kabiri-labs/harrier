@@ -1,0 +1,20 @@
+id: HRR-PRT-01
+title: "Request smuggling and desync"
+domain: PRT
+axis: technique
+
+surfaces:
+  any_of: [reverse-proxy, cache-fronted]
+
+boundaries:
+  - subject: "A cache serving the poisoned response to others"
+    home: null
+    note: >-
+      Cache poisoning and deception are the impact this often reaches. Not yet
+      written as their own topic; recorded so the gap stays visible.
+
+see_also: [HRR-PRT-04]
+
+refs:
+  wstg: [WSTG-INPV-15]
+  cwe: [444]

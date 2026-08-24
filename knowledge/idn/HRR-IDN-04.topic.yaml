@@ -1,0 +1,10 @@
+id: HRR-IDN-04
+title: "Username policy"
+domain: IDN
+axis: property
+
+surfaces:
+  any_of: [registration, login-form]
+
+refs:
+  wstg: [WSTG-IDNT-05]

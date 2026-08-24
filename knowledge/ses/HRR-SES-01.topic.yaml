@@ -1,0 +1,11 @@
+id: HRR-SES-01
+title: "Session establishment and token issue"
+domain: SES
+axis: property
+
+surfaces:
+  any_of: [session-cookie, token-bearing]
+
+refs:
+  wstg: [WSTG-SESS-01]
+  cwe: [330]

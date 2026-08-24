@@ -1,0 +1,11 @@
+id: HRR-SES-06
+title: "Logout and session termination"
+domain: SES
+axis: property
+
+surfaces:
+  any_of: [session-cookie, token-bearing]
+
+refs:
+  wstg: [WSTG-SESS-06]
+  cwe: [613]

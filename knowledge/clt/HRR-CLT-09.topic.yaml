@@ -1,0 +1,13 @@
+id: HRR-CLT-09
+title: "Web messaging"
+domain: CLT
+axis: property
+
+surfaces:
+  any_of: [cross-window]
+
+see_also: [HRR-CLT-02]
+
+refs:
+  wstg: [WSTG-CLNT-11]
+  cwe: [346]

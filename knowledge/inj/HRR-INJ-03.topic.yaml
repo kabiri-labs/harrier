@@ -1,0 +1,20 @@
+id: HRR-INJ-03
+title: "XML injection and entity expansion"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [xml-ingest]
+
+boundaries:
+  - subject: "An entity that makes the parser fetch a URL"
+    home: HRR-RES-03
+    note: >-
+      The injection is here; a parser reaching out to a network location the
+      tester chose is server-side request forgery.
+
+see_also: [HRR-RES-03]
+
+refs:
+  wstg: [WSTG-INPV-07]
+  cwe: [91, 611]

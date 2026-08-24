@@ -1,0 +1,20 @@
+id: HRR-AUT-07
+title: "Credential change and reset flows"
+domain: AUT
+axis: asset
+
+surfaces:
+  any_of: [password-change, password-reset]
+
+boundaries:
+  - subject: "A reset link built from a request-controlled host"
+    home: HRR-PRT-02
+    note: >-
+      The flow's own logic is here; a host header the application trusts when
+      composing the link is a transport-layer trust failure.
+
+see_also: [HRR-PRT-02]
+
+refs:
+  wstg: [WSTG-ATHN-09]
+  cwe: [640]

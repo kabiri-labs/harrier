@@ -1,0 +1,21 @@
+id: HRR-BIZ-05
+title: "Function use limits"
+domain: BIZ
+axis: asset
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment, export-report]
+
+boundaries:
+  - subject: "A limit protecting a credential"
+    home: HRR-AUT-03
+    note: >-
+      Lockout defends a secret; a cap on how often an action may be taken
+      defends a business rule, and the two fail differently.
+
+see_also: [HRR-AUT-03, HRR-BIZ-09]
+
+refs:
+  wstg: [WSTG-BUSL-05]
+  cwe: [770]

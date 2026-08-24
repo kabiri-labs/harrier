@@ -1,0 +1,21 @@
+id: HRR-BIZ-02
+title: "Forged and replayed requests"
+domain: BIZ
+axis: asset
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment]
+
+boundaries:
+  - subject: "Ambient authority making a cross-site request succeed"
+    home: HRR-SES-05
+    note: >-
+      Forging a request the client should not be able to construct is here; a
+      request the victim's own browser sends is a session failure.
+
+see_also: [HRR-SES-05]
+
+refs:
+  wstg: [WSTG-BUSL-02]
+  cwe: [807, 602]

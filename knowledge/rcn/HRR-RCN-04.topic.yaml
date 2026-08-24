@@ -1,0 +1,11 @@
+id: HRR-RCN-04
+title: "Execution path and architecture mapping"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  always: true
+
+refs:
+  wstg: [WSTG-INFO-07, WSTG-INFO-10]

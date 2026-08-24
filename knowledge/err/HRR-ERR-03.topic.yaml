@@ -1,0 +1,20 @@
+id: HRR-ERR-03
+title: "Information leakage in delivered content"
+domain: ERR
+axis: vector
+
+surfaces:
+  always: true
+
+boundaries:
+  - subject: "Files that should not be served at all"
+    home: HRR-CFG-02
+    note: >-
+      Content disclosed inside a page the application meant to serve is here;
+      a backup file nobody meant to publish is configuration.
+
+see_also: [HRR-CFG-02]
+
+refs:
+  wstg: [WSTG-INFO-05, WSTG-INFO-03]
+  cwe: [200, 615]

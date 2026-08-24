@@ -1,0 +1,25 @@
+id: HRR-INJ-01
+title: "SQL injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [sql-backed-param]
+
+boundaries:
+  - subject: "Operator injection against a document store"
+    home: null
+    note: >-
+      The payload is a structured operator rather than a concatenated SQL
+      fragment. Not yet written; recorded so the gap stays visible.
+  - subject: "Injection into an LDAP filter"
+    home: HRR-INJ-02
+    note: >-
+      A different interpreter with different metacharacters and no SQL
+      grammar.
+
+see_also: [HRR-INJ-02, HRR-INJ-05, HRR-INJ-12]
+
+refs:
+  wstg: [WSTG-INPV-05]
+  cwe: [89]

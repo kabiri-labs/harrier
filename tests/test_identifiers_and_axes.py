@@ -108,3 +108,33 @@ class OrderingReachesEveryUnit(SandboxCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CrossReferencesRunBothWays(SandboxCase):
+    """A see_also is a peer relationship. A boundary is the directional one."""
+
+    def test_an_unreturned_cross_reference_is_rejected(self):
+        # A reader arriving at the other topic would never learn this one exists,
+        # which is the whole value the link was supposed to add.
+        self.box.add_topic(self.box.UNLINKED_TOPIC, see_also=["HRR-CLT-01"])
+        self.assertRejected("is not returned")
+
+    def test_a_returned_cross_reference_is_accepted(self):
+        self.box.add_topic(self.box.UNLINKED_TOPIC, see_also=["HRR-AUT-02"])
+        other = self.box.read("knowledge/aut/HRR-AUT-02.topic.yaml")
+        other["see_also"] = sorted(set(other.get("see_also", [])) | {"HRR-AUT-01"})
+        self.box.write("knowledge/aut/HRR-AUT-02.topic.yaml", other)
+        self.assertAccepted()
+
+    def test_a_boundary_needs_no_return(self):
+        # Boundaries are directional by design: "the thing I am not covering
+        # lives over there" does not oblige the other topic to say anything.
+        self.box.add_topic(
+            self.box.UNLINKED_TOPIC,
+            boundaries=[{
+                "subject": "Something filed elsewhere",
+                "home": "HRR-CLT-01",
+                "note": "Recorded so the boundary is visible rather than assumed.",
+            }],
+        )
+        self.assertAccepted()

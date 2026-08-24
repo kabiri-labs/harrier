@@ -1,0 +1,13 @@
+id: HRR-ACL-06
+title: "Field-level binding and mass assignment"
+domain: ACL
+axis: vector
+
+surfaces:
+  any_of: [rest-api, graphql, registration, business-workflow]
+
+see_also: [HRR-ACL-02, HRR-BIZ-03]
+
+refs:
+  wstg: [WSTG-INPV-20]
+  cwe: [915]
