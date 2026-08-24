@@ -1,0 +1,7 @@
+id: HRR-AUT-01-POLICY
+topic: HRR-AUT-01
+status: outline
+title: "The weakest accepted credential"
+objective: >-
+  Determine the weakest credential the application actually accepts, which is
+  the enforced policy regardless of what the published one says.

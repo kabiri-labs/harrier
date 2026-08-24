@@ -1,0 +1,8 @@
+id: HRR-AUT-09-POLICY
+topic: HRR-AUT-09
+status: outline
+title: "Which accounts and actions the second factor is demanded for"
+objective: >-
+  Determine which accounts and which sensitive actions actually demand the
+  second factor, since a factor that is offered but not required protects only
+  those who opted in.

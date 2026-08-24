@@ -1,0 +1,8 @@
+id: HRR-IDN-04-NAMING
+topic: HRR-IDN-04
+status: outline
+title: "The identifier space the application accepts"
+objective: >-
+  Determine which characters, lengths and forms are accepted in a username,
+  since an accepted form that is visually or semantically indistinguishable
+  from another is an impersonation primitive.

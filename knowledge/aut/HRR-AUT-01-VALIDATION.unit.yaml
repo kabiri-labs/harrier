@@ -1,0 +1,8 @@
+id: HRR-AUT-01-VALIDATION
+topic: HRR-AUT-01
+status: outline
+title: "Consistency of enforcement across credential-setting surfaces"
+objective: >-
+  Determine whether every surface that sets a credential applies the same
+  rule, since registration, change and reset are frequently three separate
+  implementations.

@@ -6,6 +6,11 @@ axis: property
 surfaces:
   any_of: [security-question]
 
+order:
+  - HRR-AUT-06-POLICY
+  - HRR-AUT-06-VALIDATION
+  - HRR-AUT-06-RATE
+
 refs:
   wstg: [WSTG-ATHN-08]
   cwe: [640]

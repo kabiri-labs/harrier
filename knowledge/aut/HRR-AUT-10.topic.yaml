@@ -6,6 +6,12 @@ axis: property
 surfaces:
   any_of: [sso-oidc]
 
+order:
+  - HRR-AUT-10-VALIDATION
+  - HRR-AUT-10-BINDING
+  - HRR-AUT-10-SCOPE
+  - HRR-AUT-10-REVOCATION
+
 boundaries:
   - subject: "Verifying the signature on an issued token"
     home: HRR-CRY-05

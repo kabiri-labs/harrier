@@ -1,0 +1,8 @@
+id: HRR-IDN-03-TIME
+topic: HRR-IDN-03
+status: outline
+title: "A timing differential between an existing and a non-existing account"
+objective: >-
+  Determine whether response latency differs according to whether the
+  submitted account exists, which is what remains when the responses have been
+  made identical.

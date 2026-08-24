@@ -6,12 +6,24 @@ axis: property
 surfaces:
   any_of: [persistent-login]
 
+order:
+  - HRR-AUT-05-ENTROPY
+  - HRR-AUT-05-EXPIRY
+  - HRR-AUT-05-REVOCATION
+
 boundaries:
   - subject: "Where the persistent secret is stored in the browser"
     home: HRR-CLT-10
     note: >-
       The design of the mechanism is here; the storage medium's own exposure
       is client-side.
+
+  - subject: "Whether sign-out terminates the server-side session"
+    home: HRR-SES-06
+    note: >-
+      Termination of the session is a session property. Whether a separate
+      long-lived secret survives that termination and re-authenticates is this
+      mechanism's own failure.
 
 see_also: [HRR-CLT-10]
 

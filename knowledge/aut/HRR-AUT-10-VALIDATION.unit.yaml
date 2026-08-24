@@ -1,0 +1,8 @@
+id: HRR-AUT-10-VALIDATION
+topic: HRR-AUT-10
+status: outline
+title: "How the authorization request's return location is matched"
+objective: >-
+  Determine how strictly the registered return location is matched, since
+  prefix or wildcard matching hands the authorization response to a location
+  the client never registered.

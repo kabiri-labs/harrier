@@ -1,0 +1,7 @@
+id: HRR-AUT-07-EXPIRY
+topic: HRR-AUT-07
+status: outline
+title: "Lifetime of the reset artefact"
+objective: >-
+  Determine whether a reset artefact stops being accepted after its stated
+  lifetime has passed.

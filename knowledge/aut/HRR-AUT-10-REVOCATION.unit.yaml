@@ -1,0 +1,7 @@
+id: HRR-AUT-10-REVOCATION
+topic: HRR-AUT-10
+status: outline
+title: "Effect of withdrawing a grant on tokens already issued"
+objective: >-
+  Determine whether withdrawing a grant stops the tokens issued under it from
+  being accepted.

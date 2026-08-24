@@ -1,0 +1,7 @@
+id: HRR-AUT-03-SCOPE
+topic: HRR-AUT-03
+status: outline
+title: "What the failure counter is keyed on"
+objective: >-
+  Determine what value the failure counter is keyed on, since a counter keyed
+  on anything the caller supplies is reset by changing that value.

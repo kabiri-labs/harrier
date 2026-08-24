@@ -1,0 +1,7 @@
+id: HRR-AUT-09-BINDING
+topic: HRR-AUT-09
+status: outline
+title: "Binding of the one-time value to the requesting session"
+objective: >-
+  Determine whether a one-time value issued for one account or session is
+  refused when it is submitted from another.

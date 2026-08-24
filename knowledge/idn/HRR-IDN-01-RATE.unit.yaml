@@ -1,0 +1,7 @@
+id: HRR-IDN-01-RATE
+topic: HRR-IDN-01
+status: outline
+title: "Throttling of account creation"
+objective: >-
+  Determine whether one caller can create accounts faster than a human would,
+  which decides whether every per-account limit elsewhere can be sidestepped.
