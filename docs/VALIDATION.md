@@ -61,6 +61,11 @@ checked.
 - a unit still marked `outline` while carrying everything an authored unit needs
   is rejected, because a stale status makes the coverage figures lie
 - every unit is reached by its topic's `order`, when one is declared
+- every `see_also` is returned by the topic it names. A one-way link is a
+  boundary written in the wrong field
+- every WSTG identifier the ordered procedure resolved is claimed by at least one
+  topic. An identifier resolved to no domain is exempt: it is not one test, or
+  not a test at all, so requiring a topic would force one that should not exist
 
 **5 — Payloads.** Both directions of the variable rule: an undeclared placeholder
 leaves an entry nobody can fill in, and a declared-but-unused one is what a
@@ -75,7 +80,7 @@ would push the rationale out of the one place it is written.
 
 ## What the suite adds
 
-72 tests, offline, no network and no fixtures of their own: every mutation test
+95 tests, offline, no network and no fixtures of their own: every mutation test
 copies the real repository and breaks exactly one thing in it. A hand-built
 miniature drifts from what it stands in for, and then the suite passes while the
 repository is broken.

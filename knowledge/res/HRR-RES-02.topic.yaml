@@ -1,0 +1,26 @@
+id: HRR-RES-02
+title: "File upload handling"
+domain: RES
+axis: property
+
+surfaces:
+  any_of: [file-upload]
+
+boundaries:
+  - subject: "Whether the file type is one the business expects"
+    home: null
+    note: >-
+      Published under business logic. Type acceptance is a validation question
+      inside this mechanism, not a separate test: the server stores and later
+      serves what the attacker supplied.
+  - subject: "Where the object store puts it"
+    home: HRR-CFG-09
+    note: >-
+      What the application accepts is here; how the storage it lands in is
+      configured is a configuration finding.
+
+see_also: [HRR-CFG-09]
+
+refs:
+  wstg: [WSTG-BUSL-08, WSTG-BUSL-09]
+  cwe: [434, 646]

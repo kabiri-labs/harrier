@@ -1,0 +1,13 @@
+id: HRR-CLT-10
+title: "Client-side storage and cache"
+domain: CLT
+axis: property
+
+surfaces:
+  any_of: [client-storage]
+
+see_also: [HRR-AUT-05, HRR-SES-04]
+
+refs:
+  wstg: [WSTG-CLNT-12, WSTG-ATHN-06]
+  cwe: [922, 525]

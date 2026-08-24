@@ -208,6 +208,23 @@ def check_standards(repo: Repository, problems: Problems) -> None:
             if code not in domains:
                 problems.add("standards/wstg-map.yaml", f"{wid} names undefined domain {code}")
 
+    covered = {
+        wid
+        for topic in repo.topics
+        for wid in (topic.data.get("refs") or {}).get("wstg") or []
+    }
+    for entry in wmap.data["map"]:
+        # An entry with no domains is one the ordered procedure deliberately did
+        # not resolve -- it is not one test, or not a test at all. Requiring a
+        # topic for it would force a topic that should not exist.
+        if entry["domains"] and entry["id"] not in covered:
+            problems.add(
+                "standards/wstg-map.yaml",
+                f"{entry['id']} is mapped to a domain but no topic claims it -- "
+                "a resolved identifier with no topic is a coverage hole, not a "
+                "decision",
+            )
+
     for wid in sorted(pinned - mapped):
         problems.add(
             "standards/wstg-map.yaml",
@@ -347,6 +364,14 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
         for target in doc.data.get("see_also") or []:
             if target not in topics:
                 problems.add(doc.rel, f"see_also names unknown topic {target}")
+            elif tid not in (topics[target].data.get("see_also") or []):
+                problems.add(
+                    doc.rel,
+                    f"see_also {target} is not returned -- a cross-reference is a "
+                    "peer relationship, and a reader arriving at the other topic "
+                    "would never learn this one exists. If the relationship really "
+                    "runs one way, it is a boundary, not a see_also",
+                )
         for boundary in doc.data.get("boundaries") or []:
             home = boundary.get("home")
             if home is not None and home not in topics:
@@ -558,7 +583,9 @@ def coverage(root: Path) -> Dict[str, int]:
         for doc in repo.topics
         for wid in (doc.data.get("refs") or {}).get("wstg") or []
     }
+    coverable = {e["id"] for e in wmap if e["domains"]}
     return {
+        "wstg_coverable": len(coverable),
         "topics": len(repo.topics),
         "units": len(repo.units),
         "units_authored": sum(1 for d in repo.units if d.data.get("status") != "outline"),

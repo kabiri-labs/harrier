@@ -1,0 +1,13 @@
+id: HRR-INJ-02
+title: "LDAP injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [ldap-backed-param]
+
+see_also: [HRR-INJ-01]
+
+refs:
+  wstg: [WSTG-INPV-06]
+  cwe: [90]

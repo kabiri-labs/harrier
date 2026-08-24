@@ -1,0 +1,10 @@
+id: HRR-IDN-01
+title: "Account registration controls"
+domain: IDN
+axis: property
+
+surfaces:
+  any_of: [registration]
+
+refs:
+  wstg: [WSTG-IDNT-02]

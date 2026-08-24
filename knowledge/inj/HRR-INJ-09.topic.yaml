@@ -1,0 +1,11 @@
+id: HRR-INJ-09
+title: "Format string injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [template-param, search]
+
+refs:
+  wstg: [WSTG-INPV-13]
+  cwe: [134]

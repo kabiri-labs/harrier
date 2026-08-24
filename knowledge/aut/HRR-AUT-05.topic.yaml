@@ -1,0 +1,20 @@
+id: HRR-AUT-05
+title: "Persistent authentication"
+domain: AUT
+axis: property
+
+surfaces:
+  any_of: [persistent-login]
+
+boundaries:
+  - subject: "Where the persistent secret is stored in the browser"
+    home: HRR-CLT-10
+    note: >-
+      The design of the mechanism is here; the storage medium's own exposure
+      is client-side.
+
+see_also: [HRR-CLT-10]
+
+refs:
+  wstg: [WSTG-ATHN-05]
+  cwe: [539]

@@ -1,0 +1,14 @@
+id: HRR-BIZ-01
+title: "Business rule validation"
+domain: BIZ
+axis: asset
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment, export-report]
+
+see_also: [HRR-BIZ-03]
+
+refs:
+  wstg: [WSTG-BUSL-01]
+  cwe: [20, 602]

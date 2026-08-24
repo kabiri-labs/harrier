@@ -1,0 +1,13 @@
+id: HRR-RCN-06
+title: "API surface enumeration"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  any_of: [rest-api, graphql, websocket]
+
+see_also: [HRR-RCN-07]
+
+refs:
+  wstg: [WSTG-APIT-01]

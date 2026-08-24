@@ -1,0 +1,13 @@
+id: HRR-CFG-02
+title: "Exposed files and backup artefacts"
+domain: CFG
+axis: phase
+
+surfaces:
+  always: true
+
+see_also: [HRR-ERR-03]
+
+refs:
+  wstg: [WSTG-CONF-03, WSTG-CONF-04]
+  cwe: [530, 548]

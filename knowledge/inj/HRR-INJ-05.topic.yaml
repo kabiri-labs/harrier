@@ -1,0 +1,13 @@
+id: HRR-INJ-05
+title: "XPath injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [xpath-backed-param]
+
+see_also: [HRR-INJ-01]
+
+refs:
+  wstg: [WSTG-INPV-09]
+  cwe: [643]

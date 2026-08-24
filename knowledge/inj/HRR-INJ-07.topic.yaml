@@ -1,0 +1,13 @@
+id: HRR-INJ-07
+title: "Code injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [code-eval, deserialization]
+
+see_also: [HRR-INJ-08]
+
+refs:
+  wstg: [WSTG-INPV-11]
+  cwe: [94, 502]

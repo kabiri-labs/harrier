@@ -1,0 +1,13 @@
+id: HRR-INJ-08
+title: "Operating system command injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [os-command]
+
+see_also: [HRR-INJ-04, HRR-INJ-07]
+
+refs:
+  wstg: [WSTG-INPV-12]
+  cwe: [78]

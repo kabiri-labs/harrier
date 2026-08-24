@@ -1,0 +1,14 @@
+id: HRR-BIZ-08
+title: "Payment and value handling"
+domain: BIZ
+axis: asset
+kind: inquiry
+
+surfaces:
+  any_of: [payment]
+
+see_also: [HRR-BIZ-03]
+
+refs:
+  wstg: [WSTG-BUSL-10]
+  cwe: [602]

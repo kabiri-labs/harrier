@@ -1,0 +1,11 @@
+id: HRR-CRY-04
+title: "Padding oracle"
+domain: CRY
+axis: technique
+
+surfaces:
+  any_of: [token-bearing, object-id-param, shared-secret-config]
+
+refs:
+  wstg: [WSTG-CRYP-02]
+  cwe: [209]

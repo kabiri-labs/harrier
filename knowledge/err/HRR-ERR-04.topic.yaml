@@ -1,0 +1,20 @@
+id: HRR-ERR-04
+title: "Publicly indexed exposure"
+domain: ERR
+axis: phase
+
+surfaces:
+  always: true
+
+boundaries:
+  - subject: "The same search used to enumerate the surface"
+    home: HRR-RCN-05
+    note: >-
+      Building a map is recon; finding something that should never have been
+      public is a disclosure finding.
+
+see_also: [HRR-RCN-05]
+
+refs:
+  wstg: [WSTG-INFO-01]
+  cwe: [200]

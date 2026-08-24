@@ -1,0 +1,19 @@
+id: HRR-CLT-02
+title: "DOM-based cross-site scripting"
+domain: CLT
+axis: context
+
+surfaces:
+  any_of: [dom-sink]
+
+boundaries:
+  - subject: "Output the server produced"
+    home: HRR-CLT-01
+    note: >-
+      The slug names the sink; the topic names who wrote to it.
+
+see_also: [HRR-CLT-01, HRR-CLT-05, HRR-CLT-09]
+
+refs:
+  wstg: [WSTG-CLNT-01, WSTG-CLNT-02]
+  cwe: [79]

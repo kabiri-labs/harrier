@@ -1,0 +1,20 @@
+id: HRR-CFG-04
+title: "HTTP method exposure"
+domain: CFG
+axis: phase
+
+surfaces:
+  always: true
+
+boundaries:
+  - subject: "Bypassing access control by changing the verb"
+    home: HRR-ACL-05
+    note: >-
+      Which methods the server accepts is configuration; whether a forbidden
+      action succeeds under another verb is access control.
+
+see_also: [HRR-ACL-05]
+
+refs:
+  wstg: [WSTG-CONF-06]
+  cwe: [650]

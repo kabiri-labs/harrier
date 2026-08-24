@@ -1,0 +1,20 @@
+id: HRR-PRT-05
+title: "WebSocket handshake and origin"
+domain: PRT
+axis: property
+
+surfaces:
+  any_of: [websocket]
+
+boundaries:
+  - subject: "Message content reaching an interpreter"
+    home: HRR-INJ-11
+    note: >-
+      Establishing the connection is here; what is then sent over it is
+      injection.
+
+see_also: [HRR-INJ-11]
+
+refs:
+  wstg: [WSTG-CLNT-10]
+  cwe: [1385]

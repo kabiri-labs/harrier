@@ -1,0 +1,19 @@
+id: HRR-IDN-02
+title: "Account provisioning and deprovisioning"
+domain: IDN
+axis: phase
+
+surfaces:
+  any_of: [registration, admin-panel, privileged-function]
+
+boundaries:
+  - subject: "Whether a provisioned role can exceed its grant"
+    home: HRR-ACL-04
+    note: >-
+      How an account comes to exist is identity; what it may then do is access
+      control.
+
+see_also: [HRR-ACL-04]
+
+refs:
+  wstg: [WSTG-IDNT-03]

@@ -1,0 +1,11 @@
+id: HRR-AUT-06
+title: "Knowledge-based recovery"
+domain: AUT
+axis: property
+
+surfaces:
+  any_of: [security-question]
+
+refs:
+  wstg: [WSTG-ATHN-08]
+  cwe: [640]

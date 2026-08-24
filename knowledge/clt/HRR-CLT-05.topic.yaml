@@ -1,0 +1,13 @@
+id: HRR-CLT-05
+title: "Client-side resource manipulation"
+domain: CLT
+axis: vector
+
+surfaces:
+  any_of: [dom-sink, redirect-param]
+
+see_also: [HRR-CLT-02]
+
+refs:
+  wstg: [WSTG-CLNT-06]
+  cwe: [829]

@@ -1,0 +1,20 @@
+id: HRR-RCN-02
+title: "Application and virtual host enumeration"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  always: true
+
+boundaries:
+  - subject: "Administrative interfaces found while enumerating"
+    home: HRR-CFG-03
+    note: >-
+      Finding them is recon; whether they should be reachable at all is a
+      configuration finding.
+
+see_also: [HRR-CFG-03]
+
+refs:
+  wstg: [WSTG-INFO-04]

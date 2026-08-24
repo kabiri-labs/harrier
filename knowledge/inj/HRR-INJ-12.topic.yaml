@@ -1,0 +1,13 @@
+id: HRR-INJ-12
+title: "GraphQL resolver injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [graphql]
+
+see_also: [HRR-INJ-01]
+
+refs:
+  wstg: [WSTG-APIT-99]
+  cwe: [74]

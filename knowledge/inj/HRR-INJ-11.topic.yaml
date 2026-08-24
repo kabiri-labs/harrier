@@ -1,0 +1,20 @@
+id: HRR-INJ-11
+title: "WebSocket message injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [websocket]
+
+boundaries:
+  - subject: "The handshake and its origin check"
+    home: HRR-PRT-05
+    note: >-
+      Message content reaching a server-side interpreter is injection; how the
+      connection was established is a protocol concern.
+
+see_also: [HRR-PRT-05]
+
+refs:
+  wstg: [WSTG-CLNT-10]
+  cwe: [74]

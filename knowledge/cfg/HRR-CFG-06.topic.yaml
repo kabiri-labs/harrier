@@ -1,0 +1,20 @@
+id: HRR-CFG-06
+title: "Plugin cross-domain policy"
+domain: CFG
+axis: phase
+
+surfaces:
+  any_of: [plugin-policy]
+
+boundaries:
+  - subject: "Current cross-origin sharing"
+    home: HRR-CLT-06
+    note: >-
+      The plugins that read these policy files are retired. Recorded so the
+      coverage claim stays honest, not because it is likely to matter.
+
+see_also: [HRR-CLT-06, HRR-CLT-07]
+
+refs:
+  wstg: [WSTG-CONF-08]
+  cwe: [942]

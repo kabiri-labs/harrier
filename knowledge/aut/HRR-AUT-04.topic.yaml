@@ -1,0 +1,20 @@
+id: HRR-AUT-04
+title: "Authentication bypass"
+domain: AUT
+axis: technique
+
+surfaces:
+  any_of: [login-form, sso-oidc, token-bearing, admin-panel]
+
+boundaries:
+  - subject: "Reaching a function without authenticating at all"
+    home: HRR-ACL-03
+    note: >-
+      Defeating the authentication mechanism is here; an unauthenticated
+      request that a missing check lets through is access control.
+
+see_also: [HRR-ACL-03]
+
+refs:
+  wstg: [WSTG-ATHN-04]
+  cwe: [287]

@@ -1,0 +1,13 @@
+id: HRR-CLT-03
+title: "Client-side open redirect"
+domain: CLT
+axis: vector
+
+surfaces:
+  any_of: [redirect-param, dom-sink]
+
+see_also: [HRR-CLT-01]
+
+refs:
+  wstg: [WSTG-CLNT-04]
+  cwe: [601]

@@ -1,0 +1,13 @@
+id: HRR-RES-03
+title: "Server-side request forgery"
+domain: RES
+axis: technique
+
+surfaces:
+  any_of: [server-fetch, file-upload, xml-ingest]
+
+see_also: [HRR-INJ-03]
+
+refs:
+  wstg: [WSTG-INPV-19]
+  cwe: [918]

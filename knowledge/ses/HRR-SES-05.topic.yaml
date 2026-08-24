@@ -1,0 +1,21 @@
+id: HRR-SES-05
+title: "Cross-site request forgery"
+domain: SES
+axis: technique
+
+surfaces:
+  any_of: [session-cookie, business-workflow, privileged-function]
+
+boundaries:
+  - subject: "Cross-origin reads rather than writes"
+    home: HRR-CLT-06
+    note: >-
+      Ambient authority on a state-changing request is a session failure; a
+      policy that lets another origin read the response is a browser-enforced
+      one.
+
+see_also: [HRR-BIZ-02, HRR-CLT-06]
+
+refs:
+  wstg: [WSTG-SESS-05]
+  cwe: [352]

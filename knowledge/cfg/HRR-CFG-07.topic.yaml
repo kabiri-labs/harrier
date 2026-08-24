@@ -1,0 +1,11 @@
+id: HRR-CFG-07
+title: "File and directory permissions"
+domain: CFG
+axis: property
+
+surfaces:
+  always: true
+
+refs:
+  wstg: [WSTG-CONF-09]
+  cwe: [732]

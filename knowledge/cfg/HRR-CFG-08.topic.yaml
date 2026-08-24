@@ -1,0 +1,11 @@
+id: HRR-CFG-08
+title: "Subdomain takeover"
+domain: CFG
+axis: phase
+
+surfaces:
+  any_of: [dns-delegated]
+
+refs:
+  wstg: [WSTG-CONF-10]
+  cwe: [350]

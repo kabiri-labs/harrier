@@ -1,0 +1,11 @@
+id: HRR-AUT-09
+title: "Multi-factor authentication"
+domain: AUT
+axis: property
+
+surfaces:
+  any_of: [mfa]
+
+refs:
+  wstg: [WSTG-ATHN-11]
+  cwe: [308]

@@ -1,0 +1,11 @@
+id: HRR-AUT-02
+title: "Default and seeded credentials"
+domain: AUT
+axis: phase
+
+surfaces:
+  any_of: [login-form, admin-panel]
+
+refs:
+  wstg: [WSTG-ATHN-02]
+  cwe: [1392]

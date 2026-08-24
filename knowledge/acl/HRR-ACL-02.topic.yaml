@@ -1,0 +1,20 @@
+id: HRR-ACL-02
+title: "Object-level access control"
+domain: ACL
+axis: vector
+
+surfaces:
+  any_of: [object-id-param, path-param, rest-api, graphql, multi-tenant]
+
+boundaries:
+  - subject: "The same failure reached through an API rather than a page"
+    home: null
+    note: >-
+      Not a separate topic. Broken object level authorization is this test;
+      rest-api and graphql are surface tags on it.
+
+see_also: [HRR-ACL-03, HRR-ACL-06, HRR-ACL-07, HRR-RES-01]
+
+refs:
+  wstg: [WSTG-ATHZ-04, WSTG-APIT-02]
+  cwe: [639, 566]

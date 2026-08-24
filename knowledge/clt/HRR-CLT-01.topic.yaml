@@ -1,0 +1,25 @@
+id: HRR-CLT-01
+title: "Cross-site scripting via server-returned output"
+domain: CLT
+axis: context
+
+surfaces:
+  any_of: [search, rich-text, stored-then-rendered, redirect-param, template-param]
+
+boundaries:
+  - subject: "Output the browser itself wrote"
+    home: HRR-CLT-02
+    note: >-
+      This topic is output the server produced. When client script writes it
+      into a sink, nothing the server returned was ever unsafe.
+  - subject: "Reflected versus stored delivery"
+    home: null
+    note: >-
+      Not a separate topic. Delivery is a dimension: it changes where the
+      payload is pasted, not what proves it fired.
+
+see_also: [HRR-CFG-05, HRR-CLT-02, HRR-CLT-03, HRR-CLT-04, HRR-INJ-10]
+
+refs:
+  wstg: [WSTG-INPV-01, WSTG-INPV-02, WSTG-CLNT-03]
+  cwe: [79, 80]

@@ -1,0 +1,26 @@
+id: HRR-RES-01
+title: "Path traversal and file inclusion"
+domain: RES
+axis: technique
+
+surfaces:
+  any_of: [path-param, file-download, template-param]
+
+boundaries:
+  - subject: "Two components disagreeing about the path"
+    home: HRR-PRT-04
+    note: >-
+      Resolving a path the attacker wrote is here; a proxy and an origin
+      reading the same path differently is a protocol concern.
+  - subject: "An identifier that names a record rather than a file"
+    home: HRR-ACL-02
+    note: >-
+      Published under authorization and usually found there. Filed by
+      mechanism: the server resolves a path, which is the same mechanism as
+      inclusion and upload.
+
+see_also: [HRR-ACL-02, HRR-PRT-04]
+
+refs:
+  wstg: [WSTG-ATHZ-01]
+  cwe: [22, 98]

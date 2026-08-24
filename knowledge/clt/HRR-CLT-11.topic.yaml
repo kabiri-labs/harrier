@@ -1,0 +1,13 @@
+id: HRR-CLT-11
+title: "Cross-site script inclusion"
+domain: CLT
+axis: technique
+
+surfaces:
+  any_of: [rest-api, export-report]
+
+see_also: [HRR-CLT-06]
+
+refs:
+  wstg: [WSTG-CLNT-13]
+  cwe: [1385]
