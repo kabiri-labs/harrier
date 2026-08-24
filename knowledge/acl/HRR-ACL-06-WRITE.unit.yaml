@@ -1,0 +1,7 @@
+id: HRR-ACL-06-WRITE
+topic: HRR-ACL-06
+status: outline
+title: "Binding of a field the interface never exposed"
+objective: >-
+  Determine whether a field the interface never submits is bound from the
+  request body and persisted.

@@ -116,6 +116,21 @@ axes:
       RATE: The limit on how often the mechanism may be exercised.
       QUOTA: The limit on what one principal may accumulate in total.
 
+  - name: principal
+    description: >
+      Who is making the request. Splitting on it is correct wherever a
+      different caller is refused by a different check: an unauthenticated
+      caller, a lesser role and a peer account are usually stopped by three
+      separate pieces of code, so a clean result for one says nothing about
+      the others. It changes the procedure -- which account and which session
+      the request is made from -- and the oracle, which is what that caller
+      should have been refused.
+    slugs:
+      ANON: A caller carrying no authenticated session.
+      LOWPRIV: An authenticated caller holding a lesser role.
+      PEER: An authenticated caller of the same role but a different account.
+      TENANT: A caller belonging to a different tenant or organisation.
+
   - name: asset
     description: >
       The same test applied to a materially different kind of surface, where the

@@ -1,0 +1,8 @@
+id: HRR-ACL-06-MAP
+topic: HRR-ACL-06
+status: outline
+kind: recon
+title: "The fields the model carries beyond those the form submits"
+objective: >-
+  Record which fields the object model holds that the interface never submits,
+  since those are the ones a binding failure exposes.

@@ -1,10 +1,17 @@
 id: HRR-ACL-02
 title: "Object-level access control"
 domain: ACL
-axis: vector
+axis: principal
 
 surfaces:
   any_of: [object-id-param, path-param, rest-api, graphql, multi-tenant]
+
+order:
+  - HRR-ACL-02-MAP
+  - HRR-ACL-02-PEER
+  - HRR-ACL-02-TENANT
+  - HRR-ACL-02-WRITE
+  - HRR-ACL-02-IMPACT
 
 boundaries:
   - subject: "The same failure reached through an API rather than a page"

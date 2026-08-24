@@ -1,0 +1,7 @@
+id: HRR-ACL-03-ANON
+topic: HRR-ACL-03
+status: outline
+title: "A privileged function reached without authenticating"
+objective: >-
+  Determine whether a privileged function executes for a caller carrying no
+  session at all.

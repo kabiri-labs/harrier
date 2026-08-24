@@ -1,0 +1,7 @@
+id: HRR-ACL-03-LOWPRIV
+topic: HRR-ACL-03
+status: outline
+title: "A privileged function reached by a lesser role"
+objective: >-
+  Determine whether a privileged function executes for an authenticated caller
+  whose role does not include it.

@@ -1,0 +1,9 @@
+id: HRR-ACL-07-MAP
+topic: HRR-ACL-07
+status: outline
+kind: recon
+title: "The schema's types and fields, and who may reach each"
+objective: >-
+  Record the types and fields the schema exposes and which role is expected to
+  reach each, since a field-level check can only be judged against that
+  expectation.

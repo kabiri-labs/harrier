@@ -1,0 +1,7 @@
+id: HRR-ACL-07-PROBE
+topic: HRR-ACL-07
+status: outline
+title: "A field resolving for a role that should not read it"
+objective: >-
+  Determine whether a field outside the caller's role resolves to a value
+  rather than to an authorization error.

@@ -7,6 +7,10 @@ kind: recon
 surfaces:
   always: true
 
+order:
+  - HRR-ACL-01-MAP
+  - HRR-ACL-01-VERIFY
+
 boundaries:
   - subject: "Whether each role's grant is actually enforced"
     home: HRR-ACL-03

@@ -6,6 +6,11 @@ axis: phase
 surfaces:
   any_of: [graphql]
 
+order:
+  - HRR-ACL-07-MAP
+  - HRR-ACL-07-PROBE
+  - HRR-ACL-07-EVADE
+
 see_also: [HRR-ACL-02, HRR-RCN-07]
 
 refs:
