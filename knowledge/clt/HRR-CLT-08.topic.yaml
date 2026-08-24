@@ -8,6 +8,12 @@ surfaces:
 
 see_also: [HRR-CFG-05]
 
+order:
+  - HRR-CLT-08-POLICY
+  - HRR-CLT-08-PROBE
+  - HRR-CLT-08-WRITE
+  - HRR-CLT-08-EVADE
+
 refs:
   wstg: [WSTG-CLNT-09]
   cwe: [1021]

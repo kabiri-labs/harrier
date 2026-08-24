@@ -1,0 +1,9 @@
+id: HRR-CLT-01-EVADE
+topic: HRR-CLT-01
+status: outline
+kind: recon
+title: "Filter, encoder and policy evasion"
+objective: >-
+  Determine whether a negative result in another context is caused by an
+  encoder, a filter or a content security policy rather than by the value never
+  reaching the page.

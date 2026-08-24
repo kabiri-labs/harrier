@@ -1,0 +1,8 @@
+id: HRR-PRT-02-MAP
+topic: HRR-PRT-02
+status: outline
+kind: recon
+title: "Host-derived value inventory"
+objective: >-
+  Establish which responses contain absolute URLs, and which of those the
+  application composes from a value the request supplied.

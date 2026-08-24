@@ -1,0 +1,8 @@
+id: HRR-PRT-05-POLICY
+topic: HRR-PRT-05
+status: outline
+kind: recon
+title: "Declared handshake requirements"
+objective: >-
+  Establish which headers, subprotocols and authentication the handshake
+  requires before a connection is accepted.

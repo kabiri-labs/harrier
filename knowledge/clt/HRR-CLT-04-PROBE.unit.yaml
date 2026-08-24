@@ -1,0 +1,7 @@
+id: HRR-CLT-04-PROBE
+topic: HRR-CLT-04
+status: outline
+title: "Declaration parsing probe"
+objective: >-
+  Determine whether an injected style declaration is parsed and applied rather
+  than escaped or discarded.

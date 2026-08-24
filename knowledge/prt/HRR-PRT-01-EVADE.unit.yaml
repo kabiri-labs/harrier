@@ -1,0 +1,8 @@
+id: HRR-PRT-01-EVADE
+topic: HRR-PRT-01
+status: outline
+kind: recon
+title: "Framing normalisation evasion"
+objective: >-
+  Determine whether a negative result is caused by the intermediary rewriting
+  framing headers rather than by both parsers agreeing.

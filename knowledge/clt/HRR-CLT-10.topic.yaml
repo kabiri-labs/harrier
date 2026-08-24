@@ -8,6 +8,13 @@ surfaces:
 
 see_also: [HRR-AUT-05, HRR-SES-04]
 
+order:
+  - HRR-CLT-10-MAP
+  - HRR-CLT-10-STORAGE
+  - HRR-CLT-10-FLAGS
+  - HRR-CLT-10-SCOPE
+  - HRR-CLT-10-REVOCATION
+
 refs:
   wstg: [WSTG-CLNT-12, WSTG-ATHN-06]
   cwe: [922, 525]

@@ -136,8 +136,14 @@ coverage claim stays honest instead of quietly counting them.
 
 ## 4. Axes and their slug vocabularies
 
-Every topic declares exactly **one primary axis**. Its units are named from that
-axis's vocabulary, plus the `phase` vocabulary, which every topic may use.
+Every topic declares at most **one primary axis**. Its units are named from that
+axis's vocabulary, plus the universal ones — `phase` and `reach` — which every
+topic may use.
+
+A topic may declare none. Its units then come from the universal vocabularies
+alone, which is the honest form for a small topic whose decomposition really is
+just probe, reach and evade. A declared axis that no unit draws from is rejected:
+it states a constraint that constrains nothing.
 
 A slug outside the declared vocabulary is rejected. This is what makes
 non-overlap mechanical rather than a matter of care: two topics cannot invent two

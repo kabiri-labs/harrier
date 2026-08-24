@@ -1,0 +1,9 @@
+id: HRR-CLT-02-EVADE
+topic: HRR-CLT-02
+status: outline
+kind: recon
+title: "Sanitiser and policy evasion"
+objective: >-
+  Determine whether a negative result at a sink is caused by a client-side
+  sanitiser or a content security policy rather than by the source never
+  arriving.

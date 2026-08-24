@@ -1,7 +1,6 @@
 id: HRR-CLT-07
 title: "Cross-site flashing"
 domain: CLT
-axis: phase
 
 surfaces:
   any_of: [plugin-policy]
@@ -14,6 +13,10 @@ boundaries:
       honest, not because it is likely to matter.
 
 see_also: [HRR-CFG-06]
+
+order:
+  - HRR-CLT-07-MAP
+  - HRR-CLT-07-PROBE
 
 refs:
   wstg: [WSTG-CLNT-08]

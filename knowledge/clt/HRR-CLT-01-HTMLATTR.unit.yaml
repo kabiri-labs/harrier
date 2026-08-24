@@ -1,0 +1,7 @@
+id: HRR-CLT-01-HTMLATTR
+topic: HRR-CLT-01
+status: outline
+title: "Attribute value context"
+objective: >-
+  Determine whether a value landing inside an attribute can escape its quoting
+  or introduce an event-handler attribute.

@@ -1,0 +1,8 @@
+id: HRR-CLT-07-MAP
+topic: HRR-CLT-07
+status: outline
+kind: recon
+title: "Plugin content inventory"
+objective: >-
+  Establish whether any plugin-hosted content is still served, and by which
+  pages it is embedded.

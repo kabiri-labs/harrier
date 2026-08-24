@@ -8,6 +8,13 @@ surfaces:
 
 see_also: [HRR-CLT-02]
 
+order:
+  - HRR-CLT-05-MAP
+  - HRR-CLT-05-QUERY
+  - HRR-CLT-05-PATH
+  - HRR-CLT-05-EXEC
+  - HRR-CLT-05-EVADE
+
 refs:
   wstg: [WSTG-CLNT-06]
   cwe: [829]

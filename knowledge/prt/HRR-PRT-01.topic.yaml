@@ -15,6 +15,13 @@ boundaries:
 
 see_also: [HRR-PRT-04]
 
+order:
+  - HRR-PRT-01-FPRINT
+  - HRR-PRT-01-TIME
+  - HRR-PRT-01-DIFF
+  - HRR-PRT-01-WRITE
+  - HRR-PRT-01-EVADE
+
 refs:
   wstg: [WSTG-INPV-15]
   cwe: [444]

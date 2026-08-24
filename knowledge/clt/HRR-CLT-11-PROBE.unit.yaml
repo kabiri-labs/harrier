@@ -1,0 +1,7 @@
+id: HRR-CLT-11-PROBE
+topic: HRR-CLT-11
+status: outline
+title: "Cross-origin inclusion probe"
+objective: >-
+  Determine whether such an endpoint can be loaded by a script tag on an origin
+  the tester controls without being refused.

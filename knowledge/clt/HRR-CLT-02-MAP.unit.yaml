@@ -1,0 +1,8 @@
+id: HRR-CLT-02-MAP
+topic: HRR-CLT-02
+status: outline
+kind: recon
+title: "Source and sink inventory"
+objective: >-
+  Establish which attacker-influenceable sources the loaded script reads, and
+  which sinks it writes each of them into.

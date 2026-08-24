@@ -1,0 +1,7 @@
+id: HRR-CLT-08-PROBE
+topic: HRR-CLT-08
+status: outline
+title: "Framing confirmation"
+objective: >-
+  Determine whether the page renders inside a frame on an origin the tester
+  controls rather than refusing to load.

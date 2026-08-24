@@ -1,0 +1,7 @@
+id: HRR-PRT-03-QUERY
+topic: HRR-PRT-03
+status: outline
+title: "Query string duplication"
+objective: >-
+  Determine whether the component that authorises a request and the component
+  that acts on it select different occurrences from the query string.

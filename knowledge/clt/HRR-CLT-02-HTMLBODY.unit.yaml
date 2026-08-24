@@ -1,0 +1,7 @@
+id: HRR-CLT-02-HTMLBODY
+topic: HRR-CLT-02
+status: outline
+title: "Markup-writing sink"
+objective: >-
+  Determine whether a source reaches an innerHTML-family sink that parses the
+  assigned string as markup.

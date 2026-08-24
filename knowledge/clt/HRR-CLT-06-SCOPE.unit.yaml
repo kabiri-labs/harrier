@@ -1,0 +1,7 @@
+id: HRR-CLT-06-SCOPE
+topic: HRR-CLT-06
+status: outline
+title: "Accepted origin set"
+objective: >-
+  Determine whether the endpoint accepts an origin it should not, including a
+  reflected one, a null one, or one matched by prefix or suffix.

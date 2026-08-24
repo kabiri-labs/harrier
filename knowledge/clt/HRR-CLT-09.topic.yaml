@@ -8,6 +8,13 @@ surfaces:
 
 see_also: [HRR-CLT-02]
 
+order:
+  - HRR-CLT-09-MAP
+  - HRR-CLT-09-VALIDATION
+  - HRR-CLT-09-SCOPE
+  - HRR-CLT-09-WRITE
+  - HRR-CLT-09-EXEC
+
 refs:
   wstg: [WSTG-CLNT-11]
   cwe: [346]

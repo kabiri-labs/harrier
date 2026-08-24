@@ -1,0 +1,7 @@
+id: HRR-CLT-01-MARKUP
+topic: HRR-CLT-01
+status: outline
+title: "Markup injection without script execution"
+objective: >-
+  Determine whether markup can be injected that alters the page's meaning or
+  exfiltrates data while script execution stays blocked.

@@ -1,0 +1,7 @@
+id: HRR-PRT-03-BODY
+topic: HRR-PRT-03
+status: outline
+title: "Body field duplication"
+objective: >-
+  Determine whether a duplicated body field is resolved differently from a
+  duplicated query parameter by the same application.

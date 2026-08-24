@@ -1,0 +1,7 @@
+id: HRR-CLT-01-CSS
+topic: HRR-CLT-01
+status: outline
+title: "Style context"
+objective: >-
+  Determine whether a value landing in a style attribute or block can introduce
+  a declaration the browser acts on.

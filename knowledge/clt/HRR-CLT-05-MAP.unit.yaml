@@ -1,0 +1,8 @@
+id: HRR-CLT-05-MAP
+topic: HRR-CLT-05
+status: outline
+kind: recon
+title: "Script-driven resource inventory"
+objective: >-
+  Establish which resources the loaded script fetches at runtime and which of
+  their locations derive from attacker-influenceable input.

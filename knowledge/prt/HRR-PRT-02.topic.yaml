@@ -15,6 +15,12 @@ boundaries:
 
 see_also: [HRR-AUT-07]
 
+order:
+  - HRR-PRT-02-MAP
+  - HRR-PRT-02-HEADER
+  - HRR-PRT-02-WRITE
+  - HRR-PRT-02-EVADE
+
 refs:
   wstg: [WSTG-INPV-17]
   cwe: [644]

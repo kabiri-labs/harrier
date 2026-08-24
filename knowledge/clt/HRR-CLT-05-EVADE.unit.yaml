@@ -1,0 +1,8 @@
+id: HRR-CLT-05-EVADE
+topic: HRR-CLT-05
+status: outline
+kind: recon
+title: "Location allow-list evasion"
+objective: >-
+  Determine whether a negative result is caused by an origin allow-list rather
+  than by the location never being attacker-influenceable.

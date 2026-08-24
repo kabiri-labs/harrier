@@ -15,6 +15,12 @@ boundaries:
 
 see_also: [HRR-CLT-01]
 
+order:
+  - HRR-CLT-04-PROBE
+  - HRR-CLT-04-DIFF
+  - HRR-CLT-04-READ
+  - HRR-CLT-04-EVADE
+
 refs:
   wstg: [WSTG-CLNT-05]
   cwe: [79]

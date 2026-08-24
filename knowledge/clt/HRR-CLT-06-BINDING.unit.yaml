@@ -1,0 +1,7 @@
+id: HRR-CLT-06-BINDING
+topic: HRR-CLT-06
+status: outline
+title: "Credentialed cross-origin access"
+objective: >-
+  Determine whether the endpoint permits credentials to accompany a request
+  from an origin it accepted.

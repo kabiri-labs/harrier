@@ -1,0 +1,7 @@
+id: HRR-CLT-02-HTMLATTR
+topic: HRR-CLT-02
+status: outline
+title: "Attribute-writing sink"
+objective: >-
+  Determine whether a source reaches a call that sets an attribute whose name
+  or value the tester controls.

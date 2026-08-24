@@ -129,6 +129,12 @@ makes the *target* vulnerable. `done_when` says what proves *you performed the
 test*, including when you found nothing. A unit with only the first cannot answer
 "did I finish", which is the question a tester asks at the end of a long day.
 
+**A declared `axis` must do work.** It states which vocabulary this topic's
+units may draw from *beyond* the universal ones, so declaring one no unit draws
+from constrains nothing and misdescribes the decomposition. Omit it instead: a
+small topic whose units are all phases and reaches genuinely has no primary axis,
+and inventing a unit to justify a declaration is the worse of the two errors.
+
 **An objective states one outcome, not a menu of them.** This is the boundary
 rule applied to the sentence that carries it, and it is the mistake that recurs:
 

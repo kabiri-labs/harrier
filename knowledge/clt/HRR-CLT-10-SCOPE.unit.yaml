@@ -1,0 +1,7 @@
+id: HRR-CLT-10-SCOPE
+topic: HRR-CLT-10
+status: outline
+title: "Storage reachable from another origin"
+objective: >-
+  Determine whether stored values are readable by a sibling subdomain or by any
+  document the application embeds.
