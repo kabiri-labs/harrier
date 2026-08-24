@@ -138,3 +138,21 @@ class CrossReferencesRunBothWays(SandboxCase):
             }],
         )
         self.assertAccepted()
+
+
+class SurfaceEmissionsMustHoldForEverySurface(SandboxCase):
+    """An emitted tag is a claim about every surface carrying the emitting one."""
+
+    def test_cross_window_does_not_imply_a_dom_sink(self):
+        # A postMessage handler that logs the user out or updates state writes
+        # into no sink at all. Emitting dom-sink would make surface-first
+        # navigation offer DOM-XSS for a surface where nothing writes anywhere.
+        surfaces = self.box.read("vocab/surfaces.yaml")["surfaces"]
+        cross_window = next(s for s in surfaces if s["tag"] == "cross-window")
+        self.assertNotIn("dom-sink", cross_window.get("emits") or [])
+
+    def test_reverse_tabnabbing_selects_cross_window(self):
+        # An ordinary application-authored target=_blank link is the common case
+        # of this vulnerability, and cross-window is the tag that describes it.
+        topic = self.box.read("knowledge/clt/HRR-CLT-12.topic.yaml")
+        self.assertIn("cross-window", topic["surfaces"]["any_of"])

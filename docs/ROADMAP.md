@@ -25,7 +25,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 0 | Foundation | `done` | Documents, 14 domain codes, 6 axis vocabularies, 36 surface tags, 5 dimensions, WSTG pinned and fully mapped. No content. |
 | 1 | Schema and validator | `done` | Seven schemas, six validation passes, offline suite, CI. Identifiers, axis slugs, every cross-reference and the outline/authored distinction are machine-checked. Cheap now, impossible to retrofit across 350 files. |
 | 1.5 | Pin the reference standards | `done` | ASVS 5.0.0 at its release commit, CWE 4.20 by versioned archive and content hash. `refs.asvs` and `refs.cwe` both resolve. CVE stays out: it names one bug in one product, not a class. |
-| 2 | Topic map | `done` | 98 topics across 13 domains. Every resolvable WSTG identifier is claimed by a topic, and the validator now rejects one that is not. |
+| 2 | Topic map | `done` | 99 topics across 13 domains. Every resolvable WSTG identifier is claimed by a topic, and the validator now rejects one that is not. |
 | 3 | Unit outline pass | `not started` | Every topic decomposed to units. Identifier, title, objective, surfaces, refs. **This is where the artefact becomes genuinely useful.** |
 | 4 | Two reference topics at depth | `not started` | SQL injection and cross-site scripting. Chosen because one splits on `technique` with a dimension, the other on `context` with two dimensions — between them they exercise every mechanism in the model. |
 | 5 | Published artefact | `not started` | Single self-contained HTML file. Surface-first navigation, full-text search, standard-coverage views. |
@@ -54,7 +54,7 @@ work read as phase 2's:
 |---|---|
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
-| Topics | 98 |
+| Topics | 99 |
 | Units — outlined | 0 |
 | Units — authored | 0 |
 
@@ -71,7 +71,7 @@ The number to watch from here is units, which is phase 3's job.
 | | | | | | | |
 |---|---|---|---|---|---|---|
 | `INJ` 12 | `CLT` 12 | `SES` 11 | `AUT` 10 | `BIZ` 9 | `CFG` 9 | `ACL` 7 |
-| `RCN` 7 | `PRT` 5 | `CRY` 5 | `ERR` 4 | `IDN` 4 | `RES` 3 | `SUP` 0 |
+| `RCN` 8 | `PRT` 5 | `CRY` 5 | `ERR` 4 | `IDN` 4 | `RES` 3 | `SUP` 0 |
 
 `SUP` carries no topics because no WSTG test covers vulnerable components or
 supply chain, and phase 2's input is the WSTG map. It is phase 6's first entry,
@@ -96,10 +96,10 @@ against real material rather than an empty tree:
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 98 topics across 13 domains, each with an axis, a surface clause and its boundaries. |
+| `knowledge/` | 99 topics across 13 domains, each with an axis, a surface clause and its boundaries. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
 | `harrier/` | Nine schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 95 offline tests, almost all of them negative — asserting what must be rejected. |
+| `tests/` | 101 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until phase 4

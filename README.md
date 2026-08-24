@@ -71,7 +71,7 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 95 tests, offline
+python -m unittest discover -s tests -t .   # 101 tests, offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
 ```
@@ -83,7 +83,7 @@ rule is mechanical rather than a review comment.
 ## Status
 
 Phases 0 to 2 of seven. The model, the vocabularies and the machine checks are
-settled, and the taxonomy's top level exists: **98 topics across 13 domains**,
+settled, and the taxonomy's top level exists: **99 topics across 13 domains**,
 every resolvable WSTG identifier claimed by one, with the boundaries between
 neighbouring topics written down.
 

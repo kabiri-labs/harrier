@@ -13,7 +13,7 @@ boundaries:
       Content disclosed inside a page the application meant to serve is here;
       a backup file nobody meant to publish is configuration.
 
-see_also: [HRR-CFG-02]
+see_also: [HRR-CFG-02, HRR-RCN-08]
 
 refs:
   wstg: [WSTG-INFO-05, WSTG-INFO-03]
