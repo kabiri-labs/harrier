@@ -1,0 +1,7 @@
+id: HRR-IDN-04-VALIDATION
+topic: HRR-IDN-04
+status: outline
+title: "Agreement between the uniqueness rule and the lookup rule"
+objective: >-
+  Determine whether two distinct names that registration accepted as different
+  resolve to the same account at authentication.

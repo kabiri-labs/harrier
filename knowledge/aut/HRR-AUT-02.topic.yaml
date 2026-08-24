@@ -6,6 +6,11 @@ axis: phase
 surfaces:
   any_of: [login-form, admin-panel]
 
+order:
+  - HRR-AUT-02-MAP
+  - HRR-AUT-02-PROBE
+  - HRR-AUT-02-IMPACT
+
 refs:
   wstg: [WSTG-ATHN-02]
   cwe: [1392]

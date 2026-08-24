@@ -6,5 +6,9 @@ axis: property
 surfaces:
   any_of: [registration, login-form]
 
+order:
+  - HRR-IDN-04-NAMING
+  - HRR-IDN-04-VALIDATION
+
 refs:
   wstg: [WSTG-IDNT-05]

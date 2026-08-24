@@ -1,0 +1,8 @@
+id: HRR-AUT-01-SIZE
+topic: HRR-AUT-01
+status: outline
+title: "Handling of an over-long credential"
+objective: >-
+  Determine whether a credential longer than the accepted maximum is rejected
+  or silently truncated, since truncation shortens the secret without telling
+  anyone.

@@ -171,6 +171,7 @@ class ADeclaredAxisMustDoWork(SandboxCase):
         self.assertRejected("declares axis context but no unit draws a slug from it")
 
     def test_a_topic_may_omit_the_axis_when_every_unit_is_universal(self):
+        self.box.clear_units(self.box.BASE_TOPIC_ID)
         topic = self.box.read(self.box.BASE_TOPIC)
         topic.pop("axis", None)
         topic["order"] = ["HRR-AUT-01-PROBE", "HRR-AUT-01-READ"]
@@ -180,6 +181,7 @@ class ADeclaredAxisMustDoWork(SandboxCase):
         self.assertAccepted()
 
     def test_an_invented_slug_is_still_rejected_without_an_axis(self):
+        self.box.clear_units(self.box.BASE_TOPIC_ID)
         topic = self.box.read(self.box.BASE_TOPIC)
         topic.pop("axis", None)
         topic["order"] = ["HRR-AUT-01-CLEVER"]

@@ -55,16 +55,29 @@ class Sandbox:
     #: validator checks, and would drift from the repository the moment one of
     #: them changed.
     #:
-    #: It is deliberately a topic that carries no units and that nothing links
-    #: to. A test declaring its own `order` or `see_also` on a topic that
-    #: already has real units or inbound links would collide with them and fail
-    #: on the wrong rule.
+    #: It is deliberately a topic that nothing links to: a test declaring its
+    #: own `see_also` on a topic with inbound links would collide with them and
+    #: fail on the wrong rule. Units are not a constraint on the choice --
+    #: `add_topic` drops the base's own units from the copy.
     BASE_TOPIC = "knowledge/aut/HRR-AUT-01.topic.yaml"
     BASE_TOPIC_ID = "HRR-AUT-01"
 
     #: Kept as a separate name because the reason differs: some tests need a
     #: topic nothing links to, which is a weaker requirement than the base's.
     UNLINKED_TOPIC = BASE_TOPIC
+
+    def clear_units(self, topic_id: str) -> None:
+        """Remove a real topic's own units from the copy.
+
+        The bases these tests start from are real topics, so they carry
+        whatever units phase 3 has written for them by now. A test that
+        declares its own `order` would collide with those, and the collision
+        names the wrong rule. Dropping them here rather than hunting for an
+        ever-shrinking set of unit-free topics is what keeps the fixture
+        working as coverage grows.
+        """
+        for unit in self.root.glob(f"knowledge/*/{topic_id}-*.unit.yaml"):
+            unit.unlink()
 
     def add_topic(self, base: str | None = None, **overrides: Any) -> str:
         """Overwrite the base topic with one field changed, and return its id.
@@ -75,6 +88,8 @@ class Sandbox:
         them changed. Here, an override is the only difference.
         """
         topic = self.read(base or self.BASE_TOPIC)
+        self.clear_units(topic["id"])
+        topic.pop("order", None)
         # The fixture's units are named with technique slugs, so the fixture's
         # topic declares that axis unless a test is specifically about the axis
         # rule. The base topic's own axis is irrelevant here -- what is being

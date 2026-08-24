@@ -1,0 +1,7 @@
+id: HRR-AUT-06-RATE
+topic: HRR-AUT-06
+status: outline
+title: "Throttling of answer submission"
+objective: >-
+  Determine whether repeated wrong answers to a recovery question are slowed
+  or stopped.

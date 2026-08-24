@@ -55,7 +55,7 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 99 |
-| Units — outlined | 223 |
+| Units — outlined | 269 |
 | Units — authored | 0 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -73,7 +73,8 @@ The number to watch from here is units, which is phase 3's job.
 | 1 | `INJ` `RES` | 15 | 79 | `done` |
 | 2 | `CLT` `PRT` | 17 | 80 | `done` |
 | 3 | `SES` `CRY` | 16 | 64 | `done` |
-| 4 | `AUT` `IDN` `ACL` | 21 | — | `not started` |
+| 4a | `AUT` `IDN` | 14 | 46 | `done` |
+| 4b | `ACL` | 7 | — | `not started` |
 | 5 | `BIZ` `ERR` | 13 | — | `not started` |
 | 6 | `RCN` `CFG` | 17 | — | `not started` |
 

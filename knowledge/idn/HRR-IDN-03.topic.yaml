@@ -6,6 +6,11 @@ axis: technique
 surfaces:
   any_of: [login-form, registration, password-reset, search]
 
+order:
+  - HRR-IDN-03-DIFF
+  - HRR-IDN-03-TIME
+  - HRR-IDN-03-IMPACT
+
 boundaries:
   - subject: "Verbose errors that disclose other internals"
     home: HRR-ERR-01

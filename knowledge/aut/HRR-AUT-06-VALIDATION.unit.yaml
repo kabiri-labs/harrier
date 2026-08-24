@@ -1,0 +1,7 @@
+id: HRR-AUT-06-VALIDATION
+topic: HRR-AUT-06
+status: outline
+title: "How strictly a submitted answer is compared"
+objective: >-
+  Determine how leniently a submitted answer is compared, since case,
+  whitespace and substring tolerance shrink the space an attacker must cover.

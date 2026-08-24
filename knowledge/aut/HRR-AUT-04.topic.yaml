@@ -6,12 +6,24 @@ axis: technique
 surfaces:
   any_of: [login-form, sso-oidc, token-bearing, admin-panel]
 
+order:
+  - HRR-AUT-04-MAP
+  - HRR-AUT-04-DIFF
+  - HRR-AUT-04-REPLAY
+
 boundaries:
   - subject: "Reaching a function without authenticating at all"
     home: HRR-ACL-03
     note: >-
       Defeating the authentication mechanism is here; an unauthenticated
       request that a missing check lets through is access control.
+
+  - subject: "Reuse of an identifier issued after authentication succeeded"
+    home: HRR-SES-09
+    note: >-
+      Replaying an artefact of the authentication exchange defeats the
+      mechanism. Replaying the identifier it issued rides a session that was
+      established legitimately.
 
 see_also: [HRR-ACL-03]
 

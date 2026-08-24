@@ -6,5 +6,10 @@ axis: property
 surfaces:
   any_of: [registration]
 
+order:
+  - HRR-IDN-01-POLICY
+  - HRR-IDN-01-VALIDATION
+  - HRR-IDN-01-RATE
+
 refs:
   wstg: [WSTG-IDNT-02]

@@ -1,0 +1,7 @@
+id: HRR-AUT-04-REPLAY
+topic: HRR-AUT-04
+status: outline
+title: "Reuse of a captured authentication artefact"
+objective: >-
+  Determine whether an artefact captured from one authentication exchange
+  authenticates a second one outside its intended context or window.

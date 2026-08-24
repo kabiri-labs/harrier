@@ -1,0 +1,7 @@
+id: HRR-AUT-10-SCOPE
+topic: HRR-AUT-10
+status: outline
+title: "Enforcement of the granted scope at the resource"
+objective: >-
+  Determine whether the resource enforces the scope the token was granted,
+  rather than treating any valid token as fully authorised.
