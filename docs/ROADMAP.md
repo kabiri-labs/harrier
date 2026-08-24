@@ -55,7 +55,7 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 99 |
-| Units — outlined | 364 |
+| Units — outlined | 365 |
 | Units — authored | 0 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -77,7 +77,7 @@ from here is authored units, which is phase 4's.
 | 4a | `AUT` `IDN` | 14 | 46 | `done` |
 | 4b | `ACL` | 7 | 21 | `done` |
 | 5 | `BIZ` `ERR` | 13 | 36 | `done` |
-| 6 | `RCN` `CFG` | 17 | 38 | `done` |
+| 6 | `RCN` `CFG` | 17 | 39 | `done` |
 
 Batch 1 went first because SQL injection already carries payloads and a card, so
 the unit model could be judged against real depth material before three hundred
@@ -113,7 +113,7 @@ against real material rather than an empty tree:
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 99 topics across 13 domains, and 364 outlined units across all thirteen domains. |
+| `knowledge/` | 99 topics across 13 domains, and 365 outlined units across all thirteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
 | `harrier/` | Nine schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
 | `tests/` | 107 offline tests, almost all of them negative — asserting what must be rejected. |
