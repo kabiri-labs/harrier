@@ -1,0 +1,54 @@
+# Second-order payloads. These must be inert on write and active on read, which
+# is the whole point: the write endpoint accepts them because it is parameterised
+# correctly, and the consumer breaks because it is not.
+#
+# {{MARKER}} is a unique per-test token. The marker entries exist so that "which
+# features read this value back" is answered by observation before any active
+# payload is stored.
+id: sqli/second-order
+reviewed: "2026-08-23"   # not re-verified since; treat as unreviewed, not current
+title: Second-order injection payloads
+variables: [MARKER]
+credits:
+  - "Stored-then-concatenated injection is long-standing public technique; entries are written for this project."
+safety: >
+  Second-order payloads persist. Record every value written and the endpoint that
+  wrote it, so the data can be removed at the end of the engagement. Do not store
+  a payload whose effect at an unknown consumer cannot be reasoned about --
+  a stored active payload can fire in a background job or an administrator's
+  console rather than in the tester's own session.
+entries:
+  - name: consumer tracing marker
+    payload: "{{MARKER}}"
+    detect: "Store this, then visit every enumerated consumer and record which ones render or re-query it. Do this before storing anything active."
+
+  - name: quote carrier
+    payload: "{{MARKER}}'"
+    detect: "A trailing quote that a parameterised write accepts intact. An error at a consumer means that consumer concatenated it."
+
+  - name: balanced comment carrier
+    payload: "{{MARKER}}'--"
+    detect: "Terminates a concatenated string and comments out the remainder at the consumer, without affecting the write."
+
+  - name: numeric context carrier
+    payload: "{{MARKER}} AND 1=2"
+    detect: "For stored values later used as a numeric lookup key. A consumer returning nothing where it should return a record is the signal."
+
+  - name: escaped-quote carrier
+    payload: "{{MARKER}}\\'"
+    detect: "Survives a write that escapes quotes but is unescaped again on read. Distinguishes single-escape from double-escape handling."
+    note: "If the plain quote carrier does nothing but this one does, the value is being unescaped before concatenation -- record that as the mechanism."
+
+  - name: identifier context carrier
+    payload: "{{MARKER}}\" "
+    detect: "For stored values interpolated as a column or table identifier rather than as a string, where double quotes are the delimiter."
+
+  - name: computed-value carrier
+    dbms: [mysql, postgresql, mssql, sqlite]
+    payload: "{{MARKER}}' || (SELECT '') || '"
+    detect: "A concatenation that is valid SQL and a no-op. If the consumer renders the marker unchanged, the value passed through a query without breaking it -- which localises where the concatenation happens."
+
+  - name: computed-value carrier (Oracle)
+    dbms: [oracle]
+    payload: "{{MARKER}}' || (SELECT '' FROM dual) || '"
+    detect: "Oracle form of the same no-op concatenation."

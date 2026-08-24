@@ -1,0 +1,20 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Generated artefact. The published HTML is built from the repository; it is not
+# committed, because a stale committed copy is indistinguishable from a current
+# one at a glance and only one of those is safe to hand to someone.
+build/
+
+# Editor / OS noise
+.DS_Store
+.idea/
+.vscode/

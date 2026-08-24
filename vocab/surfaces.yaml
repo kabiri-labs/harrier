@@ -1,0 +1,309 @@
+# Attack-surface tags -- the primary navigation axis.
+#
+# A tester mid-engagement does not browse by standard; they look at the thing in
+# front of them and ask what applies to it. These tags are how that question is
+# answered, which is why these are a first-class controlled vocabulary and not a
+# loose set of labels. See docs/ARCHITECTURE.md section 8.
+#
+# `discovery_hint` exists so a tag can be applied from what was actually observed
+# rather than from a guess about endpoint names. Endpoint names are a bad proxy
+# for behaviour: /search may not query a database and /profile may. Tag what the
+# surface does, not what it is called.
+#
+# `emits` is closed transitively: a tag may imply another, so a surface described
+# once does not have to be described again. An emitted tag must state something
+# true of every surface carrying the emitting tag -- see docs/AUTHORING.md.
+version: 1
+surfaces:
+  - tag: login-form
+    label: Interactive authentication entry point
+    description: >
+      Any surface that accepts a primary credential and establishes an
+      authenticated context, including SSO initiation and API token exchange.
+    discovery_hint: "Any form or endpoint posting a password, PIN, or client secret; /login, /signin, /oauth/token."
+    emits: [session-cookie]
+
+  - tag: registration
+    label: Self-service account creation
+    description: >
+      A surface that creates a new principal without an existing authenticated
+      operator, including invite acceptance and tenant sign-up.
+    discovery_hint: "Sign-up forms, invite-acceptance links, trial provisioning, tenant creation."
+    emits: []
+
+  - tag: password-change
+    label: Authenticated credential change
+    description: >
+      A surface that changes a credential for an already-authenticated principal,
+      where the old secret is normally required.
+    discovery_hint: "Account settings pages, /profile/password, credential rotation in an admin panel."
+    emits: []
+
+  - tag: password-reset
+    label: Unauthenticated credential recovery
+    description: >
+      A surface that issues or consumes a recovery token to reset a credential
+      without the old secret.
+    discovery_hint: "Forgot-password flows, reset links with a token parameter, recovery-code entry."
+    emits: [redirect-param]
+
+  - tag: mfa
+    label: Second-factor challenge
+    description: >
+      A surface that validates a second authentication factor, or enrols and
+      removes one.
+    discovery_hint: "OTP entry, push-approval polling, WebAuthn ceremonies, recovery-code redemption, factor enrolment."
+    emits: []
+
+  - tag: sso-oidc
+    label: Federated identity flow
+    description: >
+      An OAuth 2.0 or OpenID Connect participant surface: authorisation request,
+      redirect handling, token exchange, or assertion consumption.
+    discovery_hint: "/authorize, /callback, SAML ACS endpoints, id_token or code parameters, state and nonce values."
+    emits: [redirect-param, token-bearing]
+
+  - tag: session-cookie
+    label: Cookie-borne session state
+    description: >
+      Session identity carried in a cookie, where the cookie's attributes and
+      lifecycle are themselves part of the attack surface.
+    discovery_hint: "Set-Cookie on a session identifier; observe Secure, HttpOnly, SameSite, Domain, Path and expiry."
+    emits: []
+
+  - tag: token-bearing
+    label: Bearer-token authentication
+    description: >
+      Identity carried in a request-borne token rather than a server-side session
+      handle, so the token's own claims and signature are in scope.
+    discovery_hint: "Authorization: Bearer headers, JWT-shaped values, API keys in headers or query strings."
+    emits: []
+
+  - tag: file-upload
+    label: Client-supplied file ingestion
+    description: >
+      A surface that accepts a file from the client, whatever the storage
+      destination or subsequent processing.
+    discovery_hint: "multipart/form-data posts, avatar and document uploads, import features, drag-and-drop widgets."
+    emits: [file-download]
+
+  - tag: file-download
+    label: Server-supplied file retrieval
+    description: >
+      A surface that returns stored content, especially where a request value
+      selects which content is returned.
+    discovery_hint: "Download links carrying a filename, path or id; export endpoints; attachment retrieval."
+    emits: [object-id-param]
+
+  - tag: search
+    label: Free-text query surface
+    description: >
+      A surface that accepts unstructured operator-influenced text and returns
+      matched records.
+    discovery_hint: "Search boxes, autocomplete and typeahead endpoints, filter bars, saved-query features."
+    emits: [sql-backed-param, stored-then-rendered]
+
+  - tag: sql-backed-param
+    label: Parameter reaching a SQL data store
+    description: >
+      Any request parameter whose value plausibly reaches a relational database --
+      search, sort, filter, id lookup, report criteria, login.
+    discovery_hint: "Sort/filter/search params, numeric ids, login fields, export criteria."
+    emits: []
+
+  - tag: nosql-backed-param
+    label: Parameter reaching a document or key-value store
+    description: >
+      A parameter whose value reaches a non-relational store, where operator
+      injection rather than string concatenation is the usual flaw.
+    discovery_hint: "JSON request bodies whose fields become query filters; document ids; aggregation criteria."
+    emits: []
+
+  - tag: object-id-param
+    label: Direct object reference in a request
+    description: >
+      A request value that names a specific stored object, so authorisation on
+      that object is decided per request.
+    discovery_hint: "Numeric or UUID ids in paths, query strings, JSON bodies, or hidden form fields."
+    emits: []
+
+  - tag: admin-panel
+    label: Privileged administrative interface
+    description: >
+      A surface whose intended audience is operators rather than end users, and
+      whose functions cross the privilege boundary.
+    discovery_hint: "/admin, back-office hostnames, feature flags, user management, configuration editors."
+    emits: [object-id-param, impersonation]
+
+  - tag: multi-tenant
+    label: Tenant-partitioned data
+    description: >
+      A deployment where records belong to separate organisations and tenancy is
+      enforced in application logic rather than by deployment isolation.
+    discovery_hint: "Organisation or workspace ids in requests, tenant subdomains, shared login across tenants."
+    emits: [object-id-param]
+
+  - tag: impersonation
+    label: Act-as-another-principal capability
+    description: >
+      A function that lets one principal operate as another, including support
+      impersonation and delegated access.
+    discovery_hint: "Support 'view as user' controls, act-as parameters, delegated-access grants."
+    emits: []
+
+  - tag: graphql
+    label: GraphQL endpoint
+    description: >
+      A single endpoint resolving client-specified queries, where authorisation
+      and cost control are per resolver rather than per route.
+    discovery_hint: "/graphql or /api/graphql, POST bodies with query/variables, introspection responses."
+    emits: [rest-api, object-id-param]
+
+  - tag: rest-api
+    label: Structured machine-facing API
+    description: >
+      A programmatic interface consumed by clients other than the rendered web
+      application, including mobile and partner integrations.
+    discovery_hint: "/api/ paths, JSON request and response bodies, OpenAPI or Swagger documents, versioned routes."
+    emits: [object-id-param]
+
+  - tag: websocket
+    label: Persistent bidirectional channel
+    description: >
+      A long-lived connection carrying application messages, where per-message
+      authorisation is easy to omit after the handshake.
+    discovery_hint: "ws:// or wss:// upgrades, socket.io endpoints, live dashboards and chat features."
+    emits: []
+
+  - tag: redirect-param
+    label: Request-controlled navigation target
+    description: >
+      A request value that determines where the user agent is sent next, whether
+      by HTTP redirect or client-side navigation.
+    discovery_hint: "next, return_to, redirect_uri, continue, url parameters; post-login and post-logout landing."
+    emits: []
+
+  - tag: rich-text
+    label: Markup-preserving user content
+    description: >
+      A surface that intentionally retains a subset of markup rather than
+      escaping it, so sanitiser behaviour is the control under test.
+    discovery_hint: "WYSIWYG editors, comment bodies allowing formatting, Markdown rendering, HTML email templates."
+    emits: [stored-then-rendered]
+
+  - tag: stored-then-rendered
+    label: Persisted input re-emitted to other users
+    description: >
+      Input that is stored and later rendered in another user's context, which
+      moves the payload delivery away from the request that submitted it.
+    discovery_hint: "Comments, profile fields, filenames shown in listings, audit logs and notifications rendered in a UI."
+    emits: []
+
+  - tag: template-param
+    label: Request value reaching a template engine
+    description: >
+      A value that is interpolated into a server-side or client-side template
+      rather than into rendered output only.
+    discovery_hint: "Customisable notification or invoice templates, themes, mail merge fields, report titles."
+    emits: []
+
+  - tag: payment
+    label: Monetary transaction flow
+    description: >
+      A surface where value moves, including checkout, refunds, credit
+      adjustment, and subscription changes.
+    discovery_hint: "Checkout steps, price or quantity fields, discount and voucher codes, refund and payout actions."
+    emits: [object-id-param]
+
+  - tag: export-report
+    label: Bulk data extraction
+    description: >
+      A surface that renders many records into a downloadable artefact, where
+      criteria are operator-supplied.
+    discovery_hint: "CSV/XLSX/PDF export buttons, scheduled report builders, date-range and column selectors."
+    emits: [sql-backed-param, file-download]
+
+  - tag: reverse-proxy
+    label: Intermediary in the request path
+    description: >
+      A CDN, load balancer, WAF or gateway between the client and the origin, so
+      two systems parse the same request.
+    discovery_hint: "Via, X-Forwarded-*, CF-Ray or Server headers; cache hit/miss indicators; differing error pages."
+    emits: []
+
+  - tag: server-fetch
+    label: Server-initiated outbound request
+    description: >
+      A function where the server retrieves a resource whose location is
+      influenced by the request.
+    discovery_hint: "URL preview, webhook registration, avatar-by-URL, PDF rendering from a link, import-from-URL."
+    emits: []
+
+  - tag: xml-ingest
+    label: XML or XML-derived document parsing
+    description: >
+      A surface that parses XML, SVG, SOAP, or an office format that is XML
+      underneath.
+    discovery_hint: "SOAP endpoints, SAML assertions, SVG or DOCX/XLSX uploads, RSS and sitemap import."
+    emits: [file-upload]
+
+  - tag: deserialization
+    label: Structured object reconstruction
+    description: >
+      A surface that reconstructs application objects from a client-supplied
+      encoded form.
+    discovery_hint: "Base64 blobs in cookies or hidden fields, Java or PHP serialised markers, pickled payloads, VIEWSTATE."
+    emits: []
+
+  - tag: persistent-login
+    label: Authentication that survives the session
+    description: >
+      A feature that keeps a principal authenticated across browser sessions
+      without re-presenting the credential, so a long-lived secret exists
+      somewhere outside the session store.
+    discovery_hint: "'Remember me' checkboxes, cookies with a long Max-Age set at login, device-trust prompts, 'keep me signed in'."
+    emits: []
+
+  - tag: security-question
+    label: Knowledge-based recovery factor
+    description: >
+      A secret chosen from a fixed question set, used to authenticate or to
+      recover an account, where the answer space is often small and the answer
+      frequently discoverable.
+    discovery_hint: "Security-question enrolment during registration; 'answer your security question' steps in recovery or step-up flows."
+    emits: []
+
+  - tag: alternative-channel
+    label: Second route to the same account
+    description: >
+      A separate interface reaching the same accounts with its own
+      authentication implementation, so the weakest implementation sets the
+      effective strength.
+    discovery_hint: "Mobile or partner APIs, legacy or beta hostnames, SMS/IVR/email-command interfaces, desktop clients, kiosk or offline modes."
+    emits: []
+
+  - tag: path-param
+    label: Request value naming a path or resource
+    description: >
+      A request value that selects a file, template, or included resource by
+      name or path rather than by opaque identifier, so traversal outside the
+      intended root is expressible.
+    discovery_hint: "Filenames, template or theme names, locale or page params, include/view params, any value ending in an extension."
+    emits: [file-download]
+
+  - tag: privileged-function
+    label: Function restricted by role
+    description: >
+      A function whose availability is meant to depend on the caller's role
+      rather than on the object it acts upon, so the authorisation decision is
+      about who is asking rather than what they are asking for.
+    discovery_hint: "Actions visible to one role and absent for another; approve/publish/refund/suspend controls; anything gated behind a role check in the UI."
+    emits: []
+
+  - tag: business-workflow
+    label: Multi-step stateful process
+    description: >
+      A sequence whose steps are meant to occur in order and once, where the
+      server may trust the client to sequence them.
+    discovery_hint: "Wizards, checkout funnels, approval chains, onboarding flows, step parameters in requests."
+    emits: []

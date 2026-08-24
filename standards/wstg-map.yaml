@@ -1,0 +1,669 @@
+# WSTG identifier to domain map.
+#
+# Evidence that the domain set in vocab/domains.yaml partitions the published
+# standard without ambiguity. Every identifier in standards/wstg.yaml appears
+# here exactly once, with the rule from docs/TAXONOMY.md section 3 that decided
+# it. A `rule: 0` entry is one the procedure deliberately does not resolve to a
+# single domain -- either it is not one test, or it is not a test at all -- and
+# says so.
+#
+# This is authored, not generated. It is the input to phase 2: every topic
+# created must be reachable from an entry here, and every entry must be covered
+# by at least one topic before 1.0.
+#
+# Several identifiers map to more than one domain. That is the model working,
+# not a defect: one published identifier is not assumed to be one test.
+version: 1
+map:
+  - id: WSTG-APIT-01
+    title: "API Reconnaissance"
+    domains: [RCN]
+    rule: 1
+    note: >-
+      Recon does not become a different activity because the surface is an API.
+      rest-api and graphql are surface tags.
+
+  - id: WSTG-APIT-02
+    title: "API Broken Object Level Authorization"
+    domains: [ACL]
+    rule: 8
+    note: >-
+      Broken object level authorization is the same mechanism as ATHZ-04. One
+      topic.
+
+  - id: WSTG-APIT-99
+    title: "Testing GraphQL"
+    domains: [RCN, ACL, BIZ, INJ]
+    rule: 0
+    note: >-
+      Not one test. Schema introspection is RCN; per-field authorization is ACL;
+      batching and aliasing against limits is BIZ; resolver injection is INJ.
+      The graphql surface tag collects them.
+
+  - id: WSTG-ATHN-01
+    title: "Testing for Credentials Transported over an Encrypted Channel"
+    domains: [CRY]
+    rule: 6
+    note: >-
+      Credential transport is one asset of 'sensitive data over an unprotected
+      channel' (CRYP-03). One topic, asset axis.
+
+  - id: WSTG-ATHN-02
+    title: "Testing for Default Credentials"
+    domains: [AUT]
+    rule: 8
+
+  - id: WSTG-ATHN-03
+    title: "Testing for Weak Lock Out Mechanism"
+    domains: [AUT]
+    rule: 8
+    note: >-
+      Lockout protects a credential. Limits on a business function are BUSL-05
+      in BIZ.
+
+  - id: WSTG-ATHN-04
+    title: "Testing for Bypassing Authentication Schema"
+    domains: [AUT]
+    rule: 8
+
+  - id: WSTG-ATHN-05
+    title: "Testing for Vulnerable Remember Password"
+    domains: [AUT]
+    rule: 8
+    note: >-
+      The mechanism is a persistent authentication design. Where it stores the
+      secret is a unit shared with CLT.
+
+  - id: WSTG-ATHN-06
+    title: "Testing for Browser Cache Weakness"
+    domains: [CLT]
+    rule: 5
+    note: >-
+      Browser storage and cache behaviour.
+
+  - id: WSTG-ATHN-07
+    title: "Testing for Weak Password Policy"
+    domains: [AUT]
+    rule: 8
+
+  - id: WSTG-ATHN-08
+    title: "Testing for Weak Security Question Answer"
+    domains: [AUT]
+    rule: 8
+
+  - id: WSTG-ATHN-09
+    title: "Testing for Weak Password Change or Reset Functionalities"
+    domains: [AUT]
+    rule: 8
+
+  - id: WSTG-ATHN-10
+    title: "Testing for Weaker Authentication in Alternative Channel"
+    domains: [AUT]
+    rule: 8
+
+  - id: WSTG-ATHN-11
+    title: "Testing Multi-Factor Authentication (MFA)"
+    domains: [AUT]
+    rule: 8
+
+  - id: WSTG-ATHZ-01
+    title: "Testing Directory Traversal File Include"
+    domains: [RES]
+    rule: 3
+    note: >-
+      The server opens a path the attacker named. Found during access-control
+      testing; filed by mechanism.
+
+  - id: WSTG-ATHZ-02
+    title: "Testing for Bypassing Authorization Schema"
+    domains: [ACL]
+    rule: 8
+
+  - id: WSTG-ATHZ-03
+    title: "Testing for Privilege Escalation"
+    domains: [ACL]
+    rule: 8
+
+  - id: WSTG-ATHZ-04
+    title: "Testing for Insecure Direct Object References"
+    domains: [ACL]
+    rule: 8
+    note: >-
+      Same topic as WSTG-APIT-02 (BOLA). One topic, surface tags distinguish
+      REST, GraphQL and HTML.
+
+  - id: WSTG-ATHZ-05
+    title: "Testing for OAuth Weaknesses"
+    domains: [AUT]
+    rule: 8
+    note: >-
+      A sign-in protocol. Scope and consent flaws reference ACL.
+
+  - id: WSTG-BUSL-01
+    title: "Test Business Logic Data Validation"
+    domains: [BIZ]
+    rule: 10
+
+  - id: WSTG-BUSL-02
+    title: "Test Ability to Forge Requests"
+    domains: [BIZ]
+    rule: 10
+
+  - id: WSTG-BUSL-03
+    title: "Test Integrity Checks"
+    domains: [BIZ]
+    rule: 10
+
+  - id: WSTG-BUSL-04
+    title: "Test for Process Timing"
+    domains: [BIZ]
+    rule: 10
+    note: >-
+      Includes race conditions and time-of-check/time-of-use.
+
+  - id: WSTG-BUSL-05
+    title: "Test Number of Times a Function Can Be Used Limits"
+    domains: [BIZ]
+    rule: 10
+    note: >-
+      Limits protecting a business function. Limits protecting a credential are
+      ATHN-03 in AUT.
+
+  - id: WSTG-BUSL-06
+    title: "Testing for the Circumvention of Work Flows"
+    domains: [BIZ]
+    rule: 10
+
+  - id: WSTG-BUSL-07
+    title: "Test Defenses Against Application Misuse"
+    domains: [BIZ]
+    rule: 10
+
+  - id: WSTG-BUSL-08
+    title: "Test Upload of Unexpected File Types"
+    domains: [RES]
+    rule: 3
+    note: >-
+      The server stores and later serves content the attacker supplied. Whether
+      the type is 'expected' is a validation question inside that mechanism.
+
+  - id: WSTG-BUSL-09
+    title: "Test Upload of Malicious Files"
+    domains: [RES]
+    rule: 3
+
+  - id: WSTG-BUSL-10
+    title: "Test Payment Functionality"
+    domains: [BIZ]
+    rule: 10
+
+  - id: WSTG-CLNT-01
+    title: "Testing for DOM Based Cross Site Scripting"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CLNT-02
+    title: "Testing for JavaScript Execution"
+    domains: [CLT]
+    rule: 5
+    note: >-
+      Same topic as CLNT-01: a JavaScript sink is one context of DOM-based
+      execution.
+
+  - id: WSTG-CLNT-03
+    title: "Testing for HTML Injection"
+    domains: [CLT]
+    rule: 5
+    note: >-
+      The MARKUP context unit of the XSS topics.
+
+  - id: WSTG-CLNT-04
+    title: "Testing for Client-Side URL Redirect"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CLNT-05
+    title: "Testing for CSS Injection"
+    domains: [CLT]
+    rule: 5
+    note: >-
+      The CSS context unit.
+
+  - id: WSTG-CLNT-06
+    title: "Testing for Client-Side Resource Manipulation"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CLNT-07
+    title: "Test Cross Origin Resource Sharing"
+    domains: [CLT]
+    rule: 5
+    note: >-
+      Rule 5 fires: reading cross-origin data requires a victim's browser. The
+      header analysis alone would be CFG, but it is one unit of the same topic.
+
+  - id: WSTG-CLNT-08
+    title: "Testing for Cross Site Flashing"
+    domains: [CLT]
+    rule: 5
+    note: >-
+      Obsolete: the plugin is gone. Recorded so the coverage claim stays honest.
+
+  - id: WSTG-CLNT-09
+    title: "Testing for Clickjacking"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CLNT-10
+    title: "Testing WebSockets"
+    domains: [PRT, INJ]
+    rule: 2
+    note: >-
+      Handshake, origin validation and framing are PRT; message content
+      interpreted server-side is INJ with the WSMSG vector.
+
+  - id: WSTG-CLNT-11
+    title: "Test Web Messaging"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CLNT-12
+    title: "Test Browser Storage"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CLNT-13
+    title: "Testing for Cross Site Script Inclusion"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CLNT-14
+    title: "Testing for Reverse Tabnabbing"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-CONF-01
+    title: "Test Network Infrastructure Configuration"
+    domains: [CFG]
+    rule: 12
+
+  - id: WSTG-CONF-02
+    title: "Test Application Platform Configuration"
+    domains: [CFG]
+    rule: 12
+
+  - id: WSTG-CONF-03
+    title: "Test File Extensions Handling for Sensitive Information"
+    domains: [CFG]
+    rule: 12
+
+  - id: WSTG-CONF-04
+    title: "Review Old Backup and Unreferenced Files for Sensitive Information"
+    domains: [CFG]
+    rule: 12
+
+  - id: WSTG-CONF-05
+    title: "Enumerate Infrastructure and Application Admin Interfaces"
+    domains: [CFG]
+    rule: 12
+    note: >-
+      Enumeration is the method; the deliverable is 'this must not be
+      reachable', so rule 1 does not fire.
+
+  - id: WSTG-CONF-06
+    title: "Test HTTP Methods"
+    domains: [CFG]
+    rule: 12
+    note: >-
+      Which methods the server accepts. Bypassing access control by changing the
+      verb is WSTG-INPV-03 in ACL.
+
+  - id: WSTG-CONF-07
+    title: "Test HTTP Strict Transport Security"
+    domains: [CFG]
+    rule: 12
+    note: >-
+      A header instructing the client. The TLS configuration it enforces is
+      CRYP-01 in CRY.
+
+  - id: WSTG-CONF-08
+    title: "Test RIA Cross Domain Policy"
+    domains: [CFG]
+    rule: 12
+    note: >-
+      A published policy file. The plugin that enforced it is obsolete; low
+      priority.
+
+  - id: WSTG-CONF-09
+    title: "Test File Permission"
+    domains: [CFG]
+    rule: 12
+
+  - id: WSTG-CONF-10
+    title: "Test for Subdomain Takeover"
+    domains: [CFG]
+    rule: 12
+    note: >-
+      DNS and infrastructure state. Not SUP: nothing third-party is being
+      delivered into the application.
+
+  - id: WSTG-CONF-11
+    title: "Test Cloud Storage"
+    domains: [CFG]
+    rule: 12
+
+  - id: WSTG-CONF-12
+    title: "Testing for Content Security Policy"
+    domains: [CFG]
+    rule: 12
+    note: >-
+      A weak CSP harms nobody on its own -- it is a defence-in-depth gap, so
+      rule 5 does not fire. Bypassing an existing CSP to land XSS is a unit of
+      the XSS topic in CLT.
+
+  - id: WSTG-CONF-13
+    title: "Test Path Confusion"
+    domains: [PRT]
+    rule: 2
+    note: >-
+      Intermediary and origin disagree on the path.
+
+  - id: WSTG-CONF-14
+    title: "Test Other HTTP Security Header Misconfigurations"
+    domains: [CFG]
+    rule: 12
+
+  - id: WSTG-CRYP-01
+    title: "Testing for Weak Transport Layer Security"
+    domains: [CRY]
+    rule: 6
+
+  - id: WSTG-CRYP-02
+    title: "Testing for Padding Oracle"
+    domains: [CRY]
+    rule: 6
+
+  - id: WSTG-CRYP-03
+    title: "Testing for Sensitive Information Sent Via Unencrypted Channels"
+    domains: [CRY]
+    rule: 6
+
+  - id: WSTG-CRYP-04
+    title: "Testing for Weak Cryptographic Primitives"
+    domains: [CRY]
+    rule: 6
+
+  - id: WSTG-ERRH-01
+    title: "Testing for Improper Error Handling"
+    domains: [ERR]
+    rule: 11
+
+  - id: WSTG-ERRH-02
+    title: "Testing for Stack Traces"
+    domains: [ERR]
+    rule: 11
+
+  - id: WSTG-IDNT-01
+    title: "Test Role Definitions"
+    domains: [ACL]
+    rule: 8
+    note: >-
+      kind: recon within ACL -- the role map is the input every access-control
+      test consumes.
+
+  - id: WSTG-IDNT-02
+    title: "Test User Registration Process"
+    domains: [IDN]
+    rule: 8
+
+  - id: WSTG-IDNT-03
+    title: "Test Account Provisioning Process"
+    domains: [IDN]
+    rule: 8
+
+  - id: WSTG-IDNT-04
+    title: "Testing for Account Enumeration and Guessable User Account"
+    domains: [IDN]
+    rule: 8
+    note: >-
+      Rule 8 fires before rule 11: the subject is account existence, not general
+      disclosure.
+
+  - id: WSTG-IDNT-05
+    title: "Testing for Weak or Unenforced Username Policy"
+    domains: [IDN]
+    rule: 8
+
+  - id: WSTG-INFO-01
+    title: "Conduct Search Engine Discovery and Reconnaissance for Information Leakage"
+    domains: [RCN, ERR]
+    rule: 1
+    note: >-
+      Splits: the discovered surface is a map (RCN); content that should not be
+      public is a finding (ERR).
+
+  - id: WSTG-INFO-02
+    title: "Fingerprint Web Server"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INFO-03
+    title: "Review Webserver Metafiles for Information Leakage"
+    domains: [RCN, ERR]
+    rule: 1
+    note: >-
+      Metafiles enumerate paths (RCN); a metafile disclosing internals is a
+      finding (ERR).
+
+  - id: WSTG-INFO-04
+    title: "Enumerate Applications on Webserver"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INFO-05
+    title: "Review Webpage Content for Information Leakage"
+    domains: [ERR]
+    rule: 11
+    note: >-
+      Deliverable is a finding, not a map.
+
+  - id: WSTG-INFO-06
+    title: "Identify Application Entry Points"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INFO-07
+    title: "Map Execution Paths Through Application"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INFO-08
+    title: "Fingerprint Web Application Framework"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INFO-09
+    title: "Fingerprint Web Application"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INFO-10
+    title: "Map Application Architecture"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INPV-01
+    title: "Testing for Reflected Cross Site Scripting"
+    domains: [CLT]
+    rule: 5
+
+  - id: WSTG-INPV-02
+    title: "Testing for Stored Cross Site Scripting"
+    domains: [CLT]
+    rule: 5
+    note: >-
+      Same topic as INPV-01; stored versus reflected is the delivery dimension.
+
+  - id: WSTG-INPV-03
+    title: "Testing for HTTP Verb Tampering"
+    domains: [ACL]
+    rule: 8
+    note: >-
+      The oracle is 'a forbidden action succeeded', not 'the method is enabled'
+      (CONF-06).
+
+  - id: WSTG-INPV-04
+    title: "Testing for HTTP Parameter pollution"
+    domains: [PRT]
+    rule: 2
+    note: >-
+      Two parameter parsers disagree.
+
+  - id: WSTG-INPV-05
+    title: "Testing for SQL Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-06
+    title: "Testing for LDAP Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-07
+    title: "Testing for XML Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-08
+    title: "Testing for SSI Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-09
+    title: "Testing for XPath Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-10
+    title: "Testing for IMAP SMTP Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-11
+    title: "Testing for Code Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-12
+    title: "Testing for Command Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-13
+    title: "Testing for Format String Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-14
+    title: "Testing for Incubated Vulnerabilities"
+    domains: []
+    rule: 0
+    note: >-
+      Maps to no topic. 'Incubated' describes second-order delivery, which this
+      model expresses as the delivery dimension on INJ and CLT topics.
+
+  - id: WSTG-INPV-15
+    title: "Testing for HTTP Splitting Smuggling"
+    domains: [PRT]
+    rule: 2
+
+  - id: WSTG-INPV-16
+    title: "Testing for HTTP Incoming Requests"
+    domains: [RCN]
+    rule: 1
+
+  - id: WSTG-INPV-17
+    title: "Testing for Host Header Injection"
+    domains: [PRT]
+    rule: 2
+    note: >-
+      A component trusts a request-controlled value that identifies the
+      deployment.
+
+  - id: WSTG-INPV-18
+    title: "Testing for Server-Side Template Injection"
+    domains: [INJ]
+    rule: 4
+
+  - id: WSTG-INPV-19
+    title: "Testing for Server-Side Request Forgery"
+    domains: [RES]
+    rule: 3
+
+  - id: WSTG-INPV-20
+    title: "Testing for Mass Assignment"
+    domains: [ACL]
+    rule: 8
+    note: >-
+      Permission over which fields may be bound.
+
+  - id: WSTG-SESS-01
+    title: "Testing for Session Management Schema"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-02
+    title: "Testing for Cookies Attributes"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-03
+    title: "Testing for Session Fixation"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-04
+    title: "Testing for Exposed Session Variables"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-05
+    title: "Testing for Cross Site Request Forgery"
+    domains: [SES]
+    rule: 7
+    note: >-
+      Rule 7 fires before rule 5: the mechanism is ambient authority of the
+      session carrier, not browser behaviour.
+
+  - id: WSTG-SESS-06
+    title: "Testing for Logout Functionality"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-07
+    title: "Testing Session Timeout"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-08
+    title: "Testing for Session Puzzling"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-09
+    title: "Testing for Session Hijacking"
+    domains: [SES]
+    rule: 7
+
+  - id: WSTG-SESS-10
+    title: "Testing JSON Web Tokens"
+    domains: [CRY, SES]
+    rule: 6
+    note: >-
+      Splits cleanly by rule order: signature and key verification is CRY; claim
+      lifetime, audience and issuer are property units of the SES token topic.
+
+  - id: WSTG-SESS-11
+    title: "Testing for Concurrent Sessions"
+    domains: [SES]
+    rule: 7

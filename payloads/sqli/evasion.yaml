@@ -1,0 +1,76 @@
+# Filter evasion. Each entry is a transformation class, not a magic string. The
+# question this pack answers is "was the negative result caused by a filter?",
+# so what matters is covering the classes and recording pass or block for each.
+#
+# {{FRAGMENT}} is the shortest blocking fragment found by binary search. Applying
+# a transformation to a whole payload rather than to the identified fragment
+# makes the result uninterpretable.
+id: sqli/evasion
+reviewed: "2026-08-23"   # not re-verified since; treat as unreviewed, not current
+title: Filter and WAF evasion transformations
+variables: [FRAGMENT]
+credits:
+  - "Transformation classes follow published WAF-bypass research, notably PortSwigger's and the corpus in PayloadsAllTheThings; entries are written for this project."
+safety: >
+  Evasion testing is for establishing whether a filter is masking a result, not
+  for defeating a control in production traffic. Keep the underlying payloads at
+  the proof-of-concept level the other packs use, and stop once the masked node
+  has been re-run.
+entries:
+  - name: case variation
+    payload: "{{FRAGMENT}}"
+    detect: "Re-send with mixed case throughout. A pass means the filter matches case-sensitively."
+    note: "The cheapest class, and still effective against naive pattern lists."
+
+  - name: inline comment interruption
+    dbms: [mysql, mssql]
+    payload: "/**/{{FRAGMENT}}/**/"
+    detect: "Comments break a keyword match while the engine still parses the statement."
+
+  - name: versioned comment
+    dbms: [mysql]
+    payload: "/*!50000{{FRAGMENT}}*/"
+    detect: "MySQL executes the contents of a versioned comment; a filter that strips comments sees nothing."
+    note: "MySQL-specific. On other engines this is inert, which is itself a useful control."
+
+  - name: whitespace substitution
+    payload: "{{FRAGMENT}}"
+    detect: "Re-send substituting tab, newline, carriage return, form feed or vertical tab for each space. A pass locates the filter's tokenizer."
+    note: "Which characters the engine treats as whitespace varies; test each rather than assuming."
+
+  - name: URL double encoding
+    payload: "{{FRAGMENT}}"
+    detect: "Percent-encode once, then percent-encode the percent signs. A pass means one component decodes before the filter and another after."
+
+  - name: parenthesis for whitespace
+    payload: "({{FRAGMENT}})"
+    detect: "Where the grammar allows it, parentheses remove the need for spaces entirely, defeating whitespace-anchored patterns."
+
+  - name: logical operator substitution
+    payload: "{{FRAGMENT}}"
+    detect: "Replace AND with && and OR with || where the engine accepts them, or express the same condition without either."
+    note: "On MySQL, double pipe is logical OR by default; on PostgreSQL and Oracle it concatenates. The substitution is not portable, and using the wrong one changes semantics rather than form."
+
+  - name: string literal reconstruction
+    dbms: [mysql, postgresql, mssql]
+    payload: "{{FRAGMENT}}"
+    detect: "Rebuild a blocked literal from character codes or concatenation so no literal appears in the request."
+    note: "Verify the reconstructed form still expresses the original condition before recording it as a pass."
+
+  - name: hex literal substitution
+    dbms: [mysql, mssql]
+    payload: "{{FRAGMENT}}"
+    detect: "Replace a quoted string with its hexadecimal literal form, removing the quote the filter matched on."
+
+  - name: HTTP parameter pollution
+    payload: "{{FRAGMENT}}"
+    detect: "Split the payload across repeated parameters of the same name. A pass means the intermediary and the origin disagree about which occurrence wins."
+    note: "This is also a finding in its own right -- see WSTG-INPV-04."
+
+  - name: request method and encoding shift
+    payload: "{{FRAGMENT}}"
+    detect: "Move the parameter between query string, form body, JSON body and multipart. Many filters inspect one of these thoroughly and the rest not at all."
+
+  - name: semantic control
+    payload: "{{FRAGMENT}}"
+    detect: "After any transformation passes, re-send the untransformed fragment to confirm it is still blocked. If it is not, the block was rate limiting or intermittent, and the pass proves nothing."

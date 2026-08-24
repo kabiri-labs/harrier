@@ -1,0 +1,87 @@
+# Dimension vocabularies.
+#
+# A dimension is an axis that changes only *how* a unit is performed -- payload
+# syntax, delivery position, engine quirk -- not what proves it. Splitting a unit
+# on a dimension is the mistake that turns seven SQL injection techniques into
+# thirty-five unusable rows. See docs/ARCHITECTURE.md section 3.
+#
+# Dimension values are matched against this file. A value outside it narrows a
+# dimension to nothing, which silently removes content from the published
+# artefact -- a mistyped engine name must fail loudly instead.
+#
+# Descriptions record what the value changes about a payload, because that is the
+# only reason the value exists here. Engine and browser behaviour is volatile
+# content: revisit it rather than trusting it.
+version: 1
+reviewed: "2026-08-24"
+dimensions:
+  engine:
+    label: Relational database engine
+    values:
+      - value: mysql
+        label: MySQL / MariaDB
+        note: "Backtick identifier quoting; no FROM requirement in a SELECT."
+      - value: postgresql
+        label: PostgreSQL
+        note: "Strict type matching across UNION arms; rich built-in information functions."
+      - value: mssql
+        label: Microsoft SQL Server
+        note: "Stacked queries available over most drivers, which widens the technique set."
+      - value: oracle
+        label: Oracle Database
+        note: "Every SELECT requires a FROM clause, so payload shapes differ structurally."
+      - value: sqlite
+        label: SQLite
+        note: "Permissive typing; a reduced metadata surface compared with server engines."
+
+  document_store:
+    label: Document and key-value store
+    values:
+      - value: mongodb
+        label: MongoDB
+        note: "Operator injection through structured query documents rather than concatenated text."
+      - value: redis
+        label: Redis
+        note: "Reached indirectly through cache keys and session storage rather than a query parameter."
+
+  browser:
+    label: Browser engine
+    values:
+      - value: chromium
+        label: Chromium
+        note: "Blink parsing and its sanitiser behaviour."
+      - value: firefox
+        label: Firefox
+        note: "Gecko parsing; historically differs on markup recovery and URI scheme handling."
+      - value: webkit
+        label: WebKit
+        note: "Safari and every iOS browser; differs on both parsing and CSP enforcement detail."
+
+  delivery:
+    label: How the payload reaches the sink
+    values:
+      - value: reflected
+        label: Reflected
+        note: "Returned in the response to the request that carried it."
+      - value: stored
+        label: Stored
+        note: "Persisted and returned later, possibly to another user, possibly in another context."
+      - value: dom
+        label: DOM
+        note: "Never reaches the server; written to a sink by client-side script."
+
+  platform:
+    label: Server-side platform
+    values:
+      - value: php
+        label: PHP
+      - value: java
+        label: Java / JVM
+      - value: dotnet
+        label: .NET
+      - value: python
+        label: Python
+      - value: nodejs
+        label: Node.js
+      - value: ruby
+        label: Ruby

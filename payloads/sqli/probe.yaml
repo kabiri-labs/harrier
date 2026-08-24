@@ -1,0 +1,58 @@
+# Injection-point probes. Every entry is non-destructive and reads nothing: the
+# whole pack exists to tell four outcomes apart, not to extract anything.
+#
+# The pairing matters more than any single payload. A lone quote proves only
+# that the application dislikes quotes; a quote that errors alongside a balanced
+# equivalent that does not is what proves concatenation into a statement.
+id: sqli/probe
+reviewed: "2026-08-23"   # not re-verified since; treat as unreviewed, not current
+title: Injection point discovery probes
+credits:
+  - "Technique coverage informed by PortSwigger Web Security Academy's SQL injection labs and by PayloadsAllTheThings; entries are written for this project."
+entries:
+  - name: single quote
+    payload: "'"
+    detect: "Engine or driver error, or any response differing from both the baseline and a plain rejected value."
+
+  - name: double quote
+    payload: "\""
+    detect: "Distinguishes double-quoted string contexts, and engines that accept double quotes as string delimiters."
+
+  - name: trailing backslash
+    payload: "\\"
+    detect: "Escapes the closing delimiter on engines that honour backslash escapes, breaking the statement where a quote alone was filtered."
+
+  - name: balanced string equivalent
+    payload: "' 'a' = 'a"
+    detect: "Must return the baseline record. A baseline-identical response here alongside an error for the lone quote is the concatenation proof."
+
+  - name: balanced string true
+    payload: "' OR '1'='1"
+    detect: "Broadens the result set in a string context. Compare record count against baseline."
+
+  - name: balanced string false
+    payload: "' AND '1'='2"
+    detect: "Must empty the result set in a string context. The differential against the true form is the strongest cheap signal."
+
+  - name: numeric identity
+    payload: " AND 1=1"
+    detect: "Must return the baseline record in a numeric context without any quote at all."
+
+  - name: numeric contradiction
+    payload: " AND 1=2"
+    detect: "Must empty the result set in a numeric context; pair with the identity above."
+
+  - name: numeric arithmetic identity
+    dbms: [mysql, postgresql, mssql, sqlite]
+    payload: "-0"
+    detect: "Appended to a numeric id, an arithmetic no-op returns the same record only if the value is used as a number rather than as a string."
+
+  - name: numeric arithmetic identity (Oracle)
+    dbms: [oracle]
+    payload: "-0"
+    detect: "Same intent as above; listed separately because Oracle's implicit numeric conversion differs and may error where other engines coerce."
+    note: "If this errors while the plain id succeeds, the value is being bound rather than concatenated."
+
+  - name: inert hostile control
+    payload: "<<sqli-control-not-sql>>"
+    detect: "Looks hostile but contains no SQL syntax. If this is blocked identically to the quote, the block is a filter and not a query error -- go to HRR-INJ-01-EVADE."

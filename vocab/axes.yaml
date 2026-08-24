@@ -1,0 +1,112 @@
+# Axis slug vocabularies. A topic declares exactly one primary axis, and its units
+# are named from that axis's slugs plus the phase slugs, which every topic may use.
+#
+# A slug outside the declared vocabulary is rejected. This is what makes non-overlap
+# mechanical rather than a matter of care: two topics cannot invent two names for one
+# idea, because neither may invent a name at all.
+#
+# Needing two primary axes means either the topic should split, or the second axis is
+# a dimension. See docs/ARCHITECTURE.md section 3.
+version: 1
+axes:
+  - name: phase
+    universal: true
+    description: >
+      Steps that recur across topics and are not alternatives to one another.
+      Available to every topic regardless of its primary axis.
+    slugs:
+      MAP: Enumerate the surface or workflow before testing it.
+      PROBE: Establish whether the condition exists at all.
+      FPRINT: Identify the engine, product or version that resolves a dimension.
+      VERIFY: Confirm a positive result by a second, independent route.
+      EVADE: Defeat a filter, encoder or WAF that is masking another unit's result.
+      IMPACT: Establish what the confirmed condition actually permits.
+
+  - name: technique
+    description: >
+      Alternative routes to the same finding, chosen from observed evidence rather
+      than all executed. The oracle differs per route.
+    slugs:
+      ERROR: Inference from engine error text surfaced in the response.
+      BOOL: Inference from a content differential between true and false conditions.
+      TIME: Inference from response latency under a controlled delay.
+      UNION: Direct extraction by appending a result set to the original query.
+      OOB: Extraction over a channel other than the response body.
+      STACK: A second statement executed alongside the first.
+      SECOND: A payload stored in one request and interpreted in a later one.
+      DIFF: Comparison of two responses that should be identical, or should not be.
+      BRUTE: Exhaustive enumeration over a bounded value space.
+      REPLAY: Reuse of a captured value outside its intended window or context.
+
+  - name: context
+    description: >
+      Where the payload lands and is interpreted. Determines what must be escaped
+      and what proves interpretation, so it changes both payload and oracle.
+    slugs:
+      HTMLBODY: Element content.
+      HTMLATTR: Attribute value, quoted or unquoted.
+      HTMLURI: A URL-bearing attribute such as href, src or formaction.
+      JSSTR: Inside a JavaScript string literal.
+      JSCODE: Directly into executable JavaScript.
+      CSS: A style context.
+      SVG: Inside inline SVG markup.
+      MARKUP: Markup injection where script execution is blocked.
+      SQLSTR: A quoted string operand in a SQL statement.
+      SQLNUM: A numeric operand, unquoted.
+      SQLID: An identifier position such as a column or table name.
+      OSCMD: An operating-system command line.
+      PATH: A filesystem or URL path segment.
+      XMLDOC: An XML document parsed by the application.
+      TMPL: A server-side template expression.
+      LDAPFLT: An LDAP search filter.
+      JSONDOC: A JSON document interpreted by a document store or parser.
+
+  - name: vector
+    description: >
+      How attacker-controlled input arrives. Splitting on it is correct only where
+      the transport itself changes the oracle, not merely where you paste the payload.
+    slugs:
+      QUERY: URL query string parameter.
+      BODY: Request body field.
+      PATH: URL path segment.
+      HEADER: A request header.
+      COOKIE: A cookie value.
+      FILENAME: An uploaded file's name.
+      FILEBODY: An uploaded file's content.
+      WSMSG: A WebSocket message.
+      GQLVAR: A GraphQL variable or argument.
+      IMPORT: A bulk import or batch-processed document.
+      REFERER: Referrer-derived input.
+
+  - name: property
+    description: >
+      Which security property of a single mechanism is under test. Each property is
+      separately recordable: a token can have excellent entropy and no rotation.
+    slugs:
+      ENTROPY: Unpredictability of the generated value.
+      SCOPE: The boundary over which the value is accepted.
+      EXPIRY: Lifetime and expiry enforcement.
+      ROTATION: Reissue on a state or privilege change.
+      FLAGS: Declared attributes and protections on the carrier.
+      BINDING: Binding of the value to a subject, device or channel.
+      REVOCATION: Whether invalidation actually invalidates.
+      TRANSPORT: Protection of the value in transit.
+      STORAGE: Protection of the value at rest, client or server side.
+      POLICY: The declared rule set governing the mechanism.
+
+  - name: asset
+    description: >
+      The same test applied to a materially different kind of surface, where the
+      surface changes the procedure rather than only the URL.
+    slugs:
+      LOGIN: Sign-in.
+      LOGOUT: Sign-out and session termination.
+      REGISTER: Account creation.
+      RESET: Credential recovery.
+      CHANGE: Credential or contact-detail change.
+      MFA: Second-factor enrolment and verification.
+      PROFILE: User-owned data surface.
+      ADMIN: Privileged or administrative surface.
+      EXPORT: Bulk read or report generation.
+      UPLOAD: File submission.
+      SEARCH: Query and filter surface.

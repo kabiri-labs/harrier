@@ -1,0 +1,363 @@
+# Pinned authoritative WSTG identifier list.
+#
+# Generated from the OWASP WSTG project's own checklist, not from memory. Every
+# `refs.wstg` value in knowledge/ is resolved against this file. A wrong identifier
+# reads perfectly well in a diff -- WSTG-AUTHZ-* for what is actually WSTG-ATHZ-*
+# is the canonical example -- so it is checked mechanically instead.
+#
+# WSTG is a coverage skeleton here, not the table of contents. It proves nothing
+# standard is missing; it does not bound the scope. See docs/TAXONOMY.md section 5.
+#
+# Only identifiers and official test titles are recorded here. WSTG is CC BY-SA;
+# no WSTG prose is reproduced anywhere in this repository.
+#
+# This file is generated. Do not hand-edit it -- correct the source or the
+# generator instead, so the pin below stays true.
+#
+# Refresh procedure:
+#   1. git ls-remote https://github.com/OWASP/wstg master        -> new source_commit
+#   2. curl -sO https://raw.githubusercontent.com/OWASP/wstg/<commit>/checklists/checklist.md
+#   3. sha256sum checklist.md                                    -> new source_sha256
+#   4. Regenerate this file, update the three pin fields, and review the diff.
+#      A diff with no ID changes is a title-wording change and is safe. A diff
+#      that adds or removes an ID means the refs.wstg values in knowledge/ need review.
+#
+# The pin is what makes this file auditable. Anyone can re-fetch the exact bytes
+# it was built from:
+#   curl -s https://raw.githubusercontent.com/OWASP/wstg/<source_commit>/checklists/checklist.md | sha256sum
+# and compare against source_sha256. A branch name alone could not do that --
+# `master` moves, so it names a moving target rather than the evidence.
+version: 1
+source: "OWASP/wstg checklists/checklist.md"
+source_ref: "master"
+source_commit: "2fab1ade827ee2336f14b7c695014191b7e2f3e1"
+source_sha256: "1b69e92583c329f101797041b6fd26bef53f86189d8143d210e618b2e2ccbd32"
+retrieved: "2026-08-23"
+wstg:
+  - id: WSTG-APIT-01
+    title: "API Reconnaissance"
+    verified: true
+  - id: WSTG-APIT-02
+    title: "API Broken Object Level Authorization"
+    verified: true
+  - id: WSTG-APIT-99
+    title: "Testing GraphQL"
+    verified: true
+  - id: WSTG-ATHN-01
+    title: "Testing for Credentials Transported over an Encrypted Channel"
+    verified: true
+  - id: WSTG-ATHN-02
+    title: "Testing for Default Credentials"
+    verified: true
+  - id: WSTG-ATHN-03
+    title: "Testing for Weak Lock Out Mechanism"
+    verified: true
+  - id: WSTG-ATHN-04
+    title: "Testing for Bypassing Authentication Schema"
+    verified: true
+  - id: WSTG-ATHN-05
+    title: "Testing for Vulnerable Remember Password"
+    verified: true
+  - id: WSTG-ATHN-06
+    title: "Testing for Browser Cache Weakness"
+    verified: true
+  - id: WSTG-ATHN-07
+    title: "Testing for Weak Password Policy"
+    verified: true
+  - id: WSTG-ATHN-08
+    title: "Testing for Weak Security Question Answer"
+    verified: true
+  - id: WSTG-ATHN-09
+    title: "Testing for Weak Password Change or Reset Functionalities"
+    verified: true
+  - id: WSTG-ATHN-10
+    title: "Testing for Weaker Authentication in Alternative Channel"
+    verified: true
+  - id: WSTG-ATHN-11
+    title: "Testing Multi-Factor Authentication (MFA)"
+    verified: true
+  - id: WSTG-ATHZ-01
+    title: "Testing Directory Traversal File Include"
+    verified: true
+  - id: WSTG-ATHZ-02
+    title: "Testing for Bypassing Authorization Schema"
+    verified: true
+  - id: WSTG-ATHZ-03
+    title: "Testing for Privilege Escalation"
+    verified: true
+  - id: WSTG-ATHZ-04
+    title: "Testing for Insecure Direct Object References"
+    verified: true
+  - id: WSTG-ATHZ-05
+    title: "Testing for OAuth Weaknesses"
+    verified: true
+  - id: WSTG-BUSL-01
+    title: "Test Business Logic Data Validation"
+    verified: true
+  - id: WSTG-BUSL-02
+    title: "Test Ability to Forge Requests"
+    verified: true
+  - id: WSTG-BUSL-03
+    title: "Test Integrity Checks"
+    verified: true
+  - id: WSTG-BUSL-04
+    title: "Test for Process Timing"
+    verified: true
+  - id: WSTG-BUSL-05
+    title: "Test Number of Times a Function Can Be Used Limits"
+    verified: true
+  - id: WSTG-BUSL-06
+    title: "Testing for the Circumvention of Work Flows"
+    verified: true
+  - id: WSTG-BUSL-07
+    title: "Test Defenses Against Application Misuse"
+    verified: true
+  - id: WSTG-BUSL-08
+    title: "Test Upload of Unexpected File Types"
+    verified: true
+  - id: WSTG-BUSL-09
+    title: "Test Upload of Malicious Files"
+    verified: true
+  - id: WSTG-BUSL-10
+    title: "Test Payment Functionality"
+    verified: true
+  - id: WSTG-CLNT-01
+    title: "Testing for DOM Based Cross Site Scripting"
+    verified: true
+  - id: WSTG-CLNT-02
+    title: "Testing for JavaScript Execution"
+    verified: true
+  - id: WSTG-CLNT-03
+    title: "Testing for HTML Injection"
+    verified: true
+  - id: WSTG-CLNT-04
+    title: "Testing for Client-Side URL Redirect"
+    verified: true
+  - id: WSTG-CLNT-05
+    title: "Testing for CSS Injection"
+    verified: true
+  - id: WSTG-CLNT-06
+    title: "Testing for Client-Side Resource Manipulation"
+    verified: true
+  - id: WSTG-CLNT-07
+    title: "Test Cross Origin Resource Sharing"
+    verified: true
+  - id: WSTG-CLNT-08
+    title: "Testing for Cross Site Flashing"
+    verified: true
+  - id: WSTG-CLNT-09
+    title: "Testing for Clickjacking"
+    verified: true
+  - id: WSTG-CLNT-10
+    title: "Testing WebSockets"
+    verified: true
+  - id: WSTG-CLNT-11
+    title: "Test Web Messaging"
+    verified: true
+  - id: WSTG-CLNT-12
+    title: "Test Browser Storage"
+    verified: true
+  - id: WSTG-CLNT-13
+    title: "Testing for Cross Site Script Inclusion"
+    verified: true
+  - id: WSTG-CLNT-14
+    title: "Testing for Reverse Tabnabbing"
+    verified: true
+  - id: WSTG-CONF-01
+    title: "Test Network Infrastructure Configuration"
+    verified: true
+  - id: WSTG-CONF-02
+    title: "Test Application Platform Configuration"
+    verified: true
+  - id: WSTG-CONF-03
+    title: "Test File Extensions Handling for Sensitive Information"
+    verified: true
+  - id: WSTG-CONF-04
+    title: "Review Old Backup and Unreferenced Files for Sensitive Information"
+    verified: true
+  - id: WSTG-CONF-05
+    title: "Enumerate Infrastructure and Application Admin Interfaces"
+    verified: true
+  - id: WSTG-CONF-06
+    title: "Test HTTP Methods"
+    verified: true
+  - id: WSTG-CONF-07
+    title: "Test HTTP Strict Transport Security"
+    verified: true
+  - id: WSTG-CONF-08
+    title: "Test RIA Cross Domain Policy"
+    verified: true
+  - id: WSTG-CONF-09
+    title: "Test File Permission"
+    verified: true
+  - id: WSTG-CONF-10
+    title: "Test for Subdomain Takeover"
+    verified: true
+  - id: WSTG-CONF-11
+    title: "Test Cloud Storage"
+    verified: true
+  - id: WSTG-CONF-12
+    title: "Testing for Content Security Policy"
+    verified: true
+  - id: WSTG-CONF-13
+    title: "Test Path Confusion"
+    verified: true
+  - id: WSTG-CONF-14
+    title: "Test Other HTTP Security Header Misconfigurations"
+    verified: true
+  - id: WSTG-CRYP-01
+    title: "Testing for Weak Transport Layer Security"
+    verified: true
+  - id: WSTG-CRYP-02
+    title: "Testing for Padding Oracle"
+    verified: true
+  - id: WSTG-CRYP-03
+    title: "Testing for Sensitive Information Sent Via Unencrypted Channels"
+    verified: true
+  - id: WSTG-CRYP-04
+    title: "Testing for Weak Cryptographic Primitives"
+    verified: true
+  - id: WSTG-ERRH-01
+    title: "Testing for Improper Error Handling"
+    verified: true
+  - id: WSTG-ERRH-02
+    title: "Testing for Stack Traces"
+    verified: true
+  - id: WSTG-IDNT-01
+    title: "Test Role Definitions"
+    verified: true
+  - id: WSTG-IDNT-02
+    title: "Test User Registration Process"
+    verified: true
+  - id: WSTG-IDNT-03
+    title: "Test Account Provisioning Process"
+    verified: true
+  - id: WSTG-IDNT-04
+    title: "Testing for Account Enumeration and Guessable User Account"
+    verified: true
+  - id: WSTG-IDNT-05
+    title: "Testing for Weak or Unenforced Username Policy"
+    verified: true
+  - id: WSTG-INFO-01
+    title: "Conduct Search Engine Discovery and Reconnaissance for Information Leakage"
+    verified: true
+  - id: WSTG-INFO-02
+    title: "Fingerprint Web Server"
+    verified: true
+  - id: WSTG-INFO-03
+    title: "Review Webserver Metafiles for Information Leakage"
+    verified: true
+  - id: WSTG-INFO-04
+    title: "Enumerate Applications on Webserver"
+    verified: true
+  - id: WSTG-INFO-05
+    title: "Review Webpage Content for Information Leakage"
+    verified: true
+  - id: WSTG-INFO-06
+    title: "Identify Application Entry Points"
+    verified: true
+  - id: WSTG-INFO-07
+    title: "Map Execution Paths Through Application"
+    verified: true
+  - id: WSTG-INFO-08
+    title: "Fingerprint Web Application Framework"
+    verified: true
+  - id: WSTG-INFO-09
+    title: "Fingerprint Web Application"
+    verified: true
+  - id: WSTG-INFO-10
+    title: "Map Application Architecture"
+    verified: true
+  - id: WSTG-INPV-01
+    title: "Testing for Reflected Cross Site Scripting"
+    verified: true
+  - id: WSTG-INPV-02
+    title: "Testing for Stored Cross Site Scripting"
+    verified: true
+  - id: WSTG-INPV-03
+    title: "Testing for HTTP Verb Tampering"
+    verified: true
+  - id: WSTG-INPV-04
+    title: "Testing for HTTP Parameter pollution"
+    verified: true
+  - id: WSTG-INPV-05
+    title: "Testing for SQL Injection"
+    verified: true
+  - id: WSTG-INPV-06
+    title: "Testing for LDAP Injection"
+    verified: true
+  - id: WSTG-INPV-07
+    title: "Testing for XML Injection"
+    verified: true
+  - id: WSTG-INPV-08
+    title: "Testing for SSI Injection"
+    verified: true
+  - id: WSTG-INPV-09
+    title: "Testing for XPath Injection"
+    verified: true
+  - id: WSTG-INPV-10
+    title: "Testing for IMAP SMTP Injection"
+    verified: true
+  - id: WSTG-INPV-11
+    title: "Testing for Code Injection"
+    verified: true
+  - id: WSTG-INPV-12
+    title: "Testing for Command Injection"
+    verified: true
+  - id: WSTG-INPV-13
+    title: "Testing for Format String Injection"
+    verified: true
+  - id: WSTG-INPV-14
+    title: "Testing for Incubated Vulnerabilities"
+    verified: true
+  - id: WSTG-INPV-15
+    title: "Testing for HTTP Splitting Smuggling"
+    verified: true
+  - id: WSTG-INPV-16
+    title: "Testing for HTTP Incoming Requests"
+    verified: true
+  - id: WSTG-INPV-17
+    title: "Testing for Host Header Injection"
+    verified: true
+  - id: WSTG-INPV-18
+    title: "Testing for Server-Side Template Injection"
+    verified: true
+  - id: WSTG-INPV-19
+    title: "Testing for Server-Side Request Forgery"
+    verified: true
+  - id: WSTG-INPV-20
+    title: "Testing for Mass Assignment"
+    verified: true
+  - id: WSTG-SESS-01
+    title: "Testing for Session Management Schema"
+    verified: true
+  - id: WSTG-SESS-02
+    title: "Testing for Cookies Attributes"
+    verified: true
+  - id: WSTG-SESS-03
+    title: "Testing for Session Fixation"
+    verified: true
+  - id: WSTG-SESS-04
+    title: "Testing for Exposed Session Variables"
+    verified: true
+  - id: WSTG-SESS-05
+    title: "Testing for Cross Site Request Forgery"
+    verified: true
+  - id: WSTG-SESS-06
+    title: "Testing for Logout Functionality"
+    verified: true
+  - id: WSTG-SESS-07
+    title: "Testing Session Timeout"
+    verified: true
+  - id: WSTG-SESS-08
+    title: "Testing for Session Puzzling"
+    verified: true
+  - id: WSTG-SESS-09
+    title: "Testing for Session Hijacking"
+    verified: true
+  - id: WSTG-SESS-10
+    title: "Testing JSON Web Tokens"
+    verified: true
+  - id: WSTG-SESS-11
+    title: "Testing for Concurrent Sessions"
+    verified: true

