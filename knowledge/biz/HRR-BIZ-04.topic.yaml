@@ -8,8 +8,8 @@ surfaces:
 
 order:
   - HRR-BIZ-04-MAP
-  - HRR-BIZ-04-TIME
-  - HRR-BIZ-04-SECOND
+  - HRR-BIZ-04-RACE
+  - HRR-BIZ-04-TOCTOU
 
 see_also: [HRR-BIZ-06]
 
