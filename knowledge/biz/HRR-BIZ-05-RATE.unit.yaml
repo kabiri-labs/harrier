@@ -1,0 +1,8 @@
+id: HRR-BIZ-05-RATE
+topic: HRR-BIZ-05
+status: outline
+kind: inquiry
+title: "Enforcement of how often the function may be exercised"
+objective: >-
+  Establish whether the cap on how frequently a function may be invoked is
+  enforced by the server.

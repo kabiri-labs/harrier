@@ -1,11 +1,14 @@
 id: HRR-BIZ-07
 title: "Application misuse detection"
 domain: BIZ
-axis: asset
 kind: inquiry
 
 surfaces:
   any_of: [business-workflow, privileged-function]
+
+order:
+  - HRR-BIZ-07-MAP
+  - HRR-BIZ-07-PROBE
 
 refs:
   wstg: [WSTG-BUSL-07]

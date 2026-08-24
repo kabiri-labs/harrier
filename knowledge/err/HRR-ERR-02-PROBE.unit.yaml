@@ -1,0 +1,7 @@
+id: HRR-ERR-02-PROBE
+topic: HRR-ERR-02
+status: outline
+title: "Debug output served in normal operation"
+objective: >-
+  Determine whether diagnostic output is served when nothing has failed, which
+  is a configuration left enabled rather than an error path.

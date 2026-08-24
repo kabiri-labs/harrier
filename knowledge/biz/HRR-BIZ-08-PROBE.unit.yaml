@@ -1,0 +1,8 @@
+id: HRR-BIZ-08-PROBE
+topic: HRR-BIZ-08
+status: outline
+kind: inquiry
+title: "Whether a client-supplied value reaches the charge"
+objective: >-
+  Establish whether any component of the amount charged is taken from a value
+  the client supplies rather than one the server holds.

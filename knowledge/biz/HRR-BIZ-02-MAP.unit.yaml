@@ -1,0 +1,9 @@
+id: HRR-BIZ-02-MAP
+topic: HRR-BIZ-02
+status: outline
+kind: recon
+title: "The requests the client is expected to be able to construct"
+objective: >-
+  Record which requests the legitimate client issues and what, if anything,
+  makes each one unforgeable, since that is the property a forgery has to
+  defeat.

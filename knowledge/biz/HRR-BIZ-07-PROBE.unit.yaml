@@ -1,0 +1,8 @@
+id: HRR-BIZ-07-PROBE
+topic: HRR-BIZ-07
+status: outline
+kind: inquiry
+title: "Whether sustained misuse changes the application's behaviour"
+objective: >-
+  Establish whether behaviour no legitimate user would produce, sustained long
+  enough to be unambiguous, changes how the application responds.

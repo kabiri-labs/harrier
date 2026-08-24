@@ -1,11 +1,15 @@
 id: HRR-BIZ-08
 title: "Payment and value handling"
 domain: BIZ
-axis: asset
 kind: inquiry
 
 surfaces:
   any_of: [payment]
+
+order:
+  - HRR-BIZ-08-MAP
+  - HRR-BIZ-08-PROBE
+  - HRR-BIZ-08-IMPACT
 
 see_also: [HRR-BIZ-03]
 

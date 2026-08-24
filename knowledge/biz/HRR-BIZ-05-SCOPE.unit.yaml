@@ -1,0 +1,8 @@
+id: HRR-BIZ-05-SCOPE
+topic: HRR-BIZ-05
+status: outline
+kind: inquiry
+title: "What the limit counts against"
+objective: >-
+  Establish what the limit is counted against, since a limit keyed on a value
+  the caller chooses is reset by choosing another.

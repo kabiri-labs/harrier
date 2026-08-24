@@ -1,0 +1,8 @@
+id: HRR-BIZ-03-PROBE
+topic: HRR-BIZ-03
+status: outline
+kind: inquiry
+title: "Acceptance of returned state that was altered"
+objective: >-
+  Establish whether the server acts on a value it previously issued when that
+  value comes back changed.

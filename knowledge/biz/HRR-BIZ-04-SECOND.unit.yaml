@@ -1,0 +1,7 @@
+id: HRR-BIZ-04-SECOND
+topic: HRR-BIZ-04
+status: outline
+title: "A decision taken on state that changed before it was used"
+objective: >-
+  Determine whether a value checked in one step is acted on in a later one
+  without being read again.

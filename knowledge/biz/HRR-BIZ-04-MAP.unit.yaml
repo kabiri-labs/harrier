@@ -1,0 +1,8 @@
+id: HRR-BIZ-04-MAP
+topic: HRR-BIZ-04
+status: outline
+kind: recon
+title: "The operations whose outcome depends on state read earlier"
+objective: >-
+  Record which operations decide on a value they read before acting, since
+  that gap is the only place this class of defect can exist.
