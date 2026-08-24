@@ -112,10 +112,10 @@ against real material rather than an empty tree:
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 99 topics across 13 domains, and 223 outlined units across six domains. |
+| `knowledge/` | 99 topics across 13 domains, and 269 outlined units across eight domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
 | `harrier/` | Nine schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 103 offline tests, almost all of them negative — asserting what must be rejected. |
+| `tests/` | 107 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until phase 4
