@@ -1,0 +1,7 @@
+id: HRR-CRY-04-PROBE
+topic: HRR-CRY-04
+status: outline
+title: "Ciphertext malleability probe"
+objective: >-
+  Determine whether altering a byte of an opaque value produces a response
+  distinguishable from altering a different byte.

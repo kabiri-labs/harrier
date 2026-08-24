@@ -1,0 +1,8 @@
+id: HRR-SES-11-POLICY
+topic: HRR-SES-11
+status: outline
+kind: recon
+title: "Declared concurrency rule"
+objective: >-
+  Establish what the application states about holding more than one session at
+  a time, if it states anything.

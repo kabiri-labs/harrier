@@ -1,0 +1,8 @@
+id: HRR-SES-05-MAP
+topic: HRR-SES-05
+status: outline
+kind: recon
+title: "State-changing request inventory"
+objective: >-
+  Establish which requests change state, and what each of them requires beyond
+  the session cookie itself.

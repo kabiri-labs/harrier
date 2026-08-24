@@ -1,0 +1,7 @@
+id: HRR-SES-02-FLAGS
+topic: HRR-SES-02
+status: outline
+title: "Declared cookie protections"
+objective: >-
+  Determine, for each cookie carrying session state, whether Secure, HttpOnly
+  and a same-site restriction are all present.

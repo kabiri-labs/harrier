@@ -1,0 +1,8 @@
+id: HRR-SES-01-MAP
+topic: HRR-SES-01
+status: outline
+kind: recon
+title: "Session artefact inventory"
+objective: >-
+  Establish which value identifies an authenticated session, where it is
+  carried, and which component issues it.

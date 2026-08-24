@@ -1,0 +1,7 @@
+id: HRR-SES-07-VALIDATION
+topic: HRR-SES-07
+status: outline
+title: "Server-side enforcement of the limit"
+objective: >-
+  Determine whether the limit is enforced by the issuer rather than only by a
+  client-visible claim the holder can edit.

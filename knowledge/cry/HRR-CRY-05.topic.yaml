@@ -20,6 +20,13 @@ boundaries:
 
 see_also: [HRR-SES-10, HRR-AUT-10]
 
+order:
+  - HRR-CRY-05-PROBE
+  - HRR-CRY-05-FPRINT
+  - HRR-CRY-05-BRUTE
+  - HRR-CRY-05-REPLAY
+  - HRR-CRY-05-PIVOT
+
 refs:
   wstg: [WSTG-SESS-10]
   cwe: [347]

@@ -99,7 +99,8 @@ axes:
     slugs:
       ENTROPY: Unpredictability of the generated value.
       SCOPE: The boundary over which the value is accepted.
-      EXPIRY: Lifetime and expiry enforcement.
+      EXPIRY: Absolute lifetime and its enforcement.
+      IDLE: How long the mechanism tolerates inactivity before ending.
       ROTATION: Reissue on a state or privilege change.
       FLAGS: Declared attributes and protections on the carrier.
       BINDING: Binding of the value to a subject, device or channel.

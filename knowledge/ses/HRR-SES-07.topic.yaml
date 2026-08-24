@@ -6,6 +6,11 @@ axis: property
 surfaces:
   any_of: [session-cookie, token-bearing]
 
+order:
+  - HRR-SES-07-EXPIRY
+  - HRR-SES-07-IDLE
+  - HRR-SES-07-VALIDATION
+
 refs:
   wstg: [WSTG-SESS-07]
   cwe: [613]

@@ -1,0 +1,7 @@
+id: HRR-SES-03-REPLAY
+topic: HRR-SES-03
+status: outline
+title: "Survival of a planted identifier across authentication"
+objective: >-
+  Determine whether an identifier that existed before sign-in remains valid
+  after it, rather than being replaced.

@@ -15,6 +15,12 @@ boundaries:
 
 see_also: [HRR-CLT-10]
 
+order:
+  - HRR-SES-04-QUERY
+  - HRR-SES-04-PATH
+  - HRR-SES-04-REFERER
+  - HRR-SES-04-READ
+
 refs:
   wstg: [WSTG-SESS-04]
   cwe: [598]

@@ -16,6 +16,14 @@ boundaries:
 
 see_also: [HRR-CRY-01]
 
+order:
+  - HRR-CRY-02-MAP
+  - HRR-CRY-02-LOGIN
+  - HRR-CRY-02-REGISTER
+  - HRR-CRY-02-RESET
+  - HRR-CRY-02-CHANGE
+  - HRR-CRY-02-EXPORT
+
 refs:
   wstg: [WSTG-CRYP-03, WSTG-ATHN-01]
   cwe: [319]

@@ -6,6 +6,11 @@ axis: property
 surfaces:
   any_of: [session-cookie]
 
+order:
+  - HRR-SES-02-FLAGS
+  - HRR-SES-02-SCOPE
+  - HRR-SES-02-EXPIRY
+
 refs:
   wstg: [WSTG-SESS-02]
   cwe: [1004, 614]

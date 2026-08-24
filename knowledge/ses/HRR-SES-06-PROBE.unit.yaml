@@ -1,0 +1,7 @@
+id: HRR-SES-06-PROBE
+topic: HRR-SES-06
+status: outline
+title: "Server-side termination request"
+objective: >-
+  Determine whether signing out issues a request the server acts on rather than
+  only discarding state in the browser.

@@ -1,0 +1,8 @@
+id: HRR-CRY-02-MAP
+topic: HRR-CRY-02
+status: outline
+kind: recon
+title: "Sensitive payload inventory"
+objective: >-
+  Establish which requests and responses carry credentials, tokens, personal
+  data or payment details, and over which channel each travels.

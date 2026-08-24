@@ -16,6 +16,12 @@ boundaries:
 
 see_also: [HRR-AUT-10, HRR-CRY-05]
 
+order:
+  - HRR-SES-10-EXPIRY
+  - HRR-SES-10-SCOPE
+  - HRR-SES-10-BINDING
+  - HRR-SES-10-REVOCATION
+
 refs:
   wstg: [WSTG-SESS-10]
   cwe: [613]

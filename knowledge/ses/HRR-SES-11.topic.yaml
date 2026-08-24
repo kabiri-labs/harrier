@@ -6,6 +6,11 @@ axis: property
 surfaces:
   any_of: [session-cookie, token-bearing]
 
+order:
+  - HRR-SES-11-POLICY
+  - HRR-SES-11-SCOPE
+  - HRR-SES-11-REVOCATION
+
 refs:
   wstg: [WSTG-SESS-11]
   cwe: [613]

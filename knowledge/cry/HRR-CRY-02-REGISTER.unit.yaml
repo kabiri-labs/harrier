@@ -1,0 +1,7 @@
+id: HRR-CRY-02-REGISTER
+topic: HRR-CRY-02
+status: outline
+title: "Account creation channel"
+objective: >-
+  Determine whether the details supplied at registration travel over an
+  unencrypted channel, which the sign-in form's protection does not cover.

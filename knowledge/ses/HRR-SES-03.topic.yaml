@@ -6,6 +6,11 @@ axis: technique
 surfaces:
   any_of: [session-cookie, token-bearing, login-form]
 
+order:
+  - HRR-SES-03-PROBE
+  - HRR-SES-03-REPLAY
+  - HRR-SES-03-READ
+
 refs:
   wstg: [WSTG-SESS-03]
   cwe: [384]
