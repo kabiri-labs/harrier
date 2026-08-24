@@ -1,10 +1,14 @@
 id: HRR-ACL-06
 title: "Field-level binding and mass assignment"
 domain: ACL
-axis: vector
 
 surfaces:
   any_of: [rest-api, graphql, registration, business-workflow]
+
+order:
+  - HRR-ACL-06-MAP
+  - HRR-ACL-06-WRITE
+  - HRR-ACL-06-IMPACT
 
 see_also: [HRR-ACL-02, HRR-BIZ-03]
 

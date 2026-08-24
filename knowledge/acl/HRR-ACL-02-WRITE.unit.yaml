@@ -1,0 +1,7 @@
+id: HRR-ACL-02-WRITE
+topic: HRR-ACL-02
+status: outline
+title: "Modification of an object the caller does not own"
+objective: >-
+  Determine whether an object the caller does not own can be changed or
+  deleted, which is a separate result from whether it can be read.

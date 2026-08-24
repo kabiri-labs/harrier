@@ -1,0 +1,7 @@
+id: HRR-ACL-02-IMPACT
+topic: HRR-ACL-02
+status: outline
+title: "How much of the object space a confirmed failure reaches"
+objective: >-
+  Determine how much of the object space one confirmed failure yields, since a
+  single readable record and an enumerable dataset are different findings.

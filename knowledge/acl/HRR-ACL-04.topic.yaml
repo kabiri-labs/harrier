@@ -6,6 +6,19 @@ axis: technique
 surfaces:
   any_of: [privileged-function, admin-panel, impersonation, multi-tenant]
 
+order:
+  - HRR-ACL-04-DIFF
+  - HRR-ACL-04-REPLAY
+  - HRR-ACL-04-SECOND
+
+boundaries:
+  - subject: "Reaching another tenant's data without gaining a role"
+    home: HRR-ACL-02
+    note: >-
+      Crossing a tenant boundary on an object is an object-level failure even
+      when the tenancy is what separates the two accounts. Escalation is a
+      change in what the caller is, not in which record it names.
+
 see_also: [HRR-IDN-02]
 
 refs:

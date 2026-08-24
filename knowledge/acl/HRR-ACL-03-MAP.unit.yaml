@@ -1,0 +1,8 @@
+id: HRR-ACL-03-MAP
+topic: HRR-ACL-03
+status: outline
+kind: recon
+title: "The privileged functions and how each is addressed"
+objective: >-
+  Record every function the application treats as privileged and the request
+  that reaches it, including those the interface only exposes to some roles.

@@ -1,0 +1,7 @@
+id: HRR-ACL-05-DIFF
+topic: HRR-ACL-05
+status: outline
+title: "The same action under a method the check does not cover"
+objective: >-
+  Determine whether an action refused under one request method succeeds under
+  another that reaches the same handler.

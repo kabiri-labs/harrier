@@ -1,0 +1,9 @@
+id: HRR-ACL-02-MAP
+topic: HRR-ACL-02
+status: outline
+kind: recon
+title: "The object identifiers and where they appear"
+objective: >-
+  Record which identifiers name objects, in which parameters and paths they
+  appear, and which of them are guessable, so the comparisons that follow are
+  aimed at the whole object space rather than one endpoint.

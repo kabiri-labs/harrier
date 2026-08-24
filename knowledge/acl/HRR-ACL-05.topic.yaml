@@ -6,6 +6,10 @@ axis: technique
 surfaces:
   any_of: [privileged-function, admin-panel, business-workflow, rest-api, graphql]
 
+order:
+  - HRR-ACL-05-DIFF
+  - HRR-ACL-05-EVADE
+
 boundaries:
   - subject: "Which methods the server advertises"
     home: HRR-CFG-04

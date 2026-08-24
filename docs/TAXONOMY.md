@@ -187,6 +187,15 @@ and block every destination that is not already public.
 · `TRANSPORT` · `STORAGE` · `POLICY` · `VALIDATION` · `NAMING` · `PARSING`
 · `SERVING` · `SIZE` · `RATE` · `QUOTA`
 
+### `principal` — who is making the request
+
+Correct wherever a different caller is refused by a different check. An
+anonymous caller, a lesser role and a peer account are usually stopped by three
+separate pieces of code, so a clean result for one is not evidence about the
+others.
+
+`ANON` · `LOWPRIV` · `PEER` · `TENANT`
+
 ### `asset` — the same test against a different kind of surface
 
 `LOGIN` · `LOGOUT` · `REGISTER` · `RESET` · `CHANGE` · `MFA` · `PROFILE`
