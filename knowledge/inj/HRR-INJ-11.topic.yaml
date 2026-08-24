@@ -15,6 +15,13 @@ boundaries:
 
 see_also: [HRR-PRT-05]
 
+order:
+  - HRR-INJ-11-MAP
+  - HRR-INJ-11-PROBE
+  - HRR-INJ-11-ERROR
+  - HRR-INJ-11-TIME
+  - HRR-INJ-11-EVADE
+
 refs:
   wstg: [WSTG-CLNT-10]
   cwe: [74]

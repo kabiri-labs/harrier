@@ -93,6 +93,11 @@ axes:
       TRANSPORT: Protection of the value in transit.
       STORAGE: Protection of the value at rest, client or server side.
       POLICY: The declared rule set governing the mechanism.
+      VALIDATION: What the mechanism accepts, and on what evidence.
+      NAMING: How an attacker-supplied identifier or name is handled.
+      PARSING: What happens when the accepted content is interpreted.
+      SERVING: What happens when the stored content is handed back out.
+      QUOTA: Limits on size, count or rate that the mechanism enforces.
 
   - name: asset
     description: >

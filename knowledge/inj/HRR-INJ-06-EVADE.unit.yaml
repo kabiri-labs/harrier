@@ -1,0 +1,8 @@
+id: HRR-INJ-06-EVADE
+topic: HRR-INJ-06
+status: outline
+kind: recon
+title: "Encoding and normalisation evasion"
+objective: >-
+  Determine whether a negative result is caused by header encoding rather than
+  by the field never reaching a message.

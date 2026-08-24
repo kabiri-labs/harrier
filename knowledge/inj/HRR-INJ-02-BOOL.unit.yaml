@@ -1,0 +1,7 @@
+id: HRR-INJ-02-BOOL
+topic: HRR-INJ-02
+status: outline
+title: "Filter tautology and blind inference"
+objective: >-
+  Determine whether an always-true clause widens the result set, and whether a
+  controlled condition yields two distinguishable responses.

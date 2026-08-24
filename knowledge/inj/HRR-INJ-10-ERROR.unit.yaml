@@ -1,0 +1,7 @@
+id: HRR-INJ-10-ERROR
+topic: HRR-INJ-10
+status: outline
+title: "Error-based inference"
+objective: >-
+  Determine whether an invalid expression produces an engine error naming the
+  template, the context, or the failing construct.

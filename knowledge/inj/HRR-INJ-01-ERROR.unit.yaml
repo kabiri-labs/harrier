@@ -1,0 +1,7 @@
+id: HRR-INJ-01-ERROR
+topic: HRR-INJ-01
+status: outline
+title: "Error-based inference"
+objective: >-
+  Determine whether an engine error surfaced in the response can be made to
+  carry a value the database computed.

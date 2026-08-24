@@ -8,6 +8,12 @@ surfaces:
 
 see_also: [HRR-INJ-01]
 
+order:
+  - HRR-INJ-05-PROBE
+  - HRR-INJ-05-ERROR
+  - HRR-INJ-05-BOOL
+  - HRR-INJ-05-EVADE
+
 refs:
   wstg: [WSTG-INPV-09]
   cwe: [643]

@@ -26,7 +26,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 1 | Schema and validator | `done` | Seven schemas, six validation passes, offline suite, CI. Identifiers, axis slugs, every cross-reference and the outline/authored distinction are machine-checked. Cheap now, impossible to retrofit across 350 files. |
 | 1.5 | Pin the reference standards | `done` | ASVS 5.0.0 at its release commit, CWE 4.20 by versioned archive and content hash. `refs.asvs` and `refs.cwe` both resolve. CVE stays out: it names one bug in one product, not a class. |
 | 2 | Topic map | `done` | 99 topics across 13 domains. Every resolvable WSTG identifier is claimed by a topic, and the validator now rejects one that is not. |
-| 3 | Unit outline pass | `not started` | Every topic decomposed to units. Identifier, title, objective, surfaces, refs. **This is where the artefact becomes genuinely useful.** |
+| 3 | Unit outline pass | `in progress` | Every topic decomposed to units carrying an identifier, a title and a falsifiable objective. **This is where the artefact becomes genuinely useful.** Proceeding in batches of two or three domains, because a review of 350 files at once is not a review. |
 | 4 | Two reference topics at depth | `not started` | SQL injection and cross-site scripting. Chosen because one splits on `technique` with a dimension, the other on `context` with two dimensions — between them they exercise every mechanism in the model. |
 | 5 | Published artefact | `not started` | Single self-contained HTML file. Surface-first navigation, full-text search, standard-coverage views. |
 | 6 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. This is the clearest differentiation from restating WSTG. |
@@ -55,7 +55,7 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 99 |
-| Units — outlined | 0 |
+| Units — outlined | 75 |
 | Units — authored | 0 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -65,6 +65,21 @@ describes second-order delivery rather than a test, so nothing can cover it and
 the validator does not ask anything to.
 
 The number to watch from here is units, which is phase 3's job.
+
+### Phase 3 batches
+
+| Batch | Domains | Topics | Units | Status |
+|---|---|---|---|---|
+| 1 | `INJ` `RES` | 15 | 75 | `done` |
+| 2 | `CLT` `PRT` | 17 | — | `not started` |
+| 3 | `SES` `CRY` | 16 | — | `not started` |
+| 4 | `AUT` `IDN` `ACL` | 21 | — | `not started` |
+| 5 | `BIZ` `ERR` | 13 | — | `not started` |
+| 6 | `RCN` `CFG` | 17 | — | `not started` |
+
+Batch 1 went first because SQL injection already carries payloads and a card, so
+the unit model could be judged against real depth material before three hundred
+more units were written on top of it.
 
 ### Topics per domain
 
@@ -96,10 +111,10 @@ against real material rather than an empty tree:
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 99 topics across 13 domains, each with an axis, a surface clause and its boundaries. |
+| `knowledge/` | 99 topics across 13 domains, and 75 outlined units under `INJ` and `RES`. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
 | `harrier/` | Nine schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 101 offline tests, almost all of them negative — asserting what must be rejected. |
+| `tests/` | 103 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until phase 4

@@ -1,0 +1,7 @@
+id: HRR-INJ-09-ERROR
+topic: HRR-INJ-09
+status: outline
+title: "Error and crash inference"
+objective: >-
+  Determine whether specifiers that read beyond supplied arguments produce an
+  error, a truncated response, or a terminated process.

@@ -8,6 +8,11 @@ surfaces:
 
 see_also: [HRR-INJ-08]
 
+order:
+  - HRR-INJ-04-PROBE
+  - HRR-INJ-04-IMPACT
+  - HRR-INJ-04-EVADE
+
 refs:
   wstg: [WSTG-INPV-08]
   cwe: [97]

@@ -1,0 +1,7 @@
+id: HRR-INJ-07-PROBE
+topic: HRR-INJ-07
+status: outline
+title: "Evaluation probe"
+objective: >-
+  Determine whether an arithmetic expression submitted as input is returned
+  evaluated rather than as the literal text sent.

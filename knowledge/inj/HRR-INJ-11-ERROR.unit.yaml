@@ -1,0 +1,7 @@
+id: HRR-INJ-11-ERROR
+topic: HRR-INJ-11
+status: outline
+title: "Error-based inference"
+objective: >-
+  Determine whether a malformed field produces a server error carrying
+  interpreter detail rather than a generic rejection.

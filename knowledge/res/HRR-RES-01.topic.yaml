@@ -21,6 +21,13 @@ boundaries:
 
 see_also: [HRR-ACL-02, HRR-PRT-04]
 
+order:
+  - HRR-RES-01-PROBE
+  - HRR-RES-01-ERROR
+  - HRR-RES-01-VERIFY
+  - HRR-RES-01-IMPACT
+  - HRR-RES-01-EVADE
+
 refs:
   wstg: [WSTG-ATHZ-01]
   cwe: [22, 98]

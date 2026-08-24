@@ -48,3 +48,47 @@ class TheRealRepository(unittest.TestCase):
         ):
             with self.subTest(label=label):
                 self.assertIn(f"| {label} | {value} |", roadmap, why)
+
+
+class UnitsBelongToTheAxisTheirTopicDeclares(unittest.TestCase):
+    """Asserted over the real content rather than a fixture: the axis rule is
+    what makes the taxonomy non-overlapping, and it is worth knowing that the
+    written content actually obeys it rather than only that it could be made to."""
+
+    def test_every_unit_slug_is_drawn_from_a_declared_vocabulary(self):
+        import yaml
+
+        from harrier import Repository, find_root
+
+        repo = Repository.load(find_root(REPO_ROOT))
+        axes = {a["name"]: set(a["slugs"]) for a in repo.vocab["axes"].data["axes"]}
+        universal = {
+            s
+            for a in repo.vocab["axes"].data["axes"]
+            if a.get("universal")
+            for s in a["slugs"]
+        }
+        topics = {d.data["id"]: d.data for d in repo.topics}
+        self.assertTrue(repo.units, "no units to check")
+        for unit in repo.units:
+            uid, parent = unit.data["id"], unit.data["topic"]
+            slug = uid[len(parent) + 1 :]
+            allowed = axes[topics[parent]["axis"]] | universal
+            with self.subTest(unit=uid):
+                self.assertIn(slug, allowed)
+
+    def test_no_two_units_share_an_objective(self):
+        from harrier import Repository, find_root
+
+        repo = Repository.load(find_root(REPO_ROOT))
+        seen = {}
+        for unit in repo.units:
+            objective = " ".join(unit.data["objective"].split())
+            with self.subTest(unit=unit.data["id"]):
+                self.assertNotIn(
+                    objective,
+                    seen,
+                    f"identical to {seen.get(objective)} -- a copied objective "
+                    "means one of the two units was not thought about",
+                )
+            seen[objective] = unit.data["id"]

@@ -1,0 +1,7 @@
+id: HRR-INJ-10-IMPACT
+topic: HRR-INJ-10
+status: outline
+title: "Established reach of the evaluation context"
+objective: >-
+  Determine whether the evaluation context exposes objects permitting file
+  access or command execution, or is confined to data rendering.

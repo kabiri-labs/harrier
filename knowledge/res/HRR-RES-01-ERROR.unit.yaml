@@ -1,0 +1,7 @@
+id: HRR-RES-01-ERROR
+topic: HRR-RES-01
+status: outline
+title: "Error-based path disclosure"
+objective: >-
+  Determine whether a path that cannot resolve produces an error naming the
+  absolute path the application attempted to open.

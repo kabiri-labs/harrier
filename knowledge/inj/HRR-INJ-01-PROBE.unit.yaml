@@ -1,0 +1,7 @@
+id: HRR-INJ-01-PROBE
+topic: HRR-INJ-01
+status: outline
+title: "Injection point probe"
+objective: >-
+  Determine whether a syntax-breaking character alters the query's result or
+  its error behaviour in a way the same request without it does not.

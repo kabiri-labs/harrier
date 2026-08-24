@@ -1,0 +1,7 @@
+id: HRR-INJ-09-PROBE
+topic: HRR-INJ-09
+status: outline
+title: "Conversion specifier probe"
+objective: >-
+  Determine whether a conversion specifier submitted as input is consumed by a
+  formatting function rather than echoed literally.

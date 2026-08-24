@@ -1,0 +1,7 @@
+id: HRR-INJ-05-ERROR
+topic: HRR-INJ-05
+status: outline
+title: "Error-based inference"
+objective: >-
+  Determine whether a malformed expression produces an error naming the
+  constructed path or its failing position.

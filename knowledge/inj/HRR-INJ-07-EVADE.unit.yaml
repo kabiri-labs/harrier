@@ -1,0 +1,8 @@
+id: HRR-INJ-07-EVADE
+topic: HRR-INJ-07
+status: outline
+kind: recon
+title: "Expression and encoding evasion"
+objective: >-
+  Determine whether a negative result is caused by an expression allow-list
+  rather than by the absence of an evaluator.

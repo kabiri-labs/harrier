@@ -16,6 +16,14 @@ boundaries:
 
 see_also: [HRR-CLT-01]
 
+order:
+  - HRR-INJ-10-PROBE
+  - HRR-INJ-10-FPRINT
+  - HRR-INJ-10-ERROR
+  - HRR-INJ-10-OOB
+  - HRR-INJ-10-IMPACT
+  - HRR-INJ-10-EVADE
+
 refs:
   wstg: [WSTG-INPV-18]
   cwe: [1336]

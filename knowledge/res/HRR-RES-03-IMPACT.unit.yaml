@@ -1,0 +1,7 @@
+id: HRR-RES-03-IMPACT
+topic: HRR-RES-03
+status: outline
+title: "Established reach of the fetch"
+objective: >-
+  Determine whether the fetch reaches internal services, a cloud metadata
+  endpoint, or only destinations already public.

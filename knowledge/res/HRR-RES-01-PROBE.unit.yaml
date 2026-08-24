@@ -1,0 +1,7 @@
+id: HRR-RES-01-PROBE
+topic: HRR-RES-01
+status: outline
+title: "Traversal sequence survival probe"
+objective: >-
+  Determine whether a traversal sequence in the parameter changes which
+  resource is returned relative to the unmodified request.

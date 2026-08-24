@@ -170,7 +170,8 @@ Steps that recur across topics and are not alternatives to each other.
 ### `property` — which security property of one mechanism is under test
 
 `ENTROPY` · `SCOPE` · `EXPIRY` · `ROTATION` · `FLAGS` · `BINDING` · `REVOCATION`
-· `TRANSPORT` · `STORAGE` · `POLICY`
+· `TRANSPORT` · `STORAGE` · `POLICY` · `VALIDATION` · `NAMING` · `PARSING`
+· `SERVING` · `QUOTA`
 
 ### `asset` — the same test against a different kind of surface
 

@@ -51,15 +51,20 @@ class Sandbox:
         self.write(rel, data if result is None else result)
 
     #: The topic every mutation test starts from. A real one rather than an
-    #: invented one: it is the file the SQL injection tests already talk about,
-    #: and starting from it means a test changes exactly the field under test
-    #: while everything else stays as the repository has it.
-    BASE_TOPIC = "knowledge/inj/HRR-INJ-01.topic.yaml"
+    #: invented one -- a miniature would need its own copy of every field the
+    #: validator checks, and would drift from the repository the moment one of
+    #: them changed.
+    #:
+    #: It is deliberately a topic that carries no units and that nothing links
+    #: to. A test declaring its own `order` or `see_also` on a topic that
+    #: already has real units or inbound links would collide with them and fail
+    #: on the wrong rule.
+    BASE_TOPIC = "knowledge/aut/HRR-AUT-01.topic.yaml"
+    BASE_TOPIC_ID = "HRR-AUT-01"
 
-    #: A topic nothing else links to. Tests that rewrite cross-references start
-    #: here, because rewriting them on a topic other topics point back to would
-    #: break their symmetry and fail on the wrong rule.
-    UNLINKED_TOPIC = "knowledge/aut/HRR-AUT-01.topic.yaml"
+    #: Kept as a separate name because the reason differs: some tests need a
+    #: topic nothing links to, which is a weaker requirement than the base's.
+    UNLINKED_TOPIC = BASE_TOPIC
 
     def add_topic(self, base: str | None = None, **overrides: Any) -> str:
         """Overwrite the base topic with one field changed, and return its id.
@@ -70,6 +75,13 @@ class Sandbox:
         them changed. Here, an override is the only difference.
         """
         topic = self.read(base or self.BASE_TOPIC)
+        # The fixture's units are named with technique slugs, so the fixture's
+        # topic declares that axis unless a test is specifically about the axis
+        # rule. The base topic's own axis is irrelevant here -- what is being
+        # exercised is the rule, not this topic's content.
+        topic.setdefault("axis", "technique")
+        if base is None and "axis" not in overrides:
+            topic["axis"] = "technique"
         # refs merges key by key rather than replacing the block. A test that
         # sets refs.cwe is not saying the topic has no WSTG reference, and
         # dropping one would trip the coverage gate instead of the rule under
@@ -83,8 +95,8 @@ class Sandbox:
     def add_unit(self, **overrides: Any) -> str:
         """Write a minimal valid authored unit under the base topic."""
         unit = {
-            "id": "HRR-INJ-01-UNION",
-            "topic": "HRR-INJ-01",
+            "id": f"{self.BASE_TOPIC_ID}-UNION",
+            "topic": self.BASE_TOPIC_ID,
             "title": "UNION-based extraction",
             "objective": (
                 "Determine whether a UNION arm can be appended to the query so that "

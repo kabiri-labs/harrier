@@ -1,0 +1,7 @@
+id: HRR-INJ-11-TIME
+topic: HRR-INJ-11
+status: outline
+title: "Time-based inference"
+objective: >-
+  Determine whether a conditional delay injected into a message field is
+  reproducibly observable in reply latency.

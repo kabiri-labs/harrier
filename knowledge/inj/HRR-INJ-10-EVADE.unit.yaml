@@ -1,0 +1,8 @@
+id: HRR-INJ-10-EVADE
+topic: HRR-INJ-10
+status: outline
+kind: recon
+title: "Delimiter and sandbox evasion"
+objective: >-
+  Determine whether a negative result is caused by a sandbox or delimiter
+  filter rather than by the absence of evaluation.

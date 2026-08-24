@@ -1,0 +1,8 @@
+id: HRR-RES-01-EVADE
+topic: HRR-RES-01
+status: outline
+kind: recon
+title: "Normalisation and encoding evasion"
+objective: >-
+  Determine whether a negative result is caused by path normalisation or an
+  allow-list rather than by the parameter never naming a path.

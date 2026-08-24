@@ -1,0 +1,7 @@
+id: HRR-RES-03-PROBE
+topic: HRR-RES-03
+status: outline
+title: "Fetch trigger probe"
+objective: >-
+  Determine whether a value the tester controls causes the server to issue a
+  request to a destination the tester named.

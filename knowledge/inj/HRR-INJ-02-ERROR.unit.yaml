@@ -1,0 +1,7 @@
+id: HRR-INJ-02-ERROR
+topic: HRR-INJ-02
+status: outline
+title: "Error-based inference"
+objective: >-
+  Determine whether a malformed filter produces a directory error that names
+  the constructed filter or its failing position.

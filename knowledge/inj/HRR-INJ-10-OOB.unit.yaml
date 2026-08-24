@@ -1,0 +1,7 @@
+id: HRR-INJ-10-OOB
+topic: HRR-INJ-10
+status: outline
+title: "Out-of-band confirmation"
+objective: >-
+  Determine whether the engine can be made to initiate a network interaction
+  carrying a token the tester chose.

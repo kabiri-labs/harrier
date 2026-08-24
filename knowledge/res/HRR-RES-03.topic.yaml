@@ -8,6 +8,14 @@ surfaces:
 
 see_also: [HRR-INJ-03]
 
+order:
+  - HRR-RES-03-PROBE
+  - HRR-RES-03-OOB
+  - HRR-RES-03-DIFF
+  - HRR-RES-03-TIME
+  - HRR-RES-03-IMPACT
+  - HRR-RES-03-EVADE
+
 refs:
   wstg: [WSTG-INPV-19]
   cwe: [918]

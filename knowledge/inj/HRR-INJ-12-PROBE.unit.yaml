@@ -1,0 +1,7 @@
+id: HRR-INJ-12-PROBE
+topic: HRR-INJ-12
+status: outline
+title: "Argument metacharacter probe"
+objective: >-
+  Determine whether a syntax-breaking character in a resolver argument changes
+  the response relative to the same query without it.

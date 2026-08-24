@@ -1,0 +1,7 @@
+id: HRR-INJ-03-PROBE
+topic: HRR-INJ-03
+status: outline
+title: "Entity and markup acceptance probe"
+objective: >-
+  Determine whether the parser resolves a declared internal entity rather than
+  treating the declaration as literal text.
