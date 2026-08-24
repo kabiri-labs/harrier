@@ -24,7 +24,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 |---|---|---|---|
 | 0 | Foundation | `done` | Documents, 14 domain codes, 6 axis vocabularies, 36 surface tags, 5 dimensions, WSTG pinned and fully mapped. No content. |
 | 1 | Schema and validator | `done` | Seven schemas, six validation passes, offline suite, CI. Identifiers, axis slugs, every cross-reference and the outline/authored distinction are machine-checked. Cheap now, impossible to retrofit across 350 files. |
-| 1.5 | Pin the reference standards | `in progress` | ASVS 5.0.0 pinned at its release commit; `refs.asvs` resolves. **CWE is outstanding**: `cwe.mitre.org` is unreachable from the build environment's network policy, and no authoritative mirror exists to pin instead. Must land before phase 3, when every unit starts carrying `refs.cwe` and one wrong number propagates. |
+| 1.5 | Pin the reference standards | `done` | ASVS 5.0.0 at its release commit, CWE 4.20 by versioned archive and content hash. `refs.asvs` and `refs.cwe` both resolve. CVE stays out: it names one bug in one product, not a class. |
 | 2 | Topic map | `not started` | Every topic named, placed in a domain, given its axis and boundaries. `standards/wstg-map.yaml` is the input: every entry must be covered by at least one topic, and every topic must trace back to an entry or be declared beyond-WSTG. |
 | 3 | Unit outline pass | `not started` | Every topic decomposed to units. Identifier, title, objective, surfaces, refs. **This is where the artefact becomes genuinely useful.** |
 | 4 | Two reference topics at depth | `not started` | SQL injection and cross-site scripting. Chosen because one splits on `technique` with a dimension, the other on `context` with two dimensions — between them they exercise every mechanism in the model. |
@@ -80,9 +80,10 @@ against real material rather than an empty tree:
 | `payloads/sqli/` | 99 SQL injection payloads across 10 files, covering probe, fingerprint, seven techniques and evasion. |
 | `toolbox/registry.yaml` | 6 tools with per-flag rationale. |
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
-| `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers, pinned by commit and SHA-256. Identifiers and structural names only — the text is CC BY-SA. |
-| `harrier/` | Eight schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 80 offline tests, almost all of them negative — asserting what must be rejected. |
+| `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
+| `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
+| `harrier/` | Nine schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
+| `tests/` | 90 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until phase 4

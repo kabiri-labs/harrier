@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pinned CWE index",
+  "description": "Identifiers and names from a MITRE CWE catalogue release. The copyright and licence fields are required, not decorative: the CWE Terms of Use grant use on the condition that any copy reproduces MITRE's copyright designation and the licence, so a regeneration that dropped them would put this repository outside the grant.",
+  "type": "object",
+  "required": ["version", "source", "source_url", "source_sha256", "standard_version", "standard_date", "retrieved", "licence", "copyright", "cwe"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"const": 1},
+    "source": {"type": "string", "minLength": 10},
+    "source_url": {
+      "description": "Must name a specific catalogue version. cwec_latest moves, so it names a moving target rather than the evidence.",
+      "type": "string",
+      "pattern": "^https://cwe\\.mitre\\.org/data/xml/cwec_v[0-9]+\\.[0-9]+\\.xml\\.zip$"
+    },
+    "source_sha256": {
+      "description": "Of the extracted XML, never the archive: a zip carries timestamps, so two archives of identical content do not hash alike.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "standard_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+$"},
+    "standard_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "retrieved": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "licence": {"type": "string", "minLength": 20},
+    "copyright": {"type": "string", "pattern": "The MITRE Corporation"},
+    "cwe": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "name", "kind", "status"],
+        "properties": {
+          "id": {"type": "integer", "minimum": 1},
+          "name": {"type": "string", "minLength": 3},
+          "kind": {"enum": ["weakness", "category", "view"]},
+          "status": {"enum": ["Draft", "Incomplete", "Stable", "Obsolete", "Deprecated"]},
+          "abstraction": {"enum": ["Pillar", "Class", "Base", "Variant", "Compound"]}
+        },
+        "if": {"properties": {"kind": {"const": "weakness"}}, "required": ["kind"]},
+        "then": {"required": ["abstraction"]}
+      }
+    }
+  }
+}

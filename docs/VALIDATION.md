@@ -47,10 +47,12 @@ checked.
   name, so two topics cannot name one idea differently.
 - identifiers are well formed, unique, match their file name, and sit in the
   directory their domain names
-- `refs.wstg` and `refs.asvs` resolve against their pinned files. A chapter or
-  section may be cited as well as a single requirement — citing a whole section
-  is often the more honest reference. `refs.cwe` is still shape-checked only, as
-  no CWE catalogue is pinned yet
+- `refs.wstg`, `refs.asvs` and `refs.cwe` all resolve against their pinned files.
+  An ASVS chapter or section may be cited as well as a single requirement —
+  citing a whole section is often the more honest reference. A CWE reference must
+  name a weakness: a category or a view is rejected *by name*, because both are
+  real identifiers and "not found" would be misleading about them. A deprecated
+  weakness is rejected in favour of its replacement
 - surface tags, dimension names and dimension values resolve
 - `objective` is falsifiable and `done_when` is countable — both are pattern
   checks against the language that makes them neither
@@ -83,10 +85,20 @@ A suite that only checks good cases cannot tell a working rule from one that has
 quietly stopped firing, and a rule that has stopped firing looks exactly like a
 repository with no problems.
 
-The ASVS pin carries a further assertion of its own: no requirement text appears
-in it. ASVS is CC BY-SA, so reproducing the text would force share-alike onto
-this repository — the schema has no field for it, and a test checks that none
-arrived anyway.
+Each pin carries assertions of its own, and they differ because the licences do:
+
+- **ASVS** is CC BY-SA, so no requirement text appears in the pin. Reproducing it
+  would force share-alike onto this repository; the schema has no field for it,
+  and a test checks that none arrived anyway.
+- **CWE** is not share-alike, but MITRE's grant is *conditional* on reproducing
+  its copyright designation and the licence. Both are required fields, the
+  copyright must name MITRE, and a test asserts `NOTICE` still carries the
+  designation the pin records.
+- **Both**, plus WSTG, must pin something immutable. A branch (`v5.0.0`) and a
+  moving alias (`cwec_latest`) are rejected by pattern, because each names a
+  moving target rather than the evidence — and each currently serves the same
+  bytes as the thing it should have been, which is exactly when the mistake looks
+  harmless.
 
 Three properties are asserted about the repository rather than the code:
 

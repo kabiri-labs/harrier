@@ -210,3 +210,70 @@ class TheAsvsPinStaysAuditable(SandboxCase):
     def test_an_unschemad_standards_file_is_reported(self):
         self.box.path("standards/capec.yaml").write_text("version: 1\ncapec: []\n")
         self.assertRejected("no schema is registered for this standard")
+
+
+class TheCwePinResolvesReferences(SandboxCase):
+    def test_a_real_weakness_is_accepted(self):
+        self.box.add_topic(refs={"cwe": [89]})
+        self.assertAccepted()
+
+    def test_an_identifier_absent_from_the_catalogue_is_rejected(self):
+        self.box.add_topic(refs={"cwe": [999999]})
+        self.assertRejected("CWE-999999 is not in the pinned CWE catalogue")
+
+    def test_citing_a_view_is_rejected_with_the_reason(self):
+        # CWE-699 is a real identifier and not a weakness, so "not found" would
+        # be a misleading thing to say about it.
+        self.box.add_topic(refs={"cwe": [699]})
+        self.assertRejected("CWE-699 is a view")
+
+    def test_citing_a_category_is_rejected_with_the_reason(self):
+        def find_category(data):
+            return next(e["id"] for e in data["cwe"] if e["kind"] == "category")
+        category = find_category(self.box.read("standards/cwe.yaml"))
+        self.box.add_topic(refs={"cwe": [category]})
+        self.assertRejected(f"CWE-{category} is a category")
+
+    def test_a_deprecated_weakness_is_rejected(self):
+        data = self.box.read("standards/cwe.yaml")
+        deprecated = next(
+            e["id"] for e in data["cwe"]
+            if e["kind"] == "weakness" and e["status"] == "Deprecated"
+        )
+        self.box.add_topic(refs={"cwe": [deprecated]})
+        self.assertRejected(f"CWE-{deprecated} is deprecated")
+
+
+class TheCwePinCarriesItsLicenceCondition(SandboxCase):
+    """MITRE grants use on the condition that a copy reproduces the copyright
+    designation and the licence. Dropping either puts this repository outside
+    the grant, so both are required rather than decorative."""
+
+    def test_the_copyright_designation_is_required(self):
+        def strip(data):
+            data.pop("copyright")
+        self.box.edit("standards/cwe.yaml", strip)
+        self.assertRejected("'copyright' is a required property")
+
+    def test_a_copyright_not_naming_mitre_is_rejected(self):
+        def rewrite(data):
+            data["copyright"] = "Copyright (c) 2026, Somebody Else"
+        self.box.edit("standards/cwe.yaml", rewrite)
+        self.assertRejected("schema (cwe)")
+
+    def test_the_moving_latest_url_cannot_be_the_pin(self):
+        # cwec_latest moves, so it names a moving target rather than the evidence.
+        def unpin(data):
+            data["source_url"] = "https://cwe.mitre.org/data/xml/cwec_latest.xml.zip"
+        self.box.edit("standards/cwe.yaml", unpin)
+        self.assertRejected("source_url")
+
+    def test_the_notice_reproduces_the_mitre_attribution(self):
+        notice = (self.box.root / "NOTICE").read_text(encoding="utf-8")
+        pin = self.box.read("standards/cwe.yaml")
+        self.assertIn(
+            pin["copyright"],
+            notice,
+            "the CWE grant is conditional on reproducing MITRE's copyright "
+            "designation; NOTICE is where this repository does that",
+        )

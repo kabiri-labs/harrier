@@ -1,0 +1,6815 @@
+# Pinned MITRE CWE identifiers.
+#
+# Generated from the CWE project's own catalogue release, not from memory. Every
+# `refs.cwe` value in knowledge/ and mitigations/ is resolved against this file.
+#
+# ATTRIBUTION IS A LICENCE CONDITION, not a courtesy. The CWE Terms of Use grant
+# a non-exclusive, royalty-free licence to use CWE, on the condition that any
+# copy reproduces MITRE's copyright designation and the licence. Both are carried
+# here and in NOTICE:
+#
+#   Copyright (c) 2006-2026, The MITRE Corporation. CWE is a trademark of
+#   The MITRE Corporation. https://cwe.mitre.org/about/termsofuse.html
+#
+# WHAT IS HERE. Identifier, name, kind and -- for weaknesses -- abstraction and
+# status. Weakness descriptions are not reproduced: they are not needed to
+# resolve a reference, and a cross-reference is a pointer to look up rather than
+# a copy to read.
+#
+# Categories and views are recorded alongside weaknesses so that citing one can
+# be rejected with a message that says WHY. CWE-699 is a category and CWE-1000 is
+# a view; both are real identifiers and neither is a weakness, so "not found"
+# would be a misleading thing to say about them.
+#
+# This file is generated. Do not hand-edit it -- a hand-edit would make the
+# verification claim below empty.
+#
+# Refresh procedure:
+#   1. curl -sO https://cwe.mitre.org/data/xml/cwec_latest.xml.zip  -> read its version
+#   2. Re-fetch at the VERSIONED url, never cwec_latest: latest moves, so it
+#      names a moving target rather than the evidence.
+#      curl -sO https://cwe.mitre.org/data/xml/cwec_v<VERSION>.xml.zip
+#   3. unzip; sha256sum the extracted XML                           -> new source_sha256
+#      Hash the XML, not the archive: a zip carries timestamps, so two archives of
+#      identical content do not hash alike.
+#   4. Regenerate, update the pin fields, and review the diff. An entry that has
+#      become Deprecated means the refs.cwe values naming it need review.
+version: 1
+source: "MITRE CWE catalogue, cwec_v4.20.xml"
+source_url: "https://cwe.mitre.org/data/xml/cwec_v4.20.xml.zip"
+source_sha256: "1f5a78bd62e00f86436b4fe32d5034a57e8f0da88e4063b2072b664ae510912e"
+standard_version: "4.20"
+standard_date: "2026-04-30"
+retrieved: "2026-08-24"
+licence: "CWE Terms of Use -- royalty-free use conditional on reproducing MITRE's copyright designation and the licence; see NOTICE"
+copyright: "Copyright (c) 2006-2026, The MITRE Corporation"
+cwe:
+  - id: 5
+    name: "J2EE Misconfiguration: Data Transmission Without Encryption"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 6
+    name: "J2EE Misconfiguration: Insufficient Session-ID Length"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 7
+    name: "J2EE Misconfiguration: Missing Custom Error Page"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 8
+    name: "J2EE Misconfiguration: Entity Bean Declared Remote"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 9
+    name: "J2EE Misconfiguration: Weak Access Permissions for EJB Methods"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 11
+    name: "ASP.NET Misconfiguration: Creating Debug Binary"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 12
+    name: "ASP.NET Misconfiguration: Missing Custom Error Page"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 13
+    name: "ASP.NET Misconfiguration: Password in Configuration File"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 14
+    name: "Compiler Removal of Code to Clear Buffers"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 15
+    name: "External Control of System or Configuration Setting"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 20
+    name: "Improper Input Validation"
+    kind: weakness
+    status: Stable
+    abstraction: Class
+  - id: 22
+    name: "Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 23
+    name: "Relative Path Traversal"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 24
+    name: "Path Traversal: '../filedir'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 25
+    name: "Path Traversal: '/../filedir'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 26
+    name: "Path Traversal: '/dir/../filename'"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 27
+    name: "Path Traversal: 'dir/../../filename'"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 28
+    name: "Path Traversal: '..\\filedir'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 29
+    name: "Path Traversal: '\\..\\filename'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 30
+    name: "Path Traversal: '\\dir\\..\\filename'"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 31
+    name: "Path Traversal: 'dir\\..\\..\\filename'"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 32
+    name: "Path Traversal: '...' (Triple Dot)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 33
+    name: "Path Traversal: '....' (Multiple Dot)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 34
+    name: "Path Traversal: '....//'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 35
+    name: "Path Traversal: '.../...//'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 36
+    name: "Absolute Path Traversal"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 37
+    name: "Path Traversal: '/absolute/pathname/here'"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 38
+    name: "Path Traversal: '\\absolute\\pathname\\here'"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 39
+    name: "Path Traversal: 'C:dirname'"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 40
+    name: "Path Traversal: '\\\\UNC\\share\\name\\' (Windows UNC Share)"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 41
+    name: "Improper Resolution of Path Equivalence"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 42
+    name: "Path Equivalence: 'filename.' (Trailing Dot)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 43
+    name: "Path Equivalence: 'filename....' (Multiple Trailing Dot)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 44
+    name: "Path Equivalence: 'file.name' (Internal Dot)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 45
+    name: "Path Equivalence: 'file...name' (Multiple Internal Dot)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 46
+    name: "Path Equivalence: 'filename ' (Trailing Space)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 47
+    name: "Path Equivalence: ' filename' (Leading Space)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 48
+    name: "Path Equivalence: 'file name' (Internal Whitespace)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 49
+    name: "Path Equivalence: 'filename/' (Trailing Slash)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 50
+    name: "Path Equivalence: '//multiple/leading/slash'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 51
+    name: "Path Equivalence: '/multiple//internal/slash'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 52
+    name: "Path Equivalence: '/multiple/trailing/slash//'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 53
+    name: "Path Equivalence: '\\multiple\\\\internal\\backslash'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 54
+    name: "Path Equivalence: 'filedir\\' (Trailing Backslash)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 55
+    name: "Path Equivalence: '/./' (Single Dot Directory)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 56
+    name: "Path Equivalence: 'filedir*' (Wildcard)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 57
+    name: "Path Equivalence: 'fakedir/../realdir/filename'"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 58
+    name: "Path Equivalence: Windows 8.3 Filename"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 59
+    name: "Improper Link Resolution Before File Access ('Link Following')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 61
+    name: "UNIX Symbolic Link (Symlink) Following"
+    kind: weakness
+    status: Incomplete
+    abstraction: Compound
+  - id: 62
+    name: "UNIX Hard Link"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 64
+    name: "Windows Shortcut Following (.LNK)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 65
+    name: "Windows Hard Link"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 66
+    name: "Improper Handling of File Names that Identify Virtual Resources"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 67
+    name: "Improper Handling of Windows Device Names"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 69
+    name: "Improper Handling of Windows ::DATA Alternate Data Stream"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 71
+    name: "DEPRECATED: Apple '.DS_Store'"
+    kind: weakness
+    status: Deprecated
+    abstraction: Variant
+  - id: 72
+    name: "Improper Handling of Apple HFS+ Alternate Data Stream Path"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 73
+    name: "External Control of File Name or Path"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 74
+    name: "Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 75
+    name: "Failure to Sanitize Special Elements into a Different Plane (Special Element Injection)"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 76
+    name: "Improper Neutralization of Equivalent Special Elements"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 77
+    name: "Improper Neutralization of Special Elements used in a Command ('Command Injection')"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 78
+    name: "Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 79
+    name: "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 80
+    name: "Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 81
+    name: "Improper Neutralization of Script in an Error Message Web Page"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 82
+    name: "Improper Neutralization of Script in Attributes of IMG Tags in a Web Page"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 83
+    name: "Improper Neutralization of Script in Attributes in a Web Page"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 84
+    name: "Improper Neutralization of Encoded URI Schemes in a Web Page"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 85
+    name: "Doubled Character XSS Manipulations"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 86
+    name: "Improper Neutralization of Invalid Characters in Identifiers in Web Pages"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 87
+    name: "Improper Neutralization of Alternate XSS Syntax"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 88
+    name: "Improper Neutralization of Argument Delimiters in a Command ('Argument Injection')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 89
+    name: "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 90
+    name: "Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 91
+    name: "XML Injection (aka Blind XPath Injection)"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 92
+    name: "DEPRECATED: Improper Sanitization of Custom Special Characters"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 93
+    name: "Improper Neutralization of CRLF Sequences ('CRLF Injection')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 94
+    name: "Improper Control of Generation of Code ('Code Injection')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 95
+    name: "Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 96
+    name: "Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 97
+    name: "Improper Neutralization of Server-Side Includes (SSI) Within a Web Page"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 98
+    name: "Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion')"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 99
+    name: "Improper Control of Resource Identifiers ('Resource Injection')"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 102
+    name: "Struts: Duplicate Validation Forms"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 103
+    name: "Struts: Incomplete validate() Method Definition"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 104
+    name: "Struts: Form Bean Does Not Extend Validation Class"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 105
+    name: "Struts: Form Field Without Validator"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 106
+    name: "Struts: Plug-in Framework not in Use"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 107
+    name: "Struts: Unused Validation Form"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 108
+    name: "Struts: Unvalidated Action Form"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 109
+    name: "Struts: Validator Turned Off"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 110
+    name: "Struts: Validator Without Form Field"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 111
+    name: "Direct Use of Unsafe JNI"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 112
+    name: "Missing XML Validation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 113
+    name: "Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Request/Response Splitting')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 114
+    name: "Process Control"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 115
+    name: "Misinterpretation of Input"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 116
+    name: "Improper Encoding or Escaping of Output"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 117
+    name: "Improper Output Neutralization for Logs"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 118
+    name: "Incorrect Access of Indexable Resource ('Range Error')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 119
+    name: "Improper Restriction of Operations within the Bounds of a Memory Buffer"
+    kind: weakness
+    status: Stable
+    abstraction: Class
+  - id: 120
+    name: "Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 121
+    name: "Stack-based Buffer Overflow"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 122
+    name: "Heap-based Buffer Overflow"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 123
+    name: "Write-what-where Condition"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 124
+    name: "Buffer Underwrite ('Buffer Underflow')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 125
+    name: "Out-of-bounds Read"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 126
+    name: "Buffer Over-read"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 127
+    name: "Buffer Under-read"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 128
+    name: "Wrap-around Error"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 129
+    name: "Improper Validation of Array Index"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 130
+    name: "Improper Handling of Length Parameter Inconsistency"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 131
+    name: "Incorrect Calculation of Buffer Size"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 132
+    name: "DEPRECATED: Miscalculated Null Termination"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 134
+    name: "Use of Externally-Controlled Format String"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 135
+    name: "Incorrect Calculation of Multi-Byte String Length"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 138
+    name: "Improper Neutralization of Special Elements"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 140
+    name: "Improper Neutralization of Delimiters"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 141
+    name: "Improper Neutralization of Parameter/Argument Delimiters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 142
+    name: "Improper Neutralization of Value Delimiters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 143
+    name: "Improper Neutralization of Record Delimiters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 144
+    name: "Improper Neutralization of Line Delimiters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 145
+    name: "Improper Neutralization of Section Delimiters"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 146
+    name: "Improper Neutralization of Expression/Command Delimiters"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 147
+    name: "Improper Neutralization of Input Terminators"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 148
+    name: "Improper Neutralization of Input Leaders"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 149
+    name: "Improper Neutralization of Quoting Syntax"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 150
+    name: "Improper Neutralization of Escape, Meta, or Control Sequences"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 151
+    name: "Improper Neutralization of Comment Delimiters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 152
+    name: "Improper Neutralization of Macro Symbols"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 153
+    name: "Improper Neutralization of Substitution Characters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 154
+    name: "Improper Neutralization of Variable Name Delimiters"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 155
+    name: "Improper Neutralization of Wildcards or Matching Symbols"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 156
+    name: "Improper Neutralization of Whitespace"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 157
+    name: "Failure to Sanitize Paired Delimiters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 158
+    name: "Improper Neutralization of Null Byte or NUL Character"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 159
+    name: "Improper Handling of Invalid Use of Special Elements"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 160
+    name: "Improper Neutralization of Leading Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 161
+    name: "Improper Neutralization of Multiple Leading Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 162
+    name: "Improper Neutralization of Trailing Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 163
+    name: "Improper Neutralization of Multiple Trailing Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 164
+    name: "Improper Neutralization of Internal Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 165
+    name: "Improper Neutralization of Multiple Internal Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 166
+    name: "Improper Handling of Missing Special Element"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 167
+    name: "Improper Handling of Additional Special Element"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 168
+    name: "Improper Handling of Inconsistent Special Elements"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 170
+    name: "Improper Null Termination"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 172
+    name: "Encoding Error"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 173
+    name: "Improper Handling of Alternate Encoding"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 174
+    name: "Double Decoding of the Same Data"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 175
+    name: "Improper Handling of Mixed Encoding"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 176
+    name: "Improper Handling of Unicode Encoding"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 177
+    name: "Improper Handling of URL Encoding (Hex Encoding)"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 178
+    name: "Improper Handling of Case Sensitivity"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 179
+    name: "Incorrect Behavior Order: Early Validation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 180
+    name: "Incorrect Behavior Order: Validate Before Canonicalize"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 181
+    name: "Incorrect Behavior Order: Validate Before Filter"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 182
+    name: "Collapse of Data into Unsafe Value"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 183
+    name: "Permissive List of Allowed Inputs"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 184
+    name: "Incomplete List of Disallowed Inputs"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 185
+    name: "Incorrect Regular Expression"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 186
+    name: "Overly Restrictive Regular Expression"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 187
+    name: "Partial String Comparison"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 188
+    name: "Reliance on Data/Memory Layout"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 190
+    name: "Integer Overflow or Wraparound"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 191
+    name: "Integer Underflow (Wrap or Wraparound)"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 192
+    name: "Integer Coercion Error"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 193
+    name: "Off-by-one Error"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 194
+    name: "Unexpected Sign Extension"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 195
+    name: "Signed to Unsigned Conversion Error"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 196
+    name: "Unsigned to Signed Conversion Error"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 197
+    name: "Numeric Truncation Error"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 198
+    name: "Use of Incorrect Byte Ordering"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 200
+    name: "Exposure of Sensitive Information to an Unauthorized Actor"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 201
+    name: "Insertion of Sensitive Information Into Sent Data"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 202
+    name: "Exposure of Sensitive Information Through Data Queries"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 203
+    name: "Observable Discrepancy"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 204
+    name: "Observable Response Discrepancy"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 205
+    name: "Observable Behavioral Discrepancy"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 206
+    name: "Observable Internal Behavioral Discrepancy"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 207
+    name: "Observable Behavioral Discrepancy With Equivalent Products"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 208
+    name: "Observable Timing Discrepancy"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 209
+    name: "Generation of Error Message Containing Sensitive Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 210
+    name: "Self-generated Error Message Containing Sensitive Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 211
+    name: "Externally-Generated Error Message Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 212
+    name: "Improper Removal of Sensitive Information Before Storage or Transfer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 213
+    name: "Exposure of Sensitive Information Due to Incompatible Policies"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 214
+    name: "Invocation of Process Using Visible Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 215
+    name: "Insertion of Sensitive Information Into Debugging Code"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 216
+    name: "DEPRECATED: Containment Errors (Container Errors)"
+    kind: weakness
+    status: Deprecated
+    abstraction: Class
+  - id: 217
+    name: "DEPRECATED: Failure to Protect Stored Data from Modification"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 218
+    name: "DEPRECATED: Failure to provide confidentiality for stored data"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 219
+    name: "Storage of File with Sensitive Data Under Web Root"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 220
+    name: "Storage of File With Sensitive Data Under FTP Root"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 221
+    name: "Information Loss or Omission"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 222
+    name: "Truncation of Security-relevant Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 223
+    name: "Omission of Security-relevant Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 224
+    name: "Obscured Security-relevant Information by Alternate Name"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 225
+    name: "DEPRECATED: General Information Management Problems"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 226
+    name: "Sensitive Information in Resource Not Removed Before Reuse"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 228
+    name: "Improper Handling of Syntactically Invalid Structure"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 229
+    name: "Improper Handling of Values"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 230
+    name: "Improper Handling of Missing Values"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 231
+    name: "Improper Handling of Extra Values"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 232
+    name: "Improper Handling of Undefined Values"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 233
+    name: "Improper Handling of Parameters"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 234
+    name: "Failure to Handle Missing Parameter"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 235
+    name: "Improper Handling of Extra Parameters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 236
+    name: "Improper Handling of Undefined Parameters"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 237
+    name: "Improper Handling of Structural Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 238
+    name: "Improper Handling of Incomplete Structural Elements"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 239
+    name: "Failure to Handle Incomplete Element"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 240
+    name: "Improper Handling of Inconsistent Structural Elements"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 241
+    name: "Improper Handling of Unexpected Data Type"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 242
+    name: "Use of Inherently Dangerous Function"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 243
+    name: "Creation of chroot Jail Without Changing Working Directory"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 244
+    name: "Improper Clearing of Heap Memory Before Release ('Heap Inspection')"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 245
+    name: "J2EE Bad Practices: Direct Management of Connections"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 246
+    name: "J2EE Bad Practices: Direct Use of Sockets"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 247
+    name: "DEPRECATED: Reliance on DNS Lookups in a Security Decision"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 248
+    name: "Uncaught Exception"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 249
+    name: "DEPRECATED: Often Misused: Path Manipulation"
+    kind: weakness
+    status: Deprecated
+    abstraction: Variant
+  - id: 250
+    name: "Execution with Unnecessary Privileges"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 252
+    name: "Unchecked Return Value"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 253
+    name: "Incorrect Check of Function Return Value"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 256
+    name: "Plaintext Storage of a Password"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 257
+    name: "Storing Passwords in a Recoverable Format"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 258
+    name: "Empty Password in Configuration File"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 259
+    name: "Use of Hard-coded Password"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 260
+    name: "Password in Configuration File"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 261
+    name: "Weak Encoding for Password"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 262
+    name: "Not Using Password Aging"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 263
+    name: "Password Aging with Long Expiration"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 266
+    name: "Incorrect Privilege Assignment"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 267
+    name: "Privilege Defined With Unsafe Actions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 268
+    name: "Privilege Chaining"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 269
+    name: "Improper Privilege Management"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 270
+    name: "Privilege Context Switching Error"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 271
+    name: "Privilege Dropping / Lowering Errors"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 272
+    name: "Least Privilege Violation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 273
+    name: "Improper Check for Dropped Privileges"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 274
+    name: "Improper Handling of Insufficient Privileges"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 276
+    name: "Incorrect Default Permissions"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 277
+    name: "Insecure Inherited Permissions"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 278
+    name: "Insecure Preserved Inherited Permissions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 279
+    name: "Incorrect Execution-Assigned Permissions"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 280
+    name: "Improper Handling of Insufficient Permissions or Privileges"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 281
+    name: "Improper Preservation of Permissions"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 282
+    name: "Improper Ownership Management"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 283
+    name: "Unverified Ownership"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 284
+    name: "Improper Access Control"
+    kind: weakness
+    status: Incomplete
+    abstraction: Pillar
+  - id: 285
+    name: "Improper Authorization"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 286
+    name: "Incorrect User Management"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 287
+    name: "Improper Authentication"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 288
+    name: "Authentication Bypass Using an Alternate Path or Channel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 289
+    name: "Authentication Bypass by Alternate Name"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 290
+    name: "Authentication Bypass by Spoofing"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 291
+    name: "Reliance on IP Address for Authentication"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 292
+    name: "DEPRECATED: Trusting Self-reported DNS Name"
+    kind: weakness
+    status: Deprecated
+    abstraction: Variant
+  - id: 293
+    name: "Using Referer Field for Authentication"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 294
+    name: "Authentication Bypass by Capture-replay"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 295
+    name: "Improper Certificate Validation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 296
+    name: "Improper Following of a Certificate's Chain of Trust"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 297
+    name: "Improper Validation of Certificate with Host Mismatch"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 298
+    name: "Improper Validation of Certificate Expiration"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 299
+    name: "Improper Check for Certificate Revocation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 300
+    name: "Channel Accessible by Non-Endpoint"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 301
+    name: "Reflection Attack in an Authentication Protocol"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 302
+    name: "Authentication Bypass by Assumed-Immutable Data"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 303
+    name: "Incorrect Implementation of Authentication Algorithm"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 304
+    name: "Missing Critical Step in Authentication"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 305
+    name: "Authentication Bypass by Primary Weakness"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 306
+    name: "Missing Authentication for Critical Function"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 307
+    name: "Improper Restriction of Excessive Authentication Attempts"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 308
+    name: "Use of Single-factor Authentication"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 309
+    name: "Use of Password System for Primary Authentication"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 311
+    name: "Missing Encryption of Sensitive Data"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 312
+    name: "Cleartext Storage of Sensitive Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 313
+    name: "Cleartext Storage in a File or on Disk"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 314
+    name: "Cleartext Storage in the Registry"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 315
+    name: "Cleartext Storage of Sensitive Information in a Cookie"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 316
+    name: "Cleartext Storage of Sensitive Information in Memory"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 317
+    name: "Cleartext Storage of Sensitive Information in GUI"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 318
+    name: "Cleartext Storage of Sensitive Information in Executable"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 319
+    name: "Cleartext Transmission of Sensitive Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 321
+    name: "Use of Hard-coded Cryptographic Key"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 322
+    name: "Key Exchange without Entity Authentication"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 323
+    name: "Reusing a Nonce, Key Pair in Encryption"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 324
+    name: "Use of a Key Past its Expiration Date"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 325
+    name: "Missing Cryptographic Step"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 326
+    name: "Inadequate Encryption Strength"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 327
+    name: "Use of a Broken or Risky Cryptographic Algorithm"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 328
+    name: "Use of Weak Hash"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 329
+    name: "Generation of Predictable IV with CBC Mode"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 330
+    name: "Use of Insufficiently Random Values"
+    kind: weakness
+    status: Stable
+    abstraction: Class
+  - id: 331
+    name: "Insufficient Entropy"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 332
+    name: "Insufficient Entropy in PRNG"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 333
+    name: "Improper Handling of Insufficient Entropy in TRNG"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 334
+    name: "Small Space of Random Values"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 335
+    name: "Incorrect Usage of Seeds in Pseudo-Random Number Generator (PRNG)"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 336
+    name: "Same Seed in Pseudo-Random Number Generator (PRNG)"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 337
+    name: "Predictable Seed in Pseudo-Random Number Generator (PRNG)"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 338
+    name: "Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 339
+    name: "Small Seed Space in PRNG"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 340
+    name: "Generation of Predictable Numbers or Identifiers"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 341
+    name: "Predictable from Observable State"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 342
+    name: "Predictable Exact Value from Previous Values"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 343
+    name: "Predictable Value Range from Previous Values"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 344
+    name: "Use of Invariant Value in Dynamically Changing Context"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 345
+    name: "Insufficient Verification of Data Authenticity"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 346
+    name: "Origin Validation Error"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 347
+    name: "Improper Verification of Cryptographic Signature"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 348
+    name: "Use of Less Trusted Source"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 349
+    name: "Acceptance of Extraneous Untrusted Data With Trusted Data"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 350
+    name: "Reliance on Reverse DNS Resolution for a Security-Critical Action"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 351
+    name: "Insufficient Type Distinction"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 352
+    name: "Cross-Site Request Forgery (CSRF)"
+    kind: weakness
+    status: Stable
+    abstraction: Compound
+  - id: 353
+    name: "Missing Support for Integrity Check"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 354
+    name: "Improper Validation of Integrity Check Value"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 356
+    name: "Product UI does not Warn User of Unsafe Actions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 357
+    name: "Insufficient UI Warning of Dangerous Operations"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 358
+    name: "Improperly Implemented Security Check for Standard"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 359
+    name: "Exposure of Private Personal Information to an Unauthorized Actor"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 360
+    name: "Trust of System Event Data"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 362
+    name: "Concurrent Execution using Shared Resource with Improper Synchronization ('Race Condition')"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 363
+    name: "Race Condition Enabling Link Following"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 364
+    name: "Signal Handler Race Condition"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 365
+    name: "DEPRECATED: Race Condition in Switch"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 366
+    name: "Race Condition within a Thread"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 367
+    name: "Time-of-check Time-of-use (TOCTOU) Race Condition"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 368
+    name: "Context Switching Race Condition"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 369
+    name: "Divide By Zero"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 370
+    name: "Missing Check for Certificate Revocation after Initial Check"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 372
+    name: "Incomplete Internal State Distinction"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 373
+    name: "DEPRECATED: State Synchronization Error"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 374
+    name: "Passing Mutable Objects to an Untrusted Method"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 375
+    name: "Returning a Mutable Object to an Untrusted Caller"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 377
+    name: "Insecure Temporary File"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 378
+    name: "Creation of Temporary File With Insecure Permissions"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 379
+    name: "Creation of Temporary File in Directory with Insecure Permissions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 382
+    name: "J2EE Bad Practices: Use of System.exit()"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 383
+    name: "J2EE Bad Practices: Direct Use of Threads"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 384
+    name: "Session Fixation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Compound
+  - id: 385
+    name: "Covert Timing Channel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 386
+    name: "Symbolic Name not Mapping to Correct Object"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 390
+    name: "Detection of Error Condition Without Action"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 391
+    name: "Unchecked Error Condition"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 392
+    name: "Missing Report of Error Condition"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 393
+    name: "Return of Wrong Status Code"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 394
+    name: "Unexpected Status Code or Return Value"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 395
+    name: "Use of NullPointerException Catch to Detect NULL Pointer Dereference"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 396
+    name: "Declaration of Catch for Generic Exception"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 397
+    name: "Declaration of Throws for Generic Exception"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 400
+    name: "Uncontrolled Resource Consumption"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 401
+    name: "Missing Release of Memory after Effective Lifetime"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 402
+    name: "Transmission of Private Resources into a New Sphere ('Resource Leak')"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 403
+    name: "Exposure of File Descriptor to Unintended Control Sphere ('File Descriptor Leak')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 404
+    name: "Improper Resource Shutdown or Release"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 405
+    name: "Asymmetric Resource Consumption (Amplification)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 406
+    name: "Insufficient Control of Network Message Volume (Network Amplification)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 407
+    name: "Inefficient Algorithmic Complexity"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 408
+    name: "Incorrect Behavior Order: Early Amplification"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 409
+    name: "Improper Handling of Highly Compressed Data (Data Amplification)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 410
+    name: "Insufficient Resource Pool"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 412
+    name: "Unrestricted Externally Accessible Lock"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 413
+    name: "Improper Resource Locking"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 414
+    name: "Missing Lock Check"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 415
+    name: "Double Free"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 416
+    name: "Use After Free"
+    kind: weakness
+    status: Stable
+    abstraction: Variant
+  - id: 419
+    name: "Unprotected Primary Channel"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 420
+    name: "Unprotected Alternate Channel"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 421
+    name: "Race Condition During Access to Alternate Channel"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 422
+    name: "Unprotected Windows Messaging Channel ('Shatter')"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 423
+    name: "DEPRECATED: Proxied Trusted Channel"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 424
+    name: "Improper Protection of Alternate Path"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 425
+    name: "Direct Request ('Forced Browsing')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 426
+    name: "Untrusted Search Path"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 427
+    name: "Uncontrolled Search Path Element"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 428
+    name: "Unquoted Search Path or Element"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 430
+    name: "Deployment of Wrong Handler"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 431
+    name: "Missing Handler"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 432
+    name: "Dangerous Signal Handler not Disabled During Sensitive Operations"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 433
+    name: "Unparsed Raw Web Content Delivery"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 434
+    name: "Unrestricted Upload of File with Dangerous Type"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 435
+    name: "Improper Interaction Between Multiple Correctly-Behaving Entities"
+    kind: weakness
+    status: Draft
+    abstraction: Pillar
+  - id: 436
+    name: "Interpretation Conflict"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 437
+    name: "Incomplete Model of Endpoint Features"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 439
+    name: "Behavioral Change in New Version or Environment"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 440
+    name: "Expected Behavior Violation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 441
+    name: "Unintended Proxy or Intermediary ('Confused Deputy')"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 443
+    name: "DEPRECATED: HTTP response splitting"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 444
+    name: "Inconsistent Interpretation of HTTP Requests ('HTTP Request/Response Smuggling')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 446
+    name: "UI Discrepancy for Security Feature"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 447
+    name: "Unimplemented or Unsupported Feature in UI"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 448
+    name: "Obsolete Feature in UI"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 449
+    name: "The UI Performs the Wrong Action"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 450
+    name: "Multiple Interpretations of UI Input"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 451
+    name: "User Interface (UI) Misrepresentation of Critical Information"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 453
+    name: "Insecure Default Variable Initialization"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 454
+    name: "External Initialization of Trusted Variables or Data Stores"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 455
+    name: "Non-exit on Failed Initialization"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 456
+    name: "Missing Initialization of a Variable"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 457
+    name: "Use of Uninitialized Variable"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 458
+    name: "DEPRECATED: Incorrect Initialization"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 459
+    name: "Incomplete Cleanup"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 460
+    name: "Improper Cleanup on Thrown Exception"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 462
+    name: "Duplicate Key in Associative List (Alist)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 463
+    name: "Deletion of Data Structure Sentinel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 464
+    name: "Addition of Data Structure Sentinel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 466
+    name: "Return of Pointer Value Outside of Expected Range"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 467
+    name: "Use of sizeof() on a Pointer Type"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 468
+    name: "Incorrect Pointer Scaling"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 469
+    name: "Use of Pointer Subtraction to Determine Size"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 470
+    name: "Use of Externally-Controlled Input to Select Classes or Code ('Unsafe Reflection')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 471
+    name: "Modification of Assumed-Immutable Data (MAID)"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 472
+    name: "External Control of Assumed-Immutable Web Parameter"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 473
+    name: "PHP External Variable Modification"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 474
+    name: "Use of Function with Inconsistent Implementations"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 475
+    name: "Undefined Behavior for Input to API"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 476
+    name: "NULL Pointer Dereference"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 477
+    name: "Use of Obsolete Function"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 478
+    name: "Missing Default Case in Multiple Condition Expression"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 479
+    name: "Signal Handler Use of a Non-reentrant Function"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 480
+    name: "Use of Incorrect Operator"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 481
+    name: "Assigning instead of Comparing"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 482
+    name: "Comparing instead of Assigning"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 483
+    name: "Incorrect Block Delimitation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 484
+    name: "Omitted Break Statement in Switch"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 486
+    name: "Comparison of Classes by Name"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 487
+    name: "Reliance on Package-level Scope"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 488
+    name: "Exposure of Data Element to Wrong Session"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 489
+    name: "Active Debug Code"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 491
+    name: "Public cloneable() Method Without Final ('Object Hijack')"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 492
+    name: "Use of Inner Class Containing Sensitive Data"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 493
+    name: "Critical Public Variable Without Final Modifier"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 494
+    name: "Download of Code Without Integrity Check"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 495
+    name: "Private Data Structure Returned From A Public Method"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 496
+    name: "Public Data Assigned to Private Array-Typed Field"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 497
+    name: "Exposure of Sensitive System Information to an Unauthorized Control Sphere"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 498
+    name: "Cloneable Class Containing Sensitive Information"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 499
+    name: "Serializable Class Containing Sensitive Data"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 500
+    name: "Public Static Field Not Marked Final"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 501
+    name: "Trust Boundary Violation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 502
+    name: "Deserialization of Untrusted Data"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 506
+    name: "Embedded Malicious Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 507
+    name: "Trojan Horse"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 508
+    name: "Non-Replicating Malicious Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 509
+    name: "Replicating Malicious Code (Virus or Worm)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 510
+    name: "Trapdoor"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 511
+    name: "Logic/Time Bomb"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 512
+    name: "Spyware"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 514
+    name: "Covert Channel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 515
+    name: "Covert Storage Channel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 516
+    name: "DEPRECATED: Covert Timing Channel"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 520
+    name: ".NET Misconfiguration: Use of Impersonation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 521
+    name: "Weak Password Requirements"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 522
+    name: "Insufficiently Protected Credentials"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 523
+    name: "Unprotected Transport of Credentials"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 524
+    name: "Use of Cache Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 525
+    name: "Use of Web Browser Cache Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 526
+    name: "Cleartext Storage of Sensitive Information in an Environment Variable"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 527
+    name: "Exposure of Version-Control Repository to an Unauthorized Control Sphere"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 528
+    name: "Exposure of Core Dump File to an Unauthorized Control Sphere"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 529
+    name: "Exposure of Access Control List Files to an Unauthorized Control Sphere"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 530
+    name: "Exposure of Backup File to an Unauthorized Control Sphere"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 531
+    name: "Inclusion of Sensitive Information in Test Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 532
+    name: "Insertion of Sensitive Information into Log File"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 533
+    name: "DEPRECATED: Information Exposure Through Server Log Files"
+    kind: weakness
+    status: Deprecated
+    abstraction: Variant
+  - id: 534
+    name: "DEPRECATED: Information Exposure Through Debug Log Files"
+    kind: weakness
+    status: Deprecated
+    abstraction: Variant
+  - id: 535
+    name: "Exposure of Information Through Shell Error Message"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 536
+    name: "Servlet Runtime Error Message Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 537
+    name: "Java Runtime Error Message Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 538
+    name: "Insertion of Sensitive Information into Externally-Accessible File or Directory"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 539
+    name: "Use of Persistent Cookies Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 540
+    name: "Inclusion of Sensitive Information in Source Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 541
+    name: "Inclusion of Sensitive Information in an Include File"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 542
+    name: "DEPRECATED: Information Exposure Through Cleanup Log Files"
+    kind: weakness
+    status: Deprecated
+    abstraction: Variant
+  - id: 543
+    name: "Use of Singleton Pattern Without Synchronization in a Multithreaded Context"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 544
+    name: "Missing Standardized Error Handling Mechanism"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 545
+    name: "DEPRECATED: Use of Dynamic Class Loading"
+    kind: weakness
+    status: Deprecated
+    abstraction: Variant
+  - id: 546
+    name: "Suspicious Comment"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 547
+    name: "Use of Hard-coded, Security-relevant Constants"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 548
+    name: "Exposure of Information Through Directory Listing"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 549
+    name: "Missing Password Field Masking"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 550
+    name: "Server-generated Error Message Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 551
+    name: "Incorrect Behavior Order: Authorization Before Parsing and Canonicalization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 552
+    name: "Files or Directories Accessible to External Parties"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 553
+    name: "Command Shell in Externally Accessible Directory"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 554
+    name: "ASP.NET Misconfiguration: Not Using Input Validation Framework"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 555
+    name: "J2EE Misconfiguration: Plaintext Password in Configuration File"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 556
+    name: "ASP.NET Misconfiguration: Use of Identity Impersonation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 558
+    name: "Use of getlogin() in Multithreaded Application"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 560
+    name: "Use of umask() with chmod-style Argument"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 561
+    name: "Dead Code"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 562
+    name: "Return of Stack Variable Address"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 563
+    name: "Assignment to Variable without Use"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 564
+    name: "SQL Injection: Hibernate"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 565
+    name: "Reliance on Cookies without Validation and Integrity Checking"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 566
+    name: "Authorization Bypass Through User-Controlled SQL Primary Key"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 567
+    name: "Unsynchronized Access to Shared Data in a Multithreaded Context"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 568
+    name: "finalize() Method Without super.finalize()"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 570
+    name: "Expression is Always False"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 571
+    name: "Expression is Always True"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 572
+    name: "Call to Thread run() instead of start()"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 573
+    name: "Improper Following of Specification by Caller"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 574
+    name: "EJB Bad Practices: Use of Synchronization Primitives"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 575
+    name: "EJB Bad Practices: Use of AWT Swing"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 576
+    name: "EJB Bad Practices: Use of Java I/O"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 577
+    name: "EJB Bad Practices: Use of Sockets"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 578
+    name: "EJB Bad Practices: Use of Class Loader"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 579
+    name: "J2EE Bad Practices: Non-serializable Object Stored in Session"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 580
+    name: "clone() Method Without super.clone()"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 581
+    name: "Object Model Violation: Just One of Equals and Hashcode Defined"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 582
+    name: "Array Declared Public, Final, and Static"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 583
+    name: "finalize() Method Declared Public"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 584
+    name: "Return Inside Finally Block"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 585
+    name: "Empty Synchronized Block"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 586
+    name: "Explicit Call to Finalize()"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 587
+    name: "Assignment of a Fixed Address to a Pointer"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 588
+    name: "Attempt to Access Child of a Non-structure Pointer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 589
+    name: "Call to Non-ubiquitous API"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 590
+    name: "Free of Memory not on the Heap"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 591
+    name: "Sensitive Data Storage in Improperly Locked Memory"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 592
+    name: "DEPRECATED: Authentication Bypass Issues"
+    kind: weakness
+    status: Deprecated
+    abstraction: Class
+  - id: 593
+    name: "Authentication Bypass: OpenSSL CTX Object Modified after SSL Objects are Created"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 594
+    name: "J2EE Framework: Saving Unserializable Objects to Disk"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 595
+    name: "Comparison of Object References Instead of Object Contents"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 596
+    name: "DEPRECATED: Incorrect Semantic Object Comparison"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 597
+    name: "Use of Wrong Operator in String Comparison"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 598
+    name: "Use of HTTP Request With Sensitive Query String"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 599
+    name: "Missing Validation of OpenSSL Certificate"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 600
+    name: "Uncaught Exception in Servlet"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 601
+    name: "URL Redirection to Untrusted Site ('Open Redirect')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 602
+    name: "Client-Side Enforcement of Server-Side Security"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 603
+    name: "Use of Client-Side Authentication"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 605
+    name: "Multiple Binds to the Same Port"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 606
+    name: "Unchecked Input for Loop Condition"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 607
+    name: "Public Static Final Field References Mutable Object"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 608
+    name: "Struts: Non-private Field in ActionForm Class"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 609
+    name: "Double-Checked Locking"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 610
+    name: "Externally Controlled Reference to a Resource in Another Sphere"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 611
+    name: "Improper Restriction of XML External Entity Reference"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 612
+    name: "Improper Authorization of Index Containing Sensitive Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 613
+    name: "Insufficient Session Expiration"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 614
+    name: "Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 615
+    name: "Inclusion of Sensitive Information in Source Code Comments"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 616
+    name: "Incomplete Identification of Uploaded File Variables (PHP)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 617
+    name: "Reachable Assertion"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 618
+    name: "Exposed Unsafe ActiveX Method"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 619
+    name: "Dangling Database Cursor ('Cursor Injection')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 620
+    name: "Unverified Password Change"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 621
+    name: "Variable Extraction Error"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 622
+    name: "Improper Validation of Function Hook Arguments"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 623
+    name: "Unsafe ActiveX Control Marked Safe For Scripting"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 624
+    name: "Executable Regular Expression Error"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 625
+    name: "Permissive Regular Expression"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 626
+    name: "Null Byte Interaction Error (Poison Null Byte)"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 627
+    name: "Dynamic Variable Evaluation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 628
+    name: "Function Call with Incorrectly Specified Arguments"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 636
+    name: "Not Failing Securely ('Failing Open')"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 637
+    name: "Unnecessary Complexity in Protection Mechanism (Not Using 'Economy of Mechanism')"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 638
+    name: "Not Using Complete Mediation"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 639
+    name: "Authorization Bypass Through User-Controlled Key"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 640
+    name: "Weak Password Recovery Mechanism for Forgotten Password"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 641
+    name: "Improper Restriction of Names for Files and Other Resources"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 642
+    name: "External Control of Critical State Data"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 643
+    name: "Improper Neutralization of Data within XPath Expressions ('XPath Injection')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 644
+    name: "Improper Neutralization of HTTP Headers for Scripting Syntax"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 645
+    name: "Overly Restrictive Account Lockout Mechanism"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 646
+    name: "Reliance on File Name or Extension of Externally-Supplied File"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 647
+    name: "Use of Non-Canonical URL Paths for Authorization Decisions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 648
+    name: "Incorrect Use of Privileged APIs"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 649
+    name: "Reliance on Obfuscation or Encryption of Security-Relevant Inputs without Integrity Checking"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 650
+    name: "Trusting HTTP Permission Methods on the Server Side"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 651
+    name: "Exposure of WSDL File Containing Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 652
+    name: "Improper Neutralization of Data within XQuery Expressions ('XQuery Injection')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 653
+    name: "Improper Isolation or Compartmentalization"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 654
+    name: "Reliance on a Single Factor in a Security Decision"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 655
+    name: "Insufficient Psychological Acceptability"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 656
+    name: "Reliance on Security Through Obscurity"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 657
+    name: "Violation of Secure Design Principles"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 662
+    name: "Improper Synchronization"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 663
+    name: "Use of a Non-reentrant Function in a Concurrent Context"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 664
+    name: "Improper Control of a Resource Through its Lifetime"
+    kind: weakness
+    status: Draft
+    abstraction: Pillar
+  - id: 665
+    name: "Improper Initialization"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 666
+    name: "Operation on Resource in Wrong Phase of Lifetime"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 667
+    name: "Improper Locking"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 668
+    name: "Exposure of Resource to Wrong Sphere"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 669
+    name: "Incorrect Resource Transfer Between Spheres"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 670
+    name: "Always-Incorrect Control Flow Implementation"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 671
+    name: "Lack of Administrator Control over Security"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 672
+    name: "Operation on a Resource after Expiration or Release"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 673
+    name: "External Influence of Sphere Definition"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 674
+    name: "Uncontrolled Recursion"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 675
+    name: "Multiple Operations on Resource in Single-Operation Context"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 676
+    name: "Use of Potentially Dangerous Function"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 680
+    name: "Integer Overflow to Buffer Overflow"
+    kind: weakness
+    status: Draft
+    abstraction: Compound
+  - id: 681
+    name: "Incorrect Conversion between Numeric Types"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 682
+    name: "Incorrect Calculation"
+    kind: weakness
+    status: Draft
+    abstraction: Pillar
+  - id: 683
+    name: "Function Call With Incorrect Order of Arguments"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 684
+    name: "Incorrect Provision of Specified Functionality"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 685
+    name: "Function Call With Incorrect Number of Arguments"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 686
+    name: "Function Call With Incorrect Argument Type"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 687
+    name: "Function Call With Incorrectly Specified Argument Value"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 688
+    name: "Function Call With Incorrect Variable or Reference as Argument"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 689
+    name: "Permission Race Condition During Resource Copy"
+    kind: weakness
+    status: Draft
+    abstraction: Compound
+  - id: 690
+    name: "Unchecked Return Value to NULL Pointer Dereference"
+    kind: weakness
+    status: Draft
+    abstraction: Compound
+  - id: 691
+    name: "Insufficient Control Flow Management"
+    kind: weakness
+    status: Draft
+    abstraction: Pillar
+  - id: 692
+    name: "Incomplete Denylist to Cross-Site Scripting"
+    kind: weakness
+    status: Draft
+    abstraction: Compound
+  - id: 693
+    name: "Protection Mechanism Failure"
+    kind: weakness
+    status: Draft
+    abstraction: Pillar
+  - id: 694
+    name: "Use of Multiple Resources with Duplicate Identifier"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 695
+    name: "Use of Low-Level Functionality"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 696
+    name: "Incorrect Behavior Order"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 697
+    name: "Incorrect Comparison"
+    kind: weakness
+    status: Incomplete
+    abstraction: Pillar
+  - id: 698
+    name: "Execution After Redirect (EAR)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 703
+    name: "Improper Check or Handling of Exceptional Conditions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Pillar
+  - id: 704
+    name: "Incorrect Type Conversion or Cast"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 705
+    name: "Incorrect Control Flow Scoping"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 706
+    name: "Use of Incorrectly-Resolved Name or Reference"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 707
+    name: "Improper Neutralization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Pillar
+  - id: 708
+    name: "Incorrect Ownership Assignment"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 710
+    name: "Improper Adherence to Coding Standards"
+    kind: weakness
+    status: Incomplete
+    abstraction: Pillar
+  - id: 732
+    name: "Incorrect Permission Assignment for Critical Resource"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 733
+    name: "Compiler Optimization Removal or Modification of Security-critical Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 749
+    name: "Exposed Dangerous Method or Function"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 754
+    name: "Improper Check for Unusual or Exceptional Conditions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 755
+    name: "Improper Handling of Exceptional Conditions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 756
+    name: "Missing Custom Error Page"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 757
+    name: "Selection of Less-Secure Algorithm During Negotiation ('Algorithm Downgrade')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 758
+    name: "Reliance on Undefined, Unspecified, or Implementation-Defined Behavior"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 759
+    name: "Use of a One-Way Hash without a Salt"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 760
+    name: "Use of a One-Way Hash with a Predictable Salt"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 761
+    name: "Free of Pointer not at Start of Buffer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 762
+    name: "Mismatched Memory Management Routines"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 763
+    name: "Release of Invalid Pointer or Reference"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 764
+    name: "Multiple Locks of a Critical Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 765
+    name: "Multiple Unlocks of a Critical Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 766
+    name: "Critical Data Element Declared Public"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 767
+    name: "Access to Critical Private Variable via Public Method"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 768
+    name: "Incorrect Short Circuit Evaluation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 769
+    name: "DEPRECATED: Uncontrolled File Descriptor Consumption"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 770
+    name: "Allocation of Resources Without Limits or Throttling"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 771
+    name: "Missing Reference to Active Allocated Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 772
+    name: "Missing Release of Resource after Effective Lifetime"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 773
+    name: "Missing Reference to Active File Descriptor or Handle"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 774
+    name: "Allocation of File Descriptors or Handles Without Limits or Throttling"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 775
+    name: "Missing Release of File Descriptor or Handle after Effective Lifetime"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 776
+    name: "Improper Restriction of Recursive Entity References in DTDs ('XML Entity Expansion')"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 777
+    name: "Regular Expression without Anchors"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 778
+    name: "Insufficient Logging"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 779
+    name: "Logging of Excessive Data"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 780
+    name: "Use of RSA Algorithm without OAEP"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 781
+    name: "Improper Address Validation in IOCTL with METHOD_NEITHER I/O Control Code"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 782
+    name: "Exposed IOCTL with Insufficient Access Control"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 783
+    name: "Operator Precedence Logic Error"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 784
+    name: "Reliance on Cookies without Validation and Integrity Checking in a Security Decision"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 785
+    name: "Use of Path Manipulation Function without Maximum-sized Buffer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 786
+    name: "Access of Memory Location Before Start of Buffer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 787
+    name: "Out-of-bounds Write"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 788
+    name: "Access of Memory Location After End of Buffer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 789
+    name: "Memory Allocation with Excessive Size Value"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 790
+    name: "Improper Filtering of Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 791
+    name: "Incomplete Filtering of Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 792
+    name: "Incomplete Filtering of One or More Instances of Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 793
+    name: "Only Filtering One Instance of a Special Element"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 794
+    name: "Incomplete Filtering of Multiple Instances of Special Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 795
+    name: "Only Filtering Special Elements at a Specified Location"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 796
+    name: "Only Filtering Special Elements Relative to a Marker"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 797
+    name: "Only Filtering Special Elements at an Absolute Position"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 798
+    name: "Use of Hard-coded Credentials"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 799
+    name: "Improper Control of Interaction Frequency"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 804
+    name: "Guessable CAPTCHA"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 805
+    name: "Buffer Access with Incorrect Length Value"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 806
+    name: "Buffer Access Using Size of Source Buffer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 807
+    name: "Reliance on Untrusted Inputs in a Security Decision"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 820
+    name: "Missing Synchronization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 821
+    name: "Incorrect Synchronization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 822
+    name: "Untrusted Pointer Dereference"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 823
+    name: "Use of Out-of-range Pointer Offset"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 824
+    name: "Access of Uninitialized Pointer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 825
+    name: "Expired Pointer Dereference"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 826
+    name: "Premature Release of Resource During Expected Lifetime"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 827
+    name: "Improper Control of Document Type Definition"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 828
+    name: "Signal Handler with Functionality that is not Asynchronous-Safe"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 829
+    name: "Inclusion of Functionality from Untrusted Control Sphere"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 830
+    name: "Inclusion of Web Functionality from an Untrusted Source"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 831
+    name: "Signal Handler Function Associated with Multiple Signals"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 832
+    name: "Unlock of a Resource that is not Locked"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 833
+    name: "Deadlock"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 834
+    name: "Excessive Iteration"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 835
+    name: "Loop with Unreachable Exit Condition ('Infinite Loop')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 836
+    name: "Use of Password Hash Instead of Password for Authentication"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 837
+    name: "Improper Enforcement of a Single, Unique Action"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 838
+    name: "Inappropriate Encoding for Output Context"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 839
+    name: "Numeric Range Comparison Without Minimum Check"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 841
+    name: "Improper Enforcement of Behavioral Workflow"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 842
+    name: "Placement of User into Incorrect Group"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 843
+    name: "Access of Resource Using Incompatible Type ('Type Confusion')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 862
+    name: "Missing Authorization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 863
+    name: "Incorrect Authorization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 908
+    name: "Use of Uninitialized Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 909
+    name: "Missing Initialization of Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 910
+    name: "Use of Expired File Descriptor"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 911
+    name: "Improper Update of Reference Count"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 912
+    name: "Hidden Functionality"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 913
+    name: "Improper Control of Dynamically-Managed Code Resources"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 914
+    name: "Improper Control of Dynamically-Identified Variables"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 915
+    name: "Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 916
+    name: "Use of Password Hash With Insufficient Computational Effort"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 917
+    name: "Improper Neutralization of Special Elements used in an Expression Language Statement ('Expression Language Injection')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 918
+    name: "Server-Side Request Forgery (SSRF)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 920
+    name: "Improper Restriction of Power Consumption"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 921
+    name: "Storage of Sensitive Data in a Mechanism without Access Control"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 922
+    name: "Insecure Storage of Sensitive Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 923
+    name: "Improper Restriction of Communication Channel to Intended Endpoints"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 924
+    name: "Improper Enforcement of Message Integrity During Transmission in a Communication Channel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 925
+    name: "Improper Verification of Intent by Broadcast Receiver"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 926
+    name: "Improper Export of Android Application Components"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 927
+    name: "Use of Implicit Intent for Sensitive Communication"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 939
+    name: "Improper Authorization in Handler for Custom URL Scheme"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 940
+    name: "Improper Verification of Source of a Communication Channel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 941
+    name: "Incorrectly Specified Destination in a Communication Channel"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 942
+    name: "Permissive Cross-domain Security Policy with Untrusted Domains"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 943
+    name: "Improper Neutralization of Special Elements in Data Query Logic"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1004
+    name: "Sensitive Cookie Without 'HttpOnly' Flag"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1007
+    name: "Insufficient Visual Distinction of Homoglyphs Presented to User"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1021
+    name: "Improper Restriction of Rendered UI Layers or Frames"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1022
+    name: "Use of Web Link to Untrusted Target with window.opener Access"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1023
+    name: "Incomplete Comparison with Missing Factors"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1024
+    name: "Comparison of Incompatible Types"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1025
+    name: "Comparison Using Wrong Factors"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1037
+    name: "Processor Optimization Removal or Modification of Security-critical Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1038
+    name: "Insecure Automated Optimizations"
+    kind: weakness
+    status: Draft
+    abstraction: Class
+  - id: 1039
+    name: "Inadequate Detection or Handling of Adversarial Input Perturbations in Automated Recognition Mechanism"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1041
+    name: "Use of Redundant Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1042
+    name: "Static Member Data Element outside of a Singleton Class Element"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1043
+    name: "Data Element Aggregating an Excessively Large Number of Non-Primitive Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1044
+    name: "Architecture with Number of Horizontal Layers Outside of Expected Range"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1045
+    name: "Parent Class with a Virtual Destructor and a Child Class without a Virtual Destructor"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1046
+    name: "Creation of Immutable Text Using String Concatenation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1047
+    name: "Modules with Circular Dependencies"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1048
+    name: "Invokable Control Element with Large Number of Outward Calls"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1049
+    name: "Excessive Data Query Operations in a Large Data Table"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1050
+    name: "Excessive Platform Resource Consumption within a Loop"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1051
+    name: "Initialization with Hard-Coded Network Resource Configuration Data"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1052
+    name: "Excessive Use of Hard-Coded Literals in Initialization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1053
+    name: "Missing Documentation for Design"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1054
+    name: "Invocation of a Control Element at an Unnecessarily Deep Horizontal Layer"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1055
+    name: "Multiple Inheritance from Concrete Classes"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1056
+    name: "Invokable Control Element with Variadic Parameters"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1057
+    name: "Data Access Operations Outside of Expected Data Manager Component"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1058
+    name: "Invokable Control Element in Multi-Thread Context with non-Final Static Storable or Member Element"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1059
+    name: "Insufficient Technical Documentation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1060
+    name: "Excessive Number of Inefficient Server-Side Data Accesses"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1061
+    name: "Insufficient Encapsulation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1062
+    name: "Parent Class with References to Child Class"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1063
+    name: "Creation of Class Instance within a Static Code Block"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1064
+    name: "Invokable Control Element with Signature Containing an Excessive Number of Parameters"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1065
+    name: "Runtime Resource Management Control Element in a Component Built to Run on Application Servers"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1066
+    name: "Missing Serialization Control Element"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1067
+    name: "Excessive Execution of Sequential Searches of Data Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1068
+    name: "Inconsistency Between Implementation and Documented Design"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1069
+    name: "Empty Exception Block"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1070
+    name: "Serializable Data Element Containing non-Serializable Item Elements"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1071
+    name: "Empty Code Block"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1072
+    name: "Data Resource Access without Use of Connection Pooling"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1073
+    name: "Non-SQL Invokable Control Element with Excessive Number of Data Resource Accesses"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1074
+    name: "Class with Excessively Deep Inheritance"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1075
+    name: "Unconditional Control Flow Transfer outside of Switch Block"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1076
+    name: "Insufficient Adherence to Expected Conventions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1077
+    name: "Floating Point Comparison with Incorrect Operator"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1078
+    name: "Inappropriate Source Code Style or Formatting"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1079
+    name: "Parent Class without Virtual Destructor Method"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1080
+    name: "Source Code File with Excessive Number of Lines of Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1082
+    name: "Class Instance Self Destruction Control Element"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1083
+    name: "Data Access from Outside Expected Data Manager Component"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1084
+    name: "Invokable Control Element with Excessive File or Data Access Operations"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1085
+    name: "Invokable Control Element with Excessive Volume of Commented-out Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1086
+    name: "Class with Excessive Number of Child Classes"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1087
+    name: "Class with Virtual Method without a Virtual Destructor"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1088
+    name: "Synchronous Access of Remote Resource without Timeout"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1089
+    name: "Large Data Table with Excessive Number of Indices"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1090
+    name: "Method Containing Access of a Member Element from Another Class"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1091
+    name: "Use of Object without Invoking Destructor Method"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1092
+    name: "Use of Same Invokable Control Element in Multiple Architectural Layers"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1093
+    name: "Excessively Complex Data Representation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1094
+    name: "Excessive Index Range Scan for a Data Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1095
+    name: "Loop Condition Value Update within the Loop"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1096
+    name: "Singleton Class Instance Creation without Proper Locking or Synchronization"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1097
+    name: "Persistent Storable Data Element without Associated Comparison Control Element"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1098
+    name: "Data Element containing Pointer Item without Proper Copy Control Element"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1099
+    name: "Inconsistent Naming Conventions for Identifiers"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1100
+    name: "Insufficient Isolation of System-Dependent Functions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1101
+    name: "Reliance on Runtime Component in Generated Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1102
+    name: "Reliance on Machine-Dependent Data Representation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1103
+    name: "Use of Platform-Dependent Third Party Components"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1104
+    name: "Use of Unmaintained Third Party Components"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1105
+    name: "Insufficient Encapsulation of Machine-Dependent Functionality"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1106
+    name: "Insufficient Use of Symbolic Constants"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1107
+    name: "Insufficient Isolation of Symbolic Constant Definitions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1108
+    name: "Excessive Reliance on Global Variables"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1109
+    name: "Use of Same Variable for Multiple Purposes"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1110
+    name: "Incomplete Design Documentation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1111
+    name: "Incomplete I/O Documentation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1112
+    name: "Incomplete Documentation of Program Execution"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1113
+    name: "Inappropriate Comment Style"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1114
+    name: "Inappropriate Whitespace Style"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1115
+    name: "Source Code Element without Standard Prologue"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1116
+    name: "Inaccurate Source Code Comments"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1117
+    name: "Callable with Insufficient Behavioral Summary"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1118
+    name: "Insufficient Documentation of Error Handling Techniques"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1119
+    name: "Excessive Use of Unconditional Branching"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1120
+    name: "Excessive Code Complexity"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1121
+    name: "Excessive McCabe Cyclomatic Complexity"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1122
+    name: "Excessive Halstead Complexity"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1123
+    name: "Excessive Use of Self-Modifying Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1124
+    name: "Excessively Deep Nesting"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1125
+    name: "Excessive Attack Surface"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1126
+    name: "Declaration of Variable with Unnecessarily Wide Scope"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1127
+    name: "Compilation with Insufficient Warnings or Errors"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1164
+    name: "Irrelevant Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1173
+    name: "Improper Use of Validation Framework"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1174
+    name: "ASP.NET Misconfiguration: Improper Model Validation"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 1176
+    name: "Inefficient CPU Computation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1177
+    name: "Use of Prohibited Code"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1187
+    name: "DEPRECATED: Use of Uninitialized Resource"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 1188
+    name: "Initialization of a Resource with an Insecure Default"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1189
+    name: "Improper Isolation of Shared Resources on System-on-a-Chip (SoC)"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1190
+    name: "DMA Device Enabled Too Early in Boot Phase"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1191
+    name: "On-Chip Debug and Test Interface With Improper Access Control"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1192
+    name: "Improper Identifier for IP Block used in System-On-Chip (SOC)"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1193
+    name: "Power-On of Untrusted Execution Core Before Enabling Fabric Access Control"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1204
+    name: "Generation of Weak Initialization Vector (IV)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1209
+    name: "Failure to Disable Reserved Bits"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1220
+    name: "Insufficient Granularity of Access Control"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1221
+    name: "Incorrect Register Defaults or Module Parameters"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1222
+    name: "Insufficient Granularity of Address Regions Protected by Register Locks"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1223
+    name: "Race Condition for Write-Once Attributes"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1224
+    name: "Improper Restriction of Write-Once Bit Fields"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1229
+    name: "Creation of Emergent Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1230
+    name: "Exposure of Sensitive Information Through Metadata"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1231
+    name: "Improper Prevention of Lock Bit Modification"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1232
+    name: "Improper Lock Behavior After Power State Transition"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1233
+    name: "Security-Sensitive Hardware Controls with Missing Lock Bit Protection"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1234
+    name: "Hardware Internal or Debug Modes Allow Override of Locks"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1235
+    name: "Incorrect Use of Autoboxing and Unboxing for Performance Critical Operations"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1236
+    name: "Improper Neutralization of Formula Elements in a CSV File"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1239
+    name: "Improper Zeroization of Hardware Register"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 1240
+    name: "Use of a Cryptographic Primitive with a Risky Implementation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1241
+    name: "Use of Predictable Algorithm in Random Number Generator"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1242
+    name: "Inclusion of Undocumented Features or Chicken Bits"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1243
+    name: "Sensitive Non-Volatile Information Not Protected During Debug"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1244
+    name: "Internal Asset Exposed to Unsafe Debug Access Level or State"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1245
+    name: "Improper Finite State Machines (FSMs) in Hardware Logic"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1246
+    name: "Improper Write Handling in Limited-write Non-Volatile Memories"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1247
+    name: "Improper Protection Against Voltage and Clock Glitches"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1248
+    name: "Semiconductor Defects in Hardware Logic with Security-Sensitive Implications"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1249
+    name: "Application-Level Admin Tool with Inconsistent View of Underlying Operating System"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1250
+    name: "Improper Preservation of Consistency Between Independent Representations of Shared State"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1251
+    name: "Mirrored Regions with Different Values"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1252
+    name: "CPU Hardware Not Configured to Support Exclusivity of Write and Execute Operations"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1253
+    name: "Incorrect Selection of Fuse Values"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1254
+    name: "Incorrect Comparison Logic Granularity"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1255
+    name: "Comparison Logic is Vulnerable to Power Side-Channel Attacks"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 1256
+    name: "Improper Restriction of Software Interfaces to Hardware Features"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1257
+    name: "Improper Access Control Applied to Mirrored or Aliased Memory Regions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1258
+    name: "Exposure of Sensitive System Information Due to Uncleared Debug Information"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1259
+    name: "Improper Restriction of Security Token Assignment"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1260
+    name: "Improper Handling of Overlap Between Protected Memory Ranges"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1261
+    name: "Improper Handling of Single Event Upsets"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1262
+    name: "Improper Access Control for Register Interface"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1263
+    name: "Improper Physical Access Control"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1264
+    name: "Hardware Logic with Insecure De-Synchronization between Control and Data Channels"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1265
+    name: "Unintended Reentrant Invocation of Non-reentrant Code Via Nested Calls"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1266
+    name: "Improper Scrubbing of Sensitive Data from Decommissioned Device"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1267
+    name: "Policy Uses Obsolete Encoding"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1268
+    name: "Policy Privileges are not Assigned Consistently Between Control and Data Agents"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1269
+    name: "Product Released in Non-Release Configuration"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1270
+    name: "Generation of Incorrect Security Tokens"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1271
+    name: "Uninitialized Value on Reset for Registers Holding Security Settings"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1272
+    name: "Sensitive Information Uncleared Before Debug/Power State Transition"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1273
+    name: "Device Unlock Credential Sharing"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1274
+    name: "Improper Access Control for Volatile Memory Containing Boot Code"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1275
+    name: "Sensitive Cookie with Improper SameSite Attribute"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1276
+    name: "Hardware Child Block Incorrectly Connected to Parent System"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1277
+    name: "Firmware Not Updateable"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1278
+    name: "Missing Protection Against Hardware Reverse Engineering Using Integrated Circuit (IC) Imaging Techniques"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1279
+    name: "Cryptographic Operations are run Before Supporting Units are Ready"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1280
+    name: "Access Control Check Implemented After Asset is Accessed"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1281
+    name: "Sequence of Processor Instructions Leads to Unexpected Behavior"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1282
+    name: "Assumed-Immutable Data is Stored in Writable Memory"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1283
+    name: "Mutable Attestation or Measurement Reporting Data"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1284
+    name: "Improper Validation of Specified Quantity in Input"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1285
+    name: "Improper Validation of Specified Index, Position, or Offset in Input"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1286
+    name: "Improper Validation of Syntactic Correctness of Input"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1287
+    name: "Improper Validation of Specified Type of Input"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1288
+    name: "Improper Validation of Consistency within Input"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1289
+    name: "Improper Validation of Unsafe Equivalence in Input"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1290
+    name: "Incorrect Decoding of Security Identifiers"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1291
+    name: "Public Key Re-Use for Signing both Debug and Production Code"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1292
+    name: "Incorrect Conversion of Security Identifiers"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1293
+    name: "Missing Source Correlation of Multiple Independent Data"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1294
+    name: "Insecure Security Identifier Mechanism"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1295
+    name: "Debug Messages Revealing Unnecessary Information"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1296
+    name: "Incorrect Chaining or Granularity of Debug Components"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1297
+    name: "Unprotected Confidential Information on Device is Accessible by OSAT Vendors"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1298
+    name: "Hardware Logic Contains Race Conditions"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1299
+    name: "Missing Protection Mechanism for Alternate Hardware Interface"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1300
+    name: "Improper Protection of Physical Side Channels"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1301
+    name: "Insufficient or Incomplete Data Removal within Hardware Component"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1302
+    name: "Missing Source Identifier in Entity Transactions on a System-On-Chip (SOC)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1303
+    name: "Non-Transparent Sharing of Microarchitectural Resources"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1304
+    name: "Improperly Preserved Integrity of Hardware Configuration State During a Power Save/Restore Operation"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1310
+    name: "Missing Ability to Patch ROM Code"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1311
+    name: "Improper Translation of Security Attributes by Fabric Bridge"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1312
+    name: "Missing Protection for Mirrored Regions in On-Chip Fabric Firewall"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1313
+    name: "Hardware Allows Activation of Test or Debug Logic at Runtime"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1314
+    name: "Missing Write Protection for Parametric Data Values"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1315
+    name: "Improper Setting of Bus Controlling Capability in Fabric End-point"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1316
+    name: "Fabric-Address Map Allows Programming of Unwarranted Overlaps of Protected and Unprotected Ranges"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1317
+    name: "Improper Access Control in Fabric Bridge"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1318
+    name: "Missing Support for Security Features in On-chip Fabrics or Buses"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1319
+    name: "Improper Protection against Electromagnetic Fault Injection (EM-FI)"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1320
+    name: "Improper Protection for Outbound Error Messages and Alert Signals"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1321
+    name: "Improperly Controlled Modification of Object Prototype Attributes ('Prototype Pollution')"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1322
+    name: "Use of Blocking Code in Single-threaded, Non-blocking Context"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1323
+    name: "Improper Management of Sensitive Trace Data"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1324
+    name: "DEPRECATED: Sensitive Information Accessible by Physical Probing of JTAG Interface"
+    kind: weakness
+    status: Deprecated
+    abstraction: Base
+  - id: 1325
+    name: "Improperly Controlled Sequential Memory Allocation"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1326
+    name: "Missing Immutable Root of Trust in Hardware"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1327
+    name: "Binding to an Unrestricted IP Address"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1328
+    name: "Security Version Number Mutable to Older Versions"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1329
+    name: "Reliance on Component That is Not Updateable"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1330
+    name: "Remanent Data Readable after Memory Erase"
+    kind: weakness
+    status: Draft
+    abstraction: Variant
+  - id: 1331
+    name: "Improper Isolation of Shared Resources in Network On Chip (NoC)"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1332
+    name: "Improper Handling of Faults that Lead to Instruction Skips"
+    kind: weakness
+    status: Stable
+    abstraction: Base
+  - id: 1333
+    name: "Inefficient Regular Expression Complexity"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1334
+    name: "Unauthorized Error Injection Can Degrade Hardware Redundancy"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1335
+    name: "Incorrect Bitwise Shift of Integer"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1336
+    name: "Improper Neutralization of Special Elements Used in a Template Engine"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1338
+    name: "Improper Protections Against Hardware Overheating"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1339
+    name: "Insufficient Precision or Accuracy of a Real Number"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1341
+    name: "Multiple Releases of Same Resource or Handle"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1342
+    name: "Information Exposure through Microarchitectural State after Transient Execution"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1351
+    name: "Improper Handling of Hardware Behavior in Exceptionally Cold Environments"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1357
+    name: "Reliance on Insufficiently Trustworthy Component"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1384
+    name: "Improper Handling of Physical or Environmental Conditions"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1385
+    name: "Missing Origin Validation in WebSockets"
+    kind: weakness
+    status: Incomplete
+    abstraction: Variant
+  - id: 1386
+    name: "Insecure Operation on Windows Junction / Mount Point"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1389
+    name: "Incorrect Parsing of Numbers with Different Radices"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1390
+    name: "Weak Authentication"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1391
+    name: "Use of Weak Credentials"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1392
+    name: "Use of Default Credentials"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1393
+    name: "Use of Default Password"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1394
+    name: "Use of Default Cryptographic Key"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1395
+    name: "Dependency on Vulnerable Third-Party Component"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1419
+    name: "Incorrect Initialization of Resource"
+    kind: weakness
+    status: Incomplete
+    abstraction: Class
+  - id: 1420
+    name: "Exposure of Sensitive Information during Transient Execution"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1421
+    name: "Exposure of Sensitive Information in Shared Microarchitectural Structures during Transient Execution"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1422
+    name: "Exposure of Sensitive Information caused by Incorrect Data Forwarding during Transient Execution"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1423
+    name: "Exposure of Sensitive Information caused by Shared Microarchitectural Predictor State that Influences Transient Execution"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1426
+    name: "Improper Validation of Generative AI Output"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1427
+    name: "Improper Neutralization of Input Used for LLM Prompting"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1428
+    name: "Reliance on HTTP instead of HTTPS"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1429
+    name: "Missing Security-Relevant Feedback for Unexecuted Operations in Hardware Interface"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1431
+    name: "Driving Intermediate Cryptographic State/Results to Hardware Module Outputs"
+    kind: weakness
+    status: Incomplete
+    abstraction: Base
+  - id: 1434
+    name: "Insecure Setting of Generative AI/ML Model Inference Parameters"
+    kind: weakness
+    status: Draft
+    abstraction: Base
+  - id: 1
+    name: "DEPRECATED: Location"
+    kind: category
+    status: Deprecated
+  - id: 2
+    name: "7PK - Environment"
+    kind: category
+    status: Draft
+  - id: 3
+    name: "DEPRECATED: Technology-specific Environment Issues"
+    kind: category
+    status: Deprecated
+  - id: 4
+    name: "DEPRECATED: J2EE Environment Issues"
+    kind: category
+    status: Deprecated
+  - id: 10
+    name: "DEPRECATED: ASP.NET Environment Issues"
+    kind: category
+    status: Deprecated
+  - id: 16
+    name: "Configuration"
+    kind: category
+    status: Obsolete
+  - id: 17
+    name: "DEPRECATED: Code"
+    kind: category
+    status: Deprecated
+  - id: 18
+    name: "DEPRECATED: Source Code"
+    kind: category
+    status: Deprecated
+  - id: 19
+    name: "Data Processing Errors"
+    kind: category
+    status: Draft
+  - id: 21
+    name: "DEPRECATED: Pathname Traversal and Equivalence Errors"
+    kind: category
+    status: Deprecated
+  - id: 60
+    name: "DEPRECATED: UNIX Path Link Problems"
+    kind: category
+    status: Deprecated
+  - id: 63
+    name: "DEPRECATED: Windows Path Link Problems"
+    kind: category
+    status: Deprecated
+  - id: 68
+    name: "DEPRECATED: Windows Virtual File Problems"
+    kind: category
+    status: Deprecated
+  - id: 70
+    name: "DEPRECATED: Mac Virtual File Problems"
+    kind: category
+    status: Deprecated
+  - id: 100
+    name: "DEPRECATED: Technology-Specific Input Validation Problems"
+    kind: category
+    status: Deprecated
+  - id: 101
+    name: "DEPRECATED: Struts Validation Problems"
+    kind: category
+    status: Deprecated
+  - id: 133
+    name: "String Errors"
+    kind: category
+    status: Draft
+  - id: 136
+    name: "Type Errors"
+    kind: category
+    status: Draft
+  - id: 137
+    name: "Data Neutralization Issues"
+    kind: category
+    status: Draft
+  - id: 139
+    name: "DEPRECATED: General Special Element Problems"
+    kind: category
+    status: Deprecated
+  - id: 169
+    name: "DEPRECATED: Technology-Specific Special Elements"
+    kind: category
+    status: Deprecated
+  - id: 171
+    name: "DEPRECATED: Cleansing, Canonicalization, and Comparison Errors"
+    kind: category
+    status: Deprecated
+  - id: 189
+    name: "Numeric Errors"
+    kind: category
+    status: Draft
+  - id: 199
+    name: "Information Management Errors"
+    kind: category
+    status: Draft
+  - id: 227
+    name: "7PK - API Abuse"
+    kind: category
+    status: Draft
+  - id: 251
+    name: "Often Misused: String Management"
+    kind: category
+    status: Incomplete
+  - id: 254
+    name: "7PK - Security Features"
+    kind: category
+    status: Incomplete
+  - id: 255
+    name: "Credentials Management Errors"
+    kind: category
+    status: Draft
+  - id: 264
+    name: "Permissions, Privileges, and Access Controls"
+    kind: category
+    status: Obsolete
+  - id: 265
+    name: "Privilege Issues"
+    kind: category
+    status: Incomplete
+  - id: 275
+    name: "Permission Issues"
+    kind: category
+    status: Draft
+  - id: 310
+    name: "Cryptographic Issues"
+    kind: category
+    status: Draft
+  - id: 320
+    name: "Key Management Errors"
+    kind: category
+    status: Obsolete
+  - id: 355
+    name: "User Interface Security Issues"
+    kind: category
+    status: Draft
+  - id: 361
+    name: "7PK - Time and State"
+    kind: category
+    status: Incomplete
+  - id: 371
+    name: "State Issues"
+    kind: category
+    status: Draft
+  - id: 376
+    name: "DEPRECATED: Temporary File Issues"
+    kind: category
+    status: Deprecated
+  - id: 380
+    name: "DEPRECATED: Technology-Specific Time and State Issues"
+    kind: category
+    status: Deprecated
+  - id: 381
+    name: "DEPRECATED: J2EE Time and State Issues"
+    kind: category
+    status: Deprecated
+  - id: 387
+    name: "Signal Errors"
+    kind: category
+    status: Incomplete
+  - id: 388
+    name: "7PK - Errors"
+    kind: category
+    status: Draft
+  - id: 389
+    name: "Error Conditions, Return Values, Status Codes"
+    kind: category
+    status: Incomplete
+  - id: 398
+    name: "7PK - Code Quality"
+    kind: category
+    status: Draft
+  - id: 399
+    name: "Resource Management Errors"
+    kind: category
+    status: Draft
+  - id: 411
+    name: "Resource Locking Problems"
+    kind: category
+    status: Draft
+  - id: 417
+    name: "Communication Channel Errors"
+    kind: category
+    status: Draft
+  - id: 418
+    name: "DEPRECATED: Channel Errors"
+    kind: category
+    status: Deprecated
+  - id: 429
+    name: "Handler Errors"
+    kind: category
+    status: Draft
+  - id: 438
+    name: "Behavioral Problems"
+    kind: category
+    status: Draft
+  - id: 442
+    name: "DEPRECATED: Web Problems"
+    kind: category
+    status: Deprecated
+  - id: 445
+    name: "DEPRECATED: User Interface Errors"
+    kind: category
+    status: Deprecated
+  - id: 452
+    name: "Initialization and Cleanup Errors"
+    kind: category
+    status: Draft
+  - id: 461
+    name: "DEPRECATED: Data Structure Issues"
+    kind: category
+    status: Deprecated
+  - id: 465
+    name: "Pointer Issues"
+    kind: category
+    status: Draft
+  - id: 485
+    name: "7PK - Encapsulation"
+    kind: category
+    status: Draft
+  - id: 490
+    name: "DEPRECATED: Mobile Code Issues"
+    kind: category
+    status: Deprecated
+  - id: 503
+    name: "DEPRECATED: Byte/Object Code"
+    kind: category
+    status: Deprecated
+  - id: 504
+    name: "DEPRECATED: Motivation/Intent"
+    kind: category
+    status: Deprecated
+  - id: 505
+    name: "DEPRECATED: Intentionally Introduced Weakness"
+    kind: category
+    status: Deprecated
+  - id: 513
+    name: "DEPRECATED: Intentionally Introduced Nonmalicious Weakness"
+    kind: category
+    status: Deprecated
+  - id: 517
+    name: "DEPRECATED: Other Intentional, Nonmalicious Weakness"
+    kind: category
+    status: Deprecated
+  - id: 518
+    name: "DEPRECATED: Inadvertently Introduced Weakness"
+    kind: category
+    status: Deprecated
+  - id: 519
+    name: "DEPRECATED: .NET Environment Issues"
+    kind: category
+    status: Deprecated
+  - id: 557
+    name: "Concurrency Issues"
+    kind: category
+    status: Draft
+  - id: 559
+    name: "DEPRECATED: Often Misused: Arguments and Parameters"
+    kind: category
+    status: Deprecated
+  - id: 569
+    name: "Expression Issues"
+    kind: category
+    status: Draft
+  - id: 632
+    name: "DEPRECATED: Weaknesses that Affect Files or Directories"
+    kind: category
+    status: Deprecated
+  - id: 633
+    name: "DEPRECATED: Weaknesses that Affect Memory"
+    kind: category
+    status: Deprecated
+  - id: 634
+    name: "DEPRECATED: Weaknesses that Affect System Processes"
+    kind: category
+    status: Deprecated
+  - id: 712
+    name: "OWASP Top Ten 2007 Category A1 - Cross Site Scripting (XSS)"
+    kind: category
+    status: Obsolete
+  - id: 713
+    name: "OWASP Top Ten 2007 Category A2 - Injection Flaws"
+    kind: category
+    status: Obsolete
+  - id: 714
+    name: "OWASP Top Ten 2007 Category A3 - Malicious File Execution"
+    kind: category
+    status: Obsolete
+  - id: 715
+    name: "OWASP Top Ten 2007 Category A4 - Insecure Direct Object Reference"
+    kind: category
+    status: Obsolete
+  - id: 716
+    name: "OWASP Top Ten 2007 Category A5 - Cross Site Request Forgery (CSRF)"
+    kind: category
+    status: Obsolete
+  - id: 717
+    name: "OWASP Top Ten 2007 Category A6 - Information Leakage and Improper Error Handling"
+    kind: category
+    status: Obsolete
+  - id: 718
+    name: "OWASP Top Ten 2007 Category A7 - Broken Authentication and Session Management"
+    kind: category
+    status: Obsolete
+  - id: 719
+    name: "OWASP Top Ten 2007 Category A8 - Insecure Cryptographic Storage"
+    kind: category
+    status: Obsolete
+  - id: 720
+    name: "OWASP Top Ten 2007 Category A9 - Insecure Communications"
+    kind: category
+    status: Obsolete
+  - id: 721
+    name: "OWASP Top Ten 2007 Category A10 - Failure to Restrict URL Access"
+    kind: category
+    status: Obsolete
+  - id: 722
+    name: "OWASP Top Ten 2004 Category A1 - Unvalidated Input"
+    kind: category
+    status: Obsolete
+  - id: 723
+    name: "OWASP Top Ten 2004 Category A2 - Broken Access Control"
+    kind: category
+    status: Obsolete
+  - id: 724
+    name: "OWASP Top Ten 2004 Category A3 - Broken Authentication and Session Management"
+    kind: category
+    status: Obsolete
+  - id: 725
+    name: "OWASP Top Ten 2004 Category A4 - Cross-Site Scripting (XSS) Flaws"
+    kind: category
+    status: Obsolete
+  - id: 726
+    name: "OWASP Top Ten 2004 Category A5 - Buffer Overflows"
+    kind: category
+    status: Obsolete
+  - id: 727
+    name: "OWASP Top Ten 2004 Category A6 - Injection Flaws"
+    kind: category
+    status: Obsolete
+  - id: 728
+    name: "OWASP Top Ten 2004 Category A7 - Improper Error Handling"
+    kind: category
+    status: Obsolete
+  - id: 729
+    name: "OWASP Top Ten 2004 Category A8 - Insecure Storage"
+    kind: category
+    status: Obsolete
+  - id: 730
+    name: "OWASP Top Ten 2004 Category A9 - Denial of Service"
+    kind: category
+    status: Obsolete
+  - id: 731
+    name: "OWASP Top Ten 2004 Category A10 - Insecure Configuration Management"
+    kind: category
+    status: Obsolete
+  - id: 735
+    name: "CERT C Secure Coding Standard (2008) Chapter 2 - Preprocessor (PRE)"
+    kind: category
+    status: Obsolete
+  - id: 736
+    name: "CERT C Secure Coding Standard (2008) Chapter 3 - Declarations and Initialization (DCL)"
+    kind: category
+    status: Obsolete
+  - id: 737
+    name: "CERT C Secure Coding Standard (2008) Chapter 4 - Expressions (EXP)"
+    kind: category
+    status: Obsolete
+  - id: 738
+    name: "CERT C Secure Coding Standard (2008) Chapter 5 - Integers (INT)"
+    kind: category
+    status: Obsolete
+  - id: 739
+    name: "CERT C Secure Coding Standard (2008) Chapter 6 - Floating Point (FLP)"
+    kind: category
+    status: Obsolete
+  - id: 740
+    name: "CERT C Secure Coding Standard (2008) Chapter 7 - Arrays (ARR)"
+    kind: category
+    status: Obsolete
+  - id: 741
+    name: "CERT C Secure Coding Standard (2008) Chapter 8 - Characters and Strings (STR)"
+    kind: category
+    status: Obsolete
+  - id: 742
+    name: "CERT C Secure Coding Standard (2008) Chapter 9 - Memory Management (MEM)"
+    kind: category
+    status: Obsolete
+  - id: 743
+    name: "CERT C Secure Coding Standard (2008) Chapter 10 - Input Output (FIO)"
+    kind: category
+    status: Obsolete
+  - id: 744
+    name: "CERT C Secure Coding Standard (2008) Chapter 11 - Environment (ENV)"
+    kind: category
+    status: Obsolete
+  - id: 745
+    name: "CERT C Secure Coding Standard (2008) Chapter 12 - Signals (SIG)"
+    kind: category
+    status: Obsolete
+  - id: 746
+    name: "CERT C Secure Coding Standard (2008) Chapter 13 - Error Handling (ERR)"
+    kind: category
+    status: Obsolete
+  - id: 747
+    name: "CERT C Secure Coding Standard (2008) Chapter 14 - Miscellaneous (MSC)"
+    kind: category
+    status: Obsolete
+  - id: 748
+    name: "CERT C Secure Coding Standard (2008) Appendix - POSIX (POS)"
+    kind: category
+    status: Obsolete
+  - id: 751
+    name: "2009 Top 25 - Insecure Interaction Between Components"
+    kind: category
+    status: Obsolete
+  - id: 752
+    name: "2009 Top 25 - Risky Resource Management"
+    kind: category
+    status: Obsolete
+  - id: 753
+    name: "2009 Top 25 - Porous Defenses"
+    kind: category
+    status: Obsolete
+  - id: 801
+    name: "2010 Top 25 - Insecure Interaction Between Components"
+    kind: category
+    status: Obsolete
+  - id: 802
+    name: "2010 Top 25 - Risky Resource Management"
+    kind: category
+    status: Obsolete
+  - id: 803
+    name: "2010 Top 25 - Porous Defenses"
+    kind: category
+    status: Obsolete
+  - id: 808
+    name: "2010 Top 25 - Weaknesses On the Cusp"
+    kind: category
+    status: Obsolete
+  - id: 810
+    name: "OWASP Top Ten 2010 Category A1 - Injection"
+    kind: category
+    status: Obsolete
+  - id: 811
+    name: "OWASP Top Ten 2010 Category A2 - Cross-Site Scripting (XSS)"
+    kind: category
+    status: Obsolete
+  - id: 812
+    name: "OWASP Top Ten 2010 Category A3 - Broken Authentication and Session Management"
+    kind: category
+    status: Obsolete
+  - id: 813
+    name: "OWASP Top Ten 2010 Category A4 - Insecure Direct Object References"
+    kind: category
+    status: Obsolete
+  - id: 814
+    name: "OWASP Top Ten 2010 Category A5 - Cross-Site Request Forgery(CSRF)"
+    kind: category
+    status: Obsolete
+  - id: 815
+    name: "OWASP Top Ten 2010 Category A6 - Security Misconfiguration"
+    kind: category
+    status: Obsolete
+  - id: 816
+    name: "OWASP Top Ten 2010 Category A7 - Insecure Cryptographic Storage"
+    kind: category
+    status: Obsolete
+  - id: 817
+    name: "OWASP Top Ten 2010 Category A8 - Failure to Restrict URL Access"
+    kind: category
+    status: Obsolete
+  - id: 818
+    name: "OWASP Top Ten 2010 Category A9 - Insufficient Transport Layer Protection"
+    kind: category
+    status: Obsolete
+  - id: 819
+    name: "OWASP Top Ten 2010 Category A10 - Unvalidated Redirects and Forwards"
+    kind: category
+    status: Obsolete
+  - id: 840
+    name: "Business Logic Errors"
+    kind: category
+    status: Incomplete
+  - id: 845
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 2 - Input Validation and Data Sanitization (IDS)"
+    kind: category
+    status: Obsolete
+  - id: 846
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 3 - Declarations and Initialization (DCL)"
+    kind: category
+    status: Obsolete
+  - id: 847
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 4 - Expressions (EXP)"
+    kind: category
+    status: Obsolete
+  - id: 848
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 5 - Numeric Types and Operations (NUM)"
+    kind: category
+    status: Obsolete
+  - id: 849
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 6 - Object Orientation (OBJ)"
+    kind: category
+    status: Obsolete
+  - id: 850
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 7 - Methods (MET)"
+    kind: category
+    status: Obsolete
+  - id: 851
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 8 - Exceptional Behavior (ERR)"
+    kind: category
+    status: Obsolete
+  - id: 852
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 9 - Visibility and Atomicity (VNA)"
+    kind: category
+    status: Obsolete
+  - id: 853
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 10 - Locking (LCK)"
+    kind: category
+    status: Obsolete
+  - id: 854
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 11 - Thread APIs (THI)"
+    kind: category
+    status: Obsolete
+  - id: 855
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 12 - Thread Pools (TPS)"
+    kind: category
+    status: Obsolete
+  - id: 856
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 13 - Thread-Safety Miscellaneous (TSM)"
+    kind: category
+    status: Obsolete
+  - id: 857
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 14 - Input Output (FIO)"
+    kind: category
+    status: Obsolete
+  - id: 858
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 15 - Serialization (SER)"
+    kind: category
+    status: Obsolete
+  - id: 859
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 16 - Platform Security (SEC)"
+    kind: category
+    status: Obsolete
+  - id: 860
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 17 - Runtime Environment (ENV)"
+    kind: category
+    status: Obsolete
+  - id: 861
+    name: "The CERT Oracle Secure Coding Standard for Java (2011) Chapter 18 - Miscellaneous (MSC)"
+    kind: category
+    status: Obsolete
+  - id: 864
+    name: "2011 Top 25 - Insecure Interaction Between Components"
+    kind: category
+    status: Obsolete
+  - id: 865
+    name: "2011 Top 25 - Risky Resource Management"
+    kind: category
+    status: Obsolete
+  - id: 866
+    name: "2011 Top 25 - Porous Defenses"
+    kind: category
+    status: Obsolete
+  - id: 867
+    name: "2011 Top 25 - Weaknesses On the Cusp"
+    kind: category
+    status: Obsolete
+  - id: 869
+    name: "CERT C++ Secure Coding Section 01 - Preprocessor (PRE)"
+    kind: category
+    status: Incomplete
+  - id: 870
+    name: "CERT C++ Secure Coding Section 02 - Declarations and Initialization (DCL)"
+    kind: category
+    status: Incomplete
+  - id: 871
+    name: "CERT C++ Secure Coding Section 03 - Expressions (EXP)"
+    kind: category
+    status: Incomplete
+  - id: 872
+    name: "CERT C++ Secure Coding Section 04 - Integers (INT)"
+    kind: category
+    status: Incomplete
+  - id: 873
+    name: "CERT C++ Secure Coding Section 05 - Floating Point Arithmetic (FLP)"
+    kind: category
+    status: Incomplete
+  - id: 874
+    name: "CERT C++ Secure Coding Section 06 - Arrays and the STL (ARR)"
+    kind: category
+    status: Incomplete
+  - id: 875
+    name: "CERT C++ Secure Coding Section 07 - Characters and Strings (STR)"
+    kind: category
+    status: Incomplete
+  - id: 876
+    name: "CERT C++ Secure Coding Section 08 - Memory Management (MEM)"
+    kind: category
+    status: Incomplete
+  - id: 877
+    name: "CERT C++ Secure Coding Section 09 - Input Output (FIO)"
+    kind: category
+    status: Incomplete
+  - id: 878
+    name: "CERT C++ Secure Coding Section 10 - Environment (ENV)"
+    kind: category
+    status: Incomplete
+  - id: 879
+    name: "CERT C++ Secure Coding Section 11 - Signals (SIG)"
+    kind: category
+    status: Incomplete
+  - id: 880
+    name: "CERT C++ Secure Coding Section 12 - Exceptions and Error Handling (ERR)"
+    kind: category
+    status: Incomplete
+  - id: 881
+    name: "CERT C++ Secure Coding Section 13 - Object Oriented Programming (OOP)"
+    kind: category
+    status: Incomplete
+  - id: 882
+    name: "CERT C++ Secure Coding Section 14 - Concurrency (CON)"
+    kind: category
+    status: Incomplete
+  - id: 883
+    name: "CERT C++ Secure Coding Section 49 - Miscellaneous (MSC)"
+    kind: category
+    status: Incomplete
+  - id: 885
+    name: "SFP Primary Cluster: Risky Values"
+    kind: category
+    status: Incomplete
+  - id: 886
+    name: "SFP Primary Cluster: Unused entities"
+    kind: category
+    status: Incomplete
+  - id: 887
+    name: "SFP Primary Cluster: API"
+    kind: category
+    status: Incomplete
+  - id: 889
+    name: "SFP Primary Cluster: Exception Management"
+    kind: category
+    status: Incomplete
+  - id: 890
+    name: "SFP Primary Cluster: Memory Access"
+    kind: category
+    status: Incomplete
+  - id: 891
+    name: "SFP Primary Cluster: Memory Management"
+    kind: category
+    status: Incomplete
+  - id: 892
+    name: "SFP Primary Cluster: Resource Management"
+    kind: category
+    status: Incomplete
+  - id: 893
+    name: "SFP Primary Cluster: Path Resolution"
+    kind: category
+    status: Incomplete
+  - id: 894
+    name: "SFP Primary Cluster: Synchronization"
+    kind: category
+    status: Incomplete
+  - id: 895
+    name: "SFP Primary Cluster: Information Leak"
+    kind: category
+    status: Incomplete
+  - id: 896
+    name: "SFP Primary Cluster: Tainted Input"
+    kind: category
+    status: Incomplete
+  - id: 897
+    name: "SFP Primary Cluster: Entry Points"
+    kind: category
+    status: Incomplete
+  - id: 898
+    name: "SFP Primary Cluster: Authentication"
+    kind: category
+    status: Incomplete
+  - id: 899
+    name: "SFP Primary Cluster: Access Control"
+    kind: category
+    status: Incomplete
+  - id: 901
+    name: "SFP Primary Cluster: Privilege"
+    kind: category
+    status: Incomplete
+  - id: 902
+    name: "SFP Primary Cluster: Channel"
+    kind: category
+    status: Incomplete
+  - id: 903
+    name: "SFP Primary Cluster: Cryptography"
+    kind: category
+    status: Incomplete
+  - id: 904
+    name: "SFP Primary Cluster: Malware"
+    kind: category
+    status: Incomplete
+  - id: 905
+    name: "SFP Primary Cluster: Predictability"
+    kind: category
+    status: Incomplete
+  - id: 906
+    name: "SFP Primary Cluster: UI"
+    kind: category
+    status: Incomplete
+  - id: 907
+    name: "SFP Primary Cluster: Other"
+    kind: category
+    status: Incomplete
+  - id: 929
+    name: "OWASP Top Ten 2013 Category A1 - Injection"
+    kind: category
+    status: Obsolete
+  - id: 930
+    name: "OWASP Top Ten 2013 Category A2 - Broken Authentication and Session Management"
+    kind: category
+    status: Obsolete
+  - id: 931
+    name: "OWASP Top Ten 2013 Category A3 - Cross-Site Scripting (XSS)"
+    kind: category
+    status: Obsolete
+  - id: 932
+    name: "OWASP Top Ten 2013 Category A4 - Insecure Direct Object References"
+    kind: category
+    status: Obsolete
+  - id: 933
+    name: "OWASP Top Ten 2013 Category A5 - Security Misconfiguration"
+    kind: category
+    status: Obsolete
+  - id: 934
+    name: "OWASP Top Ten 2013 Category A6 - Sensitive Data Exposure"
+    kind: category
+    status: Obsolete
+  - id: 935
+    name: "OWASP Top Ten 2013 Category A7 - Missing Function Level Access Control"
+    kind: category
+    status: Obsolete
+  - id: 936
+    name: "OWASP Top Ten 2013 Category A8 - Cross-Site Request Forgery (CSRF)"
+    kind: category
+    status: Obsolete
+  - id: 937
+    name: "OWASP Top Ten 2013 Category A9 - Using Components with Known Vulnerabilities"
+    kind: category
+    status: Obsolete
+  - id: 938
+    name: "OWASP Top Ten 2013 Category A10 - Unvalidated Redirects and Forwards"
+    kind: category
+    status: Obsolete
+  - id: 944
+    name: "SFP Secondary Cluster: Access Management"
+    kind: category
+    status: Incomplete
+  - id: 945
+    name: "SFP Secondary Cluster: Insecure Resource Access"
+    kind: category
+    status: Incomplete
+  - id: 946
+    name: "SFP Secondary Cluster: Insecure Resource Permissions"
+    kind: category
+    status: Incomplete
+  - id: 947
+    name: "SFP Secondary Cluster: Authentication Bypass"
+    kind: category
+    status: Incomplete
+  - id: 948
+    name: "SFP Secondary Cluster: Digital Certificate"
+    kind: category
+    status: Incomplete
+  - id: 949
+    name: "SFP Secondary Cluster: Faulty Endpoint Authentication"
+    kind: category
+    status: Incomplete
+  - id: 950
+    name: "SFP Secondary Cluster: Hardcoded Sensitive Data"
+    kind: category
+    status: Incomplete
+  - id: 951
+    name: "SFP Secondary Cluster: Insecure Authentication Policy"
+    kind: category
+    status: Incomplete
+  - id: 952
+    name: "SFP Secondary Cluster: Missing Authentication"
+    kind: category
+    status: Incomplete
+  - id: 953
+    name: "SFP Secondary Cluster: Missing Endpoint Authentication"
+    kind: category
+    status: Incomplete
+  - id: 954
+    name: "SFP Secondary Cluster: Multiple Binds to the Same Port"
+    kind: category
+    status: Incomplete
+  - id: 955
+    name: "SFP Secondary Cluster: Unrestricted Authentication"
+    kind: category
+    status: Incomplete
+  - id: 956
+    name: "SFP Secondary Cluster: Channel Attack"
+    kind: category
+    status: Incomplete
+  - id: 957
+    name: "SFP Secondary Cluster: Protocol Error"
+    kind: category
+    status: Incomplete
+  - id: 958
+    name: "SFP Secondary Cluster: Broken Cryptography"
+    kind: category
+    status: Incomplete
+  - id: 959
+    name: "SFP Secondary Cluster: Weak Cryptography"
+    kind: category
+    status: Incomplete
+  - id: 960
+    name: "SFP Secondary Cluster: Ambiguous Exception Type"
+    kind: category
+    status: Incomplete
+  - id: 961
+    name: "SFP Secondary Cluster: Incorrect Exception Behavior"
+    kind: category
+    status: Incomplete
+  - id: 962
+    name: "SFP Secondary Cluster: Unchecked Status Condition"
+    kind: category
+    status: Incomplete
+  - id: 963
+    name: "SFP Secondary Cluster: Exposed Data"
+    kind: category
+    status: Incomplete
+  - id: 964
+    name: "SFP Secondary Cluster: Exposure Temporary File"
+    kind: category
+    status: Incomplete
+  - id: 965
+    name: "SFP Secondary Cluster: Insecure Session Management"
+    kind: category
+    status: Incomplete
+  - id: 966
+    name: "SFP Secondary Cluster: Other Exposures"
+    kind: category
+    status: Incomplete
+  - id: 967
+    name: "SFP Secondary Cluster: State Disclosure"
+    kind: category
+    status: Incomplete
+  - id: 968
+    name: "SFP Secondary Cluster: Covert Channel"
+    kind: category
+    status: Incomplete
+  - id: 969
+    name: "SFP Secondary Cluster: Faulty Memory Release"
+    kind: category
+    status: Incomplete
+  - id: 970
+    name: "SFP Secondary Cluster: Faulty Buffer Access"
+    kind: category
+    status: Incomplete
+  - id: 971
+    name: "SFP Secondary Cluster: Faulty Pointer Use"
+    kind: category
+    status: Incomplete
+  - id: 972
+    name: "SFP Secondary Cluster: Faulty String Expansion"
+    kind: category
+    status: Incomplete
+  - id: 973
+    name: "SFP Secondary Cluster: Improper NULL Termination"
+    kind: category
+    status: Incomplete
+  - id: 974
+    name: "SFP Secondary Cluster: Incorrect Buffer Length Computation"
+    kind: category
+    status: Incomplete
+  - id: 975
+    name: "SFP Secondary Cluster: Architecture"
+    kind: category
+    status: Incomplete
+  - id: 976
+    name: "SFP Secondary Cluster: Compiler"
+    kind: category
+    status: Incomplete
+  - id: 977
+    name: "SFP Secondary Cluster: Design"
+    kind: category
+    status: Incomplete
+  - id: 978
+    name: "SFP Secondary Cluster: Implementation"
+    kind: category
+    status: Incomplete
+  - id: 979
+    name: "SFP Secondary Cluster: Failed Chroot Jail"
+    kind: category
+    status: Incomplete
+  - id: 980
+    name: "SFP Secondary Cluster: Link in Resource Name Resolution"
+    kind: category
+    status: Incomplete
+  - id: 981
+    name: "SFP Secondary Cluster: Path Traversal"
+    kind: category
+    status: Incomplete
+  - id: 982
+    name: "SFP Secondary Cluster: Failure to Release Resource"
+    kind: category
+    status: Incomplete
+  - id: 983
+    name: "SFP Secondary Cluster: Faulty Resource Use"
+    kind: category
+    status: Incomplete
+  - id: 984
+    name: "SFP Secondary Cluster: Life Cycle"
+    kind: category
+    status: Incomplete
+  - id: 985
+    name: "SFP Secondary Cluster: Unrestricted Consumption"
+    kind: category
+    status: Incomplete
+  - id: 986
+    name: "SFP Secondary Cluster: Missing Lock"
+    kind: category
+    status: Incomplete
+  - id: 987
+    name: "SFP Secondary Cluster: Multiple Locks/Unlocks"
+    kind: category
+    status: Incomplete
+  - id: 988
+    name: "SFP Secondary Cluster: Race Condition Window"
+    kind: category
+    status: Incomplete
+  - id: 989
+    name: "SFP Secondary Cluster: Unrestricted Lock"
+    kind: category
+    status: Incomplete
+  - id: 990
+    name: "SFP Secondary Cluster: Tainted Input to Command"
+    kind: category
+    status: Incomplete
+  - id: 991
+    name: "SFP Secondary Cluster: Tainted Input to Environment"
+    kind: category
+    status: Incomplete
+  - id: 992
+    name: "SFP Secondary Cluster: Faulty Input Transformation"
+    kind: category
+    status: Incomplete
+  - id: 993
+    name: "SFP Secondary Cluster: Incorrect Input Handling"
+    kind: category
+    status: Incomplete
+  - id: 994
+    name: "SFP Secondary Cluster: Tainted Input to Variable"
+    kind: category
+    status: Incomplete
+  - id: 995
+    name: "SFP Secondary Cluster: Feature"
+    kind: category
+    status: Incomplete
+  - id: 996
+    name: "SFP Secondary Cluster: Security"
+    kind: category
+    status: Incomplete
+  - id: 997
+    name: "SFP Secondary Cluster: Information Loss"
+    kind: category
+    status: Incomplete
+  - id: 998
+    name: "SFP Secondary Cluster: Glitch in Computation"
+    kind: category
+    status: Incomplete
+  - id: 1001
+    name: "SFP Secondary Cluster: Use of an Improper API"
+    kind: category
+    status: Incomplete
+  - id: 1002
+    name: "SFP Secondary Cluster: Unexpected Entry Points"
+    kind: category
+    status: Incomplete
+  - id: 1005
+    name: "7PK - Input Validation and Representation"
+    kind: category
+    status: Draft
+  - id: 1006
+    name: "Bad Coding Practices"
+    kind: category
+    status: Draft
+  - id: 1009
+    name: "Audit"
+    kind: category
+    status: Draft
+  - id: 1010
+    name: "Authenticate Actors"
+    kind: category
+    status: Draft
+  - id: 1011
+    name: "Authorize Actors"
+    kind: category
+    status: Draft
+  - id: 1012
+    name: "Cross Cutting"
+    kind: category
+    status: Draft
+  - id: 1013
+    name: "Encrypt Data"
+    kind: category
+    status: Draft
+  - id: 1014
+    name: "Identify Actors"
+    kind: category
+    status: Draft
+  - id: 1015
+    name: "Limit Access"
+    kind: category
+    status: Draft
+  - id: 1016
+    name: "Limit Exposure"
+    kind: category
+    status: Draft
+  - id: 1017
+    name: "Lock Computer"
+    kind: category
+    status: Draft
+  - id: 1018
+    name: "Manage User Sessions"
+    kind: category
+    status: Draft
+  - id: 1019
+    name: "Validate Inputs"
+    kind: category
+    status: Draft
+  - id: 1020
+    name: "Verify Message Integrity"
+    kind: category
+    status: Draft
+  - id: 1027
+    name: "OWASP Top Ten 2017 Category A1 - Injection"
+    kind: category
+    status: Incomplete
+  - id: 1028
+    name: "OWASP Top Ten 2017 Category A2 - Broken Authentication"
+    kind: category
+    status: Incomplete
+  - id: 1029
+    name: "OWASP Top Ten 2017 Category A3 - Sensitive Data Exposure"
+    kind: category
+    status: Incomplete
+  - id: 1030
+    name: "OWASP Top Ten 2017 Category A4 - XML External Entities (XXE)"
+    kind: category
+    status: Incomplete
+  - id: 1031
+    name: "OWASP Top Ten 2017 Category A5 - Broken Access Control"
+    kind: category
+    status: Incomplete
+  - id: 1032
+    name: "OWASP Top Ten 2017 Category A6 - Security Misconfiguration"
+    kind: category
+    status: Incomplete
+  - id: 1033
+    name: "OWASP Top Ten 2017 Category A7 - Cross-Site Scripting (XSS)"
+    kind: category
+    status: Incomplete
+  - id: 1034
+    name: "OWASP Top Ten 2017 Category A8 - Insecure Deserialization"
+    kind: category
+    status: Incomplete
+  - id: 1035
+    name: "OWASP Top Ten 2017 Category A9 - Using Components with Known Vulnerabilities"
+    kind: category
+    status: Incomplete
+  - id: 1036
+    name: "OWASP Top Ten 2017 Category A10 - Insufficient Logging & Monitoring"
+    kind: category
+    status: Incomplete
+  - id: 1129
+    name: "CISQ Quality Measures (2016) - Reliability"
+    kind: category
+    status: Draft
+  - id: 1130
+    name: "CISQ Quality Measures (2016) - Maintainability"
+    kind: category
+    status: Draft
+  - id: 1131
+    name: "CISQ Quality Measures (2016) - Security"
+    kind: category
+    status: Draft
+  - id: 1132
+    name: "CISQ Quality Measures (2016) - Performance Efficiency"
+    kind: category
+    status: Draft
+  - id: 1134
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 00. Input Validation and Data Sanitization (IDS)"
+    kind: category
+    status: Stable
+  - id: 1135
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 01. Declarations and Initialization (DCL)"
+    kind: category
+    status: Stable
+  - id: 1136
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 02. Expressions (EXP)"
+    kind: category
+    status: Stable
+  - id: 1137
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 03. Numeric Types and Operations (NUM)"
+    kind: category
+    status: Stable
+  - id: 1138
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 04. Characters and Strings (STR)"
+    kind: category
+    status: Stable
+  - id: 1139
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 05. Object Orientation (OBJ)"
+    kind: category
+    status: Stable
+  - id: 1140
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 06. Methods (MET)"
+    kind: category
+    status: Stable
+  - id: 1141
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 07. Exceptional Behavior (ERR)"
+    kind: category
+    status: Stable
+  - id: 1142
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 08. Visibility and Atomicity (VNA)"
+    kind: category
+    status: Stable
+  - id: 1143
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 09. Locking (LCK)"
+    kind: category
+    status: Stable
+  - id: 1144
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 10. Thread APIs (THI)"
+    kind: category
+    status: Stable
+  - id: 1145
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 11. Thread Pools (TPS)"
+    kind: category
+    status: Stable
+  - id: 1146
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 12. Thread-Safety Miscellaneous (TSM)"
+    kind: category
+    status: Stable
+  - id: 1147
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 13. Input Output (FIO)"
+    kind: category
+    status: Stable
+  - id: 1148
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 14. Serialization (SER)"
+    kind: category
+    status: Stable
+  - id: 1149
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 15. Platform Security (SEC)"
+    kind: category
+    status: Stable
+  - id: 1150
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 16. Runtime Environment (ENV)"
+    kind: category
+    status: Stable
+  - id: 1151
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 17. Java Native Interface (JNI)"
+    kind: category
+    status: Stable
+  - id: 1152
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 49. Miscellaneous (MSC)"
+    kind: category
+    status: Stable
+  - id: 1153
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 50. Android (DRD)"
+    kind: category
+    status: Stable
+  - id: 1155
+    name: "SEI CERT C Coding Standard - Guidelines 01. Preprocessor (PRE)"
+    kind: category
+    status: Stable
+  - id: 1156
+    name: "SEI CERT C Coding Standard - Guidelines 02. Declarations and Initialization (DCL)"
+    kind: category
+    status: Stable
+  - id: 1157
+    name: "SEI CERT C Coding Standard - Guidelines 03. Expressions (EXP)"
+    kind: category
+    status: Stable
+  - id: 1158
+    name: "SEI CERT C Coding Standard - Guidelines 04. Integers (INT)"
+    kind: category
+    status: Stable
+  - id: 1159
+    name: "SEI CERT C Coding Standard - Guidelines 05. Floating Point (FLP)"
+    kind: category
+    status: Stable
+  - id: 1160
+    name: "SEI CERT C Coding Standard - Guidelines 06. Arrays (ARR)"
+    kind: category
+    status: Stable
+  - id: 1161
+    name: "SEI CERT C Coding Standard - Guidelines 07. Characters and Strings (STR)"
+    kind: category
+    status: Stable
+  - id: 1162
+    name: "SEI CERT C Coding Standard - Guidelines 08. Memory Management (MEM)"
+    kind: category
+    status: Stable
+  - id: 1163
+    name: "SEI CERT C Coding Standard - Guidelines 09. Input Output (FIO)"
+    kind: category
+    status: Stable
+  - id: 1165
+    name: "SEI CERT C Coding Standard - Guidelines 10. Environment (ENV)"
+    kind: category
+    status: Stable
+  - id: 1166
+    name: "SEI CERT C Coding Standard - Guidelines 11. Signals (SIG)"
+    kind: category
+    status: Stable
+  - id: 1167
+    name: "SEI CERT C Coding Standard - Guidelines 12. Error Handling (ERR)"
+    kind: category
+    status: Stable
+  - id: 1168
+    name: "SEI CERT C Coding Standard - Guidelines 13. Application Programming Interfaces (API)"
+    kind: category
+    status: Stable
+  - id: 1169
+    name: "SEI CERT C Coding Standard - Guidelines 14. Concurrency (CON)"
+    kind: category
+    status: Stable
+  - id: 1170
+    name: "SEI CERT C Coding Standard - Guidelines 48. Miscellaneous (MSC)"
+    kind: category
+    status: Stable
+  - id: 1171
+    name: "SEI CERT C Coding Standard - Guidelines 50. POSIX (POS)"
+    kind: category
+    status: Stable
+  - id: 1172
+    name: "SEI CERT C Coding Standard - Guidelines 51. Microsoft Windows (WIN)"
+    kind: category
+    status: Stable
+  - id: 1175
+    name: "SEI CERT Oracle Secure Coding Standard for Java - Guidelines 18. Concurrency (CON)"
+    kind: category
+    status: Stable
+  - id: 1179
+    name: "SEI CERT Perl Coding Standard - Guidelines 01. Input Validation and Data Sanitization (IDS)"
+    kind: category
+    status: Stable
+  - id: 1180
+    name: "SEI CERT Perl Coding Standard - Guidelines 02. Declarations and Initialization (DCL)"
+    kind: category
+    status: Stable
+  - id: 1181
+    name: "SEI CERT Perl Coding Standard - Guidelines 03. Expressions (EXP)"
+    kind: category
+    status: Stable
+  - id: 1182
+    name: "SEI CERT Perl Coding Standard - Guidelines 04. Integers (INT)"
+    kind: category
+    status: Stable
+  - id: 1183
+    name: "SEI CERT Perl Coding Standard - Guidelines 05. Strings (STR)"
+    kind: category
+    status: Stable
+  - id: 1184
+    name: "SEI CERT Perl Coding Standard - Guidelines 06. Object-Oriented Programming (OOP)"
+    kind: category
+    status: Stable
+  - id: 1185
+    name: "SEI CERT Perl Coding Standard - Guidelines 07. File Input and Output (FIO)"
+    kind: category
+    status: Stable
+  - id: 1186
+    name: "SEI CERT Perl Coding Standard - Guidelines 50. Miscellaneous (MSC)"
+    kind: category
+    status: Stable
+  - id: 1195
+    name: "Manufacturing and Life Cycle Management Concerns"
+    kind: category
+    status: Draft
+  - id: 1196
+    name: "Security Flow Issues"
+    kind: category
+    status: Draft
+  - id: 1197
+    name: "Integration Issues"
+    kind: category
+    status: Draft
+  - id: 1198
+    name: "Privilege Separation and Access Control Issues"
+    kind: category
+    status: Draft
+  - id: 1199
+    name: "General Circuit and Logic Design Concerns"
+    kind: category
+    status: Draft
+  - id: 1201
+    name: "Core and Compute Issues"
+    kind: category
+    status: Draft
+  - id: 1202
+    name: "Memory and Storage Issues"
+    kind: category
+    status: Draft
+  - id: 1203
+    name: "Peripherals, On-chip Fabric, and Interface/IO Problems"
+    kind: category
+    status: Draft
+  - id: 1205
+    name: "Security Primitives and Cryptography Issues"
+    kind: category
+    status: Draft
+  - id: 1206
+    name: "Power, Clock, Thermal, and Reset Concerns"
+    kind: category
+    status: Draft
+  - id: 1207
+    name: "Debug and Test Problems"
+    kind: category
+    status: Draft
+  - id: 1208
+    name: "Cross-Cutting Problems"
+    kind: category
+    status: Draft
+  - id: 1210
+    name: "Audit / Logging Errors"
+    kind: category
+    status: Draft
+  - id: 1211
+    name: "Authentication Errors"
+    kind: category
+    status: Draft
+  - id: 1212
+    name: "Authorization Errors"
+    kind: category
+    status: Draft
+  - id: 1213
+    name: "Random Number Issues"
+    kind: category
+    status: Draft
+  - id: 1214
+    name: "Data Integrity Issues"
+    kind: category
+    status: Draft
+  - id: 1215
+    name: "Data Validation Issues"
+    kind: category
+    status: Draft
+  - id: 1216
+    name: "Lockout Mechanism Errors"
+    kind: category
+    status: Draft
+  - id: 1217
+    name: "User Session Errors"
+    kind: category
+    status: Draft
+  - id: 1218
+    name: "Memory Buffer Errors"
+    kind: category
+    status: Draft
+  - id: 1219
+    name: "File Handling Issues"
+    kind: category
+    status: Draft
+  - id: 1225
+    name: "Documentation Issues"
+    kind: category
+    status: Draft
+  - id: 1226
+    name: "Complexity Issues"
+    kind: category
+    status: Draft
+  - id: 1227
+    name: "Encapsulation Issues"
+    kind: category
+    status: Draft
+  - id: 1228
+    name: "API / Function Errors"
+    kind: category
+    status: Draft
+  - id: 1237
+    name: "SFP Primary Cluster: Faulty Resource Release"
+    kind: category
+    status: Incomplete
+  - id: 1238
+    name: "SFP Primary Cluster: Failure to Release Memory"
+    kind: category
+    status: Incomplete
+  - id: 1306
+    name: "CISQ Quality Measures - Reliability"
+    kind: category
+    status: Incomplete
+  - id: 1307
+    name: "CISQ Quality Measures - Maintainability"
+    kind: category
+    status: Incomplete
+  - id: 1308
+    name: "CISQ Quality Measures - Security"
+    kind: category
+    status: Incomplete
+  - id: 1309
+    name: "CISQ Quality Measures - Efficiency"
+    kind: category
+    status: Incomplete
+  - id: 1345
+    name: "OWASP Top Ten 2021 Category A01:2021 - Broken Access Control"
+    kind: category
+    status: Incomplete
+  - id: 1346
+    name: "OWASP Top Ten 2021 Category A02:2021 - Cryptographic Failures"
+    kind: category
+    status: Incomplete
+  - id: 1347
+    name: "OWASP Top Ten 2021 Category A03:2021 - Injection"
+    kind: category
+    status: Incomplete
+  - id: 1348
+    name: "OWASP Top Ten 2021 Category A04:2021 - Insecure Design"
+    kind: category
+    status: Incomplete
+  - id: 1349
+    name: "OWASP Top Ten 2021 Category A05:2021 - Security Misconfiguration"
+    kind: category
+    status: Incomplete
+  - id: 1352
+    name: "OWASP Top Ten 2021 Category A06:2021 - Vulnerable and Outdated Components"
+    kind: category
+    status: Incomplete
+  - id: 1353
+    name: "OWASP Top Ten 2021 Category A07:2021 - Identification and Authentication Failures"
+    kind: category
+    status: Incomplete
+  - id: 1354
+    name: "OWASP Top Ten 2021 Category A08:2021 - Software and Data Integrity Failures"
+    kind: category
+    status: Incomplete
+  - id: 1355
+    name: "OWASP Top Ten 2021 Category A09:2021 - Security Logging and Monitoring Failures"
+    kind: category
+    status: Incomplete
+  - id: 1356
+    name: "OWASP Top Ten 2021 Category A10:2021 - Server-Side Request Forgery (SSRF)"
+    kind: category
+    status: Incomplete
+  - id: 1359
+    name: "ICS Communications"
+    kind: category
+    status: Incomplete
+  - id: 1360
+    name: "ICS Dependencies (& Architecture)"
+    kind: category
+    status: Incomplete
+  - id: 1361
+    name: "ICS Supply Chain"
+    kind: category
+    status: Incomplete
+  - id: 1362
+    name: "ICS Engineering (Constructions/Deployment)"
+    kind: category
+    status: Incomplete
+  - id: 1363
+    name: "ICS Operations (& Maintenance)"
+    kind: category
+    status: Incomplete
+  - id: 1364
+    name: "ICS Communications: Zone Boundary Failures"
+    kind: category
+    status: Incomplete
+  - id: 1365
+    name: "ICS Communications: Unreliability"
+    kind: category
+    status: Incomplete
+  - id: 1366
+    name: "ICS Communications: Frail Security in Protocols"
+    kind: category
+    status: Incomplete
+  - id: 1367
+    name: "ICS Dependencies (& Architecture): External Physical Systems"
+    kind: category
+    status: Incomplete
+  - id: 1368
+    name: "ICS Dependencies (& Architecture): External Digital Systems"
+    kind: category
+    status: Incomplete
+  - id: 1369
+    name: "ICS Supply Chain: IT/OT Convergence/Expansion"
+    kind: category
+    status: Incomplete
+  - id: 1370
+    name: "ICS Supply Chain: Common Mode Frailties"
+    kind: category
+    status: Incomplete
+  - id: 1371
+    name: "ICS Supply Chain: Poorly Documented or Undocumented Features"
+    kind: category
+    status: Incomplete
+  - id: 1372
+    name: "ICS Supply Chain: OT Counterfeit and Malicious Corruption"
+    kind: category
+    status: Incomplete
+  - id: 1373
+    name: "ICS Engineering (Construction/Deployment): Trust Model Problems"
+    kind: category
+    status: Incomplete
+  - id: 1374
+    name: "ICS Engineering (Construction/Deployment): Maker Breaker Blindness"
+    kind: category
+    status: Incomplete
+  - id: 1375
+    name: "ICS Engineering (Construction/Deployment): Gaps in Details/Data"
+    kind: category
+    status: Incomplete
+  - id: 1376
+    name: "ICS Engineering (Construction/Deployment): Security Gaps in Commissioning"
+    kind: category
+    status: Incomplete
+  - id: 1377
+    name: "ICS Engineering (Construction/Deployment): Inherent Predictability in Design"
+    kind: category
+    status: Incomplete
+  - id: 1378
+    name: "ICS Operations (& Maintenance): Gaps in obligations and training"
+    kind: category
+    status: Incomplete
+  - id: 1379
+    name: "ICS Operations (& Maintenance): Human factors in ICS environments"
+    kind: category
+    status: Incomplete
+  - id: 1380
+    name: "ICS Operations (& Maintenance): Post-analysis changes"
+    kind: category
+    status: Incomplete
+  - id: 1381
+    name: "ICS Operations (& Maintenance): Exploitable Standard Operational Procedures"
+    kind: category
+    status: Incomplete
+  - id: 1382
+    name: "ICS Operations (& Maintenance): Emerging Energy Technologies"
+    kind: category
+    status: Incomplete
+  - id: 1383
+    name: "ICS Operations (& Maintenance): Compliance/Conformance with Regulatory Requirements"
+    kind: category
+    status: Incomplete
+  - id: 1388
+    name: "Physical Access Issues and Concerns"
+    kind: category
+    status: Draft
+  - id: 1396
+    name: "Comprehensive Categorization: Access Control"
+    kind: category
+    status: Incomplete
+  - id: 1397
+    name: "Comprehensive Categorization: Comparison"
+    kind: category
+    status: Incomplete
+  - id: 1398
+    name: "Comprehensive Categorization: Component Interaction"
+    kind: category
+    status: Incomplete
+  - id: 1399
+    name: "Comprehensive Categorization: Memory Safety"
+    kind: category
+    status: Incomplete
+  - id: 1401
+    name: "Comprehensive Categorization: Concurrency"
+    kind: category
+    status: Incomplete
+  - id: 1402
+    name: "Comprehensive Categorization: Encryption"
+    kind: category
+    status: Incomplete
+  - id: 1403
+    name: "Comprehensive Categorization: Exposed Resource"
+    kind: category
+    status: Incomplete
+  - id: 1404
+    name: "Comprehensive Categorization: File Handling"
+    kind: category
+    status: Incomplete
+  - id: 1405
+    name: "Comprehensive Categorization: Improper Check or Handling of Exceptional Conditions"
+    kind: category
+    status: Incomplete
+  - id: 1406
+    name: "Comprehensive Categorization: Improper Input Validation"
+    kind: category
+    status: Incomplete
+  - id: 1407
+    name: "Comprehensive Categorization: Improper Neutralization"
+    kind: category
+    status: Incomplete
+  - id: 1408
+    name: "Comprehensive Categorization: Incorrect Calculation"
+    kind: category
+    status: Incomplete
+  - id: 1409
+    name: "Comprehensive Categorization: Injection"
+    kind: category
+    status: Incomplete
+  - id: 1410
+    name: "Comprehensive Categorization: Insufficient Control Flow Management"
+    kind: category
+    status: Incomplete
+  - id: 1411
+    name: "Comprehensive Categorization: Insufficient Verification of Data Authenticity"
+    kind: category
+    status: Incomplete
+  - id: 1412
+    name: "Comprehensive Categorization: Poor Coding Practices"
+    kind: category
+    status: Incomplete
+  - id: 1413
+    name: "Comprehensive Categorization: Protection Mechanism Failure"
+    kind: category
+    status: Incomplete
+  - id: 1414
+    name: "Comprehensive Categorization: Randomness"
+    kind: category
+    status: Incomplete
+  - id: 1415
+    name: "Comprehensive Categorization: Resource Control"
+    kind: category
+    status: Incomplete
+  - id: 1416
+    name: "Comprehensive Categorization: Resource Lifecycle Management"
+    kind: category
+    status: Incomplete
+  - id: 1417
+    name: "Comprehensive Categorization: Sensitive Information Exposure"
+    kind: category
+    status: Incomplete
+  - id: 1418
+    name: "Comprehensive Categorization: Violation of Secure Design Principles"
+    kind: category
+    status: Incomplete
+  - id: 1433
+    name: "2025 MIHW Supplement: Expert Insights"
+    kind: category
+    status: Obsolete
+  - id: 1436
+    name: "OWASP Top Ten 2025 Category A01:2025 - Broken Access Control"
+    kind: category
+    status: Incomplete
+  - id: 1437
+    name: "OWASP Top Ten 2025 Category A02:2025 - Security Misconfiguration"
+    kind: category
+    status: Incomplete
+  - id: 1438
+    name: "OWASP Top Ten 2025 Category A03:2025 - Software Supply Chain Failures"
+    kind: category
+    status: Incomplete
+  - id: 1439
+    name: "OWASP Top Ten 2025 Category A04:2025 - Cryptographic Failures"
+    kind: category
+    status: Incomplete
+  - id: 1440
+    name: "OWASP Top Ten 2025 Category A05:2025 - Injection"
+    kind: category
+    status: Incomplete
+  - id: 1441
+    name: "OWASP Top Ten 2025 Category A06:2025 - Insecure Design"
+    kind: category
+    status: Incomplete
+  - id: 1442
+    name: "OWASP Top Ten 2025 Category A07:2025 - Authentication Failures"
+    kind: category
+    status: Incomplete
+  - id: 1443
+    name: "OWASP Top Ten 2025 Category A08:2025 - Software or Data Integrity Failures"
+    kind: category
+    status: Incomplete
+  - id: 1444
+    name: "OWASP Top Ten 2025 Category A09:2025 - Logging & Alerting Failures"
+    kind: category
+    status: Incomplete
+  - id: 1445
+    name: "OWASP Top Ten 2025 Category A10:2025 - Mishandling of Exceptional Conditions"
+    kind: category
+    status: Incomplete
+  - id: 1446
+    name: "Weaknesses That are Specific to AI/ML Technology"
+    kind: category
+    status: Incomplete
+  - id: 1447
+    name: "General Software Weaknesses that Appear in Products that Use or Support AI/ML Technology"
+    kind: category
+    status: Incomplete
+  - id: 604
+    name: "Deprecated Entries"
+    kind: view
+    status: Draft
+  - id: 629
+    name: "Weaknesses in OWASP Top Ten (2007)"
+    kind: view
+    status: Obsolete
+  - id: 630
+    name: "DEPRECATED: Weaknesses Examined by SAMATE"
+    kind: view
+    status: Deprecated
+  - id: 631
+    name: "DEPRECATED: Resource-specific Weaknesses"
+    kind: view
+    status: Deprecated
+  - id: 635
+    name: "Weaknesses Originally Used by NVD from 2008 to 2016"
+    kind: view
+    status: Obsolete
+  - id: 658
+    name: "Weaknesses in Software Written in C"
+    kind: view
+    status: Draft
+  - id: 659
+    name: "Weaknesses in Software Written in C++"
+    kind: view
+    status: Draft
+  - id: 660
+    name: "Weaknesses in Software Written in Java"
+    kind: view
+    status: Draft
+  - id: 661
+    name: "Weaknesses in Software Written in PHP"
+    kind: view
+    status: Draft
+  - id: 677
+    name: "Weakness Base Elements"
+    kind: view
+    status: Draft
+  - id: 678
+    name: "Composites"
+    kind: view
+    status: Draft
+  - id: 679
+    name: "DEPRECATED: Chain Elements"
+    kind: view
+    status: Deprecated
+  - id: 699
+    name: "Software Development"
+    kind: view
+    status: Draft
+  - id: 700
+    name: "Seven Pernicious Kingdoms"
+    kind: view
+    status: Incomplete
+  - id: 701
+    name: "Weaknesses Introduced During Design"
+    kind: view
+    status: Incomplete
+  - id: 702
+    name: "Weaknesses Introduced During Implementation"
+    kind: view
+    status: Incomplete
+  - id: 709
+    name: "Named Chains"
+    kind: view
+    status: Incomplete
+  - id: 711
+    name: "Weaknesses in OWASP Top Ten (2004)"
+    kind: view
+    status: Obsolete
+  - id: 734
+    name: "Weaknesses Addressed by the CERT C Secure Coding Standard (2008)"
+    kind: view
+    status: Obsolete
+  - id: 750
+    name: "Weaknesses in the 2009 CWE/SANS Top 25 Most Dangerous Programming Errors"
+    kind: view
+    status: Obsolete
+  - id: 800
+    name: "Weaknesses in the 2010 CWE/SANS Top 25 Most Dangerous Programming Errors"
+    kind: view
+    status: Obsolete
+  - id: 809
+    name: "Weaknesses in OWASP Top Ten (2010)"
+    kind: view
+    status: Obsolete
+  - id: 844
+    name: "Weaknesses Addressed by The CERT Oracle Secure Coding Standard for Java (2011)"
+    kind: view
+    status: Obsolete
+  - id: 868
+    name: "Weaknesses Addressed by the SEI CERT C++ Coding Standard (2016 Version)"
+    kind: view
+    status: Obsolete
+  - id: 884
+    name: "CWE Cross-section"
+    kind: view
+    status: Incomplete
+  - id: 888
+    name: "Software Fault Pattern (SFP) Clusters"
+    kind: view
+    status: Incomplete
+  - id: 900
+    name: "Weaknesses in the 2011 CWE/SANS Top 25 Most Dangerous Software Errors"
+    kind: view
+    status: Obsolete
+  - id: 919
+    name: "Weaknesses in Mobile Applications"
+    kind: view
+    status: Incomplete
+  - id: 928
+    name: "Weaknesses in OWASP Top Ten (2013)"
+    kind: view
+    status: Obsolete
+  - id: 999
+    name: "DEPRECATED: Weaknesses without Software Fault Patterns"
+    kind: view
+    status: Deprecated
+  - id: 1000
+    name: "Research Concepts"
+    kind: view
+    status: Draft
+  - id: 1003
+    name: "Weaknesses for Simplified Mapping of Published Vulnerabilities"
+    kind: view
+    status: Incomplete
+  - id: 1008
+    name: "Architectural Concepts"
+    kind: view
+    status: Incomplete
+  - id: 1026
+    name: "Weaknesses in OWASP Top Ten (2017)"
+    kind: view
+    status: Incomplete
+  - id: 1040
+    name: "Quality Weaknesses with Indirect Security Impacts"
+    kind: view
+    status: Incomplete
+  - id: 1081
+    name: "Entries with Maintenance Notes"
+    kind: view
+    status: Draft
+  - id: 1128
+    name: "CISQ Quality Measures (2016)"
+    kind: view
+    status: Incomplete
+  - id: 1133
+    name: "Weaknesses Addressed by the SEI CERT Oracle Coding Standard for Java"
+    kind: view
+    status: Stable
+  - id: 1154
+    name: "Weaknesses Addressed by the SEI CERT C Coding Standard"
+    kind: view
+    status: Stable
+  - id: 1178
+    name: "Weaknesses Addressed by the SEI CERT Perl Coding Standard"
+    kind: view
+    status: Stable
+  - id: 1194
+    name: "Hardware Design"
+    kind: view
+    status: Draft
+  - id: 1200
+    name: "Weaknesses in the 2019 CWE Top 25 Most Dangerous Software Errors"
+    kind: view
+    status: Stable
+  - id: 1305
+    name: "CISQ Quality Measures (2020)"
+    kind: view
+    status: Incomplete
+  - id: 1337
+    name: "Weaknesses in the 2021 CWE Top 25 Most Dangerous Software Weaknesses"
+    kind: view
+    status: Stable
+  - id: 1340
+    name: "CISQ Data Protection Measures"
+    kind: view
+    status: Incomplete
+  - id: 1343
+    name: "Weaknesses in the 2021 CWE Most Important Hardware Weaknesses List"
+    kind: view
+    status: Stable
+  - id: 1344
+    name: "Weaknesses in OWASP Top Ten (2021)"
+    kind: view
+    status: Incomplete
+  - id: 1350
+    name: "Weaknesses in the 2020 CWE Top 25 Most Dangerous Software Weaknesses"
+    kind: view
+    status: Stable
+  - id: 1358
+    name: "Weaknesses in SEI ETF Categories of Security Vulnerabilities in ICS"
+    kind: view
+    status: Incomplete
+  - id: 1387
+    name: "Weaknesses in the 2022 CWE Top 25 Most Dangerous Software Weaknesses"
+    kind: view
+    status: Draft
+  - id: 1400
+    name: "Comprehensive Categorization for Software Assurance Trends"
+    kind: view
+    status: Draft
+  - id: 1424
+    name: "Weaknesses Addressed by ISA/IEC 62443 Requirements"
+    kind: view
+    status: Draft
+  - id: 1425
+    name: "Weaknesses in the 2023 CWE Top 25 Most Dangerous Software Weaknesses"
+    kind: view
+    status: Draft
+  - id: 1430
+    name: "Weaknesses in the 2024 CWE Top 25 Most Dangerous Software Weaknesses"
+    kind: view
+    status: Draft
+  - id: 1432
+    name: "Weaknesses in the 2025 CWE Most Important Hardware Weaknesses List"
+    kind: view
+    status: Stable
+  - id: 1435
+    name: "Weaknesses in the 2025 CWE Top 25 Most Dangerous Software Weaknesses"
+    kind: view
+    status: Draft
+  - id: 1448
+    name: "Weaknesses Related to AI/ML Products"
+    kind: view
+    status: Incomplete
+  - id: 1450
+    name: "Weaknesses in OWASP Top Ten RC1 (2025)"
+    kind: view
+    status: Incomplete
+  - id: 2000
+    name: "Comprehensive CWE Dictionary"
+    kind: view
+    status: Draft

@@ -147,8 +147,10 @@ remembered from an earlier one resolves to nothing or, worse, to something else.
 identifier like that reads as evidence while being none, which is why the check
 is mechanical.
 
-`refs.cwe` is still checked only for plausibility: no CWE catalogue is pinned
-yet, so keep to identifiers you can state with confidence.
+`refs.cwe` resolves the same way, and must name a **weakness**. Citing `CWE-699`
+or `CWE-1000` is rejected by name: those are a category and a view, which group
+weaknesses rather than being one. A deprecated weakness is rejected in favour of
+its replacement.
 
 ## 4. Where things go
 
