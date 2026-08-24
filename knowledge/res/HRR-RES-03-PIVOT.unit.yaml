@@ -1,0 +1,8 @@
+id: HRR-RES-03-PIVOT
+topic: HRR-RES-03
+status: outline
+title: "Non-public destination reach"
+objective: >-
+  Determine whether the fetch reaches a destination that is not publicly
+  routable, such as a private range, a loopback address or a link-local
+  metadata endpoint.

@@ -1,0 +1,7 @@
+id: HRR-INJ-04-READ
+topic: HRR-INJ-04
+status: outline
+title: "File and variable disclosure"
+objective: >-
+  Determine whether an interpreted directive returns the contents of a file or
+  the value of a server variable into the response.

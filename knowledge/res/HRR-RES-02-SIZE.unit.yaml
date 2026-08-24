@@ -1,0 +1,7 @@
+id: HRR-RES-02-SIZE
+topic: HRR-RES-02
+status: outline
+title: "Per-object size limit"
+objective: >-
+  Determine whether the endpoint rejects a single object above a stated size
+  before storing or processing it.

@@ -129,6 +129,23 @@ makes the *target* vulnerable. `done_when` says what proves *you performed the
 test*, including when you found nothing. A unit with only the first cannot answer
 "did I finish", which is the question a tester asks at the end of a long day.
 
+**An objective states one outcome, not a menu of them.** This is the boundary
+rule applied to the sentence that carries it, and it is the mistake that recurs:
+
+> ~~Determine which of local file read, internal network access and parser
+> resource exhaustion the entity resolution permits.~~
+
+Those are three tests. A deployment can return a file and cap expansion, so they
+are separately recordable; reading a file does not attempt expansion, so they are
+non-substitutable; and no single sentence states what proves all three. Bundled,
+finishing the easy one marks the other two complete, which is the coverage lie
+the whole instrument exists to prevent.
+
+Enumerating several *manifestations of one observation* is fine — "an error, a
+truncated response, or a terminated process" are three ways the same read past
+the argument list shows itself. The test is whether a sibling could come out
+clean while this one comes out vulnerable.
+
 **`done_when` must be countable or enumerable.** "Tested thoroughly" is not a
 criterion. "All eight encoding variants sent, status and length recorded for
 each" is.

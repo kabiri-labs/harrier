@@ -1,0 +1,7 @@
+id: HRR-RES-01-EXEC
+topic: HRR-RES-01
+status: outline
+title: "Inclusion and execution of the resolved path"
+objective: >-
+  Determine whether the resolved path is included or executed rather than only
+  read, which a deployment can permit or forbid independently.

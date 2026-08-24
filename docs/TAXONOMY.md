@@ -153,6 +153,14 @@ Steps that recur across topics and are not alternatives to each other.
 
 `MAP` · `PROBE` · `FPRINT` · `VERIFY` · `EVADE` · `IMPACT`
 
+### `reach` — available to every topic
+
+What a confirmed primitive actually permits. Separately recordable by
+construction: a filter can allow a read and stop an execution, or allow a fetch
+and block every destination that is not already public.
+
+`READ` · `WRITE` · `EXEC` · `PIVOT` · `EXHAUST`
+
 ### `technique` — alternative routes to the same finding, chosen by evidence
 
 `ERROR` · `BOOL` · `TIME` · `UNION` · `OOB` · `STACK` · `SECOND` · `DIFF` · `BRUTE` · `REPLAY`
@@ -171,7 +179,7 @@ Steps that recur across topics and are not alternatives to each other.
 
 `ENTROPY` · `SCOPE` · `EXPIRY` · `ROTATION` · `FLAGS` · `BINDING` · `REVOCATION`
 · `TRANSPORT` · `STORAGE` · `POLICY` · `VALIDATION` · `NAMING` · `PARSING`
-· `SERVING` · `QUOTA`
+· `SERVING` · `SIZE` · `RATE` · `QUOTA`
 
 ### `asset` — the same test against a different kind of surface
 

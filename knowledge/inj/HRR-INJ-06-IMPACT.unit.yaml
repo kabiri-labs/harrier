@@ -1,7 +1,7 @@
 id: HRR-INJ-06-IMPACT
 topic: HRR-INJ-06
 status: outline
-title: "Established reach of injected lines"
+title: "Honoured injected line"
 objective: >-
-  Determine whether the surviving line break permits adding a recipient,
-  replacing a header, or appending attacker-chosen body content.
+  Determine whether a line the tester injected is honoured by the mail agent
+  rather than escaped, encoded or dropped before delivery.
