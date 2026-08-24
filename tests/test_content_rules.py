@@ -148,9 +148,26 @@ class ReferencesMustResolve(SandboxCase):
         self.box.add_topic(refs={"wstg": ["WSTG-INPV-99"]})
         self.assertRejected("WSTG-INPV-99 is not in the pinned index")
 
-    def test_asvs_is_rejected_until_a_release_is_pinned(self):
+    def test_a_pinned_asvs_requirement_is_accepted(self):
+        self.box.add_topic(refs={"asvs": ["V1.2.1"]})
+        self.assertAccepted()
+
+    def test_an_asvs_section_may_be_cited_as_well_as_a_requirement(self):
+        # Citing a whole section is often the more honest reference than citing
+        # one requirement a mitigation only partly satisfies.
+        self.box.add_topic(refs={"asvs": ["V1", "V1.2"]})
+        self.assertAccepted()
+
+    def test_an_asvs_identifier_absent_from_the_pin_is_rejected(self):
+        # V5.3.4 existed in ASVS 4.x and does not exist in 5.0. An identifier
+        # remembered from a superseded numbering is exactly the failure the pin
+        # exists to catch: it reads as evidence while being none.
         self.box.add_topic(refs={"asvs": ["V5.3.4"]})
-        self.assertRejected("refs.asvs is not yet checkable")
+        self.assertRejected("V5.3.4 is not in the pinned ASVS index")
+
+    def test_an_invented_asvs_identifier_is_rejected(self):
+        self.box.add_topic(refs={"asvs": ["V99.99.99"]})
+        self.assertRejected("V99.99.99 is not in the pinned ASVS index")
 
     def test_an_unknown_surface_tag_is_rejected(self):
         self.box.add_topic(surfaces={"any_of": ["not-a-real-surface"]})

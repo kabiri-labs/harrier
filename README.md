@@ -5,7 +5,8 @@
 > and the notes a practitioner needs to perform it without re-reading a textbook.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![WSTG](https://img.shields.io/badge/WSTG-109%20identifiers%20pinned-informational)](standards/wstg.yaml)
+[![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
+[![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![phase](https://img.shields.io/badge/phase-1%20of%207-lightgrey)](docs/ROADMAP.md)
 
 ## What this is
@@ -52,7 +53,7 @@ their own.
 |---|---|
 | `docs/` | The model, the naming methodology, the authoring rules, the roadmap |
 | `harrier/` | The validator and its schemas — the only executable code here |
-| `standards/` | Pinned WSTG, CWE and ASVS references — generated, never hand-edited |
+| `standards/` | Pinned WSTG and ASVS references — generated, never hand-edited |
 | `vocab/` | Controlled vocabularies: domains, axes, surface tags, dimensions |
 | `knowledge/` | The taxonomy: topics and units |
 | `cards/` | Recall-first prose, organised by technique |
@@ -69,7 +70,7 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 72 tests, offline
+python -m unittest discover -s tests -t .   # 80 tests, offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
 ```

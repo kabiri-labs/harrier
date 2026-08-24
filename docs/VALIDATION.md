@@ -31,10 +31,14 @@ that emit something unknown or emit themselves, duplicate dimension values, and
 the absence of a universal axis — without one, recurring steps such as `PROBE`
 have nowhere to live and every topic invents its own name for them.
 
-**3 — Standards.** The pinned index and the domain map must agree in both
+**3 — Standards.** The pinned WSTG index and the domain map must agree in both
 directions: every pinned identifier mapped, every mapped identifier pinned, no
 duplicates, no undefined domains, and no title that has drifted from the pin. An
 identifier marked unverified is reported rather than trusted.
+
+A file under `standards/` with no schema registered for it is reported rather
+than loaded and trusted — adding a standard has to include deciding how it is
+checked.
 
 **4 — Knowledge.** The pass everything else exists to make possible:
 
@@ -43,9 +47,10 @@ identifier marked unverified is reported rather than trusted.
   name, so two topics cannot name one idea differently.
 - identifiers are well formed, unique, match their file name, and sit in the
   directory their domain names
-- `refs.wstg` resolves against the pin. `refs.asvs` is rejected outright until an
-  ASVS release is pinned: a citation nobody can check reads as evidence while
-  being none
+- `refs.wstg` and `refs.asvs` resolve against their pinned files. A chapter or
+  section may be cited as well as a single requirement — citing a whole section
+  is often the more honest reference. `refs.cwe` is still shape-checked only, as
+  no CWE catalogue is pinned yet
 - surface tags, dimension names and dimension values resolve
 - `objective` is falsifiable and `done_when` is countable — both are pattern
   checks against the language that makes them neither
@@ -77,6 +82,11 @@ Almost every test is a **negative** one — it asserts that something is rejecte
 A suite that only checks good cases cannot tell a working rule from one that has
 quietly stopped firing, and a rule that has stopped firing looks exactly like a
 repository with no problems.
+
+The ASVS pin carries a further assertion of its own: no requirement text appears
+in it. ASVS is CC BY-SA, so reproducing the text would force share-alike onto
+this repository — the schema has no field for it, and a test checks that none
+arrived anyway.
 
 Three properties are asserted about the repository rather than the code:
 

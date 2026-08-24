@@ -177,3 +177,36 @@ class ToolRationaleMustDescribeTheCommand(SandboxCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TheAsvsPinStaysAuditable(SandboxCase):
+    """ASVS is CC BY-SA, so what is absent from the pin matters as much as what
+    is present."""
+
+    def test_no_requirement_text_is_reproduced(self):
+        # Requirement text would force share-alike onto this repository. The
+        # schema has no field for it; this asserts none arrived anyway.
+        raw = self.box.path("standards/asvs.yaml").read_text(encoding="utf-8")
+        body = raw.split("asvs:", 1)[1]
+        self.assertNotIn(
+            "Verify that",
+            body,
+            "requirement text must never be reproduced -- identifiers and "
+            "structural names only",
+        )
+
+    def test_a_branch_cannot_stand_in_for_the_release_tag(self):
+        def unpin(data):
+            data["source_commit"] = "v5.0.0"
+        self.box.edit("standards/asvs.yaml", unpin)
+        self.assertRejected("source_commit")
+
+    def test_the_licence_note_is_required(self):
+        def strip(data):
+            data.pop("licence")
+        self.box.edit("standards/asvs.yaml", strip)
+        self.assertRejected("'licence' is a required property")
+
+    def test_an_unschemad_standards_file_is_reported(self):
+        self.box.path("standards/capec.yaml").write_text("version: 1\ncapec: []\n")
+        self.assertRejected("no schema is registered for this standard")

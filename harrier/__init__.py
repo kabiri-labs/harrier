@@ -17,7 +17,7 @@ from typing import Any, Dict, Iterator, List, Tuple
 import yaml
 
 __all__ = [
-    "DOMAIN_DIRS",
+    "STANDARD_SCHEMAS",
     "HarrierError",
     "Repository",
     "find_root",
@@ -25,6 +25,15 @@ __all__ = [
 ]
 
 SCHEMA_DIR = Path(__file__).resolve().parent / "schema"
+
+#: Which schema applies to each file under standards/. Explicit rather than
+#: derived, so a new standard cannot be added without deciding how it is checked
+#: -- an unrecognised file there would otherwise be loaded and silently trusted.
+STANDARD_SCHEMAS = {
+    "wstg": "standard",
+    "wstg-map": "wstg-map",
+    "asvs": "asvs",
+}
 
 #: Directories that make up a loadable repository. Used to locate the root from
 #: any working directory inside a checkout.
@@ -102,9 +111,9 @@ class Repository:
     units: List[Document] = field(default_factory=list)
     payloads: List[Document] = field(default_factory=list)
     toolbox: List[Document] = field(default_factory=list)
-    #: Files under knowledge/ whose name says nothing about what they are.
-    #: Collected rather than raised on, so one structural error cannot hide
-    #: every other problem in the repository.
+    #: Files whose name says nothing about what they are: under knowledge/, or a
+    #: standards/ file with no schema. Collected rather than raised on, so one
+    #: structural error cannot hide every other problem in the repository.
     unrecognised: List[Path] = field(default_factory=list)
 
     @classmethod
@@ -114,6 +123,8 @@ class Repository:
             repo.vocab[path.stem] = Document(path, load_yaml(path))
         for path in sorted((root / "standards").glob("*.yaml")):
             repo.standards[path.stem] = Document(path, load_yaml(path))
+            if path.stem not in STANDARD_SCHEMAS:
+                repo.unrecognised.append(path)
         for path in sorted((root / "knowledge").rglob("*.yaml")):
             doc = Document(path, load_yaml(path))
             if path.name.endswith(".topic.yaml"):
@@ -136,7 +147,9 @@ class Repository:
         for name, doc in self.vocab.items():
             yield "vocab", doc
         for name, doc in self.standards.items():
-            yield ("wstg-map" if name == "wstg-map" else "standard"), doc
+            schema = STANDARD_SCHEMAS.get(name)
+            if schema is not None:
+                yield schema, doc
         for doc in self.topics:
             yield "topic", doc
         for doc in self.units:

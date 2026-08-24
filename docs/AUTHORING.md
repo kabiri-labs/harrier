@@ -137,9 +137,18 @@ and the boundary rule was applied too loosely. Prose beyond that belongs in the
 card's depth block.
 
 **Never write a standard's identifier from memory.** The authorization prefix in
-WSTG is `ATHZ`, not `AUTHZ`. Every identifier is checked against the pinned file
-under `standards/`. If the source cannot be reached, mark the entry unverified
-and say so, rather than guessing.
+WSTG is `ATHZ`, not `AUTHZ`. Every `refs.wstg` and `refs.asvs` value is resolved
+against the pinned files under `standards/`. If the source cannot be reached,
+mark the entry unverified and say so, rather than guessing.
+
+Numbering is renumbered between major releases of a standard, so an identifier
+remembered from an earlier one resolves to nothing or, worse, to something else.
+`V5.3.4` was a real ASVS 4.x requirement and does not exist in 5.0 — an
+identifier like that reads as evidence while being none, which is why the check
+is mechanical.
+
+`refs.cwe` is still checked only for plausibility: no CWE catalogue is pinned
+yet, so keep to identifiers you can state with confidence.
 
 ## 4. Where things go
 

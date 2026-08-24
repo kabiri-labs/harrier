@@ -93,10 +93,17 @@ def check_schemas(repo: Repository, problems: Problems) -> None:
     registry = Registry().with_resources(resources)
 
     for path in repo.unrecognised:
-        problems.add(
-            path,
-            "file under knowledge/ must be named <id>.topic.yaml or <id>.unit.yaml",
-        )
+        if path.parent.name == "standards":
+            problems.add(
+                path,
+                "no schema is registered for this standard -- add one to "
+                "STANDARD_SCHEMAS rather than letting the file be trusted unchecked",
+            )
+        else:
+            problems.add(
+                path,
+                "file under knowledge/ must be named <id>.topic.yaml or <id>.unit.yaml",
+            )
 
     validators = {}
     for schema_name, doc in repo.documents():
@@ -236,6 +243,7 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
         for name, body in (_vocab(repo, "dimensions", "dimensions") or {}).items()
     }
     pinned = {e["id"] for e in repo.standards["wstg"].data["wstg"]} if "wstg" in repo.standards else set()
+    asvs = _asvs_shortcodes(repo)
     tools = {t["id"] for doc in repo.toolbox for t in doc.data}
     payload_files = {str(d.path.relative_to(repo.root)) for d in repo.payloads}
 
@@ -262,7 +270,7 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
             problems.add(doc.rel, f"unknown axis {doc.data.get('axis')}")
         _check_surface_clause(doc, doc.data.get("surfaces"), surfaces, problems)
         _check_dimensions(doc, doc.data.get("dimensions"), dimensions, problems)
-        _check_refs(doc, doc.data.get("refs"), pinned, problems)
+        _check_refs(doc, doc.data.get("refs"), pinned, asvs, problems)
 
     units: Dict[str, Document] = {}
     by_topic: Dict[str, List[str]] = {}
@@ -327,7 +335,7 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
                 problems.add(doc.rel, f"{target} {rel} does not exist")
         _check_surface_clause(doc, doc.data.get("surfaces"), surfaces, problems)
         _check_dimensions(doc, doc.data.get("dimensions"), dimensions, problems)
-        _check_refs(doc, doc.data.get("refs"), pinned, problems)
+        _check_refs(doc, doc.data.get("refs"), pinned, asvs, problems)
 
     for doc in repo.units:
         for fed in doc.data.get("feeds") or []:
@@ -356,6 +364,26 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
                 )
 
 
+def _asvs_shortcodes(repo: Repository) -> Set[str]:
+    """Every requirement identifier in the pinned ASVS release.
+
+    Chapter and section shortcodes are included: a mitigation that cites a whole
+    section is a legitimate and often more honest reference than one that cites a
+    single requirement it only partly satisfies.
+    """
+    doc = repo.standards.get("asvs")
+    if doc is None:
+        return set()
+    codes: Set[str] = set()
+    for chapter in doc.data["asvs"]:
+        codes.add(chapter["shortcode"])
+        for section in chapter["sections"]:
+            codes.add(section["shortcode"])
+            for requirement in section["requirements"]:
+                codes.add(requirement["shortcode"])
+    return codes
+
+
 def _check_surface_clause(doc: Document, clause: Any, surfaces: Set[str], problems: Problems) -> None:
     if not clause:
         return
@@ -375,7 +403,13 @@ def _check_dimensions(doc: Document, declared: Any, known: Dict[str, Set[str]], 
                 problems.add(doc.rel, f"dimension {name} has no value {value}")
 
 
-def _check_refs(doc: Document, refs: Any, pinned: Set[str], problems: Problems) -> None:
+def _check_refs(
+    doc: Document,
+    refs: Any,
+    pinned: Set[str],
+    asvs: Set[str],
+    problems: Problems,
+) -> None:
     for wid in (refs or {}).get("wstg") or []:
         if wid not in pinned:
             problems.add(
@@ -383,12 +417,13 @@ def _check_refs(doc: Document, refs: Any, pinned: Set[str], problems: Problems) 
                 f"{wid} is not in the pinned index -- verify it against the source "
                 "rather than writing it from memory",
             )
-    if (refs or {}).get("asvs"):
-        problems.add(
-            doc.rel,
-            "refs.asvs is not yet checkable: no ASVS release is pinned, so a "
-            "reference there reads as evidence while being none",
-        )
+    for shortcode in (refs or {}).get("asvs") or []:
+        if shortcode not in asvs:
+            problems.add(
+                doc.rel,
+                f"{shortcode} is not in the pinned ASVS index -- a citation nobody "
+                "can check reads as evidence while being none",
+            )
 
 
 def check_payloads(repo: Repository, problems: Problems) -> None:

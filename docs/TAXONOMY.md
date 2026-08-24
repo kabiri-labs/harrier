@@ -240,7 +240,18 @@ and never hand-edited** — a hand-edit would make the verification claim empty.
 |---|---|---|
 | **WSTG** | Coverage skeleton. Confirms the taxonomy is not missing something the profession considers standard. | Identifiers and official titles only. Never write one from memory — verify against the pinned file. |
 | **CWE** | The weakness class. This is what "type of vulnerability" means; it is what mitigations attach to. | Referenced by number, resolved against the pin. |
-| **ASVS** | Mitigation cross-reference, for report writing and client conversations. | Identifiers and official requirement titles only. Remediation prose is written here, originally. |
+| **ASVS** | Mitigation cross-reference, for report writing and client conversations. | Identifiers and structural names only — **not requirement text**. Remediation prose is written here, originally. |
+
+ASVS 5.0.0 is pinned at its release tag's commit. Note that the repository also
+carries a *branch* named `v5.0.0`, which moves; pinning it would name a moving
+target, which is the failure the pin discipline exists to prevent. The two
+currently serve identical bytes, and that is not a reason to pin the branch.
+
+The pin records the requirement identifier, the chapter and section names, and
+the verification level — and nothing else. Requirement text is what ASVS *is*,
+and it is CC BY-SA; reproducing it would force share-alike onto this repository.
+A reference here is a pointer for the reader to look up, which is what a
+cross-reference is for.
 
 **CVE is not a taxonomy and is not pinned.** A CVE names one bug in one product,
 not a class. Where known-vulnerable components are the subject, the unit points
