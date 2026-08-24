@@ -70,6 +70,35 @@ dimensions:
         label: DOM
         note: "Never reaches the server; written to a sink by client-side script."
 
+  operation:
+    label: State-changing operation on an object
+    values:
+      - value: update
+        label: Update
+        note: "Modifies an existing record; often the only write path the authorization check was written against."
+      - value: delete
+        label: Delete
+        note: "Frequently a separate handler from update, and frequently a separate policy."
+      - value: create
+        label: Create
+        note: "Ownership is assigned rather than checked, so the check that refuses the other two may not exist here at all."
+
+  selection:
+    label: How a GraphQL query names the field it wants
+    values:
+      - value: direct
+        label: Direct selection
+        note: "The field named at the top level, which is the shape most authorization middleware inspects."
+      - value: alias
+        label: Alias
+        note: "The same field under another response key; a check keyed on the response name misses it."
+      - value: fragment
+        label: Fragment
+        note: "Selected through a named or inline fragment, which a check walking only the top-level selection set never reaches."
+      - value: nested
+        label: Nested path
+        note: "Reached as a child of another type, where the parent's authorization is the only one applied."
+
   platform:
     label: Server-side platform
     values:

@@ -3,5 +3,9 @@ topic: HRR-ACL-02
 status: outline
 title: "Modification of an object the caller does not own"
 objective: >-
-  Determine whether an object the caller does not own can be changed or
-  deleted, which is a separate result from whether it can be read.
+  Determine whether the caller can change state on an object it does not own,
+  which is a separate result from whether it can read one: the write path is
+  frequently a different handler with a different check. Performed once for
+  every operation the topic declares as a dimension, and against every
+  ownership boundary its sibling units name, because a policy that refuses one
+  operation routinely permits another.
