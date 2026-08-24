@@ -1,0 +1,9 @@
+id: HRR-BIZ-07-MAP
+topic: HRR-BIZ-07
+status: outline
+kind: recon
+title: "The responses that would show the application noticed"
+objective: >-
+  Record which observable responses would indicate that misuse was detected --
+  a block, a challenge, a notification, a changed latency -- since detection
+  is otherwise invisible from outside.

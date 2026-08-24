@@ -6,6 +6,11 @@ axis: technique
 surfaces:
   always: true
 
+order:
+  - HRR-ERR-01-MAP
+  - HRR-ERR-01-ERROR
+  - HRR-ERR-01-DIFF
+
 see_also: [HRR-ERR-02, HRR-IDN-03]
 
 refs:

@@ -6,6 +6,18 @@ axis: technique
 surfaces:
   always: true
 
+order:
+  - HRR-ERR-02-ERROR
+  - HRR-ERR-02-PROBE
+
+boundaries:
+  - subject: "Identifying the platform and its version"
+    home: HRR-RCN-01
+    note: >-
+      A trace naming the framework is one of the routes the fingerprint is
+      built from. The finding here is that execution detail is returned at
+      all, not what it identifies.
+
 see_also: [HRR-ERR-01]
 
 refs:

@@ -1,11 +1,16 @@
 id: HRR-BIZ-02
 title: "Forged and replayed requests"
 domain: BIZ
-axis: asset
+axis: technique
 kind: inquiry
 
 surfaces:
   any_of: [business-workflow, payment]
+
+order:
+  - HRR-BIZ-02-MAP
+  - HRR-BIZ-02-PROBE
+  - HRR-BIZ-02-REPLAY
 
 boundaries:
   - subject: "Ambient authority making a cross-site request succeed"

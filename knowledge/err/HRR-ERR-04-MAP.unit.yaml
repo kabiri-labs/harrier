@@ -1,0 +1,8 @@
+id: HRR-ERR-04-MAP
+topic: HRR-ERR-04
+status: outline
+kind: recon
+title: "What public indexes and archives hold about the target"
+objective: >-
+  Record which of the target's assets are present in search indexes, caches
+  and web archives, and at which point in time each copy was taken.

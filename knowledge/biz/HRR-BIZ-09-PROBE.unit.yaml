@@ -1,0 +1,7 @@
+id: HRR-BIZ-09-PROBE
+topic: HRR-BIZ-09
+status: outline
+title: "Enforcement of a declared control"
+objective: >-
+  Determine whether a request exceeding a declared control is refused rather
+  than served.

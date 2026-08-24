@@ -1,0 +1,9 @@
+id: HRR-ERR-03-MAP
+topic: HRR-ERR-03
+status: outline
+kind: recon
+title: "The artefacts the application delivers"
+objective: >-
+  Record which artefacts the application serves alongside its pages --
+  scripts, source maps, documents, generated files -- since each is content it
+  chose to deliver and may not have read.

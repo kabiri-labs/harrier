@@ -1,11 +1,17 @@
 id: HRR-BIZ-05
 title: "Function use limits"
 domain: BIZ
-axis: asset
+axis: property
 kind: inquiry
 
 surfaces:
   any_of: [business-workflow, payment, export-report]
+
+order:
+  - HRR-BIZ-05-MAP
+  - HRR-BIZ-05-RATE
+  - HRR-BIZ-05-QUOTA
+  - HRR-BIZ-05-SCOPE
 
 boundaries:
   - subject: "A limit protecting a credential"

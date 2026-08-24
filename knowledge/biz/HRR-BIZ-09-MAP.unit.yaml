@@ -1,0 +1,8 @@
+id: HRR-BIZ-09-MAP
+topic: HRR-BIZ-09
+status: outline
+kind: recon
+title: "The declared cost controls"
+objective: >-
+  Record which cost controls the interface declares -- depth, complexity, page
+  size, batch size -- and the value of each.

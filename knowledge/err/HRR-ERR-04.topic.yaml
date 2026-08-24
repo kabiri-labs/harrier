@@ -6,6 +6,10 @@ axis: phase
 surfaces:
   always: true
 
+order:
+  - HRR-ERR-04-MAP
+  - HRR-ERR-04-PROBE
+
 boundaries:
   - subject: "The same search used to enumerate the surface"
     home: HRR-RCN-08

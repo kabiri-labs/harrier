@@ -1,0 +1,9 @@
+id: HRR-BIZ-08-IMPACT
+topic: HRR-BIZ-08
+status: outline
+kind: inquiry
+title: "Whether the discrepancy survives settlement"
+objective: >-
+  Establish whether an accepted discrepancy is still present once the
+  transaction settles, since a later reconciliation step often corrects what
+  the checkout accepted.

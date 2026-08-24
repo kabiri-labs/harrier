@@ -6,6 +6,11 @@ axis: technique
 surfaces:
   any_of: [business-workflow, payment, file-upload]
 
+order:
+  - HRR-BIZ-04-MAP
+  - HRR-BIZ-04-TIME
+  - HRR-BIZ-04-SECOND
+
 see_also: [HRR-BIZ-06]
 
 refs:

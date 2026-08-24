@@ -1,11 +1,15 @@
 id: HRR-BIZ-01
 title: "Business rule validation"
 domain: BIZ
-axis: asset
 kind: inquiry
 
 surfaces:
   any_of: [business-workflow, payment, export-report]
+
+order:
+  - HRR-BIZ-01-MAP
+  - HRR-BIZ-01-PROBE
+  - HRR-BIZ-01-IMPACT
 
 see_also: [HRR-BIZ-03]
 

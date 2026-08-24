@@ -1,11 +1,15 @@
 id: HRR-BIZ-06
 title: "Workflow sequencing"
 domain: BIZ
-axis: asset
 kind: inquiry
 
 surfaces:
   any_of: [business-workflow, payment]
+
+order:
+  - HRR-BIZ-06-MAP
+  - HRR-BIZ-06-PROBE
+  - HRR-BIZ-06-IMPACT
 
 see_also: [HRR-BIZ-04]
 
