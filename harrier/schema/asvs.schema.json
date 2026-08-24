@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pinned ASVS index",
+  "description": "Identifiers and structural names from a published ASVS release. Requirement text is deliberately absent and there is no field for it: ASVS is CC BY-SA, so reproducing the text would force share-alike onto this repository. A reference here is a pointer for report writing; remediation prose is written originally under mitigations/.",
+  "type": "object",
+  "required": ["version", "source", "source_ref", "source_commit", "source_sha256", "retrieved", "standard_version", "licence", "asvs"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"const": 1},
+    "source": {"type": "string", "minLength": 10},
+    "source_ref": {"type": "string", "minLength": 1},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "retrieved": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "standard_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "licence": {"type": "string", "minLength": 10},
+    "asvs": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["shortcode", "name", "sections"],
+        "properties": {
+          "shortcode": {"type": "string", "pattern": "^V[0-9]+$"},
+          "name": {"type": "string", "minLength": 3},
+          "sections": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["shortcode", "name", "requirements"],
+              "properties": {
+                "shortcode": {"type": "string", "pattern": "^V[0-9]+\\.[0-9]+$"},
+                "name": {"type": "string", "minLength": 3},
+                "requirements": {
+                  "type": "array", "minItems": 1,
+                  "items": {
+                    "type": "object", "additionalProperties": false,
+                    "required": ["shortcode", "level"],
+                    "properties": {
+                      "shortcode": {"type": "string", "pattern": "^V[0-9]+\\.[0-9]+\\.[0-9]+$"},
+                      "level": {"type": "integer", "minimum": 1, "maximum": 3}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

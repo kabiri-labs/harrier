@@ -1,0 +1,1034 @@
+# Pinned OWASP ASVS identifiers.
+#
+# Generated from the ASVS project's own machine-readable release, not from
+# memory. Every `refs.asvs` value in knowledge/ and mitigations/ is resolved
+# against this file.
+#
+# WHAT IS AND IS NOT HERE. ASVS 5.0.0 is licensed CC BY-SA 4.0 -- share-alike.
+# Reproducing its requirement text would force share-alike onto this repository,
+# so only identifiers, chapter and section names, and the verification level are
+# recorded. The requirement text is deliberately absent: an ASVS reference here
+# is a pointer for report writing, and remediation prose in mitigations/ is
+# written originally.
+#
+# This file is generated. Do not hand-edit it -- a hand-edit would make the
+# verification claim below empty.
+#
+# Refresh procedure:
+#   1. git ls-remote https://github.com/OWASP/ASVS 'refs/tags/*'   -> new source_commit
+#      Pin the TAG's commit, never the branch. A branch named v5.0.0 also exists
+#      and moves; the tag v5.0.0_release is the release.
+#   2. curl -sO https://raw.githubusercontent.com/OWASP/ASVS/<commit>/<path>
+#   3. sha256sum the file                                          -> new source_sha256
+#   4. Regenerate, update the pin fields, and review the diff. A diff that adds
+#      or removes a shortcode means refs.asvs values need review.
+#
+# Anyone can re-fetch the exact bytes this was built from and compare:
+#   curl -s https://raw.githubusercontent.com/OWASP/ASVS/<source_commit>/<source_path> | sha256sum
+version: 1
+source: "OWASP/ASVS 5.0/docs_en/OWASP_Application_Security_Verification_Standard_5.0.0_en.json"
+source_ref: "v5.0.0_release"
+source_commit: "5cf9b032440be53ce345ab3c130fda46ba1ce7a2"
+source_sha256: "bcdbec214d70abcfad9284a31d4f9e5134305831d628aad3aa85d7e26626cb35"
+retrieved: "2026-08-24"
+standard_version: "5.0.0"
+licence: "CC BY-SA 4.0 -- identifiers and structural names only; no requirement text reproduced"
+asvs:
+  - shortcode: V1
+    name: "Encoding and Sanitization"
+    sections:
+      - shortcode: V1.1
+        name: "Encoding and Sanitization Architecture"
+        requirements:
+          - shortcode: V1.1.1
+            level: 2
+          - shortcode: V1.1.2
+            level: 2
+      - shortcode: V1.2
+        name: "Injection Prevention"
+        requirements:
+          - shortcode: V1.2.1
+            level: 1
+          - shortcode: V1.2.2
+            level: 1
+          - shortcode: V1.2.3
+            level: 1
+          - shortcode: V1.2.4
+            level: 1
+          - shortcode: V1.2.5
+            level: 1
+          - shortcode: V1.2.6
+            level: 2
+          - shortcode: V1.2.7
+            level: 2
+          - shortcode: V1.2.8
+            level: 2
+          - shortcode: V1.2.9
+            level: 2
+          - shortcode: V1.2.10
+            level: 3
+      - shortcode: V1.3
+        name: "Sanitization"
+        requirements:
+          - shortcode: V1.3.1
+            level: 1
+          - shortcode: V1.3.2
+            level: 1
+          - shortcode: V1.3.3
+            level: 2
+          - shortcode: V1.3.4
+            level: 2
+          - shortcode: V1.3.5
+            level: 2
+          - shortcode: V1.3.6
+            level: 2
+          - shortcode: V1.3.7
+            level: 2
+          - shortcode: V1.3.8
+            level: 2
+          - shortcode: V1.3.9
+            level: 2
+          - shortcode: V1.3.10
+            level: 2
+          - shortcode: V1.3.11
+            level: 2
+          - shortcode: V1.3.12
+            level: 3
+      - shortcode: V1.4
+        name: "Memory, String, and Unmanaged Code"
+        requirements:
+          - shortcode: V1.4.1
+            level: 2
+          - shortcode: V1.4.2
+            level: 2
+          - shortcode: V1.4.3
+            level: 2
+      - shortcode: V1.5
+        name: "Safe Deserialization"
+        requirements:
+          - shortcode: V1.5.1
+            level: 1
+          - shortcode: V1.5.2
+            level: 2
+          - shortcode: V1.5.3
+            level: 3
+
+  - shortcode: V2
+    name: "Validation and Business Logic"
+    sections:
+      - shortcode: V2.1
+        name: "Validation and Business Logic Documentation"
+        requirements:
+          - shortcode: V2.1.1
+            level: 1
+          - shortcode: V2.1.2
+            level: 2
+          - shortcode: V2.1.3
+            level: 2
+      - shortcode: V2.2
+        name: "Input Validation"
+        requirements:
+          - shortcode: V2.2.1
+            level: 1
+          - shortcode: V2.2.2
+            level: 1
+          - shortcode: V2.2.3
+            level: 2
+      - shortcode: V2.3
+        name: "Business Logic Security"
+        requirements:
+          - shortcode: V2.3.1
+            level: 1
+          - shortcode: V2.3.2
+            level: 2
+          - shortcode: V2.3.3
+            level: 2
+          - shortcode: V2.3.4
+            level: 2
+          - shortcode: V2.3.5
+            level: 3
+      - shortcode: V2.4
+        name: "Anti-automation"
+        requirements:
+          - shortcode: V2.4.1
+            level: 2
+          - shortcode: V2.4.2
+            level: 3
+
+  - shortcode: V3
+    name: "Web Frontend Security"
+    sections:
+      - shortcode: V3.1
+        name: "Web Frontend Security Documentation"
+        requirements:
+          - shortcode: V3.1.1
+            level: 3
+      - shortcode: V3.2
+        name: "Unintended Content Interpretation"
+        requirements:
+          - shortcode: V3.2.1
+            level: 1
+          - shortcode: V3.2.2
+            level: 1
+          - shortcode: V3.2.3
+            level: 3
+      - shortcode: V3.3
+        name: "Cookie Setup"
+        requirements:
+          - shortcode: V3.3.1
+            level: 1
+          - shortcode: V3.3.2
+            level: 2
+          - shortcode: V3.3.3
+            level: 2
+          - shortcode: V3.3.4
+            level: 2
+          - shortcode: V3.3.5
+            level: 3
+      - shortcode: V3.4
+        name: "Browser Security Mechanism Headers"
+        requirements:
+          - shortcode: V3.4.1
+            level: 1
+          - shortcode: V3.4.2
+            level: 1
+          - shortcode: V3.4.3
+            level: 2
+          - shortcode: V3.4.4
+            level: 2
+          - shortcode: V3.4.5
+            level: 2
+          - shortcode: V3.4.6
+            level: 2
+          - shortcode: V3.4.7
+            level: 3
+          - shortcode: V3.4.8
+            level: 3
+      - shortcode: V3.5
+        name: "Browser Origin Separation"
+        requirements:
+          - shortcode: V3.5.1
+            level: 1
+          - shortcode: V3.5.2
+            level: 1
+          - shortcode: V3.5.3
+            level: 1
+          - shortcode: V3.5.4
+            level: 2
+          - shortcode: V3.5.5
+            level: 2
+          - shortcode: V3.5.6
+            level: 3
+          - shortcode: V3.5.7
+            level: 3
+          - shortcode: V3.5.8
+            level: 3
+      - shortcode: V3.6
+        name: "External Resource Integrity"
+        requirements:
+          - shortcode: V3.6.1
+            level: 3
+      - shortcode: V3.7
+        name: "Other Browser Security Considerations"
+        requirements:
+          - shortcode: V3.7.1
+            level: 2
+          - shortcode: V3.7.2
+            level: 2
+          - shortcode: V3.7.3
+            level: 3
+          - shortcode: V3.7.4
+            level: 3
+          - shortcode: V3.7.5
+            level: 3
+
+  - shortcode: V4
+    name: "API and Web Service"
+    sections:
+      - shortcode: V4.1
+        name: "Generic Web Service Security"
+        requirements:
+          - shortcode: V4.1.1
+            level: 1
+          - shortcode: V4.1.2
+            level: 2
+          - shortcode: V4.1.3
+            level: 2
+          - shortcode: V4.1.4
+            level: 3
+          - shortcode: V4.1.5
+            level: 3
+      - shortcode: V4.2
+        name: "HTTP Message Structure Validation"
+        requirements:
+          - shortcode: V4.2.1
+            level: 2
+          - shortcode: V4.2.2
+            level: 3
+          - shortcode: V4.2.3
+            level: 3
+          - shortcode: V4.2.4
+            level: 3
+          - shortcode: V4.2.5
+            level: 3
+      - shortcode: V4.3
+        name: "GraphQL"
+        requirements:
+          - shortcode: V4.3.1
+            level: 2
+          - shortcode: V4.3.2
+            level: 2
+      - shortcode: V4.4
+        name: "WebSocket"
+        requirements:
+          - shortcode: V4.4.1
+            level: 1
+          - shortcode: V4.4.2
+            level: 2
+          - shortcode: V4.4.3
+            level: 2
+          - shortcode: V4.4.4
+            level: 2
+
+  - shortcode: V5
+    name: "File Handling"
+    sections:
+      - shortcode: V5.1
+        name: "File Handling Documentation"
+        requirements:
+          - shortcode: V5.1.1
+            level: 2
+      - shortcode: V5.2
+        name: "File Upload and Content"
+        requirements:
+          - shortcode: V5.2.1
+            level: 1
+          - shortcode: V5.2.2
+            level: 1
+          - shortcode: V5.2.3
+            level: 2
+          - shortcode: V5.2.4
+            level: 3
+          - shortcode: V5.2.5
+            level: 3
+          - shortcode: V5.2.6
+            level: 3
+      - shortcode: V5.3
+        name: "File Storage"
+        requirements:
+          - shortcode: V5.3.1
+            level: 1
+          - shortcode: V5.3.2
+            level: 1
+          - shortcode: V5.3.3
+            level: 3
+      - shortcode: V5.4
+        name: "File Download"
+        requirements:
+          - shortcode: V5.4.1
+            level: 2
+          - shortcode: V5.4.2
+            level: 2
+          - shortcode: V5.4.3
+            level: 2
+
+  - shortcode: V6
+    name: "Authentication"
+    sections:
+      - shortcode: V6.1
+        name: "Authentication Documentation"
+        requirements:
+          - shortcode: V6.1.1
+            level: 1
+          - shortcode: V6.1.2
+            level: 2
+          - shortcode: V6.1.3
+            level: 2
+      - shortcode: V6.2
+        name: "Password Security"
+        requirements:
+          - shortcode: V6.2.1
+            level: 1
+          - shortcode: V6.2.2
+            level: 1
+          - shortcode: V6.2.3
+            level: 1
+          - shortcode: V6.2.4
+            level: 1
+          - shortcode: V6.2.5
+            level: 1
+          - shortcode: V6.2.6
+            level: 1
+          - shortcode: V6.2.7
+            level: 1
+          - shortcode: V6.2.8
+            level: 1
+          - shortcode: V6.2.9
+            level: 2
+          - shortcode: V6.2.10
+            level: 2
+          - shortcode: V6.2.11
+            level: 2
+          - shortcode: V6.2.12
+            level: 2
+      - shortcode: V6.3
+        name: "General Authentication Security"
+        requirements:
+          - shortcode: V6.3.1
+            level: 1
+          - shortcode: V6.3.2
+            level: 1
+          - shortcode: V6.3.3
+            level: 2
+          - shortcode: V6.3.4
+            level: 2
+          - shortcode: V6.3.5
+            level: 3
+          - shortcode: V6.3.6
+            level: 3
+          - shortcode: V6.3.7
+            level: 3
+          - shortcode: V6.3.8
+            level: 3
+      - shortcode: V6.4
+        name: "Authentication Factor Lifecycle and Recovery"
+        requirements:
+          - shortcode: V6.4.1
+            level: 1
+          - shortcode: V6.4.2
+            level: 1
+          - shortcode: V6.4.3
+            level: 2
+          - shortcode: V6.4.4
+            level: 2
+          - shortcode: V6.4.5
+            level: 3
+          - shortcode: V6.4.6
+            level: 3
+      - shortcode: V6.5
+        name: "General Multi-factor authentication requirements"
+        requirements:
+          - shortcode: V6.5.1
+            level: 2
+          - shortcode: V6.5.2
+            level: 2
+          - shortcode: V6.5.3
+            level: 2
+          - shortcode: V6.5.4
+            level: 2
+          - shortcode: V6.5.5
+            level: 2
+          - shortcode: V6.5.6
+            level: 3
+          - shortcode: V6.5.7
+            level: 3
+          - shortcode: V6.5.8
+            level: 3
+      - shortcode: V6.6
+        name: "Out-of-Band authentication mechanisms"
+        requirements:
+          - shortcode: V6.6.1
+            level: 2
+          - shortcode: V6.6.2
+            level: 2
+          - shortcode: V6.6.3
+            level: 2
+          - shortcode: V6.6.4
+            level: 3
+      - shortcode: V6.7
+        name: "Cryptographic authentication mechanism"
+        requirements:
+          - shortcode: V6.7.1
+            level: 3
+          - shortcode: V6.7.2
+            level: 3
+      - shortcode: V6.8
+        name: "Authentication with an Identity Provider"
+        requirements:
+          - shortcode: V6.8.1
+            level: 2
+          - shortcode: V6.8.2
+            level: 2
+          - shortcode: V6.8.3
+            level: 2
+          - shortcode: V6.8.4
+            level: 2
+
+  - shortcode: V7
+    name: "Session Management"
+    sections:
+      - shortcode: V7.1
+        name: "Session Management Documentation"
+        requirements:
+          - shortcode: V7.1.1
+            level: 2
+          - shortcode: V7.1.2
+            level: 2
+          - shortcode: V7.1.3
+            level: 2
+      - shortcode: V7.2
+        name: "Fundamental Session Management Security"
+        requirements:
+          - shortcode: V7.2.1
+            level: 1
+          - shortcode: V7.2.2
+            level: 1
+          - shortcode: V7.2.3
+            level: 1
+          - shortcode: V7.2.4
+            level: 1
+      - shortcode: V7.3
+        name: "Session Timeout"
+        requirements:
+          - shortcode: V7.3.1
+            level: 2
+          - shortcode: V7.3.2
+            level: 2
+      - shortcode: V7.4
+        name: "Session Termination"
+        requirements:
+          - shortcode: V7.4.1
+            level: 1
+          - shortcode: V7.4.2
+            level: 1
+          - shortcode: V7.4.3
+            level: 2
+          - shortcode: V7.4.4
+            level: 2
+          - shortcode: V7.4.5
+            level: 2
+      - shortcode: V7.5
+        name: "Defenses Against Session Abuse"
+        requirements:
+          - shortcode: V7.5.1
+            level: 2
+          - shortcode: V7.5.2
+            level: 2
+          - shortcode: V7.5.3
+            level: 3
+      - shortcode: V7.6
+        name: "Federated Re-authentication"
+        requirements:
+          - shortcode: V7.6.1
+            level: 2
+          - shortcode: V7.6.2
+            level: 2
+
+  - shortcode: V8
+    name: "Authorization"
+    sections:
+      - shortcode: V8.1
+        name: "Authorization Documentation"
+        requirements:
+          - shortcode: V8.1.1
+            level: 1
+          - shortcode: V8.1.2
+            level: 2
+          - shortcode: V8.1.3
+            level: 3
+          - shortcode: V8.1.4
+            level: 3
+      - shortcode: V8.2
+        name: "General Authorization Design"
+        requirements:
+          - shortcode: V8.2.1
+            level: 1
+          - shortcode: V8.2.2
+            level: 1
+          - shortcode: V8.2.3
+            level: 2
+          - shortcode: V8.2.4
+            level: 3
+      - shortcode: V8.3
+        name: "Operation Level Authorization"
+        requirements:
+          - shortcode: V8.3.1
+            level: 1
+          - shortcode: V8.3.2
+            level: 3
+          - shortcode: V8.3.3
+            level: 3
+      - shortcode: V8.4
+        name: "Other Authorization Considerations"
+        requirements:
+          - shortcode: V8.4.1
+            level: 2
+          - shortcode: V8.4.2
+            level: 3
+
+  - shortcode: V9
+    name: "Self-contained Tokens"
+    sections:
+      - shortcode: V9.1
+        name: "Token source and integrity"
+        requirements:
+          - shortcode: V9.1.1
+            level: 1
+          - shortcode: V9.1.2
+            level: 1
+          - shortcode: V9.1.3
+            level: 1
+      - shortcode: V9.2
+        name: "Token content"
+        requirements:
+          - shortcode: V9.2.1
+            level: 1
+          - shortcode: V9.2.2
+            level: 2
+          - shortcode: V9.2.3
+            level: 2
+          - shortcode: V9.2.4
+            level: 2
+
+  - shortcode: V10
+    name: "OAuth and OIDC"
+    sections:
+      - shortcode: V10.1
+        name: "Generic OAuth and OIDC Security"
+        requirements:
+          - shortcode: V10.1.1
+            level: 2
+          - shortcode: V10.1.2
+            level: 2
+      - shortcode: V10.2
+        name: "OAuth Client"
+        requirements:
+          - shortcode: V10.2.1
+            level: 2
+          - shortcode: V10.2.2
+            level: 2
+          - shortcode: V10.2.3
+            level: 3
+      - shortcode: V10.3
+        name: "OAuth Resource Server"
+        requirements:
+          - shortcode: V10.3.1
+            level: 2
+          - shortcode: V10.3.2
+            level: 2
+          - shortcode: V10.3.3
+            level: 2
+          - shortcode: V10.3.4
+            level: 2
+          - shortcode: V10.3.5
+            level: 3
+      - shortcode: V10.4
+        name: "OAuth Authorization Server"
+        requirements:
+          - shortcode: V10.4.1
+            level: 1
+          - shortcode: V10.4.2
+            level: 1
+          - shortcode: V10.4.3
+            level: 1
+          - shortcode: V10.4.4
+            level: 1
+          - shortcode: V10.4.5
+            level: 1
+          - shortcode: V10.4.6
+            level: 2
+          - shortcode: V10.4.7
+            level: 2
+          - shortcode: V10.4.8
+            level: 2
+          - shortcode: V10.4.9
+            level: 2
+          - shortcode: V10.4.10
+            level: 2
+          - shortcode: V10.4.11
+            level: 2
+          - shortcode: V10.4.12
+            level: 3
+          - shortcode: V10.4.13
+            level: 3
+          - shortcode: V10.4.14
+            level: 3
+          - shortcode: V10.4.15
+            level: 3
+          - shortcode: V10.4.16
+            level: 3
+      - shortcode: V10.5
+        name: "OIDC Client"
+        requirements:
+          - shortcode: V10.5.1
+            level: 2
+          - shortcode: V10.5.2
+            level: 2
+          - shortcode: V10.5.3
+            level: 2
+          - shortcode: V10.5.4
+            level: 2
+          - shortcode: V10.5.5
+            level: 2
+      - shortcode: V10.6
+        name: "OpenID Provider"
+        requirements:
+          - shortcode: V10.6.1
+            level: 2
+          - shortcode: V10.6.2
+            level: 2
+      - shortcode: V10.7
+        name: "Consent Management"
+        requirements:
+          - shortcode: V10.7.1
+            level: 2
+          - shortcode: V10.7.2
+            level: 2
+          - shortcode: V10.7.3
+            level: 2
+
+  - shortcode: V11
+    name: "Cryptography"
+    sections:
+      - shortcode: V11.1
+        name: "Cryptographic Inventory and Documentation"
+        requirements:
+          - shortcode: V11.1.1
+            level: 2
+          - shortcode: V11.1.2
+            level: 2
+          - shortcode: V11.1.3
+            level: 3
+          - shortcode: V11.1.4
+            level: 3
+      - shortcode: V11.2
+        name: "Secure Cryptography Implementation"
+        requirements:
+          - shortcode: V11.2.1
+            level: 2
+          - shortcode: V11.2.2
+            level: 2
+          - shortcode: V11.2.3
+            level: 2
+          - shortcode: V11.2.4
+            level: 3
+          - shortcode: V11.2.5
+            level: 3
+      - shortcode: V11.3
+        name: "Encryption Algorithms"
+        requirements:
+          - shortcode: V11.3.1
+            level: 1
+          - shortcode: V11.3.2
+            level: 1
+          - shortcode: V11.3.3
+            level: 2
+          - shortcode: V11.3.4
+            level: 3
+          - shortcode: V11.3.5
+            level: 3
+      - shortcode: V11.4
+        name: "Hashing and Hash-based Functions"
+        requirements:
+          - shortcode: V11.4.1
+            level: 1
+          - shortcode: V11.4.2
+            level: 2
+          - shortcode: V11.4.3
+            level: 2
+          - shortcode: V11.4.4
+            level: 2
+      - shortcode: V11.5
+        name: "Random Values"
+        requirements:
+          - shortcode: V11.5.1
+            level: 2
+          - shortcode: V11.5.2
+            level: 3
+      - shortcode: V11.6
+        name: "Public Key Cryptography"
+        requirements:
+          - shortcode: V11.6.1
+            level: 2
+          - shortcode: V11.6.2
+            level: 3
+      - shortcode: V11.7
+        name: "In-Use Data Cryptography"
+        requirements:
+          - shortcode: V11.7.1
+            level: 3
+          - shortcode: V11.7.2
+            level: 3
+
+  - shortcode: V12
+    name: "Secure Communication"
+    sections:
+      - shortcode: V12.1
+        name: "General TLS Security Guidance"
+        requirements:
+          - shortcode: V12.1.1
+            level: 1
+          - shortcode: V12.1.2
+            level: 2
+          - shortcode: V12.1.3
+            level: 2
+          - shortcode: V12.1.4
+            level: 3
+          - shortcode: V12.1.5
+            level: 3
+      - shortcode: V12.2
+        name: "HTTPS Communication with External Facing Services"
+        requirements:
+          - shortcode: V12.2.1
+            level: 1
+          - shortcode: V12.2.2
+            level: 1
+      - shortcode: V12.3
+        name: "General Service to Service Communication Security"
+        requirements:
+          - shortcode: V12.3.1
+            level: 2
+          - shortcode: V12.3.2
+            level: 2
+          - shortcode: V12.3.3
+            level: 2
+          - shortcode: V12.3.4
+            level: 2
+          - shortcode: V12.3.5
+            level: 3
+
+  - shortcode: V13
+    name: "Configuration"
+    sections:
+      - shortcode: V13.1
+        name: "Configuration Documentation"
+        requirements:
+          - shortcode: V13.1.1
+            level: 2
+          - shortcode: V13.1.2
+            level: 3
+          - shortcode: V13.1.3
+            level: 3
+          - shortcode: V13.1.4
+            level: 3
+      - shortcode: V13.2
+        name: "Backend Communication Configuration"
+        requirements:
+          - shortcode: V13.2.1
+            level: 2
+          - shortcode: V13.2.2
+            level: 2
+          - shortcode: V13.2.3
+            level: 2
+          - shortcode: V13.2.4
+            level: 2
+          - shortcode: V13.2.5
+            level: 2
+          - shortcode: V13.2.6
+            level: 3
+      - shortcode: V13.3
+        name: "Secret Management"
+        requirements:
+          - shortcode: V13.3.1
+            level: 2
+          - shortcode: V13.3.2
+            level: 2
+          - shortcode: V13.3.3
+            level: 3
+          - shortcode: V13.3.4
+            level: 3
+      - shortcode: V13.4
+        name: "Unintended Information Leakage"
+        requirements:
+          - shortcode: V13.4.1
+            level: 1
+          - shortcode: V13.4.2
+            level: 2
+          - shortcode: V13.4.3
+            level: 2
+          - shortcode: V13.4.4
+            level: 2
+          - shortcode: V13.4.5
+            level: 2
+          - shortcode: V13.4.6
+            level: 3
+          - shortcode: V13.4.7
+            level: 3
+
+  - shortcode: V14
+    name: "Data Protection"
+    sections:
+      - shortcode: V14.1
+        name: "Data Protection Documentation"
+        requirements:
+          - shortcode: V14.1.1
+            level: 2
+          - shortcode: V14.1.2
+            level: 2
+      - shortcode: V14.2
+        name: "General Data Protection"
+        requirements:
+          - shortcode: V14.2.1
+            level: 1
+          - shortcode: V14.2.2
+            level: 2
+          - shortcode: V14.2.3
+            level: 2
+          - shortcode: V14.2.4
+            level: 2
+          - shortcode: V14.2.5
+            level: 3
+          - shortcode: V14.2.6
+            level: 3
+          - shortcode: V14.2.7
+            level: 3
+          - shortcode: V14.2.8
+            level: 3
+      - shortcode: V14.3
+        name: "Client-side Data Protection"
+        requirements:
+          - shortcode: V14.3.1
+            level: 1
+          - shortcode: V14.3.2
+            level: 2
+          - shortcode: V14.3.3
+            level: 2
+
+  - shortcode: V15
+    name: "Secure Coding and Architecture"
+    sections:
+      - shortcode: V15.1
+        name: "Secure Coding and Architecture Documentation"
+        requirements:
+          - shortcode: V15.1.1
+            level: 1
+          - shortcode: V15.1.2
+            level: 2
+          - shortcode: V15.1.3
+            level: 2
+          - shortcode: V15.1.4
+            level: 3
+          - shortcode: V15.1.5
+            level: 3
+      - shortcode: V15.2
+        name: "Security Architecture and Dependencies"
+        requirements:
+          - shortcode: V15.2.1
+            level: 1
+          - shortcode: V15.2.2
+            level: 2
+          - shortcode: V15.2.3
+            level: 2
+          - shortcode: V15.2.4
+            level: 3
+          - shortcode: V15.2.5
+            level: 3
+      - shortcode: V15.3
+        name: "Defensive Coding"
+        requirements:
+          - shortcode: V15.3.1
+            level: 1
+          - shortcode: V15.3.2
+            level: 2
+          - shortcode: V15.3.3
+            level: 2
+          - shortcode: V15.3.4
+            level: 2
+          - shortcode: V15.3.5
+            level: 2
+          - shortcode: V15.3.6
+            level: 2
+          - shortcode: V15.3.7
+            level: 2
+      - shortcode: V15.4
+        name: "Safe Concurrency"
+        requirements:
+          - shortcode: V15.4.1
+            level: 3
+          - shortcode: V15.4.2
+            level: 3
+          - shortcode: V15.4.3
+            level: 3
+          - shortcode: V15.4.4
+            level: 3
+
+  - shortcode: V16
+    name: "Security Logging and Error Handling"
+    sections:
+      - shortcode: V16.1
+        name: "Security Logging Documentation"
+        requirements:
+          - shortcode: V16.1.1
+            level: 2
+      - shortcode: V16.2
+        name: "General Logging"
+        requirements:
+          - shortcode: V16.2.1
+            level: 2
+          - shortcode: V16.2.2
+            level: 2
+          - shortcode: V16.2.3
+            level: 2
+          - shortcode: V16.2.4
+            level: 2
+          - shortcode: V16.2.5
+            level: 2
+      - shortcode: V16.3
+        name: "Security Events"
+        requirements:
+          - shortcode: V16.3.1
+            level: 2
+          - shortcode: V16.3.2
+            level: 2
+          - shortcode: V16.3.3
+            level: 2
+          - shortcode: V16.3.4
+            level: 2
+      - shortcode: V16.4
+        name: "Log Protection"
+        requirements:
+          - shortcode: V16.4.1
+            level: 2
+          - shortcode: V16.4.2
+            level: 2
+          - shortcode: V16.4.3
+            level: 2
+      - shortcode: V16.5
+        name: "Error Handling"
+        requirements:
+          - shortcode: V16.5.1
+            level: 2
+          - shortcode: V16.5.2
+            level: 2
+          - shortcode: V16.5.3
+            level: 2
+          - shortcode: V16.5.4
+            level: 3
+
+  - shortcode: V17
+    name: "WebRTC"
+    sections:
+      - shortcode: V17.1
+        name: "TURN Server"
+        requirements:
+          - shortcode: V17.1.1
+            level: 2
+          - shortcode: V17.1.2
+            level: 3
+      - shortcode: V17.2
+        name: "Media"
+        requirements:
+          - shortcode: V17.2.1
+            level: 2
+          - shortcode: V17.2.2
+            level: 2
+          - shortcode: V17.2.3
+            level: 2
+          - shortcode: V17.2.4
+            level: 2
+          - shortcode: V17.2.5
+            level: 3
+          - shortcode: V17.2.6
+            level: 3
+          - shortcode: V17.2.7
+            level: 3
+          - shortcode: V17.2.8
+            level: 3
+      - shortcode: V17.3
+        name: "Signaling"
+        requirements:
+          - shortcode: V17.3.1
+            level: 2
+          - shortcode: V17.3.2
+            level: 2
+
