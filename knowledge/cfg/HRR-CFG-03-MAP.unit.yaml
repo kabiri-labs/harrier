@@ -1,0 +1,9 @@
+id: HRR-CFG-03-MAP
+topic: HRR-CFG-03
+status: outline
+kind: recon
+title: "The administrative interfaces the platform provides"
+objective: >-
+  Record which administrative interfaces this platform and its components ship
+  with, and at which paths, since an interface nobody looked for is not an
+  interface nobody deployed.

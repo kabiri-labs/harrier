@@ -1,0 +1,8 @@
+id: HRR-RCN-06-MAP
+topic: HRR-RCN-06
+status: outline
+kind: recon
+title: "The interface as its own client and specification describe it"
+objective: >-
+  Record the endpoints, operations and parameters named by specifications,
+  client bundles and observed traffic.

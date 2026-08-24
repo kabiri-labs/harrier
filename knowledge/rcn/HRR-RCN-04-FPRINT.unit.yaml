@@ -1,0 +1,9 @@
+id: HRR-RCN-04-FPRINT
+topic: HRR-RCN-04
+status: outline
+kind: recon
+title: "What each intermediary is"
+objective: >-
+  Record which product each intermediary is -- content delivery, filtering,
+  load balancing, gateway -- since each rewrites requests in ways the tests
+  downstream must account for.

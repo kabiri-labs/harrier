@@ -6,6 +6,9 @@ axis: phase
 surfaces:
   any_of: [plugin-policy]
 
+order:
+  - HRR-CFG-06-PROBE
+
 boundaries:
   - subject: "Current cross-origin sharing"
     home: HRR-CLT-06

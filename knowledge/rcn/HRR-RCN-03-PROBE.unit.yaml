@@ -1,0 +1,8 @@
+id: HRR-RCN-03-PROBE
+topic: HRR-RCN-03
+status: outline
+kind: recon
+title: "Parameters accepted but never sent by the client"
+objective: >-
+  Record parameters the application accepts that its own client never sends,
+  since those are the ones no interface constrains.

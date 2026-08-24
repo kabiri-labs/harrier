@@ -1,0 +1,9 @@
+id: HRR-RCN-04-MAP
+topic: HRR-RCN-04
+status: outline
+kind: recon
+title: "The tiers a request passes through"
+objective: >-
+  Record the sequence of intermediaries a request crosses and where it is
+  finally answered, since a control observed at one tier says nothing about
+  the next.

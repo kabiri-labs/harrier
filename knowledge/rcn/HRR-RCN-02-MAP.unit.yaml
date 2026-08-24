@@ -1,0 +1,9 @@
+id: HRR-RCN-02-MAP
+topic: HRR-RCN-02
+status: outline
+kind: recon
+title: "The names, certificates and addresses belonging to the target"
+objective: >-
+  Record the DNS names, certificate subjects and address ranges that belong to
+  the target, since the surface is defined by this list and nothing outside it
+  may be touched.

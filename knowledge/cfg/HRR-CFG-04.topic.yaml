@@ -6,6 +6,10 @@ axis: phase
 surfaces:
   always: true
 
+order:
+  - HRR-CFG-04-PROBE
+  - HRR-CFG-04-IMPACT
+
 boundaries:
   - subject: "Bypassing access control by changing the verb"
     home: HRR-ACL-05

@@ -1,0 +1,7 @@
+id: HRR-CFG-05-POLICY
+topic: HRR-CFG-05
+status: outline
+title: "What the declared policies permit"
+objective: >-
+  Determine what the security headers a response carries actually permit, as
+  opposed to what their presence suggests.

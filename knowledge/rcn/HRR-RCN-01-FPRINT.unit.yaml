@@ -1,0 +1,9 @@
+id: HRR-RCN-01-FPRINT
+topic: HRR-RCN-01
+status: outline
+kind: recon
+title: "The product and version answering at the origin"
+objective: >-
+  Record which server, platform and application framework answer the request,
+  and at what version, since that is the input every version-specific decision
+  later reads.

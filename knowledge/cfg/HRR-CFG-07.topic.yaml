@@ -6,6 +6,10 @@ axis: property
 surfaces:
   always: true
 
+order:
+  - HRR-CFG-07-SERVING
+  - HRR-CFG-07-STORAGE
+
 refs:
   wstg: [WSTG-CONF-09]
   cwe: [732]

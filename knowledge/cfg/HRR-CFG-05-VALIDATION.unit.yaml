@@ -1,0 +1,8 @@
+id: HRR-CFG-05-VALIDATION
+topic: HRR-CFG-05
+status: outline
+title: "Whether each declared policy is effective as written"
+objective: >-
+  Determine whether each declared policy is one a browser will honour, since a
+  directive that is misspelled, superseded or unsupported is a policy in the
+  response and not in the browser.

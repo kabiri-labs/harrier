@@ -1,0 +1,8 @@
+id: HRR-RCN-05-MAP
+topic: HRR-RCN-05
+status: outline
+kind: recon
+title: "The clients and channels carrying the application's traffic"
+objective: >-
+  Record which clients speak to the application and over which channels, since
+  a channel nobody captured is a surface nobody tested.

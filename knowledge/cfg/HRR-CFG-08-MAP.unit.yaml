@@ -1,0 +1,9 @@
+id: HRR-CFG-08-MAP
+topic: HRR-CFG-08
+status: outline
+kind: recon
+title: "The delegated names and what each points at"
+objective: >-
+  Record every name the target delegates and the third-party service each
+  resolves to, since a takeover is only possible where the delegation outlives
+  the resource.

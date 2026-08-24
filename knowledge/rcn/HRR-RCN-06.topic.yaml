@@ -7,6 +7,10 @@ kind: recon
 surfaces:
   any_of: [rest-api, graphql, websocket]
 
+order:
+  - HRR-RCN-06-MAP
+  - HRR-RCN-06-PROBE
+
 see_also: [HRR-RCN-07]
 
 refs:

@@ -6,6 +6,10 @@ axis: phase
 surfaces:
   any_of: [admin-panel, privileged-function]
 
+order:
+  - HRR-CFG-03-MAP
+  - HRR-CFG-03-PROBE
+
 boundaries:
   - subject: "Whether the interface enforces authorization once reached"
     home: HRR-ACL-03

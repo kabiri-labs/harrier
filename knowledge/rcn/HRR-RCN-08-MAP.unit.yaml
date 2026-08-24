@@ -1,0 +1,8 @@
+id: HRR-RCN-08-MAP
+topic: HRR-RCN-08
+status: outline
+kind: recon
+title: "What the metafiles declare"
+objective: >-
+  Record the paths and directives declared by robots.txt, sitemaps and well-
+  known documents, which are the target's own statement of what it publishes.

@@ -1,0 +1,9 @@
+id: HRR-RCN-01-VERIFY
+topic: HRR-RCN-01
+status: outline
+kind: recon
+title: "Corroboration from a signal the operator does not edit"
+objective: >-
+  Record whether the identification survives a signal the operator is unlikely
+  to have changed, since banners are edited far more often than parsing quirks
+  are.

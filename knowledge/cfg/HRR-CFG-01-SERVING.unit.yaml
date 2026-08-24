@@ -1,0 +1,8 @@
+id: HRR-CFG-01-SERVING
+topic: HRR-CFG-01
+status: outline
+title: "What the platform serves besides the application"
+objective: >-
+  Determine whether the platform serves components that are not the
+  application -- sample content, management consoles, status endpoints -- to a
+  caller who should not reach them.

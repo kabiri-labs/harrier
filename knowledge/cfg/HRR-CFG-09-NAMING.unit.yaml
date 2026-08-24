@@ -1,0 +1,7 @@
+id: HRR-CFG-09-NAMING
+topic: HRR-CFG-09
+status: outline
+title: "Whether object names can be enumerated"
+objective: >-
+  Determine whether object names are predictable enough that a caller can
+  reach objects it was never given a link to.

@@ -1,0 +1,9 @@
+id: HRR-RCN-03-MAP
+topic: HRR-RCN-03
+status: outline
+kind: recon
+title: "The requests the application issues and what each carries"
+objective: >-
+  Record every request the application itself issues and the parameters each
+  carries, since this inventory is the input every injection and access-
+  control test reads.

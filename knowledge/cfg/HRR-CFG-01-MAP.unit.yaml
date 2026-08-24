@@ -1,0 +1,8 @@
+id: HRR-CFG-01-MAP
+topic: HRR-CFG-01
+status: outline
+kind: recon
+title: "The services and ports reachable for the target"
+objective: >-
+  Record which services answer on the target's addresses and what each is,
+  since the application is only one of the things a host serves.

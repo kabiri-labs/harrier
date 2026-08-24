@@ -1,0 +1,9 @@
+id: HRR-CFG-02-MAP
+topic: HRR-CFG-02
+status: outline
+kind: recon
+title: "The naming the application's own files suggest"
+objective: >-
+  Record the naming conventions, extensions and directory shapes the
+  application's own served files reveal, since that is what makes a guess
+  about unlinked files informed rather than random.
