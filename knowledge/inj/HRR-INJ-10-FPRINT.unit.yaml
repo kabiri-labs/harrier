@@ -1,0 +1,8 @@
+id: HRR-INJ-10-FPRINT
+topic: HRR-INJ-10
+status: outline
+kind: recon
+title: "Template engine fingerprint"
+objective: >-
+  Establish which template engine evaluates the expression, since syntax and
+  reachable objects differ entirely between them.

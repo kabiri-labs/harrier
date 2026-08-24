@@ -6,6 +6,11 @@ axis: technique
 surfaces:
   any_of: [mail-ingest]
 
+order:
+  - HRR-INJ-06-PROBE
+  - HRR-INJ-06-IMPACT
+  - HRR-INJ-06-EVADE
+
 refs:
   wstg: [WSTG-INPV-10]
   cwe: [93]

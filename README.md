@@ -71,7 +71,7 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 101 tests, offline
+python -m unittest discover -s tests -t .   # 103 tests, offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
 ```
@@ -82,13 +82,14 @@ rule is mechanical rather than a review comment.
 
 ## Status
 
-Phases 0 to 2 of seven. The model, the vocabularies and the machine checks are
+Phases 0 to 2 of seven, and phase 3 in progress. The model, the vocabularies and the machine checks are
 settled, and the taxonomy's top level exists: **99 topics across 13 domains**,
 every resolvable WSTG identifier claimed by one, with the boundaries between
 neighbouring topics written down.
 
-What does not exist yet is the level below — the units a person actually
-performs. That is phase 3, and it is where the artefact becomes useful.
+The level below — the units a person actually performs — is being written now, in
+batches of two or three domains. **75 units exist under server-side injection and
+resource handling**; the remaining eleven domains are outstanding.
 [`docs/ROADMAP.md`](docs/ROADMAP.md) carries the plan and the definition of 1.0.
 
 ## Licence and attribution

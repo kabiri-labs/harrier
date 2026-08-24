@@ -32,22 +32,22 @@ class UnitSlugsComeFromTheDeclaredAxis(SandboxCase):
 
     def test_a_slug_from_the_declared_axis_is_accepted(self):
         self.box.add_topic(axis="technique")
-        self.box.add_unit(id="HRR-INJ-01-UNION")
+        self.box.add_unit(id="HRR-AUT-01-UNION")
         self.assertAccepted()
 
     def test_a_universal_phase_slug_is_accepted_on_any_axis(self):
         self.box.add_topic(axis="technique")
-        self.box.add_unit(id="HRR-INJ-01-PROBE")
+        self.box.add_unit(id="HRR-AUT-01-PROBE")
         self.assertAccepted()
 
     def test_a_slug_from_another_axis_is_rejected(self):
         self.box.add_topic(axis="technique")
-        self.box.add_unit(id="HRR-INJ-01-HTMLBODY")
+        self.box.add_unit(id="HRR-AUT-01-HTMLBODY")
         self.assertRejected("is not in the technique vocabulary")
 
     def test_an_invented_slug_is_rejected(self):
         self.box.add_topic(axis="technique")
-        self.box.add_unit(id="HRR-INJ-01-CLEVER")
+        self.box.add_unit(id="HRR-AUT-01-CLEVER")
         self.assertRejected("is not in the technique vocabulary")
 
     def test_an_unknown_axis_on_the_topic_is_rejected(self):
@@ -89,20 +89,20 @@ class OrderingReachesEveryUnit(SandboxCase):
     """A unit no ordering reaches is a silent coverage hole."""
 
     def test_a_complete_order_is_accepted(self):
-        self.box.add_topic(order=["HRR-INJ-01-PROBE", "HRR-INJ-01-UNION"])
-        self.box.add_unit(id="HRR-INJ-01-PROBE")
-        self.box.add_unit(id="HRR-INJ-01-UNION")
+        self.box.add_topic(order=["HRR-AUT-01-PROBE", "HRR-AUT-01-UNION"])
+        self.box.add_unit(id="HRR-AUT-01-PROBE")
+        self.box.add_unit(id="HRR-AUT-01-UNION")
         self.assertAccepted()
 
     def test_a_unit_missing_from_order_is_rejected(self):
-        self.box.add_topic(order=["HRR-INJ-01-PROBE"])
-        self.box.add_unit(id="HRR-INJ-01-PROBE")
-        self.box.add_unit(id="HRR-INJ-01-UNION")
-        self.assertRejected("HRR-INJ-01-UNION is missing from order")
+        self.box.add_topic(order=["HRR-AUT-01-PROBE"])
+        self.box.add_unit(id="HRR-AUT-01-PROBE")
+        self.box.add_unit(id="HRR-AUT-01-UNION")
+        self.assertRejected("HRR-AUT-01-UNION is missing from order")
 
     def test_order_naming_a_unit_of_another_topic_is_rejected(self):
-        self.box.add_topic(order=["HRR-INJ-01-PROBE", "HRR-CLT-01-HTMLBODY"])
-        self.box.add_unit(id="HRR-INJ-01-PROBE")
+        self.box.add_topic(order=["HRR-AUT-01-PROBE", "HRR-CLT-01-HTMLBODY"])
+        self.box.add_unit(id="HRR-AUT-01-PROBE")
         self.assertRejected("which is not a unit of this topic")
 
 

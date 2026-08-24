@@ -1,0 +1,7 @@
+id: HRR-INJ-01-BOOL
+topic: HRR-INJ-01
+status: outline
+title: "Boolean-based inference"
+objective: >-
+  Determine whether a condition the tester controls produces two reliably
+  distinguishable responses from the same request.

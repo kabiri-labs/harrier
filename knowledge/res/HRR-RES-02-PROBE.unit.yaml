@@ -1,0 +1,8 @@
+id: HRR-RES-02-PROBE
+topic: HRR-RES-02
+status: outline
+kind: recon
+title: "Upload acceptance baseline"
+objective: >-
+  Establish which file types, sizes and content the endpoint accepts without
+  complaint, and where the accepted object is afterwards reachable.

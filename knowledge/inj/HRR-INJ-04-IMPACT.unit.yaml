@@ -1,0 +1,7 @@
+id: HRR-INJ-04-IMPACT
+topic: HRR-INJ-04
+status: outline
+title: "Established reach of directive interpretation"
+objective: >-
+  Determine whether the interpreted directive permits reading a file,
+  disclosing an environment value, or executing a command.

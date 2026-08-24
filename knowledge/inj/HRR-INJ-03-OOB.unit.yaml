@@ -1,0 +1,7 @@
+id: HRR-INJ-03-OOB
+topic: HRR-INJ-03
+status: outline
+title: "Out-of-band entity resolution"
+objective: >-
+  Determine whether an external entity causes the parser to initiate a network
+  request to a location the tester chose.

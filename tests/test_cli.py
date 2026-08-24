@@ -50,7 +50,7 @@ class FailureOutput(unittest.TestCase):
         self.box.add_topic(axis="vibes")
         status, _, err = run(["--root", str(self.box.root), "validate"])
         self.assertEqual(status, EXIT_FAILED)
-        self.assertIn("HRR-INJ-01.topic.yaml", err)
+        self.assertIn("HRR-AUT-01.topic.yaml", err)
         self.assertIn("unknown axis vibes", err)
 
     def test_every_problem_is_reported_in_one_pass(self):

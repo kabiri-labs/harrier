@@ -1,0 +1,7 @@
+id: HRR-INJ-05-PROBE
+topic: HRR-INJ-05
+status: outline
+title: "Expression metacharacter probe"
+objective: >-
+  Determine whether a quote or bracket alters the selected node set in a way
+  the same request without it does not.

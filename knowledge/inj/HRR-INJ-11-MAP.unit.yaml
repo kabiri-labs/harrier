@@ -1,0 +1,8 @@
+id: HRR-INJ-11-MAP
+topic: HRR-INJ-11
+status: outline
+kind: recon
+title: "Message schema enumeration"
+objective: >-
+  Establish which message types the socket accepts and which fields of each
+  reach server-side processing.

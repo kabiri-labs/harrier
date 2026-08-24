@@ -1,0 +1,7 @@
+id: HRR-INJ-07-ERROR
+topic: HRR-INJ-07
+status: outline
+title: "Error-based inference"
+objective: >-
+  Determine whether a deliberately invalid expression produces a language error
+  naming the evaluator or the failing construct.

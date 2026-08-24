@@ -1,0 +1,7 @@
+id: HRR-INJ-03-ERROR
+topic: HRR-INJ-03
+status: outline
+title: "Error-based disclosure"
+objective: >-
+  Determine whether a parser error caused by an unresolvable entity discloses a
+  filesystem path or the content it attempted to read.

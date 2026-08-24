@@ -1,0 +1,7 @@
+id: HRR-RES-02-NAMING
+topic: HRR-RES-02
+status: outline
+title: "Supplied filename handling"
+objective: >-
+  Determine whether an attacker-chosen filename can traverse outside the
+  storage directory or overwrite an existing object.

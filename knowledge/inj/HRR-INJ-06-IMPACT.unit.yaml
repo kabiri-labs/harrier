@@ -1,0 +1,7 @@
+id: HRR-INJ-06-IMPACT
+topic: HRR-INJ-06
+status: outline
+title: "Established reach of injected lines"
+objective: >-
+  Determine whether the surviving line break permits adding a recipient,
+  replacing a header, or appending attacker-chosen body content.

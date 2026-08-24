@@ -1,0 +1,7 @@
+id: HRR-INJ-01-STACK
+topic: HRR-INJ-01
+status: outline
+title: "Stacked statement execution"
+objective: >-
+  Determine whether a second statement, separated from the first, is executed
+  by the driver rather than rejected.

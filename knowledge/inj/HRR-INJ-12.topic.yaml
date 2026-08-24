@@ -8,6 +8,13 @@ surfaces:
 
 see_also: [HRR-INJ-01]
 
+order:
+  - HRR-INJ-12-MAP
+  - HRR-INJ-12-PROBE
+  - HRR-INJ-12-ERROR
+  - HRR-INJ-12-TIME
+  - HRR-INJ-12-OOB
+
 refs:
   wstg: [WSTG-APIT-99]
   cwe: [74]

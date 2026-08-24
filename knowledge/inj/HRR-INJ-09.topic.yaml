@@ -6,6 +6,11 @@ axis: technique
 surfaces:
   any_of: [template-param, search]
 
+order:
+  - HRR-INJ-09-PROBE
+  - HRR-INJ-09-ERROR
+  - HRR-INJ-09-IMPACT
+
 refs:
   wstg: [WSTG-INPV-13]
   cwe: [134]

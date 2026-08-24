@@ -1,0 +1,7 @@
+id: HRR-INJ-01-TIME
+topic: HRR-INJ-01
+status: outline
+title: "Time-based inference"
+objective: >-
+  Determine whether a conditional delay the tester injects is reproducibly
+  observable in response latency.

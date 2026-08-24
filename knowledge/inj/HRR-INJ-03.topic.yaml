@@ -15,6 +15,13 @@ boundaries:
 
 see_also: [HRR-RES-03]
 
+order:
+  - HRR-INJ-03-PROBE
+  - HRR-INJ-03-ERROR
+  - HRR-INJ-03-OOB
+  - HRR-INJ-03-IMPACT
+  - HRR-INJ-03-EVADE
+
 refs:
   wstg: [WSTG-INPV-07]
   cwe: [91, 611]

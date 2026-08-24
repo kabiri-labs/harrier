@@ -1,0 +1,7 @@
+id: HRR-INJ-04-PROBE
+topic: HRR-INJ-04
+status: outline
+title: "Directive interpretation probe"
+objective: >-
+  Determine whether a server-side include directive is interpreted rather than
+  returned as literal text.

@@ -1,0 +1,8 @@
+id: HRR-INJ-12-MAP
+topic: HRR-INJ-12
+status: outline
+kind: recon
+title: "Resolver argument enumeration"
+objective: >-
+  Establish which arguments each resolver accepts and which of them reach a
+  datastore or an external call.
