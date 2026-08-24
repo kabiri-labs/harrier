@@ -1,0 +1,7 @@
+id: HRR-SES-07-IDLE
+topic: HRR-SES-07
+status: outline
+title: "Inactivity limit"
+objective: >-
+  Determine whether a session left unused is ended after a bounded period of
+  inactivity.

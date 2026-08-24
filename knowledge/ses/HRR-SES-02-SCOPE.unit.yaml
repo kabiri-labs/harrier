@@ -1,0 +1,7 @@
+id: HRR-SES-02-SCOPE
+topic: HRR-SES-02
+status: outline
+title: "Domain and path reach"
+objective: >-
+  Determine whether the cookie is scoped to more hosts or paths than the
+  application that issued it occupies.

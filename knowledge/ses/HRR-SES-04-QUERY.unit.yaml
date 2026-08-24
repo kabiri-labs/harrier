@@ -1,0 +1,7 @@
+id: HRR-SES-04-QUERY
+topic: HRR-SES-04
+status: outline
+title: "Identifier carried in the query string"
+objective: >-
+  Determine whether the session identifier appears in a query string, where
+  proxies, logs and history retain it.

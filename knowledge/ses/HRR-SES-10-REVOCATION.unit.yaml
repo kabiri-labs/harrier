@@ -1,0 +1,7 @@
+id: HRR-SES-10-REVOCATION
+topic: HRR-SES-10
+status: outline
+title: "Invalidation before expiry"
+objective: >-
+  Determine whether a token can be invalidated before its expiry claim, and
+  whether an invalidated one is then refused.

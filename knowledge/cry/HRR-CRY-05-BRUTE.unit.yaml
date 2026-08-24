@@ -1,0 +1,7 @@
+id: HRR-CRY-05-BRUTE
+topic: HRR-CRY-05
+status: outline
+title: "Symmetric key recovery"
+objective: >-
+  Determine whether a shared signing key is weak enough to recover offline from
+  a single captured token.

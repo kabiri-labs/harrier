@@ -183,7 +183,7 @@ and block every destination that is not already public.
 
 ### `property` — which security property of one mechanism is under test
 
-`ENTROPY` · `SCOPE` · `EXPIRY` · `ROTATION` · `FLAGS` · `BINDING` · `REVOCATION`
+`ENTROPY` · `SCOPE` · `EXPIRY` · `IDLE` · `ROTATION` · `FLAGS` · `BINDING` · `REVOCATION`
 · `TRANSPORT` · `STORAGE` · `POLICY` · `VALIDATION` · `NAMING` · `PARSING`
 · `SERVING` · `SIZE` · `RATE` · `QUOTA`
 

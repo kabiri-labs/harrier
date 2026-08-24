@@ -16,6 +16,13 @@ boundaries:
 
 see_also: [HRR-BIZ-02, HRR-CLT-06]
 
+order:
+  - HRR-SES-05-MAP
+  - HRR-SES-05-PROBE
+  - HRR-SES-05-REPLAY
+  - HRR-SES-05-WRITE
+  - HRR-SES-05-EVADE
+
 refs:
   wstg: [WSTG-SESS-05]
   cwe: [352]

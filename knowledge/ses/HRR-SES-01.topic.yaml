@@ -6,6 +6,11 @@ axis: property
 surfaces:
   any_of: [session-cookie, token-bearing]
 
+order:
+  - HRR-SES-01-MAP
+  - HRR-SES-01-ENTROPY
+  - HRR-SES-01-BINDING
+
 refs:
   wstg: [WSTG-SESS-01]
   cwe: [330]

@@ -15,6 +15,14 @@ boundaries:
 
 see_also: [HRR-CFG-05, HRR-CRY-02]
 
+order:
+  - HRR-CRY-01-MAP
+  - HRR-CRY-01-POLICY
+  - HRR-CRY-01-BINDING
+  - HRR-CRY-01-EXPIRY
+  - HRR-CRY-01-VALIDATION
+  - HRR-CRY-01-TRANSPORT
+
 refs:
   wstg: [WSTG-CRYP-01]
   cwe: [326]

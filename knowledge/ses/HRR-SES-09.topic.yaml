@@ -6,6 +6,19 @@ axis: technique
 surfaces:
   any_of: [session-cookie, token-bearing]
 
+order:
+  - HRR-SES-09-REPLAY
+  - HRR-SES-09-BRUTE
+  - HRR-SES-09-READ
+
+boundaries:
+  - subject: "Whether the issued value looks unpredictable"
+    home: HRR-SES-01
+    note: >-
+      Analysing the value is an issue-time property. Finding a valid one at a
+      practical rate is a different claim, and a rate limit can make a weak
+      value unenumerable in practice.
+
 refs:
   wstg: [WSTG-SESS-09]
   cwe: [294]

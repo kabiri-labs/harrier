@@ -1,0 +1,7 @@
+id: HRR-SES-04-READ
+topic: HRR-SES-04
+status: outline
+title: "Confirmed capture by an unintended party"
+objective: >-
+  Determine whether a party the application never authorised obtains a usable
+  identifier through any of these routes.

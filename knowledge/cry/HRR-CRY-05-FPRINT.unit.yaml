@@ -1,0 +1,8 @@
+id: HRR-CRY-05-FPRINT
+topic: HRR-CRY-05
+status: outline
+kind: recon
+title: "Declared algorithm and key reference"
+objective: >-
+  Establish which algorithm the issuer declares and how the verifier is told
+  which key to use.

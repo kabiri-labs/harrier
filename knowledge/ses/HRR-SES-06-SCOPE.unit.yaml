@@ -1,0 +1,8 @@
+id: HRR-SES-06-SCOPE
+topic: HRR-SES-06
+status: outline
+title: "Reach of a single sign-out"
+objective: >-
+  Determine whether signing out on one client ends that session alone or every
+  session the principal holds, and whether that matches what the application
+  claims.

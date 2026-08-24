@@ -1,0 +1,7 @@
+id: HRR-CRY-01-TRANSPORT
+topic: HRR-CRY-01
+status: outline
+title: "Plaintext acceptance"
+objective: >-
+  Determine whether the listener serves the application over an unencrypted
+  channel rather than refusing or redirecting.

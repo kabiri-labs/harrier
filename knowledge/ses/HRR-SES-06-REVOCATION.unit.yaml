@@ -1,0 +1,7 @@
+id: HRR-SES-06-REVOCATION
+topic: HRR-SES-06
+status: outline
+title: "Rejection of the terminated identifier"
+objective: >-
+  Determine whether the identifier that was valid before sign-out is refused
+  afterwards by the server that issued it.

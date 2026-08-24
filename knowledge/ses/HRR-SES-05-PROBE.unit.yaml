@@ -1,0 +1,7 @@
+id: HRR-SES-05-PROBE
+topic: HRR-SES-05
+status: outline
+title: "Anti-forgery requirement"
+objective: >-
+  Determine whether a state-changing request succeeds when every anti-forgery
+  value is removed rather than being rejected.
