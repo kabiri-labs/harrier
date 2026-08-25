@@ -5,3 +5,7 @@ title: "Boolean-based inference"
 objective: >-
   Determine whether a condition the tester controls produces two reliably
   distinguishable responses from the same request.
+
+requires:
+  all_of: [surface.sql.injectable]
+yields: [primitive.db.read]

@@ -5,3 +5,7 @@ title: "Error-based inference"
 objective: >-
   Determine whether a malformed field produces a server error carrying
   interpreter detail rather than a generic rejection.
+
+requires:
+  all_of: [surface.ws.injectable]
+yields: [recon.platform.identified]

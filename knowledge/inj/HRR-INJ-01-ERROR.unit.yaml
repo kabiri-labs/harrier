@@ -5,3 +5,8 @@ title: "Error-based inference"
 objective: >-
   Determine whether an engine error surfaced in the response can be made to
   carry a value the database computed.
+
+requires:
+  all_of: [surface.sql.injectable]
+motivated_by: [recon.engine.identified]
+yields: [primitive.db.read]

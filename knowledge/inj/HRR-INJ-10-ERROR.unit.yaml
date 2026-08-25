@@ -5,3 +5,7 @@ title: "Error-based inference"
 objective: >-
   Determine whether an invalid expression produces an engine error naming the
   template, the context, or the failing construct.
+
+requires:
+  all_of: [surface.template.injectable]
+yields: [recon.approot.disclosed]

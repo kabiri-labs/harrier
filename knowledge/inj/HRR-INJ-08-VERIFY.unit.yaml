@@ -5,3 +5,8 @@ title: "In-band output confirmation"
 objective: >-
   Determine whether output of a command the tester chose appears in the
   response body rather than only a changed status.
+
+requires:
+  all_of: [surface.oscmd.injectable]
+motivated_by: [recon.platform.identified]
+yields: [primitive.exec.server]

@@ -5,3 +5,7 @@ title: "Out-of-band confirmation"
 objective: >-
   Determine whether the host can be made to initiate a network interaction
   carrying a token the tester chose.
+
+requires:
+  all_of: [surface.oscmd.injectable]
+yields: [primitive.exec.server, primitive.fetch.outbound]

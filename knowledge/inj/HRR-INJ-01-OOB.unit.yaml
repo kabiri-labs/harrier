@@ -5,3 +5,8 @@ title: "Out-of-band extraction"
 objective: >-
   Determine whether the database can be made to initiate a network interaction
   carrying data the tester chose.
+
+requires:
+  all_of: [surface.sql.injectable]
+motivated_by: [recon.engine.identified]
+yields: [primitive.db.read, primitive.fetch.outbound]

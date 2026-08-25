@@ -5,3 +5,7 @@ title: "Filter tautology and blind inference"
 objective: >-
   Determine whether an always-true clause widens the result set, and whether a
   controlled condition yields two distinguishable responses.
+
+requires:
+  all_of: [surface.ldap.injectable]
+yields: [primitive.directory.read]

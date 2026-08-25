@@ -5,3 +5,8 @@ title: "Command execution through a directive"
 objective: >-
   Determine whether an interpreted directive executes a command, which many
   deployments disable independently of includes.
+
+requires:
+  all_of: [surface.ssi.injectable]
+motivated_by: [recon.platform.identified]
+yields: [primitive.exec.server]

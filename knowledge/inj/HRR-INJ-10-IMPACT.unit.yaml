@@ -5,3 +5,8 @@ title: "Established reach of the evaluation context"
 objective: >-
   Determine whether the evaluation context exposes objects permitting file
   access or command execution, or is confined to data rendering.
+
+requires:
+  all_of: [surface.template.injectable]
+motivated_by: [recon.engine.identified]
+yields: [primitive.exec.server]

@@ -5,3 +5,7 @@ title: "Time-based inference"
 objective: >-
   Determine whether an expression that sleeps for a chosen interval is
   reproducibly observable in response latency.
+
+requires:
+  all_of: [surface.code.injectable]
+yields: [primitive.exec.server]

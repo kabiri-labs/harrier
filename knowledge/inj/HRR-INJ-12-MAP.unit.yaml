@@ -6,3 +6,7 @@ title: "Resolver argument enumeration"
 objective: >-
   Establish which arguments each resolver accepts and which of them reach a
   datastore or an external call.
+
+requires:
+  all_of: [recon.schema.known]
+yields: [surface.graphql.injectable]

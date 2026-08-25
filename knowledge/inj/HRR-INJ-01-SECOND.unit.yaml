@@ -5,3 +5,7 @@ title: "Second-order injection"
 objective: >-
   Determine whether a payload stored by one request is interpreted as SQL when
   a later request reads it back.
+
+requires:
+  all_of: [surface.sql.injectable]
+yields: [primitive.db.read]

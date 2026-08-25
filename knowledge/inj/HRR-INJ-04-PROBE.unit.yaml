@@ -5,3 +5,8 @@ title: "Directive interpretation probe"
 objective: >-
   Determine whether a server-side include directive is interpreted rather than
   returned as literal text.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.ssi.injectable]

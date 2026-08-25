@@ -5,3 +5,7 @@ title: "Content processing side effects"
 objective: >-
   Determine whether the server parses, converts or extracts the uploaded
   content in a way an attacker-crafted file can influence.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [primitive.fetch.outbound, primitive.fs.read]

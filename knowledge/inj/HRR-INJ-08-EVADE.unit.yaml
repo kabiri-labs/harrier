@@ -6,3 +6,8 @@ title: "Separator and quoting evasion"
 objective: >-
   Determine whether a negative result is caused by argument escaping rather
   than by the parameter never reaching a shell.
+
+requires:
+  all_of: [surface.oscmd.injectable]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

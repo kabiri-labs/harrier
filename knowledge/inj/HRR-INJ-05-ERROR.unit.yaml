@@ -5,3 +5,7 @@ title: "Error-based inference"
 objective: >-
   Determine whether a malformed expression produces an error naming the
   constructed path or its failing position.
+
+requires:
+  all_of: [surface.xpath.injectable]
+yields: [primitive.doc.read]

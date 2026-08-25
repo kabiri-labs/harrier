@@ -5,3 +5,8 @@ title: "Expression evaluation probe"
 objective: >-
   Determine whether a template expression submitted as input is returned
   evaluated rather than as the literal text sent.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.template.injectable]
