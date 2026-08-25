@@ -220,8 +220,11 @@ facts:
       The endpoint answers an introspection query, which hands over the schema
       rather than requiring it to be reconstructed.
 
-  - id: surface.path.unlinked
-    label: Paths reachable but not linked
+  - id: recon.paths.indexed
+    label: Paths held by public indexes and archives
     description: >
-      Paths the application serves but does not link to are known, from public
-      indexes, caches and archives.
+      Paths that search indexes, caches and archives hold for the target, and
+      that the application does not link to, are recorded. Deliberately a recon
+      fact and not a surface: an index establishes that a path was once
+      published, never that it is served now. Whether any of them still answers
+      is a separate question, asked where the answer is a finding.
