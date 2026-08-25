@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [access.user]
-yields: [primitive.data.write.other]
+yields: [primitive.field.bound]

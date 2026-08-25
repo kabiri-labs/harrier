@@ -9,4 +9,3 @@ objective: >-
 requires:
   all_of: [recon.session.identified]
 yields: [control.session.unbounded]
-closes: [control.session.unbounded]

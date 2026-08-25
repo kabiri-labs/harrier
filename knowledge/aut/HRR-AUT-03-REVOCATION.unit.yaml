@@ -7,7 +7,6 @@ objective: >-
   caller can lift protects nothing.
 
 requires:
-  all_of: [recon.entrypoints.mapped]
+  all_of: [control.lockout.enforced]
   any_of: [access.anon]
 yields: [control.limit.absent]
-closes: [control.limit.absent]

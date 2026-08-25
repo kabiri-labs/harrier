@@ -600,6 +600,10 @@ def check_chain(repo: Repository, problems: Problems) -> None:
     """
     facts = {f["id"]: f for f in (_vocab(repo, "facts", "facts") or [])}
     referenced: Set[str] = set()
+    producers: Dict[str, List[str]] = {}
+    for doc in repo.units:
+        for name in doc.data.get("yields") or []:
+            producers.setdefault(name, []).append(doc.data["id"])
 
     for doc in repo.units:
         data = doc.data
@@ -643,6 +647,16 @@ def check_chain(repo: Repository, problems: Problems) -> None:
                 f"closes {name} without yielding it -- a negative result can only "
                 f"rule out what a positive one would have established",
             )
+
+        for name in sorted(set(declared["closes"]) & produced):
+            others = [u for u in producers.get(name, []) if u != data["id"]]
+            if others:
+                problems.add(
+                    doc.rel,
+                    f"closes {name}, which {len(others)} other unit(s) also "
+                    f"establish -- a clean result here rules out this route and "
+                    f"not the fact, so closing it hides the routes that are left",
+                )
 
         if data.get("status") == "authored" and data.get("kind", "test") != "inquiry" and not produced:
             problems.add(

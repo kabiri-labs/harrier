@@ -13,4 +13,3 @@ objective: >-
 requires:
   all_of: [artifact.objectid.known, access.user]
 yields: [primitive.data.write.other]
-closes: [primitive.data.write.other]

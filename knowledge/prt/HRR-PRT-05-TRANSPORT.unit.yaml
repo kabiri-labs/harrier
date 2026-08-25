@@ -9,4 +9,3 @@ objective: >-
 requires:
   all_of: [recon.channels.mapped]
 yields: [control.transport.plaintext]
-closes: [control.transport.plaintext]

@@ -8,5 +8,5 @@ objective: >-
   which is what separates a cosmetic binding from an escalation.
 
 requires:
-  all_of: [primitive.data.write.other]
+  all_of: [primitive.field.bound]
 yields: [primitive.check.bypassed]

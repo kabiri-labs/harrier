@@ -9,4 +9,3 @@ objective: >-
 requires:
   all_of: [access.user, recon.session.identified]
 yields: [control.csrf.absent]
-closes: [control.csrf.absent]
