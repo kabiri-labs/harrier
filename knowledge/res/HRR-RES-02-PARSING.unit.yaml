@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.upload.accepts]
-yields: [primitive.fetch.outbound, primitive.fs.read]
+yields: [surface.upload.parsed]

@@ -9,4 +9,4 @@ objective: >-
 requires:
   all_of: [surface.upload.unrestricted]
 motivated_by: [surface.upload.pathcontrol, recon.platform.identified]
-yields: [primitive.exec.server]
+yields: [primitive.exec.client]

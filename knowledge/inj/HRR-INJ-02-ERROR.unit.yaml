@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.ldap.injectable]
-yields: [primitive.directory.read]
+yields: [recon.query.structure]

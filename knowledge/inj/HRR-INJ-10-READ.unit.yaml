@@ -1,0 +1,12 @@
+id: HRR-INJ-10-READ
+topic: HRR-INJ-10
+status: outline
+title: "File access from the evaluation context"
+objective: >-
+  Determine whether the evaluation context exposes an object that reads a file
+  the application does not serve.
+
+requires:
+  all_of: [surface.template.injectable]
+motivated_by: [recon.engine.identified]
+yields: [primitive.fs.read]

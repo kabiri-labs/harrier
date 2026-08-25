@@ -61,9 +61,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 99 |
-| Units — outlined | 355 |
+| Units — outlined | 356 |
 | Units — authored | 10 |
-| Units — charted | 102 |
+| Units — charted | 103 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -85,7 +85,7 @@ declaring requirements against facts nothing yet establishes.
 |---|---|---|---|
 | 1 | `RCN` | 17 | `done` |
 
-| 2 | `INJ` `RES` | 79 | `done` |
+| 2 | `INJ` `RES` | 80 | `done` |
 | 3 | `CLT` `PRT` | 80 | `not started` |
 | 4 | `SES` `CRY` | 64 | `not started` |
 | 5 | `AUT` `IDN` `ACL` | 67 | `not started` |
@@ -100,7 +100,7 @@ one nothing can ever establish.
 
 | Batch | Domains | Topics | Units | Status |
 |---|---|---|---|---|
-| 1 | `INJ` `RES` | 15 | 79 | `done` |
+| 1 | `INJ` `RES` | 15 | 80 | `done` |
 | 2 | `CLT` `PRT` | 17 | 80 | `done` |
 | 3 | `SES` `CRY` | 16 | 64 | `done` |
 | 4a | `AUT` `IDN` | 14 | 46 | `done` |
@@ -145,7 +145,7 @@ against real material rather than an empty tree:
 | `mitigations/path-resolution.md` | The first mitigation, written because a unit referenced it. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 99 topics across 13 domains, and 365 outlined units across all thirteen domains. |
+| `knowledge/` | 99 topics across 13 domains, and 366 units across all thirteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
 | `harrier/` | Nine schemas and seven validation passes. See [`VALIDATION.md`](VALIDATION.md). |
 | `tests/` | 121 offline tests, almost all of them negative — asserting what must be rejected. |
