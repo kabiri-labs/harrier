@@ -5,3 +5,7 @@ title: "Key lifecycle"
 objective: >-
   Determine whether keys can be rotated and retired, and whether material
   superseded by a rotation stops being accepted.
+
+requires:
+  all_of: [surface.appcrypto]
+yields: [control.crypto.unsound]

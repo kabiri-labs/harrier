@@ -5,3 +5,8 @@ title: "Audience and issuer checking"
 objective: >-
   Determine whether a token minted for a different audience or by a different
   issuer is refused.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.token.audience]
+closes: [control.token.audience]

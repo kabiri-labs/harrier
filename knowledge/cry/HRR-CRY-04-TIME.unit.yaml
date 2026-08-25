@@ -5,3 +5,8 @@ title: "Timing-distinguished padding failure"
 objective: >-
   Determine whether response latency separates a padding failure from a later
   failure when the responses themselves are uniform.
+
+requires:
+  all_of: [surface.appcrypto]
+motivated_by: [control.crypto.unsound]
+yields: [surface.crypto.oracle]

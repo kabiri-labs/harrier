@@ -5,3 +5,7 @@ title: "Cross-flow variable reuse"
 objective: >-
   Determine whether a session variable written by one flow is read as
   authoritative by a different flow that never set it.
+
+requires:
+  all_of: [access.user]
+yields: [surface.sessionvar.crossflow]

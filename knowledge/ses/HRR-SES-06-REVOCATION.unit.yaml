@@ -5,3 +5,8 @@ title: "Rejection of the terminated identifier"
 objective: >-
   Determine whether the identifier that was valid before sign-out is refused
   afterwards by the server that issued it.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.persists]
+closes: [control.session.persists]

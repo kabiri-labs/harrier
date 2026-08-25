@@ -5,3 +5,8 @@ title: "Invalidation before expiry"
 objective: >-
   Determine whether a token can be invalidated before its expiry claim, and
   whether an invalidated one is then refused.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.persists]
+closes: [control.session.persists]

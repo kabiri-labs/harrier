@@ -5,3 +5,8 @@ title: "Binding to the presenting client"
 objective: >-
   Determine whether the token is usable by any bearer or is tied to the client
   it was issued to.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.unbound]
+closes: [control.session.unbound]

@@ -5,3 +5,6 @@ title: "Server-side termination request"
 objective: >-
   Determine whether signing out issues a request the server acts on rather than
   only discarding state in the browser.
+
+requires:
+  all_of: [recon.session.identified]

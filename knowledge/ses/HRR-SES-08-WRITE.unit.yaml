@@ -5,3 +5,7 @@ title: "State reached through the reused variable"
 objective: >-
   Determine whether writing that variable through its own flow grants something
   in the other flow that the principal should not have.
+
+requires:
+  all_of: [surface.sessionvar.crossflow]
+yields: [primitive.check.bypassed]

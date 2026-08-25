@@ -6,3 +6,7 @@ title: "Session artefact inventory"
 objective: >-
   Establish which value identifies an authenticated session, where it is
   carried, and which component issues it.
+
+requires:
+  all_of: [access.user]
+yields: [recon.session.identified]

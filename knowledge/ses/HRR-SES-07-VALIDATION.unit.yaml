@@ -5,3 +5,7 @@ title: "Server-side enforcement of the limit"
 objective: >-
   Determine whether the limit is enforced by the issuer rather than only by a
   client-visible claim the holder can edit.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.unbounded]

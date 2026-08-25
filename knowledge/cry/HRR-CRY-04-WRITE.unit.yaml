@@ -5,3 +5,7 @@ title: "Confirmed ciphertext forgery"
 objective: >-
   Determine whether the oracle produces a ciphertext the application decrypts
   to a value the tester chose.
+
+requires:
+  all_of: [surface.crypto.oracle]
+yields: [primitive.crypto.forge]

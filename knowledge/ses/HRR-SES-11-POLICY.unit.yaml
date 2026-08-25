@@ -6,3 +6,6 @@ title: "Declared concurrency rule"
 objective: >-
   Establish what the application states about holding more than one session at
   a time, if it states anything.
+
+requires:
+  all_of: [access.user]

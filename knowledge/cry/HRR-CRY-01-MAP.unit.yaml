@@ -6,3 +6,6 @@ title: "TLS listener inventory"
 objective: >-
   Establish every hostname and port that completes a handshake, including those
   terminated at an intermediary rather than the application.
+
+requires:
+  all_of: [recon.names.mapped]

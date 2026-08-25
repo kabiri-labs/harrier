@@ -6,3 +6,6 @@ objective: >-
   Determine whether signing out on one client ends that session alone or every
   session the principal holds, and whether that matches what the application
   claims.
+
+requires:
+  all_of: [recon.session.identified]

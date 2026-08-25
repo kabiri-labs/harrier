@@ -5,3 +5,8 @@ title: "Binding to the authenticated subject"
 objective: >-
   Determine whether the issued value is tied to the subject that authenticated
   rather than being accepted for whoever presents it.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.unbound]
+closes: [control.session.unbound]

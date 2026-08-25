@@ -5,3 +5,7 @@ title: "Confirmed access through a captured identifier"
 objective: >-
   Determine whether a captured identifier returns the original user's data
   rather than being rejected.
+
+requires:
+  all_of: [artifact.session.captured]
+yields: [primitive.data.read.victim]

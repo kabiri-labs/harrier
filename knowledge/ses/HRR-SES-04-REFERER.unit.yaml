@@ -5,3 +5,7 @@ title: "Identifier leaving in a referrer"
 objective: >-
   Determine whether a page holding the identifier in its URL links to a third
   party that will receive it in the referrer.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [surface.session.inurl]

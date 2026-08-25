@@ -5,3 +5,7 @@ title: "Symmetric key recovery"
 objective: >-
   Determine whether a shared signing key is weak enough to recover offline from
   a single captured token.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [artifact.key.recovered]

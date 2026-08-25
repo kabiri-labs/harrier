@@ -5,3 +5,7 @@ title: "Identifier carried in the query string"
 objective: >-
   Determine whether the session identifier appears in a query string, where
   proxies, logs and history retain it.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [surface.session.inurl]
