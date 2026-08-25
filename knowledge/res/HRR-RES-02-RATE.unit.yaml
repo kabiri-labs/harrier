@@ -5,3 +5,7 @@ title: "Upload rate limit"
 objective: >-
   Determine whether the endpoint limits how frequently one principal may
   upload, independently of any per-object size cap.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [impact.availability.degraded]

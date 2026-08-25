@@ -5,3 +5,7 @@ title: "Honoured injected line"
 objective: >-
   Determine whether a line the tester injected is honoured by the mail agent
   rather than escaped, encoded or dropped before delivery.
+
+requires:
+  all_of: [surface.mail.injectable]
+yields: [primitive.mail.control]

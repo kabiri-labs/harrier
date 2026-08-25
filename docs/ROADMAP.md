@@ -63,7 +63,7 @@ work read as phase 2's:
 | Topics | 99 |
 | Units — outlined | 355 |
 | Units — authored | 10 |
-| Units — charted | 31 |
+| Units — charted | 102 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -84,8 +84,8 @@ declaring requirements against facts nothing yet establishes.
 | Batch | Domains | Units | Status |
 |---|---|---|---|
 | 1 | `RCN` | 17 | `done` |
-| — | `HRR-RES-01` | 5 | `done` (with the depth pass) |
-| 2 | `INJ` `RES` | 79 | `not started` |
+
+| 2 | `INJ` `RES` | 79 | `done` |
 | 3 | `CLT` `PRT` | 80 | `not started` |
 | 4 | `SES` `CRY` | 64 | `not started` |
 | 5 | `AUT` `IDN` `ACL` | 67 | `not started` |

@@ -5,3 +5,7 @@ title: "Time-based inference"
 objective: >-
   Determine whether a conditional delay injected into a resolver argument is
   reproducibly observable in response latency.
+
+requires:
+  all_of: [surface.graphql.injectable]
+yields: [primitive.db.read]

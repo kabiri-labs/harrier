@@ -6,3 +6,8 @@ title: "Destination filter evasion"
 objective: >-
   Determine whether a negative result is caused by a destination allow-list
   rather than by the value never reaching a client.
+
+requires:
+  all_of: [surface.fetch.controlled]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

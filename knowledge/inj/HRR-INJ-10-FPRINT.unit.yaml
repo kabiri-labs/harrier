@@ -6,3 +6,7 @@ title: "Template engine fingerprint"
 objective: >-
   Establish which template engine evaluates the expression, since syntax and
   reachable objects differ entirely between them.
+
+requires:
+  all_of: [surface.template.injectable]
+yields: [recon.engine.identified]

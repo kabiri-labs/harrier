@@ -263,3 +263,154 @@ facts:
       Code of the tester's choosing runs on the server. Terminal for almost
       every chain that reaches it, and the point past which an engagement stops
       and talks to the client.
+
+  - id: surface.ldap.injectable
+    label: A parameter reaches an LDAP filter
+    description: >
+      A request value has been shown to change how a directory query is
+      parsed.
+
+  - id: surface.xml.parsed
+    label: A parameter is parsed as XML
+    description: >
+      Content the caller supplies is handed to an XML parser, which is what
+      makes entity and structure attacks possible at all.
+
+  - id: surface.ssi.injectable
+    label: A parameter reaches a server-side include directive
+    description: >
+      A request value is interpreted by the server's include processor rather
+      than being rendered as text.
+
+  - id: surface.xpath.injectable
+    label: A parameter reaches an XPath expression
+    description: >
+      A request value has been shown to change how a document query is parsed.
+
+  - id: surface.mail.injectable
+    label: A parameter reaches a mail header or command
+    description: >
+      A request value is placed into a message the server sends, where a
+      separator changes the envelope rather than the body.
+
+  - id: surface.code.injectable
+    label: A parameter reaches a language evaluator
+    description: >
+      A request value is evaluated as source by the application's own runtime.
+
+  - id: surface.oscmd.injectable
+    label: A parameter reaches a command line
+    description: >
+      A request value is placed into a command the operating system runs.
+
+  - id: surface.template.injectable
+    label: A parameter reaches a server-side template expression
+    description: >
+      A request value is evaluated by a template engine rather than
+      interpolated as text.
+
+  - id: surface.format.injectable
+    label: A parameter reaches a format string
+    description: >
+      A request value is used as the format argument rather than as one of the
+      arguments it formats.
+
+  - id: surface.ws.injectable
+    label: A WebSocket message field reaches an interpreter
+    description: >
+      A field of a message the client sends changes how the server parses or
+      executes something, over a transport most testing tooling does not
+      replay.
+
+  - id: surface.graphql.injectable
+    label: A resolver argument reaches an interpreter
+    description: >
+      An argument the schema accepts is carried into a query, a command or a
+      fetch by the resolver behind it.
+
+  - id: surface.upload.accepts
+    label: The application accepts a submitted file
+    description: >
+      A file the caller supplies is stored by the application, which is the
+      precondition for every question about what it does with it.
+
+  - id: surface.upload.unrestricted
+    label: A file of the caller's chosen type is stored
+    description: >
+      The type or content restriction on upload can be defeated, so what is
+      stored is what the caller chose rather than what the application
+      expected.
+
+  - id: surface.upload.pathcontrol
+    label: The caller influences where the file is stored
+    description: >
+      The stored name or path is derived from what the caller supplied, so the
+      file's location is partly the caller's decision.
+
+  - id: surface.fetch.controlled
+    label: The server fetches a location the caller chooses
+    description: >
+      A request value decides what the server retrieves, which is the
+      condition every internal-network finding below is built on.
+
+  - id: primitive.directory.read
+    label: Directory entries readable
+    description: >
+      Entries the caller was never meant to see can be read out of the
+      directory service.
+
+  - id: primitive.doc.read
+    label: Backing document readable
+    description: >
+      Nodes of the document behind a query can be read beyond those the
+      application returns.
+
+  - id: primitive.db.write
+    label: Database write
+    description: >
+      Statements of the caller's choosing change stored data, which a read
+      alone never permits.
+
+  - id: primitive.mail.control
+    label: Message envelope controlled
+    description: >
+      Recipients, headers or the body of a message the server sends can be
+      chosen by the caller, which turns the application into the sender.
+
+  - id: primitive.memory.read
+    label: Process memory readable
+    description: >
+      Values from the process's own memory are returned, which frequently
+      include the addresses and secrets nothing else exposes.
+
+  - id: primitive.fetch.outbound
+    label: Outbound request from the server
+    description: >
+      The server can be made to send a request to a destination the caller
+      names, which is the channel every out-of-band technique reads.
+
+  - id: primitive.fetch.internal
+    label: Internal network location reached
+    description: >
+      A destination that is not reachable from the caller's own position
+      answers through the server.
+
+  - id: control.filter.identified
+    label: The input filter's behaviour is known
+    description: >
+      What the filter in front of a parameter strips, rejects or normalises
+      has been established. A negative result means something different on
+      each side of this fact, which is the whole reason the evasion units are
+      siblings of the techniques rather than steps inside them.
+
+  - id: recon.ws.mapped
+    label: WebSocket messages recorded
+    description: >
+      The message types a client sends over the socket, and their fields, are
+      recorded -- an inventory nothing else in the catalogue produces.
+
+  - id: impact.availability.degraded
+    label: Service degraded by the content of a request
+    description: >
+      Work forced by what a single request contains, rather than by how many
+      were sent, is enough to degrade the service.

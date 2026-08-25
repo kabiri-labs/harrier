@@ -5,3 +5,7 @@ title: "Time-based inference"
 objective: >-
   Determine whether a sleep of a chosen duration is reproducibly observable in
   response latency.
+
+requires:
+  all_of: [surface.oscmd.injectable]
+yields: [primitive.exec.server]

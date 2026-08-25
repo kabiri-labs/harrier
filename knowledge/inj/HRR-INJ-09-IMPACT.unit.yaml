@@ -5,3 +5,7 @@ title: "Established reach of the format string"
 objective: >-
   Determine whether the consumed specifiers permit reading memory contents back
   into the response.
+
+requires:
+  all_of: [surface.format.injectable]
+yields: [primitive.memory.read]

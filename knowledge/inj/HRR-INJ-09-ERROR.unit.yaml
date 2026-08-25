@@ -5,3 +5,7 @@ title: "Error and crash inference"
 objective: >-
   Determine whether specifiers that read beyond supplied arguments produce an
   error, a truncated response, or a terminated process.
+
+requires:
+  all_of: [surface.format.injectable]
+yields: [recon.approot.disclosed]

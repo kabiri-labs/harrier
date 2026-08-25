@@ -5,3 +5,8 @@ title: "Stacked statement execution"
 objective: >-
   Determine whether a second statement, separated from the first, is executed
   by the driver rather than rejected.
+
+requires:
+  all_of: [surface.sql.injectable]
+motivated_by: [recon.engine.identified]
+yields: [primitive.db.write]

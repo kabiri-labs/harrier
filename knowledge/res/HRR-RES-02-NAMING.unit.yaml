@@ -5,3 +5,8 @@ title: "Supplied filename handling"
 objective: >-
   Determine whether an attacker-chosen filename can traverse outside the
   storage directory or overwrite an existing object.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [surface.upload.pathcontrol]
+closes: [surface.upload.pathcontrol]

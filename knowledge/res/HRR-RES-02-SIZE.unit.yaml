@@ -5,3 +5,7 @@ title: "Per-object size limit"
 objective: >-
   Determine whether the endpoint rejects a single object above a stated size
   before storing or processing it.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [impact.availability.degraded]

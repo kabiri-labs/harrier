@@ -5,3 +5,8 @@ title: "Entity and markup acceptance probe"
 objective: >-
   Determine whether the parser resolves a declared internal entity rather than
   treating the declaration as literal text.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.xml.parsed]

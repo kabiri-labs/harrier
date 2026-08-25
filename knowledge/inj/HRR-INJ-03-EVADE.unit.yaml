@@ -6,3 +6,8 @@ title: "Declaration and encoding evasion"
 objective: >-
   Determine whether a negative result is caused by entity resolution being
   disabled rather than by the input never reaching a parser.
+
+requires:
+  all_of: [surface.xml.parsed]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

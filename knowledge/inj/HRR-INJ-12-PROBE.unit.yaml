@@ -5,3 +5,7 @@ title: "Argument metacharacter probe"
 objective: >-
   Determine whether a syntax-breaking character in a resolver argument changes
   the response relative to the same query without it.
+
+requires:
+  all_of: [surface.graphql.injectable]
+yields: [primitive.db.read]

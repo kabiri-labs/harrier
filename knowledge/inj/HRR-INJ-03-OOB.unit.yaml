@@ -6,3 +6,7 @@ objective: >-
   Determine whether external entity resolution is enabled at all, when no
   parser error and no returned content say so, by observing that the declared
   entity was dereferenced.
+
+requires:
+  all_of: [surface.xml.parsed]
+yields: [primitive.fetch.outbound]

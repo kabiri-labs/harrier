@@ -5,3 +5,7 @@ title: "Accumulated storage limit"
 objective: >-
   Determine whether the total volume one principal may accumulate is capped,
   independently of per-object and rate limits.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [impact.availability.degraded]

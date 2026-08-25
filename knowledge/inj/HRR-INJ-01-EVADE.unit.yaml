@@ -6,3 +6,8 @@ title: "Filter and encoding evasion"
 objective: >-
   Determine whether a negative result from another technique is caused by a
   filter rather than by the absence of an injection.
+
+requires:
+  all_of: [surface.sql.injectable]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

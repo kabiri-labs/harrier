@@ -5,3 +5,7 @@ title: "Time-based inference"
 objective: >-
   Determine whether a conditional delay injected into a message field is
   reproducibly observable in reply latency.
+
+requires:
+  all_of: [surface.ws.injectable]
+yields: [primitive.db.read]

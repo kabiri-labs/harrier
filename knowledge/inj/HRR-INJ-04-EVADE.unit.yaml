@@ -6,3 +6,8 @@ title: "Directive syntax evasion"
 objective: >-
   Determine whether a negative result is caused by directive filtering rather
   than by includes being disabled.
+
+requires:
+  all_of: [surface.ssi.injectable]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

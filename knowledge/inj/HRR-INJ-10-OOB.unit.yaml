@@ -5,3 +5,8 @@ title: "Out-of-band confirmation"
 objective: >-
   Determine whether the engine can be made to initiate a network interaction
   carrying a token the tester chose.
+
+requires:
+  all_of: [surface.template.injectable]
+motivated_by: [recon.engine.identified]
+yields: [primitive.fetch.outbound]
