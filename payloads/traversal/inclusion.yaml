@@ -1,38 +1,66 @@
 # Distinguishing a path that is read from one that is interpreted. The
-# difference is the whole of the severity, and the response body frequently
-# looks the same either way -- an included PHP file returns its output, which on
-# a config file is often nothing at all.
+# difference is the whole of the severity, and most of the obvious ways to test
+# it do not work.
 #
-# {{DEPTH}} is the traversal prefix and {{TARGET}} the file being asked for.
+# What does not discriminate, and why:
+#
+#   A system file returned verbatim. include() of a file containing no code
+#   emits it unchanged, exactly as a read would. /etc/passwd coming back intact
+#   says nothing whatever about the sink.
+#
+#   A source-reading wrapper. It returns the same encoded bytes through an
+#   include as through a file read, because the wrapper transforms the stream
+#   before either sink sees it. It is an excellent way to obtain source and a
+#   useless way to classify the sink.
+#
+# What discriminates is a file whose interpretation visibly differs from its
+# text -- which on these platforms means the application's own source.
+#
+# {{DEPTH}} is the traversal prefix. {{APPFILE}} is a source file of the
+# application itself, identified from the paths it serves or from the disclosed
+# application root.
 id: traversal/inclusion
 reviewed: "2026-08-25"
 title: Reading versus interpreting the resolved path
-variables: [DEPTH, TARGET]
+variables: [DEPTH, APPFILE]
 safety: >-
-  The wrapper entries read source and are safe against a live target. The
-  log-poisoning entry writes attacker-controlled content into a file the server
-  will later interpret, which is a change to the target that cannot be undone
-  from outside. Do not run it without written agreement naming it specifically.
+  The first three entries read and change nothing. The log-poisoning entry
+  writes attacker-controlled content into a file the server will later
+  interpret: it alters the target in a way nothing outside it can undo, and it
+  can break the application. Do not run it without written agreement naming that
+  step specifically.
 credits:
-  - "Stream wrappers and log poisoning are long-standing public technique; the read/interpret framing is written for this project."
+  - "Stream wrappers and log poisoning are long-standing public technique; the read/interpret discriminator and its reasoning are written for this project."
 entries:
-  - name: source read through a filter wrapper
-    platform: [php]
-    payload: "php://filter/convert.base64-encode/resource={{TARGET}}"
-    detect: "A base64 body that decodes to source rather than to the file's output."
-    note: "The discriminator, not merely a convenience: if this returns encoded source while the plain path returned nothing, the sink interprets rather than reads."
+  - name: the application's own source, plain
+    platform: [php, python, nodejs]
+    payload: "{{APPFILE}}"
+    detect: >-
+      Source text -- an opening <?php, an import, a function definition -- means
+      the sink read the file. The same request answering with rendered output,
+      or with nothing, means the sink interpreted it.
+    note: "The discriminator. Both answers are informative, which is why it is one request rather than a sweep."
 
-  - name: known-output probe
+  - name: the application's own source, through a filter wrapper
+    platform: [php]
+    payload: "php://filter/convert.base64-encode/resource={{APPFILE}}"
+    detect: "A base64 body that decodes to source."
+    note: >-
+      Run this after the plain request, and read the pair. Encoded source here
+      where the plain request rendered output is an interpreting sink and a
+      source disclosure at once. It does not classify the sink on its own: a
+      read sink returns the same bytes.
+
+  - name: a file the interpreter cannot parse
     platform: [php]
     payload: "{{DEPTH}}etc/passwd"
-    detect: "Returned verbatim by a read sink; returned mangled or empty by an include, because the interpreter tries to parse it."
-    note: "Cheapest way to tell the two apart when wrappers are disabled."
-
-  - name: extension appended by the sink
-    platform: [php]
-    payload: "{{DEPTH}}etc/passwd%00"
-    detect: "Only meaningful where the response or an error shows the sink appending an extension."
-    note: "Truncation was fixed in PHP 5.3.4. Try it when a stack that old has already been identified, and not otherwise."
+    detect: >-
+      Returned verbatim by both sink kinds, so it proves the read and nothing
+      about interpretation.
+    note: >-
+      Listed to be argued with. It looks like a discriminator and is not:
+      include() emits a file with no code in it unchanged. Use it to confirm the
+      read, never to rule execution out.
 
   - name: interpreted log file
     platform: [php]

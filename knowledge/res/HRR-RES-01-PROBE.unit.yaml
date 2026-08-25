@@ -16,15 +16,15 @@ enter_when:
   - "The inventory recorded a parameter named for a file: file, path, page, template, doc, view, lang, download."
 
 oracle:
-  positive: "A traversal sequence that resolves back to the same place returns the baseline response, while the parameter's plain value returns it too -- the sequence was resolved, not matched."
+  positive: "A sequence that resolves back to the same place returns the baseline response -- the sequence was resolved rather than matched, and the parameter names a location."
   negative: "Every form of the sequence returns the same not-found response the baseline never gave, which is a parameter that names a key rather than a path."
   inconclusive: "The endpoint returns one generic page for every input including the baseline, so nothing distinguishes resolution from rejection."
 
 sequence:
   - "Capture the baseline: the unmodified request, its status, length and content type."
   - "Send ./FILE. An identical response means the value reaches a path resolver."
-  - "Send subdir/../FILE. An identical response means traversal sequences are resolved, not rejected."
-  - "Only then overshoot the depth, and read the result against the baseline rather than against an expectation."
+  - "Send DIR/../FILE, where DIR is a directory the application itself serves. A resolver walks the path before it reaches the .., so an invented name fails on a vulnerable sink too."
+  - "Record the parameter as resolving paths, and stop. Leaving the intended directory is the read unit's decision, not this one's."
 
 first_false_positive: >-
   A 404 read as a refusal. A parameter that never reaches a filesystem returns
@@ -38,6 +38,7 @@ false_positives:
 
 preconditions:
   - "The parameter's ordinary behaviour has been observed at least once, or there is no baseline to compare against."
+  - "For the up-and-back probe, a directory that exists is known. Where none is, the same-directory probe is the whole of the available answer and the result is recorded as the weaker one it is."
 
 evidence:
   - "The baseline request and response."

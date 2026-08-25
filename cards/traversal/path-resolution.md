@@ -15,8 +15,10 @@ second as though it were the first.
 
 1. Baseline the unmodified request. Status, length, content type.
 2. `./FILE` — identical response means a resolver is in the path.
-3. `subdir/../FILE` — identical response means sequences are *resolved*, not matched.
-4. Overshoot the depth; the root clamp does the arithmetic.
+3. `DIR/../FILE`, `DIR` being a directory that exists — identical response means
+   sequences are *resolved*, not matched.
+4. Only then leave the root: overshoot the depth, and let the clamp do the
+   arithmetic.
 5. Match on a file fingerprint, never on status or length.
 
 **Payloads** — [`probe`](../../payloads/traversal/probe.yaml) ·
@@ -57,11 +59,18 @@ Either the value never reaches a resolver — it is a key into a table, and `../
 is just an unusual key — or it reaches one that refuses. From a 404 the two are
 indistinguishable.
 
-`./FILE` and `subdir/../FILE` separate them. Both resolve back to exactly the
+`./FILE` and `DIR/../FILE` separate them. Both resolve back to exactly the
 resource the baseline asked for, so a resolver returns the baseline response and
 a lookup table returns not-found. Neither leaves the intended directory, which
 means the question is answered before anything is read, and answered without the
 request that would raise an alert.
+
+`DIR` has to be a directory that **exists**. A POSIX resolver walks the path one
+component at a time and fails on a missing directory before it ever reaches the
+`..`, so an invented name returns not-found from a perfectly vulnerable sink —
+and reads as a clean result. Take the name from a path the application already
+serves. Where nothing is known to exist, `./FILE` is the whole of the available
+answer, and the result is the weaker one it is.
 
 This ordering costs two requests and routinely saves an afternoon.
 
@@ -94,11 +103,22 @@ all. An empty response therefore means either "no such file", "no permission",
 or "the interpreter consumed it", and those are a non-finding, a non-finding,
 and a critical finding respectively.
 
-Two answers separate them. Ask for a file whose text and whose interpretation
-differ visibly: returned verbatim, the sink reads. Then ask for the same file
-through a source-reading wrapper: encoded source coming back where the plain
-path returned nothing means the sink interprets. It is the *pair* that decides
-it; neither response alone says anything.
+Two obvious tests do **not** separate them, and both are worth knowing as
+non-tests:
+
+- **A system file returned intact.** `include()` of a file containing no code
+  emits it unchanged, exactly as a read does. `/etc/passwd` coming back whole
+  proves the read and says nothing about interpretation.
+- **A source-reading wrapper.** It transforms the stream before either sink sees
+  it, so a read sink and an include sink return identical encoded bytes. It is
+  the best way to *obtain* source and a useless way to classify a sink.
+
+What separates them is a file whose interpretation visibly differs from its
+text — which means the application's own source. Request it through the
+parameter: source text back, and the sink reads; rendered output or an empty
+body, and it interpreted. The wrapper then *confirms* the second case by
+returning the source the plain request would not give. That is what the wrapper
+is for here: confirmation after the discriminator, not the discriminator.
 
 ### Depth arithmetic, and why to skip it
 
