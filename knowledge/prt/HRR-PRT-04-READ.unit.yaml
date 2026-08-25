@@ -7,5 +7,5 @@ objective: >-
   own rules were meant to keep unreachable.
 
 requires:
-  all_of: [surface.parser.divergence]
+  all_of: [surface.path.divergence]
 yields: [primitive.check.bypassed]

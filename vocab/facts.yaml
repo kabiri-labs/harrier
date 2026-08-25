@@ -546,11 +546,20 @@ facts:
       Supplying one parameter or header twice produces a different result from
       supplying it once.
 
-  - id: surface.parser.divergence
-    label: Two components read one request differently
+  - id: surface.parameter.divergence
+    label: Two components choose different occurrences of a repeated name
     description: >
-      An intermediary and an origin resolve the same input to different values
-      -- a different occurrence, a different path, a different field.
+      Where one name appears twice, the components handling the request do not
+      agree on which occurrence is authoritative.
+
+  - id: surface.path.divergence
+    label: Two components normalise one path differently
+    description: >
+      An intermediary and an origin resolve the same path to different
+      locations. Separate from the parameter fact because the consequences below
+      it -- reaching a resource the intermediary's rules were meant to cover,
+      storing a response under a key an ordinary request will match -- follow
+      from the path being read differently and from nothing else.
 
   - id: primitive.markup.inject
     label: Markup injected without script
@@ -616,11 +625,21 @@ facts:
       The endpoint allows a credentialed request from an origin it accepts,
       which is what turns a permissive policy into a readable response.
 
-  - id: control.origin.unchecked
-    label: The origin of an incoming message is not checked
+  - id: control.message.origin.unchecked
+    label: A cross-document message is acted on without checking its sender
     description: >
-      A message or handshake is acted on without its origin being verified, or
-      with a comparison that a substring defeats.
+      A window message listener acts on what arrives without verifying the
+      origin that sent it, or with a comparison a substring defeats. Kept apart
+      from the handshake fact below because the two are different mechanisms:
+      one needs a listener registered in a page, the other needs a socket, and a
+      shared fact would offer the message tests to somebody holding only a
+      socket finding.
+
+  - id: control.handshake.origin.unchecked
+    label: A socket handshake accepts a foreign origin
+    description: >
+      A connection is accepted carrying an origin the application does not own.
+      What the connection then carries is a different topic's question.
 
   - id: control.storage.sensitive
     label: Sensitive data persists on the client

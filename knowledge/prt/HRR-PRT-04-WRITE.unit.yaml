@@ -7,5 +7,5 @@ objective: >-
   ordinary request will match.
 
 requires:
-  all_of: [surface.parser.divergence]
+  all_of: [surface.path.divergence]
 yields: [primitive.content.poisoned]
