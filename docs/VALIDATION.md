@@ -16,14 +16,14 @@ CI runs exactly those first two commands, in that order, with nothing extra.
 
 Exit status is the contract: `0` valid, `1` rejected, `2` bad invocation.
 
-## Six passes
+## Seven passes
 
 Every pass collects problems rather than stopping at the first. A contributor
 fixing a batch wants the whole list, and a first-failure validator quietly
 trains people to fix one thing and re-run — which is how the second and third
 problems in a file go unnoticed. Every message names the file that caused it.
 
-**1 — Schema conformance.** Seven schemas under `harrier/schema/`, selected by
+**1 — Schema conformance.** Nine schemas under `harrier/schema/`, selected by
 where the file sits. A document in the wrong directory is itself a finding.
 
 **2 — Vocabularies.** Duplicate domain codes, duplicate axis names, surface tags
@@ -81,9 +81,19 @@ command. Only keys that look like flags are checked — interactive tools explai
 a technique rather than a command-line token, and forcing those into a command
 would push the rationale out of the one place it is written.
 
+**7 — Chain.** The graph is derived rather than stored, so a wrong declaration
+produces a route that silently does not exist rather than an error. Every fact a
+unit names must be in `vocab/facts.yaml`; no unit may require what it yields; an
+`impact.*` fact may never be required, because an impact is where a chain ends;
+`closes` may not name a fact `yields` does not, since a negative result can only
+rule out what a positive one would have established; an authored test or recon
+unit must yield something, or it can be reached from nowhere and leads nowhere;
+and a fact no unit references at all is rejected, because vocabulary must not
+outrun use. See [`CHAINING.md`](CHAINING.md).
+
 ## What the suite adds
 
-101 tests, offline, no network and no fixtures of their own: every mutation test
+117 tests, offline, no network and no fixtures of their own: every mutation test
 copies the real repository and breaks exactly one thing in it. A hand-built
 miniature drifts from what it stands in for, and then the suite passes while the
 repository is broken.

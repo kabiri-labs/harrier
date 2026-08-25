@@ -27,13 +27,18 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 1.5 | Pin the reference standards | `done` | ASVS 5.0.0 at its release commit, CWE 4.20 by versioned archive and content hash. `refs.asvs` and `refs.cwe` both resolve. CVE stays out: it names one bug in one product, not a class. |
 | 2 | Topic map | `done` | 99 topics across 13 domains. Every resolvable WSTG identifier is claimed by a topic, and the validator now rejects one that is not. |
 | 3 | Unit outline pass | `done` | Every topic decomposed to units carrying an identifier, a title and a falsifiable objective. **This is where the artefact becomes genuinely useful.** Done in six batches of two or three domains, because a review of 350 files at once is not a review. |
-| 4 | Two reference topics at depth | `not started` | SQL injection and cross-site scripting. Chosen because one splits on `technique` with a dimension, the other on `context` with two dimensions — between them they exercise every mechanism in the model. |
-| 5 | Published artefact | `not started` | Single self-contained HTML file. Surface-first navigation, full-text search, standard-coverage views. |
-| 6 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. This is the clearest differentiation from restating WSTG. |
-| 7 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. |
+| 4 | Chain model spike | `done` | Five units authored across five domains and five shapes, plus the fact layer they needed. The point was to break the model while it was cheap to change, not to add coverage. |
+| 5 | Chain pass | `not started` | `requires` and `yields` for all 365 units, in six domain batches, `RCN` first because recon produces most of the base facts. Ends with the gate that every non-given fact has a producer. |
+| 6 | Published artefact | `not started` | Single self-contained HTML file: surface-first entry, a now/next view driven by the facts in hand, coverage views, and the graph. Versioning starts here. |
+| 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. This is the clearest differentiation from restating WSTG. |
+| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. |
 
-Phases 2–4 are 1.0. Phase 5 is what makes it usable; phase 6 is what makes it
+Phases 2–5 are 1.0. Phase 6 is what makes it usable; phase 7 is what makes it
 better than the standard it is built on.
+
+The order changed after phase 3: the artefact's main view is driven by the chain,
+so the chain has to exist first, and depth waits until real use says which units
+deserve it.
 
 ## The standing rule
 
@@ -55,8 +60,8 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 99 |
-| Units — outlined | 365 |
-| Units — authored | 0 |
+| Units — outlined | 360 |
+| Units — authored | 5 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -65,7 +70,8 @@ describes second-order delivery rather than a test, so nothing can cover it and
 the validator does not ask anything to.
 
 Every topic now carries units, which was phase 3's job. The number to watch
-from here is authored units, which is phase 4's.
+from here is charted units -- those carrying `requires` and `yields` -- which is
+phase 5's.
 
 ### Phase 3 batches
 
@@ -91,7 +97,7 @@ more units were written on top of it.
 | `RCN` 8 | `PRT` 5 | `CRY` 5 | `ERR` 4 | `IDN` 4 | `RES` 3 | `SUP` 0 |
 
 `SUP` carries no topics because no WSTG test covers vulnerable components or
-supply chain, and phase 2's input is the WSTG map. It is phase 6's first entry,
+supply chain, and phase 2's input is the WSTG map. It is phase 7's first entry,
 and its emptiness is part of why the scope is wider than the standard.
 
 These figures are asserted by the test suite, not maintained by hand. A stale
@@ -101,7 +107,7 @@ to be judged on.
 ## What already exists
 
 Phases 0 to 2 leave the repository with the vocabularies settled, the machine
-checks in place, and the taxonomy's top level written, so phases 3 and 4 begin
+checks in place, and the taxonomy's top level written, so the phases that follow begin
 against real material rather than an empty tree:
 
 | Asset | State |
@@ -115,9 +121,9 @@ against real material rather than an empty tree:
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
 | `knowledge/` | 99 topics across 13 domains, and 365 outlined units across all thirteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
-| `harrier/` | Nine schemas and six validation passes. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 107 offline tests, almost all of them negative — asserting what must be rejected. |
+| `harrier/` | Nine schemas and seven validation passes. See [`VALIDATION.md`](VALIDATION.md). |
+| `tests/` | 117 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
-`reviewed` date that predates phase 0. Treat them as unreviewed until phase 4
+`reviewed` date that predates phase 0. Treat them as unreviewed until a depth pass
 re-verifies them against current engine and tool behaviour.

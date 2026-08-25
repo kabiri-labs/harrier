@@ -1,8 +1,44 @@
 id: HRR-BIZ-06-PROBE
 topic: HRR-BIZ-06
-status: outline
+status: authored
 kind: inquiry
 title: "Completion with a step skipped or repeated"
 objective: >-
   Establish whether the workflow completes when a step is omitted, repeated,
   or submitted out of the order the application presents.
+
+requires:
+  all_of: [access.user, recon.workflow.mapped]
+yields: [primitive.workflow.skip]
+
+enter_when:
+  - "The steps of the workflow and the request driving each have been recorded."
+
+questions:
+  - "Which step is the one the application would refuse to sell without, and what enforces that refusal?"
+  - "Where is the position in the workflow held -- in the request, in the session, or in the record being built?"
+  - "Which steps are idempotent by design, so that repeating one is expected rather than a finding?"
+  - "What does the application do with a step submitted twice with different values: keep the first, keep the last, or reject?"
+  - "Is there a step that only the interface enforces, because no request reaches the server at all?"
+
+first_false_positive: >-
+  A workflow that appears to complete because the interface advanced, while the
+  server recorded nothing. Completion has to be read from the record the
+  workflow produces, not from the screen that follows it.
+
+preconditions:
+  - "The workflow may be completed in a test account without a real order, payment or claim being raised."
+
+evidence:
+  - "The full request sequence of one ordinary completion, as the baseline every deviation is compared against."
+  - "The record the workflow produced, for each deviation that was accepted."
+
+done_when: >-
+  Each step has been omitted once, repeated once and submitted out of order once,
+  and the outcome of each is recorded against the baseline -- or the step is
+  recorded as untestable with the reason.
+
+safety: >-
+  A completed workflow commits whatever it commits: an order, a claim, a
+  transfer. Agree with the client beforehand which workflows may be run to
+  completion and which stop one step short.

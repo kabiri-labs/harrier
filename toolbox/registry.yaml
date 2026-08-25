@@ -122,3 +122,18 @@
     Interaction data leaves the target network and is recorded by every resolver
     on the path. Use a listener the tester operates or is contractually permitted
     to use, and keep extracted values to metadata.
+
+- id: dig
+  name: dig
+  url: https://bind9.readthedocs.io
+  purpose: Resolving a name and reading the delegation chain that answered, rather than only the final address.
+  invocations:
+    - purpose: "Read the delegation behind a name"
+      cmd: "dig +noall +answer {{HOST}} CNAME"
+      flags:
+        "+noall +answer": "Suppresses everything but the records themselves, so a stale CNAME is visible instead of buried in a full response dump."
+        "CNAME": "The delegation is the finding. Asking for A resolves through it and hides the third party the name actually points at."
+    - purpose: "Confirm which nameserver answered"
+      cmd: "dig +nssearch {{HOST}}"
+      flags:
+        "+nssearch": "Asks every authoritative server directly, which distinguishes a delegation that is genuinely stale from one cached mid-migration."

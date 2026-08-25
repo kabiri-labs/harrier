@@ -7,3 +7,7 @@ objective: >-
   Record every name the target delegates and the third-party service each
   resolves to, since a takeover is only possible where the delegation outlives
   the resource.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.delegation.mapped]

@@ -91,6 +91,13 @@ first_false_positive: >
   Template echo of the input rather than query output. Prove it with a computed
   value such as 1337*7, never a static marker.
 
+requires:                    # what makes this possible; see CHAINING.md
+  all_of: [surface.sql.injectable]
+  any_of: [access.anon, access.user]
+motivated_by: [recon.engine.identified]   # worth doing sooner, not a condition
+yields: [primitive.db.read]  # what a positive result establishes
+closes: []                   # what a negative one rules out; a subset of yields
+
 payloads: payloads/sqli/union.yaml
 tools: [burp-repeater, sqlmap]
 card: cards/sqli/union-extraction.md
@@ -103,6 +110,10 @@ refs: { wstg: [WSTG-INPV-05], cwe: [89] }
 
 An outline unit carries its identifier, title, `objective`, `surfaces` and
 `refs`, and nothing else. Everything below `oracle` is relaxed.
+
+`requires` and `yields` are the exception: they are structure, not depth, and an
+outline unit should carry them. They are what places it in the chain, and a unit
+nobody can reach is not usefully outlined.
 
 This is the mechanism that decouples coverage from depth. An outline unit already
 appears in the published artefact, already answers "does this test exist and what

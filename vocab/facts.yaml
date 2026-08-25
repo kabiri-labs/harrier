@@ -1,0 +1,116 @@
+# The fact vocabulary -- the nodes of the attack chain.
+#
+# A unit declares what must already be true for it to be possible (`requires`)
+# and what becomes true when its result is positive (`yields`). Edges between
+# units are never written down: unit A leads to unit B exactly when A yields a
+# fact B requires. That is the whole mechanism.
+#
+# It is built this way because the alternative does not survive. Naming the next
+# test inside each unit means every new unit has to be inserted into the
+# `next` list of every unit that could precede it -- several hundred hand-kept
+# edges that rot silently, and rot worst exactly when the catalogue grows. Facts
+# are the join key instead: a new unit declares what it needs and what it gives,
+# and the graph reconnects itself.
+#
+# A fact outside this file is rejected, for the same reason a slug outside
+# axes.yaml is: two units must not invent two names for one condition, or the
+# graph quietly splits into two disconnected halves that look complete.
+#
+# Families, and what separates them:
+#
+#   recon.*      something is now known about the target
+#   surface.*    an interactable thing has been shown to exist
+#   access.*     a principal or session is held
+#   artifact.*   a value is in hand
+#   primitive.*  a capability is controlled -- the thing an exploit is built from
+#   control.*    the state of a defence
+#   impact.*     a business outcome; terminal, and never required by anything
+#
+# `given: true` marks a fact the engagement supplies rather than a test
+# producing it -- credentials handed over at kick-off, a target in scope. Those
+# are the roots of the graph. Everything else has to be earned.
+version: 1
+facts:
+  - id: recon.target.reachable
+    label: Target reachable
+    given: true
+    description: >
+      The target answers requests from the tester's position on the network.
+      The root of every chain: nothing below is reachable without it.
+
+  - id: recon.platform.identified
+    label: Platform and version identified
+    description: >
+      The server, application platform and framework answering at the origin are
+      known, with versions where they could be established.
+
+  - id: recon.engine.identified
+    label: Backend engine identified
+    description: >
+      The interpreter behind an injectable surface is known -- which relational
+      engine, which template language, which document store -- so payload shape
+      can be chosen rather than swept.
+
+  - id: recon.workflow.mapped
+    label: Workflow steps and order recorded
+    description: >
+      The steps of a business workflow, the request that drives each and the
+      order the application presents them in have been recorded.
+
+  - id: recon.delegation.mapped
+    label: Delegated names recorded
+    description: >
+      The names the target delegates to third-party services, and which service
+      each resolves to, have been recorded.
+
+  - id: access.anon
+    label: Unauthenticated caller
+    given: true
+    description: >
+      Requests can be made carrying no session. Available in every engagement,
+      and stated rather than assumed because a unit that needs only this is a
+      unit that needs nothing.
+
+  - id: access.user
+    label: Ordinary account held
+    given: true
+    description: >
+      A working account with no special role is held. Supplied by the client in
+      most engagements; earned through registration in some.
+
+  - id: surface.sql.injectable
+    label: A parameter reaches a SQL statement
+    description: >
+      A parameter has been shown to change the behaviour of a SQL statement --
+      the condition every extraction technique is built on, and the one thing
+      that separates a hunch from a finding.
+
+  - id: artifact.objectid.known
+    label: An identifier naming another principal's object
+    description: >
+      An identifier is held that names an object belonging to someone other than
+      the caller, which is what turns an access-control question into a request.
+
+  - id: primitive.db.read
+    label: Database read
+    description: >
+      Data the caller was never served can be read out of the database at will.
+
+  - id: primitive.data.read.peer
+    label: Another account's data readable
+    description: >
+      Records belonging to another account of the same role can be read. Narrower
+      than a database read: it is the application handing them over, one object
+      at a time.
+
+  - id: primitive.workflow.skip
+    label: Workflow completes out of order
+    description: >
+      A workflow can be completed with a step omitted, repeated or reordered,
+      which is the primitive every business-logic impact is built from.
+
+  - id: primitive.subdomain.claimable
+    label: A delegated name can be claimed
+    description: >
+      A name the target still delegates points at a resource that no longer
+      exists at the provider and that another account could register.

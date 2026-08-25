@@ -585,6 +585,76 @@ def check_toolbox(repo: Repository, problems: Problems) -> None:
                         )
 
 
+def check_chain(repo: Repository, problems: Problems) -> None:
+    """Pass 7 -- the attack chain resolves, and its facts mean one thing each.
+
+    The chain is derived, never stored: a unit leads to another exactly when it
+    yields a fact that one requires. That makes the fact vocabulary the only
+    place the graph can break, so it is the place that is checked.
+    """
+    facts = {f["id"]: f for f in (_vocab(repo, "facts", "facts") or [])}
+    referenced: Set[str] = set()
+
+    for doc in repo.units:
+        data = doc.data
+        requires = data.get("requires") or {}
+        declared = {
+            "requires": [*(requires.get("all_of") or []), *(requires.get("any_of") or [])],
+            "motivated_by": data.get("motivated_by") or [],
+            "yields": data.get("yields") or [],
+            "closes": data.get("closes") or [],
+        }
+        for field, names in declared.items():
+            for name in names:
+                referenced.add(name)
+                if name not in facts:
+                    problems.add(
+                        doc.rel,
+                        f"{field} names unknown fact {name} -- a fact outside "
+                        f"vocab/facts.yaml disconnects the graph instead of extending it",
+                    )
+
+        required = set(declared["requires"])
+        produced = set(declared["yields"])
+
+        for name in sorted(required & produced):
+            problems.add(
+                doc.rel,
+                f"requires and yields both name {name} -- a unit that needs its "
+                f"own result cannot be reached",
+            )
+
+        for name in sorted(n for n in required if n.startswith("impact.")):
+            problems.add(
+                doc.rel,
+                f"requires {name}: an impact is where a chain ends, so nothing "
+                f"may be conditioned on one",
+            )
+
+        for name in sorted(set(declared["closes"]) - produced):
+            problems.add(
+                doc.rel,
+                f"closes {name} without yielding it -- a negative result can only "
+                f"rule out what a positive one would have established",
+            )
+
+        if data.get("status") == "authored" and data.get("kind", "test") != "inquiry" and not produced:
+            problems.add(
+                doc.rel,
+                "authored without yields -- a unit that establishes nothing "
+                "cannot be reached from anywhere, and leads nowhere",
+            )
+
+    for name, fact in sorted(facts.items()):
+        if name in referenced:
+            continue
+        problems.add(
+            "vocab/facts.yaml",
+            f"{name} is declared but no unit requires, yields or is motivated by "
+            f"it -- an unreachable fact is vocabulary nobody can use",
+        )
+
+
 PASSES = (
     check_schemas,
     check_vocabularies,
@@ -592,6 +662,7 @@ PASSES = (
     check_knowledge,
     check_payloads,
     check_toolbox,
+    check_chain,
 )
 
 

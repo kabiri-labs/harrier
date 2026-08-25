@@ -64,7 +64,8 @@ their own.
 | `tests/` | Offline suite; mutation tests copy the repository and break one thing |
 
 Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
-[`docs/TAXONOMY.md`](docs/TAXONOMY.md).
+[`docs/TAXONOMY.md`](docs/TAXONOMY.md) and
+[`docs/CHAINING.md`](docs/CHAINING.md).
 
 ## Working on it
 
