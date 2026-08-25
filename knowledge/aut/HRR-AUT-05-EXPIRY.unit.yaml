@@ -5,3 +5,8 @@ title: "Enforcement of the persistent secret's lifetime"
 objective: >-
   Determine whether the persistent secret stops being accepted at the end of
   its stated lifetime.
+
+requires:
+  all_of: [access.user]
+yields: [control.persistent.weak]
+closes: [control.persistent.weak]

@@ -6,3 +6,9 @@ objective: >-
   Determine whether every surface that sets a credential applies the same
   rule, since registration, change and reset are frequently three separate
   implementations.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.credential.weak]
+closes: [control.credential.weak]

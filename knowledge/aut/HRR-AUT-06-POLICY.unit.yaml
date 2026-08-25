@@ -5,3 +5,9 @@ title: "Discoverability of the answers the question set asks for"
 objective: >-
   Determine whether the offered questions ask for facts an attacker can obtain
   from public sources or from the target's own profile.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.recovery.guessable]
+closes: [control.recovery.guessable]

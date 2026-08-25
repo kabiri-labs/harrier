@@ -5,3 +5,9 @@ title: "Clearing of an applied lockout"
 objective: >-
   Determine what clears an applied lockout, since a lockout an unauthenticated
   caller can lift protects nothing.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.limit.absent]
+closes: [control.limit.absent]

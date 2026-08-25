@@ -7,3 +7,7 @@ objective: >-
   Record the states a caller passes through between anonymous and
   authenticated, and which request drives each transition, so a skipped or
   reordered step is recognisable when it happens.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]

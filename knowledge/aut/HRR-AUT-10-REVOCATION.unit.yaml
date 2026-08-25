@@ -5,3 +5,8 @@ title: "Effect of withdrawing a grant on tokens already issued"
 objective: >-
   Determine whether withdrawing a grant stops the tokens issued under it from
   being accepted.
+
+requires:
+  all_of: [access.user]
+yields: [control.session.persists]
+closes: [control.session.persists]

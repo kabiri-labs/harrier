@@ -82,6 +82,34 @@ class Sandbox:
         """
         for unit in self.root.glob(f"knowledge/*/{topic_id}-*.unit.yaml"):
             unit.unlink()
+        self._prune_facts()
+
+    def _prune_facts(self) -> None:
+        """Drop facts nothing references any more.
+
+        Removing units can leave a fact with no producer and no consumer, which
+        the validator rejects -- correctly, but as a second broken thing the
+        test never asked for. A mutation test must break exactly one rule, so
+        the fixture repairs what it disturbed on its way past.
+        """
+        path = self.path("vocab/facts.yaml")
+        if not path.is_file():
+            return
+        referenced: set[str] = set()
+        for unit in self.root.glob("knowledge/*/*.unit.yaml"):
+            data = yaml.safe_load(unit.read_text(encoding="utf-8")) or {}
+            requires = data.get("requires") or {}
+            for names in (
+                requires.get("all_of"),
+                requires.get("any_of"),
+                data.get("motivated_by"),
+                data.get("yields"),
+                data.get("closes"),
+            ):
+                referenced.update(names or [])
+        vocab = yaml.safe_load(path.read_text(encoding="utf-8"))
+        vocab["facts"] = [f for f in vocab["facts"] if f["id"] in referenced]
+        path.write_text(yaml.safe_dump(vocab, sort_keys=False), encoding="utf-8")
 
     def add_topic(self, base: str | None = None, **overrides: Any) -> str:
         """Overwrite the base topic with one field changed, and return its id.

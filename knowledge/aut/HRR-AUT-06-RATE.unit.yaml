@@ -5,3 +5,9 @@ title: "Throttling of answer submission"
 objective: >-
   Determine whether repeated wrong answers to a recovery question are slowed
   or stopped.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.limit.absent]
+closes: [control.limit.absent]

@@ -5,3 +5,7 @@ title: "Acceptance of a documented vendor credential"
 objective: >-
   Determine whether any credential pair documented by the vendor of an
   identified component is still accepted.
+
+requires:
+  all_of: [recon.platform.identified]
+yields: [access.principal.other]

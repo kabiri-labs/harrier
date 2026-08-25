@@ -6,3 +6,7 @@ objective: >-
   Determine whether any field that can be bound decides what the caller is
   permitted to do or what it is owed, rather than how a record is presented,
   which is what separates a cosmetic binding from an escalation.
+
+requires:
+  all_of: [primitive.data.write.other]
+yields: [primitive.check.bypassed]

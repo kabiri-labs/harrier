@@ -5,3 +5,9 @@ title: "The same action under a method the check does not cover"
 objective: >-
   Determine whether an action refused under one request method succeeds under
   another that reaches the same handler.
+
+requires:
+  all_of: [recon.roles.mapped]
+  any_of: [access.anon, access.user]
+motivated_by: [control.method.override]
+yields: [primitive.privileged.action]

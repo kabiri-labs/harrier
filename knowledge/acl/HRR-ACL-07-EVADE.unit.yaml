@@ -7,3 +7,7 @@ objective: >-
   returned when the query names it another way. Performed once for every
   selection shape the topic declares as a dimension, because a check that
   inspects the parsed query walks some of those shapes and not others.
+
+requires:
+  all_of: [recon.schema.known, access.user]
+yields: [primitive.privileged.action]

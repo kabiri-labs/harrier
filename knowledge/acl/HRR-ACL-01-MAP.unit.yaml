@@ -7,3 +7,7 @@ objective: >-
   Record every role the application distinguishes and which test account
   exercises each, since an access-control finding is only as strong as the
   pair of accounts that produced it.
+
+requires:
+  all_of: [access.user]
+yields: [recon.roles.mapped]

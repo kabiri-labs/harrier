@@ -5,3 +5,8 @@ title: "A privileged function reached without authenticating"
 objective: >-
   Determine whether a privileged function executes for a caller carrying no
   session at all.
+
+requires:
+  all_of: [recon.roles.mapped]
+  any_of: [access.anon]
+yields: [primitive.privileged.action]

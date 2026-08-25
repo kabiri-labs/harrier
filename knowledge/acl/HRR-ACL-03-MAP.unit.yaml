@@ -6,3 +6,6 @@ title: "The privileged functions and how each is addressed"
 objective: >-
   Record every function the application treats as privileged and the request
   that reaches it, including those the interface only exposes to some roles.
+
+requires:
+  all_of: [recon.roles.mapped]

@@ -6,3 +6,6 @@ title: "Inventory of channels that authenticate the same account"
 objective: >-
   Record every channel through which the same account can be authenticated,
   including mobile clients, machine interfaces and support-operated paths.
+
+requires:
+  all_of: [recon.channels.mapped]

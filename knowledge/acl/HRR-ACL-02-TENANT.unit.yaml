@@ -6,3 +6,8 @@ objective: >-
   Determine whether an object belonging to a different tenant or organisation
   is served across that boundary, which fails separately from the same-tenant
   case because a different check usually enforces it.
+
+requires:
+  all_of: [artifact.objectid.known, access.user]
+yields: [primitive.data.read.tenant]
+closes: [primitive.data.read.tenant]

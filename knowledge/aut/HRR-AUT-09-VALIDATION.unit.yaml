@@ -5,3 +5,8 @@ title: "What the second-factor check accepts as satisfaction"
 objective: >-
   Determine whether the second-factor step can be satisfied by a value or a
   state the caller controls rather than by possession of the factor.
+
+requires:
+  all_of: [access.user]
+yields: [control.mfa.bypassable]
+closes: [control.mfa.bypassable]

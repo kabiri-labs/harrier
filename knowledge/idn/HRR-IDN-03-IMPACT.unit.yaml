@@ -5,3 +5,7 @@ title: "Harvesting rate once a differential is confirmed"
 objective: >-
   Determine how large a set of accounts a confirmed differential yields at a
   practical rate, which is what separates a leak from a usable list.
+
+requires:
+  all_of: [control.account.enumerable]
+yields: [artifact.accountlist]

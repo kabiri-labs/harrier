@@ -5,3 +5,8 @@ title: "Predictability of the persistent secret"
 objective: >-
   Determine whether the value stored to keep a user signed in is derived from
   account data or a counter rather than generated unpredictably.
+
+requires:
+  all_of: [access.user]
+yields: [control.persistent.weak]
+closes: [control.persistent.weak]

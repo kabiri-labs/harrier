@@ -6,3 +6,9 @@ objective: >-
   Determine whether a credential longer than the accepted maximum is rejected
   or silently truncated, since truncation shortens the secret without telling
   anyone.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.credential.weak]
+closes: [control.credential.weak]
