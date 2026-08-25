@@ -6,3 +6,7 @@ title: "What public indexes and archives hold about the target"
 objective: >-
   Record which of the target's assets are present in search indexes, caches
   and web archives, and at which point in time each copy was taken.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [recon.paths.indexed]

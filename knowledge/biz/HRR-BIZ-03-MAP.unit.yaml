@@ -6,3 +6,6 @@ title: "The state that travels through the client"
 objective: >-
   Record which values the application hands to the client and expects back
   unchanged, and what protects each in transit through it.
+
+requires:
+  all_of: [access.user]

@@ -5,3 +5,9 @@ title: "Debug output served in normal operation"
 objective: >-
   Determine whether diagnostic output is served when nothing has failed, which
   is a configuration left enabled rather than an error path.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.debug.enabled]
+closes: [control.debug.enabled]

@@ -7,3 +7,6 @@ objective: >-
   Record the naming conventions, extensions and directory shapes the
   application's own served files reveal, since that is what makes a guess
   about unlinked files informed rather than random.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

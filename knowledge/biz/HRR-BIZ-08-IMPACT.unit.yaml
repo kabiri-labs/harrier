@@ -7,3 +7,7 @@ objective: >-
   Establish whether an accepted discrepancy is still present once the
   transaction settles, since a later reconciliation step often corrects what
   the checkout accepted.
+
+requires:
+  all_of: [control.price.clientset]
+yields: [impact.value.obtained]

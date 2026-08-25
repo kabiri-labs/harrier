@@ -5,3 +5,8 @@ title: "Whether object names can be enumerated"
 objective: >-
   Determine whether object names are predictable enough that a caller can
   reach objects it was never given a link to.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.objectstore.enumerable]
+closes: [control.objectstore.enumerable]

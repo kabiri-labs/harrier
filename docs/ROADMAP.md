@@ -29,7 +29,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 3 | Unit outline pass | `done` | Every topic decomposed to units carrying an identifier, a title and a falsifiable objective. **This is where the artefact becomes genuinely useful.** Done in six batches of two or three domains, because a review of 350 files at once is not a review. |
 | 4 | Chain model spike | `done` | Five units authored across five domains and five shapes, plus the fact layer they needed. The point was to break the model while it was cheap to change, not to add coverage. |
 | 4.5 | One topic at depth | `done` | `HRR-RES-01` written all the way down: five authored units, four payload files, a shared card, the first mitigation. A calibration pass, not a coverage one -- it settles how concrete a written unit is before three hundred more are written to match it. |
-| 5 | Chain pass | `not started` | `requires` and `yields` for all 365 units, in six domain batches, `RCN` first because recon produces most of the base facts. Ends with the gate that every non-given fact has a producer. |
+| 5 | Chain pass | `done` | `requires` and `yields` for all 366 units, in six domain batches, `RCN` first because recon produces most of the base facts. 174 facts, and the gate at the end -- every non-given fact has a producer -- is enforced from here on. |
 | 6 | Published artefact | `not started` | Single self-contained HTML file: surface-first entry, a now/next view driven by the facts in hand, coverage views, and the graph. Versioning starts here. |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. This is the clearest differentiation from restating WSTG. |
 | 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. |
@@ -63,7 +63,7 @@ work read as phase 2's:
 | Topics | 99 |
 | Units — outlined | 356 |
 | Units — authored | 10 |
-| Units — charted | 312 |
+| Units — charted | 366 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -89,12 +89,11 @@ declaring requirements against facts nothing yet establishes.
 | 3 | `CLT` `PRT` | 80 | `done` |
 | 4 | `SES` `CRY` | 64 | `done` |
 | 5 | `AUT` `IDN` `ACL` | 67 | `done` |
-| 6 | `BIZ` `ERR` `CFG` | 58 | `not started` |
+| 6 | `BIZ` `ERR` `CFG` | 58 | `done` |
 
-The pass ends with a gate rather than a count: every fact that is not `given`
-must have at least one unit producing it, enforced by the validator. Until then
-a fact whose producer has simply not been charted yet is indistinguishable from
-one nothing can ever establish.
+The pass ended with a gate rather than a count: every fact that is not `given`
+has at least one unit producing it, and the validator enforces it from here on.
+174 facts, 366 units, and no condition in the graph without a route to it.
 
 ### Phase 3 batches
 
@@ -147,8 +146,8 @@ against real material rather than an empty tree:
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
 | `knowledge/` | 99 topics across 13 domains, and 366 units across all thirteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
-| `harrier/` | Nine schemas and seven validation passes. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 123 offline tests, almost all of them negative — asserting what must be rejected. |
+| `harrier/` | Nine schemas, seven validation passes and the derived chain. See [`VALIDATION.md`](VALIDATION.md). |
+| `tests/` | 125 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until a depth pass

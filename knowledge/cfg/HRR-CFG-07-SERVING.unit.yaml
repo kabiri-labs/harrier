@@ -5,3 +5,8 @@ title: "Directory contents served where no index exists"
 objective: >-
   Determine whether the server lists the contents of a directory that has no
   index document.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.directory.listed]
+closes: [surface.directory.listed]

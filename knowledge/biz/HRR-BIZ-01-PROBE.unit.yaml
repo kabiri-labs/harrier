@@ -6,3 +6,7 @@ title: "Enforcement of a recorded rule with the client bypassed"
 objective: >-
   Establish, for each recorded rule, whether the server refuses a request that
   breaks it when the interface is not there to prevent it.
+
+requires:
+  all_of: [recon.workflow.mapped, access.user]
+yields: [control.rule.clientonly]

@@ -7,3 +7,6 @@ objective: >-
   Record which requests the legitimate client issues and what, if anything,
   makes each one unforgeable, since that is the property a forgery has to
   defeat.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

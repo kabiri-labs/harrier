@@ -7,3 +7,6 @@ objective: >-
   Record which administrative interfaces this platform and its components ship
   with, and at which paths, since an interface nobody looked for is not an
   interface nobody deployed.
+
+requires:
+  all_of: [recon.platform.identified]

@@ -6,3 +6,8 @@ objective: >-
   Determine whether a cross-domain policy file is served and which origins it
   grants, so a control retired from browsers but still deployed is recorded
   rather than assumed gone.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.plugin.policy.permissive]
+closes: [control.plugin.policy.permissive]

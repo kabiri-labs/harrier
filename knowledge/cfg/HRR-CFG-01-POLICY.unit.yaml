@@ -6,3 +6,8 @@ objective: >-
   Determine whether settings intended for development survive in the deployed
   environment, which is a different failure from a setting that was never
   correct anywhere.
+
+requires:
+  all_of: [recon.platform.identified]
+yields: [control.config.nonproduction]
+closes: [control.config.nonproduction]

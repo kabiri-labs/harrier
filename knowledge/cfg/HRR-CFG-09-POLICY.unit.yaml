@@ -5,3 +5,8 @@ title: "What the store's own access policy grants"
 objective: >-
   Determine what the object store grants to an anonymous caller and to any
   authenticated caller, which the application's own permissions never see.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.objectstore.public]
+closes: [control.objectstore.public]

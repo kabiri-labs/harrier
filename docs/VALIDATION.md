@@ -95,7 +95,7 @@ meaning is uncertain is worse than one that is missing. See [`CHAINING.md`](CHAI
 
 ## What the suite adds
 
-123 tests, offline, no network and no fixtures of their own: every mutation test
+125 tests, offline, no network and no fixtures of their own: every mutation test
 copies the real repository and breaks exactly one thing in it. A hand-built
 miniature drifts from what it stands in for, and then the suite passes while the
 repository is broken.

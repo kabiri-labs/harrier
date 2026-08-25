@@ -6,3 +6,6 @@ title: "Where price, quantity and currency are decided"
 objective: >-
   Record which party decides each component of what is charged, and at which
   step the amount becomes final.
+
+requires:
+  all_of: [recon.workflow.mapped]

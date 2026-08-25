@@ -7,3 +7,6 @@ objective: >-
   Record which observable responses would indicate that misuse was detected --
   a block, a challenge, a notification, a changed latency -- since detection
   is otherwise invisible from outside.
+
+requires:
+  all_of: [access.user]

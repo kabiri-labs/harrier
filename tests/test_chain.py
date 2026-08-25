@@ -121,6 +121,26 @@ class OnlyASoleProducerMayCloseAFact(SandboxCase):
         self.assertAccepted()
 
 
+class EveryConditionHasAProducer(SandboxCase):
+    """The gate the chain pass ends on. A fact something requires and nothing
+    establishes is a hole, and from the outside it reads exactly like a route
+    nobody has taken yet -- which is the one failure a coverage claim must not
+    be able to make."""
+
+    def test_a_required_fact_nothing_yields_is_rejected(self):
+        # RCN-03-MAP is the only unit that produces the entry-point inventory,
+        # which most of the catalogue is conditioned on.
+        self.box.edit(
+            "knowledge/rcn/HRR-RCN-03-MAP.unit.yaml",
+            lambda u: u.update(yields=["recon.hosts.enumerated"]),
+        )
+        self.assertRejected("recon.entrypoints.mapped is required but no unit establishes it")
+
+    def test_a_given_fact_needs_no_producer(self):
+        # access.anon is a root: the engagement supplies it and no test earns it.
+        self.assertAccepted()
+
+
 class AnAuthoredUnitEstablishesSomething(SandboxCase):
     def test_an_authored_test_without_yields_is_rejected(self):
         def strip(unit):

@@ -6,3 +6,6 @@ title: "The services and ports reachable for the target"
 objective: >-
   Record which services answer on the target's addresses and what each is,
   since the application is only one of the things a host serves.
+
+requires:
+  all_of: [recon.names.mapped]

@@ -7,3 +7,6 @@ objective: >-
   Record each rule the workflow states or implies, and where the decision that
   enforces it is taken, since a rule decided in the client is not enforced
   anywhere.
+
+requires:
+  all_of: [recon.workflow.mapped]

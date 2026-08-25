@@ -6,3 +6,7 @@ title: "Enforcement of what one principal may accumulate"
 objective: >-
   Establish whether the cap on the total a single principal may accumulate is
   enforced, which frequently exists where a per-request cap does not.
+
+requires:
+  all_of: [access.user]
+yields: [control.limit.absent]

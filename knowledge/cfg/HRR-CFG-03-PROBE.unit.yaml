@@ -5,3 +5,8 @@ title: "Whether an administrative interface answers from outside"
 objective: >-
   Determine whether an administrative interface answers a caller who is not on
   the network the operator intended to restrict it to.
+
+requires:
+  all_of: [recon.platform.identified]
+yields: [surface.admin.reachable]
+closes: [surface.admin.reachable]

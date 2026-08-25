@@ -1002,3 +1002,147 @@ facts:
       A value the form never submits is bound from the request and stored.
       What it decides is a separate question, and the one that decides whether
       this matters.
+
+  - id: control.rule.clientonly
+    label: A business rule is not enforced by the server
+    description: >
+      A rule the workflow states is decided where the caller can change the
+      decision, so nothing enforces it once the interface is out of the way.
+
+  - id: control.request.forgeable
+    label: A hand-built request is acted on
+    description: >
+      The server acts on a request the legitimate client would never
+      construct, in that form or at that point.
+
+  - id: control.request.replayable
+    label: A legitimate request is acted on twice
+    description: >
+      A request captured once is honoured again, which fails differently from
+      accepting one that was never legitimate.
+
+  - id: control.clientstate.trusted
+    label: State returned by the client is trusted
+    description: >
+      A value the server issued and expected back unchanged is acted on when
+      it comes back altered.
+
+  - id: control.price.clientset
+    label: What is charged comes from the client
+    description: >
+      A component of the amount charged is taken from a value the caller
+      supplied rather than one the server holds.
+
+  - id: control.misuse.undetected
+    label: Sustained misuse changes nothing
+    description: >
+      Behaviour no legitimate user would produce, kept up long enough to be
+      unambiguous, provokes no observable response at all.
+
+  - id: control.error.verbose
+    label: Errors describe the fault inside the application
+    description: >
+      An error returns text about what went wrong internally rather than about
+      what the caller did wrong.
+
+  - id: control.debug.enabled
+    label: Diagnostic output is served in normal operation
+    description: >
+      Diagnostics are returned when nothing has failed, which is a setting
+      left enabled rather than an error path.
+
+  - id: control.content.internal
+    label: Delivered content carries internal detail
+    description: >
+      Something the application serves carries host names, paths, identifiers
+      or credentials that its interface never displays.
+
+  - id: control.content.withdrawn
+    label: Withdrawn content is still public
+    description: >
+      An indexed or archived copy exposes content the application has since
+      withdrawn or never meant to publish, which no change to the application
+      now recalls.
+
+  - id: control.platform.extra
+    label: The platform serves more than the application
+    description: >
+      Sample content, management consoles or status endpoints answer callers
+      who should not reach them.
+
+  - id: control.config.nonproduction
+    label: Development settings survive in production
+    description: >
+      Configuration meant for development is in force in the deployed
+      environment, which fails differently from a setting that was never right
+      anywhere.
+
+  - id: control.headers.permissive
+    label: The declared browser protections are not in force
+    description: >
+      A security header permits more than its presence suggests, is absent
+      from responses that need it, or is written in a form no browser honours.
+
+  - id: control.plugin.policy.permissive
+    label: A plugin cross-domain policy grants too much
+    description: >
+      A policy file the retired plugin runtimes read grants origins it should
+      not. Kept apart from the modern sharing policy because nothing a browser
+      does today consumes it.
+
+  - id: control.permissions.excessive
+    label: File permissions exceed what the process needs
+    description: >
+      Ownership and mode on the deployed files give the serving process, or
+      another account on the host, more than it requires.
+
+  - id: control.storage.served
+    label: Written files land where the server publishes them
+    description: >
+      Files the application writes are placed in a location that is served,
+      which turns a storage decision into a disclosure.
+
+  - id: control.objectstore.public
+    label: The object store grants access of its own
+    description: >
+      The store hands objects to an anonymous or any-authenticated caller,
+      which the application's own permissions never see.
+
+  - id: control.objectstore.enumerable
+    label: Object names can be guessed
+    description: >
+      Names in the store are predictable enough to reach objects nobody was
+      given a link to.
+
+  - id: surface.file.unlinked
+    label: The server returns a file nothing references
+    description: >
+      A file no page links to is served and the application does not need to
+      publish it. What is in it is the next question.
+
+  - id: surface.admin.reachable
+    label: An administrative interface answers from outside
+    description: >
+      A management interface responds to a caller who is not on the network
+      the operator meant to restrict it to.
+
+  - id: surface.method.extra
+    label: Methods beyond the client's own are accepted
+    description: >
+      A resource accepts request methods its own client never issues.
+
+  - id: surface.directory.listed
+    label: Directory contents are served
+    description: >
+      The server lists what is in a directory that has no index document.
+
+  - id: primitive.limit.exceeded
+    label: A limited operation is applied more times than allowed
+    description: >
+      Overlapping requests carry an operation past the limit that governs it.
+
+  - id: impact.value.obtained
+    label: Something of value is obtained
+    description: >
+      The workflow delivers goods, money, entitlement or standing that the
+      caller was not owed. Where a business-logic chain ends.

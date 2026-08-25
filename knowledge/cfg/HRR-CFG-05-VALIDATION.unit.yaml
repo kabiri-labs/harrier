@@ -6,3 +6,7 @@ objective: >-
   Determine whether each declared policy is one a browser will honour, since a
   directive that is misspelled, superseded or unsupported is a policy in the
   response and not in the browser.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [control.headers.permissive]

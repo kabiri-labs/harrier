@@ -6,3 +6,8 @@ title: "Acceptance of returned state that was altered"
 objective: >-
   Establish whether the server acts on a value it previously issued when that
   value comes back changed.
+
+requires:
+  all_of: [access.user]
+yields: [control.clientstate.trusted]
+closes: [control.clientstate.trusted]

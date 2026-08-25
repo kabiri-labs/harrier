@@ -6,3 +6,7 @@ objective: >-
   Determine whether a method accepted but unused has an effect on the server
   or on the response, since being answered and being acted on are different
   results.
+
+requires:
+  all_of: [surface.method.extra]
+yields: [primitive.privileged.action]
