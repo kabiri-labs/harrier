@@ -9,5 +9,4 @@ objective: >-
 
 requires:
   all_of: [recon.names.mapped]
-yields: [surface.path.unlinked]
-closes: [surface.path.unlinked]
+yields: [recon.paths.indexed]
