@@ -1,9 +1,41 @@
 id: HRR-RCN-01-FPRINT
 topic: HRR-RCN-01
-status: outline
+status: authored
 kind: recon
 title: "The product and version answering at the origin"
 objective: >-
   Record which server, platform and application framework answer the request,
   and at what version, since that is the input every version-specific decision
   later reads.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.platform.identified]
+
+enter_when:
+  - "Before any test whose payload or expectation depends on the platform."
+
+sequence:
+  - "Record the response headers of one ordinary request, including their order."
+  - "Request a path that cannot exist and record how the 404 is rendered."
+  - "Send one malformed request line and record how the parse failure is answered."
+  - "Reconcile the three against each other before writing a version down."
+
+first_false_positive: >-
+  A header naming an intermediary rather than the origin. A content delivery or
+  filtering layer answers with its own identity, and the product behind it is a
+  separate record -- which is why the tier map is a sibling unit rather than an
+  assumption here.
+
+preconditions:
+  - "The address answering is the one in scope, not a shared front end serving many tenants."
+
+evidence:
+  - "The raw response headers, in order, for each of the three requests."
+
+done_when: >-
+  A product and, where it could be established, a version is written down for
+  each tier that answered, or the tier is recorded as unidentified with the
+  signals that were tried.
+
+tools: [burp-repeater, curl]

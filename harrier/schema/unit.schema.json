@@ -41,6 +41,26 @@
       "propertyNames": {"pattern": "^[a-z][a-z_]*$"},
       "additionalProperties": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/slug"}, "uniqueItems": true}
     },
+    "requires": {
+      "description": "What must already be true for this unit to be possible at all -- not what makes it likely to succeed. Over-declaring here hides tests from the reader who has not yet earned the fact, which is worse than a unit offered slightly too early.",
+      "type": "object", "additionalProperties": false, "minProperties": 1,
+      "properties": {
+        "all_of": {"$ref": "#/$defs/fact_list"},
+        "any_of": {"$ref": "#/$defs/fact_list"}
+      }
+    },
+    "motivated_by": {
+      "description": "Facts that make this unit worth reaching for sooner, without being conditions of it. Kept separate from requires so that a hint can never silently become a gate.",
+      "$ref": "#/$defs/fact_list"
+    },
+    "yields": {
+      "description": "What becomes true when the result is positive. This, with requires, is the whole of the chain: no unit names another unit.",
+      "$ref": "#/$defs/fact_list"
+    },
+    "closes": {
+      "description": "What a negative result rules out. A subset of yields: a unit can only close a claim it was capable of opening.",
+      "$ref": "#/$defs/fact_list"
+    },
     "refs": {"$ref": "topic.schema.json#/$defs/refs"}
   },
   "allOf": [
@@ -73,6 +93,10 @@
   "$defs": {
     "unit_id": {"type": "string", "pattern": "^HRR-[A-Z]{3}-[0-9]{2}-[A-Z0-9]{2,10}$"},
     "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "fact_list": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"$ref": "vocab.schema.json#/$defs/fact_id"}
+    },
     "surface_clause": {"$ref": "topic.schema.json#/$defs/surface_clause"}
   }
 }

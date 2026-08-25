@@ -147,7 +147,10 @@ A tester mid-test does not browse by standard. Ranked by actual use:
    This is the default entry point, and it is why surface tags are a first-class
    controlled vocabulary rather than a loose set of labels.
 2. **By search.** Three characters to a payload.
-3. **By signal.** *"I saw this response behaviour — what does it mean, what next?"*
+3. **By what is in hand.** *"I have a session and a SQL-injectable parameter —
+   what is possible now?"* This is the working view during an engagement, and it
+   is derived from the facts units declare rather than from any stored ordering.
+   See [`CHAINING.md`](CHAINING.md).
 4. **By standard.** WSTG, CWE, ASVS coverage views. Real, but its audience is
    report-writing and scoping, not testing.
 
@@ -162,11 +165,13 @@ docs/
   ARCHITECTURE.md   this document: the model and why it is shaped this way
   TAXONOMY.md       identifiers, domains, axis vocabularies
   AUTHORING.md      the rules for writing a unit or a card
+  CHAINING.md       how one test leads to the next, and why no unit names another
   VALIDATION.md     what the validator checks, and why each rule is mechanical
   ROADMAP.md        build state; updated in the same change as the work
 
 harrier/            the validator -- the only executable code in the repository
-  schema/           seven JSON Schemas, selected by a document's location
+  chain.py          the derived attack graph; nothing about it is stored
+  schema/           nine JSON Schemas, selected by a document's location
 tests/              offline suite; mutation tests copy the repository itself
 
 standards/          published standards this project cross-references

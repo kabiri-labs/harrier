@@ -21,6 +21,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 class Sandbox:
     """A throwaway copy of the repository, with helpers to break one thing in it."""
 
+    #: The checkout the copies are made from. Exposed so a test that reads the
+    #: real catalogue rather than mutating one names the same path.
+    REPO_ROOT = REPO_ROOT
+
     def __init__(self) -> None:
         self._tmp = tempfile.mkdtemp(prefix="harrier-test-")
         self.root = Path(self._tmp) / "repo"

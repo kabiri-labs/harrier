@@ -6,3 +6,7 @@ title: "Database engine fingerprint"
 objective: >-
   Establish which relational engine answers the injectable parameter, so
   payload shapes stop being guesses.
+
+requires:
+  all_of: [surface.sql.injectable]
+yields: [recon.engine.identified]
