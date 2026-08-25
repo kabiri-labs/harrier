@@ -6,3 +6,8 @@ title: "The interface as its own client and specification describe it"
 objective: >-
   Record the endpoints, operations and parameters named by specifications,
   client bundles and observed traffic.
+
+requires:
+  all_of: [recon.target.reachable]
+motivated_by: [recon.traffic.captured]
+yields: [recon.api.mapped]

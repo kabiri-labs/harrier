@@ -62,6 +62,7 @@ work read as phase 2's:
 | Topics | 99 |
 | Units — outlined | 360 |
 | Units — authored | 5 |
+| Units — charted | 26 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -69,9 +70,29 @@ The denominators differ by one: `WSTG-INPV-14` is mapped to no domain because it
 describes second-order delivery rather than a test, so nothing can cover it and
 the validator does not ask anything to.
 
-Every topic now carries units, which was phase 3's job. The number to watch
-from here is charted units -- those carrying `requires` and `yields` -- which is
-phase 5's.
+Every topic now carries units, which was phase 3's job. The number to watch from
+here is charted units — those carrying `requires` and `yields` — which is phase
+5's, and the one the now/next view depends on entirely.
+
+### Phase 5 batches
+
+`requires` and `yields` for every unit. Recon goes first because it produces the
+facts every other domain consumes: charting anything else first would mean
+declaring requirements against facts nothing yet establishes.
+
+| Batch | Domains | Units | Status |
+|---|---|---|---|
+| 1 | `RCN` | 17 | `done` |
+| 2 | `INJ` `RES` | 79 | `not started` |
+| 3 | `CLT` `PRT` | 80 | `not started` |
+| 4 | `SES` `CRY` | 64 | `not started` |
+| 5 | `AUT` `IDN` `ACL` | 67 | `not started` |
+| 6 | `BIZ` `ERR` `CFG` | 58 | `not started` |
+
+The pass ends with a gate rather than a count: every fact that is not `given`
+must have at least one unit producing it, enforced by the validator. Until then
+a fact whose producer has simply not been charted yet is indistinguishable from
+one nothing can ever establish.
 
 ### Phase 3 batches
 

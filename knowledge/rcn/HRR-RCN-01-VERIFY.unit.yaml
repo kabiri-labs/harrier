@@ -7,3 +7,7 @@ objective: >-
   Record whether the identification survives a signal the operator is unlikely
   to have changed, since banners are edited far more often than parsing quirks
   are.
+
+requires:
+  all_of: [recon.platform.identified]
+yields: [recon.platform.confirmed]

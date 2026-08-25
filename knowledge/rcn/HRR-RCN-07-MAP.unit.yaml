@@ -7,3 +7,8 @@ objective: >-
   Record the types, fields, arguments and mutations the schema exposes, from
   introspection where it answers and from the client's own documents where it
   does not.
+
+requires:
+  all_of: [recon.api.mapped]
+motivated_by: [surface.graphql.introspectable]
+yields: [recon.schema.known]

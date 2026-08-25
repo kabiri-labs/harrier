@@ -7,3 +7,7 @@ objective: >-
   Record the DNS names, certificate subjects and address ranges that belong to
   the target, since the surface is defined by this list and nothing outside it
   may be touched.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.names.mapped]

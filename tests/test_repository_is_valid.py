@@ -45,6 +45,7 @@ class TheRealRepository(unittest.TestCase):
             ("Topics", counts["topics"]),
             ("Units — outlined", counts["units"] - counts["units_authored"]),
             ("Units — authored", counts["units_authored"]),
+            ("Units — charted", counts["units_charted"]),
         ):
             with self.subTest(label=label):
                 self.assertIn(f"| {label} | {value} |", roadmap, why)

@@ -705,6 +705,12 @@ def coverage(root: Path) -> Dict[str, int]:
         "topics": len(repo.topics),
         "units": len(repo.units),
         "units_authored": sum(1 for d in repo.units if d.data.get("status") != "outline"),
+        # The number the chain pass is judged on: a unit with neither field is
+        # in the catalogue but not in the graph, which is invisible in every
+        # other count here.
+        "units_charted": sum(
+            1 for d in repo.units if d.data.get("requires") or d.data.get("yields")
+        ),
         "wstg_pinned": len(repo.standards["wstg"].data["wstg"]),
         "wstg_mapped": len(wmap),
         "wstg_covered": len(covered),

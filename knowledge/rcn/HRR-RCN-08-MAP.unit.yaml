@@ -6,3 +6,7 @@ title: "What the metafiles declare"
 objective: >-
   Record the paths and directives declared by robots.txt, sitemaps and well-
   known documents, which are the target's own statement of what it publishes.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.metafiles.read]

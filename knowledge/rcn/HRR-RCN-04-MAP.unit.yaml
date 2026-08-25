@@ -7,3 +7,7 @@ objective: >-
   Record the sequence of intermediaries a request crosses and where it is
   finally answered, since a control observed at one tier says nothing about
   the next.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.tiers.mapped]

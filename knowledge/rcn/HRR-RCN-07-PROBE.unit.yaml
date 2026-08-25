@@ -6,3 +6,8 @@ title: "Whether introspection answers"
 objective: >-
   Record whether the endpoint answers an introspection query, and if it
   refuses, on what grounds.
+
+requires:
+  all_of: [recon.api.mapped]
+yields: [surface.graphql.introspectable]
+closes: [surface.graphql.introspectable]
