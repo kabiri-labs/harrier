@@ -93,6 +93,12 @@ could quietly file an impact as a primitive.
 `given: true` marks a fact the engagement supplies unconditionally — the target
 being reachable, requests being possible without a session. Those are the roots.
 
+`granted: true` marks one an engagement *may* supply and often does not: access
+to the host itself is the first of them. It is never assumed at the start, and
+the tester names it with `--held` when they have it. Both are exempt from the
+producer gate, because neither is earned by a test — but only `given` facts are
+held before anything is done.
+
 Credentials are **not** among them. An engagement that hands over no account
 leaves one to be earned by registering, and a root that assumed otherwise would
 open the catalogue with tests the tester cannot run. What is actually in hand is

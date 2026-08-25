@@ -8,6 +8,6 @@ objective: >-
   legitimate client would never construct in that form or at that point.
 
 requires:
-  all_of: [access.user]
+  all_of: [access.user, artifact.request.captured]
 yields: [control.request.forgeable]
 closes: [control.request.forgeable]

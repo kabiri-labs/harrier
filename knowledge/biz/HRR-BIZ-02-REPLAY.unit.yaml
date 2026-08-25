@@ -8,6 +8,6 @@ objective: >-
   separate failure from accepting one that was never legitimate.
 
 requires:
-  all_of: [access.user]
+  all_of: [access.user, artifact.request.captured]
 yields: [control.request.replayable]
 closes: [control.request.replayable]

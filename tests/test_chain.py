@@ -136,6 +136,19 @@ class EveryConditionHasAProducer(SandboxCase):
         )
         self.assertRejected("recon.entrypoints.mapped is required but no unit establishes it")
 
+    def test_a_granted_fact_is_exempt_but_not_held_at_the_start(self):
+        # Host access is supplied by an engagement whose scope includes it and
+        # by no test. It must not be assumed before the tester says they have it.
+        chain = Chain.load(self.box.root)
+        self.assertNotIn("access.host", chain.given())
+        self.assertNotIn(
+            "HRR-CFG-07-POLICY", {n.id for n in chain.available(chain.given())}
+        )
+        self.assertIn(
+            "HRR-CFG-07-POLICY",
+            {n.id for n in chain.available(chain.given() | {"access.host"})},
+        )
+
     def test_a_given_fact_needs_no_producer(self):
         # access.anon is a root: the engagement supplies it and no test earns it.
         self.assertAccepted()

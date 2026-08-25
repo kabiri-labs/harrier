@@ -9,5 +9,5 @@ objective: >-
 requires:
   all_of: [recon.roles.mapped]
   any_of: [access.anon, access.user]
-motivated_by: [control.method.override]
+motivated_by: [control.method.override, surface.method.effective]
 yields: [primitive.privileged.action]

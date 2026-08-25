@@ -673,13 +673,14 @@ def check_chain(repo: Repository, problems: Problems) -> None:
                 f"it -- an unreachable fact is vocabulary nobody can use",
             )
             continue
-        if fact.get("given") or producers.get(name):
+        if fact.get("given") or fact.get("granted") or producers.get(name):
             continue
         problems.add(
             "vocab/facts.yaml",
-            f"{name} is required but no unit establishes it -- a condition with "
-            f"no producer is a hole in the chain, and it reads from the outside "
-            f"exactly like a route nobody has taken yet",
+            f"{name} is required but no unit establishes it, and it is neither "
+            f"given nor granted -- a condition with no producer is a hole in the "
+            f"chain, and it reads from the outside exactly like a route nobody "
+            f"has taken yet",
         )
 
 

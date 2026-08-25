@@ -9,4 +9,4 @@ objective: >-
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]
-yields: [control.error.verbose, recon.approot.disclosed]
+yields: [control.error.verbose]

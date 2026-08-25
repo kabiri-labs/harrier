@@ -60,6 +60,7 @@
           "id": {"$ref": "#/$defs/fact_id"},
           "label": {"type": "string", "minLength": 3},
           "given": {"const": true},
+          "granted": {"const": true},
           "description": {"type": "string", "minLength": 20}
         }
       }
