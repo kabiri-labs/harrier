@@ -5,3 +5,7 @@ title: "Acceptance of a secondary channel's session by the primary one"
 objective: >-
   Determine whether a session obtained through a secondary channel is honoured
   by the primary one, which is what turns a weaker channel into a full bypass.
+
+requires:
+  all_of: [control.channel.weaker]
+yields: [access.principal.other]

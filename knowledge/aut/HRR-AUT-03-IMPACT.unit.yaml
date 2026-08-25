@@ -5,3 +5,8 @@ title: "Denial of service through the lockout itself"
 objective: >-
   Determine whether an attacker can lock a chosen legitimate account out at
   will, which turns the protection into the attack.
+
+requires:
+  all_of: [control.limit.absent]
+motivated_by: [artifact.accountlist]
+yields: [impact.account.denied]

@@ -7,3 +7,6 @@ objective: >-
   Record which products, frameworks and appliances in the authenticated
   surface are known to ship with vendor-supplied accounts, so the guessing
   that follows is aimed rather than blind.
+
+requires:
+  all_of: [recon.platform.identified]

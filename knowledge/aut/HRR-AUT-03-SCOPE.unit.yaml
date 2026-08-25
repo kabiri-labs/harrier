@@ -5,3 +5,9 @@ title: "What the failure counter is keyed on"
 objective: >-
   Determine what value the failure counter is keyed on, since a counter keyed
   on anything the caller supplies is reset by changing that value.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.limit.absent]
+closes: [control.limit.absent]

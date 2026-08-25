@@ -7,3 +7,6 @@ objective: >-
   Record the types and fields the schema exposes and which role is expected to
   reach each, since a field-level check can only be judged against that
   expectation.
+
+requires:
+  all_of: [recon.schema.known, recon.roles.mapped]

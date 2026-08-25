@@ -5,3 +5,8 @@ title: "Binding of the reset artefact to one account"
 objective: >-
   Determine whether a reset artefact issued for one account is refused when it
   is presented against another.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [access.principal.other]

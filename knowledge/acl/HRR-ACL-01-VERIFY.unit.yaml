@@ -7,3 +7,6 @@ objective: >-
   Record where the interface each role is actually served differs from the
   permission model as documented, so the matrix later tests read from is
   observed rather than assumed.
+
+requires:
+  all_of: [recon.roles.mapped]

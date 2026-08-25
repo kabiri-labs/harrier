@@ -5,3 +5,7 @@ title: "Binding of a field the interface never exposed"
 objective: >-
   Determine whether a field the interface never submits is bound from the
   request body and persisted.
+
+requires:
+  all_of: [access.user]
+yields: [primitive.data.write.other]

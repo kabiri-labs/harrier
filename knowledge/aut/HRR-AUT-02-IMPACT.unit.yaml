@@ -6,3 +6,7 @@ objective: >-
   Determine what an accepted vendor credential can actually reach, since such
   an account is often left in place precisely because it was believed to be
   unprivileged.
+
+requires:
+  all_of: [access.principal.other]
+yields: [access.role.elevated]

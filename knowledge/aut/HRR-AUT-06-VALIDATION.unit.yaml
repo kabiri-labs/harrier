@@ -5,3 +5,9 @@ title: "How strictly a submitted answer is compared"
 objective: >-
   Determine how leniently a submitted answer is compared, since case,
   whitespace and substring tolerance shrink the space an attacker must cover.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.recovery.guessable]
+closes: [control.recovery.guessable]

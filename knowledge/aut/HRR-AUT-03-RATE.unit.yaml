@@ -5,3 +5,9 @@ title: "Throttling of repeated authentication attempts"
 objective: >-
   Determine whether repeated failed authentication attempts against one
   account are slowed or stopped at all.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.limit.absent]
+closes: [control.limit.absent]

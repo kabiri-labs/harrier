@@ -5,3 +5,8 @@ title: "Whether a secondary channel enforces weaker requirements"
 objective: >-
   Determine whether any secondary channel authenticates the same account on
   less evidence than the primary one demands.
+
+requires:
+  all_of: [recon.channels.mapped]
+yields: [control.channel.weaker]
+closes: [control.channel.weaker]

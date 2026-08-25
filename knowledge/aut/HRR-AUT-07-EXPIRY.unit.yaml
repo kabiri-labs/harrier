@@ -5,3 +5,9 @@ title: "Lifetime of the reset artefact"
 objective: >-
   Determine whether a reset artefact stops being accepted after its stated
   lifetime has passed.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.reset.weak]
+closes: [control.reset.weak]

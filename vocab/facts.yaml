@@ -831,3 +831,152 @@ facts:
       A page carrying the identifier in its URL links or loads across an
       origin boundary, so somebody the application never authorised receives
       it in the ordinary course of use.
+
+  - id: recon.roles.mapped
+    label: The roles and the accounts holding them are recorded
+    description: >
+      Which roles the application distinguishes, and which test account
+      exercises each. Every access-control comparison is only as strong as the
+      pair of accounts behind it, so this is a condition rather than a
+      courtesy.
+
+  - id: access.principal.other
+    label: A session belonging to somebody else is held
+    description: >
+      The tester is authenticated as a principal the engagement did not grant
+      them -- through a vendor credential, a defeated authentication step, a
+      weaker channel, or a recovery artefact accepted against the wrong
+      account.
+
+  - id: access.role.elevated
+    label: A session carrying more than the granted role is held
+    description: >
+      The session in hand acts with a role above the one the engagement
+      granted.
+
+  - id: control.credential.weak
+    label: The enforced credential policy permits a guessable secret
+    description: >
+      What the application actually accepts leaves the secret guessable -- a
+      weak minimum, a silent truncation, or a rule one surface enforces and
+      another does not.
+
+  - id: control.persistent.weak
+    label: The stay-signed-in secret is not trustworthy
+    description: >
+      The long-lived secret is predictable, outlives its stated lifetime, or
+      survives the events that should end it.
+
+  - id: control.recovery.guessable
+    label: Knowledge-based recovery can be answered by an attacker
+    description: >
+      The questions ask for facts an attacker can find, or the comparison is
+      lenient enough to shrink the space to something coverable.
+
+  - id: control.reset.weak
+    label: The recovery artefact is not sound
+    description: >
+      The token, code or link the recovery flow issues is predictable,
+      outlives its stated lifetime, or is accepted more than once.
+
+  - id: control.reauth.absent
+    label: A sensitive change needs no fresh proof
+    description: >
+      An authenticated caller can change a credential or a recovery contact
+      without proving again that they are the account holder, which is what
+      turns a borrowed session into a permanent one.
+
+  - id: control.channel.weaker
+    label: A secondary channel authenticates on less
+    description: >
+      Some channel reaching the same account demands less evidence than the
+      primary one does.
+
+  - id: control.mfa.optional
+    label: The second factor is not demanded where it matters
+    description: >
+      Accounts or sensitive actions exist that the second factor is not
+      required for.
+
+  - id: control.mfa.bypassable
+    label: The second factor does not hold
+    description: >
+      The second step can be satisfied without possession of the factor -- by
+      a caller-controlled value, by a space small enough to cover, or by a
+      value issued to another account.
+
+  - id: control.oauth.flow
+    label: The authorization response is not bound to its request
+    description: >
+      Either the return location is matched loosely enough to deliver the
+      response elsewhere, or nothing ties the response to a request this
+      caller started.
+
+  - id: control.registration.unverified
+    label: An account is usable before its contact is proved
+    description: >
+      Registration produces a working account without the caller demonstrating
+      control of the address or number it names.
+
+  - id: control.provisioning.unchecked
+    label: A provisioning route demands no real evidence
+    description: >
+      An approval or verification step on the route that creates accounts is
+      declared but not enforced.
+
+  - id: control.account.enumerable
+    label: Whether an account exists is observable
+    description: >
+      The application answers differently for an account that exists and one
+      that does not, by content or by latency.
+
+  - id: artifact.accountlist
+    label: A usable list of real accounts is held
+    description: >
+      Enumeration has produced enough real account names to aim everything
+      that needs one -- credential attacks, lockout, targeted recovery.
+
+  - id: control.username.confusable
+    label: Two distinct names can mean one account
+    description: >
+      The accepted name space allows values that a human, or the application's
+      own lookup, cannot tell apart.
+
+  - id: impact.account.denied
+    label: A chosen user is locked out at will
+    description: >
+      A legitimate account can be denied access on demand, which turns the
+      protection into the attack and is where this chain ends.
+
+  - id: primitive.privileged.action
+    label: A function outside the caller's role executes
+    description: >
+      An action the caller's role does not include is carried out for them,
+      whether they hold no session, a lesser one, or reached it by another
+      verb or another query shape.
+
+  - id: primitive.data.read.tenant
+    label: Another tenant's data is readable
+    description: >
+      Records belonging to a different tenant or organisation cross that
+      boundary. Separate from the same-tenant case because a different check,
+      usually in a different place, is what fails.
+
+  - id: primitive.data.write.other
+    label: Data the caller does not own is changed
+    description: >
+      State belonging to somebody else is modified or deleted, which the write
+      path permits independently of what the read path allows.
+
+  - id: primitive.data.read.bulk
+    label: The object space is reachable at scale
+    description: >
+      A confirmed failure yields not one record but a meaningful part of the
+      set, which is a different finding to report and a different one to
+      remediate.
+
+  - id: control.method.override
+    label: A method override is honoured
+    description: >
+      The server acts on a method other than the one the request line named,
+      and other than the one an access-control check inspected.

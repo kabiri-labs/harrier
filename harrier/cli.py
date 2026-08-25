@@ -148,6 +148,14 @@ def main(argv: Optional[List[str]] = None) -> int:
             for key, value in coverage(root).items():
                 print(f"{key:16} {value}")
             return EXIT_OK
+    except BrokenPipeError:
+        # Piping into head or less closes the stream early. That is the reader's
+        # decision, not an error, and a traceback here would be the first thing
+        # a tester saw from a tool they piped out of habit.
+        try:
+            sys.stdout.close()
+        finally:
+            return EXIT_OK
     except HarrierError as exc:
         print(f"harrier: {exc}", file=sys.stderr)
         return EXIT_FAILED

@@ -9,3 +9,8 @@ objective: >-
   every operation the topic declares as a dimension, and against every
   ownership boundary its sibling units name, because a policy that refuses one
   operation routinely permits another.
+
+requires:
+  all_of: [artifact.objectid.known, access.user]
+yields: [primitive.data.write.other]
+closes: [primitive.data.write.other]

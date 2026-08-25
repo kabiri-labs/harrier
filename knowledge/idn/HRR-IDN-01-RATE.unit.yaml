@@ -5,3 +5,9 @@ title: "Throttling of account creation"
 objective: >-
   Determine whether one caller can create accounts faster than a human would,
   which decides whether every per-account limit elsewhere can be sidestepped.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.limit.absent]
+closes: [control.limit.absent]

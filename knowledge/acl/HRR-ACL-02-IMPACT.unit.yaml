@@ -5,3 +5,7 @@ title: "How much of the object space a confirmed failure reaches"
 objective: >-
   Determine how much of the object space one confirmed failure yields, since a
   single readable record and an enumerable dataset are different findings.
+
+requires:
+  all_of: [primitive.data.read.peer]
+yields: [primitive.data.read.bulk]
