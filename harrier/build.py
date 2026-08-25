@@ -23,6 +23,13 @@ from .chain import Chain
 from .validate import coverage
 
 
+#: Keys whose value is a literal to be copied and sent, not prose to be read.
+#: Whitespace in them is syntax: a MySQL comment is "-- " and stops being one
+#: without the trailing space, and a numeric-context probe starts with a space
+#: because it is appended to a bare number.
+VERBATIM = frozenset({"payload"})
+
+
 def _text(value: Any) -> str:
     """Collapse the whitespace a folded YAML scalar leaves behind."""
     if not isinstance(value, str):
@@ -32,7 +39,10 @@ def _text(value: Any) -> str:
 
 def _clean(data: Any) -> Any:
     if isinstance(data, dict):
-        return {k: _clean(v) for k, v in data.items()}
+        return {
+            k: (v if k in VERBATIM else _clean(v))
+            for k, v in data.items()
+        }
     if isinstance(data, list):
         return [_clean(v) for v in data]
     return _text(data)
@@ -172,7 +182,12 @@ th, td { text-align: left; padding: .3rem .5rem; border-bottom: 1px solid var(--
 th { color: var(--dim); font-weight: 500; font-size: .76rem; text-transform: uppercase; }
 pre { background: #0f1115; border: 1px solid var(--line); border-radius: 3px;
   padding: .6rem .8rem; overflow-x: auto; font-size: .82rem; }
-code { background: #0f1115; border-radius: 2px; padding: 0 .25rem; font-size: .85em; }
+code { background: #0f1115; border-radius: 2px; padding: 0 .25rem; font-size: .85em;
+  white-space: pre-wrap; }
+/* A payload is copied, not read: the browser would collapse the trailing space
+   that makes "-- " a comment and the leading one that makes " AND 1=1" append
+   to a bare number, and the reader would never see what went missing. */
+td code, .payload { white-space: pre; }
 pre code { background: none; padding: 0; }
 a { color: var(--accent); }
 .tag { display: inline-block; background: #232833; border-radius: 2px;
@@ -314,6 +329,18 @@ function renderUnit(u) {
         "</code></td><td>" + esc(e.detect || "") + (e.note ? '<br><span class="muted">' + esc(e.note) + "</span>" : "") +
         "</td></tr>").join("") + "</table>";
   }
+  let toolHtml = "";
+  (u.tools || []).forEach(id => {
+    const t = D.toolbox[id];
+    if (!t) return;
+    toolHtml += "<h3>Tool · " + esc(t.name) + '</h3><p class="muted">' + esc(t.purpose) + "</p>" +
+      (t.invocations || []).map(v => '<div class="card"><span class="k">' + esc(v.purpose) +
+        "</span><pre><code>" + esc(v.cmd) + "</code></pre>" +
+        (v.flags ? "<table><tr><th>Flag</th><th>Why</th></tr>" +
+          Object.keys(v.flags).map(f => "<tr><td><code>" + esc(f) + "</code></td><td>" +
+            esc(v.flags[f]) + "</td></tr>").join("") + "</table>" : "") +
+        "</div>").join("");
+  });
   const cardMd = u.card && D.cards[u.card];
   const mitMd = u.mitigation && D.mitigations[u.mitigation];
 
@@ -321,7 +348,7 @@ function renderUnit(u) {
     '<h2>' + esc(u.title) + '</h2><div class="sub"><span class="id">' + esc(u.id) +
     '</span> · ' + esc(t.title || u.topic) + ' · <span class="pill">' + esc(u.kind || "test") +
     '</span> <span class="pill">' + esc(u.status || "authored") + "</span></div>" +
-    rows.join("") + chain + payHtml +
+    rows.join("") + chain + payHtml + toolHtml +
     (cardMd ? "<h3>Card</h3>" + md(cardMd) : "") +
     (mitMd ? "<h3>Mitigation</h3>" + md(mitMd) : "");
   body.scrollTop = 0;
@@ -440,21 +467,58 @@ function showCoverage(which) {
   body.scrollTop = 0;
 }
 
+/* Search reads everything the file carries, because everything the file carries
+   is what the reader was promised. A term that appears only in a card is the
+   case that matters: the cards are where the reasoning lives. */
+function excerpt(text, t) {
+  const i = text.toLowerCase().indexOf(t);
+  const from = Math.max(0, i - 90), to = Math.min(text.length, i + t.length + 130);
+  return (from ? "… " : "") + text.slice(from, to).replace(/\s+/g, " ") + (to < text.length ? " …" : "");
+}
+
 function search(term) {
   const t = term.toLowerCase();
-  const hits = Object.values(D.units).filter(u =>
-    (u.id + " " + u.title + " " + u.objective).toLowerCase().includes(t)).slice(0, 80);
+  const has = s => String(s || "").toLowerCase().includes(t);
+  const units = Object.values(D.units).filter(u => has(u.id + " " + u.title + " " + u.objective));
+  const topics = Object.values(D.topics).filter(x => has(x.id + " " + x.title));
+  const facts = Object.values(D.facts).filter(f => has(f.id + " " + f.label + " " + f.description));
   const pay = [];
   Object.values(D.payloads).forEach(p => p.entries.forEach(e => {
-    if ((e.name + " " + e.payload).toLowerCase().includes(t)) pay.push([p, e]);
+    if (has(e.name + " " + e.payload + " " + (e.detect || "") + " " + (e.note || ""))) pay.push([p, e]);
   }));
+  const prose = [];
+  const scan = (store, kind, owner) => Object.keys(store).forEach(k => {
+    if (has(store[k])) prose.push([kind, k, excerpt(store[k], t), owner(k)]);
+  });
+  const ownerOf = key => (Object.values(D.units).find(u => u.card === key || u.mitigation === key) || {}).id;
+  scan(D.cards, "card", ownerOf);
+  scan(D.mitigations, "mitigation", ownerOf);
+  const tools = Object.values(D.toolbox).filter(x => has(JSON.stringify(x)));
+
+  const unitCards = us => us.slice(0, 60).map(u => '<div class="card" data-unit="' + esc(u.id) +
+    '" style="cursor:pointer"><h4><span class="id">' + esc(u.id) + "</span> · " + esc(u.title) +
+    "</h4><p>" + esc(u.objective) + "</p></div>").join("");
+
+  const parts = [];
+  if (units.length) parts.push("<h3>Units · " + units.length + "</h3>" + unitCards(units));
+  if (prose.length) parts.push("<h3>Cards and mitigations</h3>" + prose.map(([kind, key, ex, owner]) =>
+    '<div class="card"' + (owner ? ' data-unit="' + esc(owner) + '" style="cursor:pointer"' : "") +
+    '><h4><span class="id">' + esc(key) + '</span> <span class="pill">' + kind + "</span></h4><p>" +
+    esc(ex) + "</p></div>").join(""));
+  if (pay.length) parts.push("<h3>Payloads · " + pay.length + "</h3><table><tr><th>File</th><th>Name</th><th>Payload</th></tr>" +
+    pay.slice(0, 40).map(([p, e]) => "<tr><td>" + esc(p.id) + "</td><td>" + esc(e.name) +
+      "</td><td><code>" + esc(e.payload) + "</code></td></tr>").join("") + "</table>");
+  if (topics.length) parts.push("<h3>Topics</h3>" + topics.map(x =>
+    '<div class="card" data-topic="' + esc(x.id) + '" style="cursor:pointer"><h4><span class="id">' +
+    esc(x.id) + "</span> · " + esc(x.title) + "</h4></div>").join(""));
+  if (facts.length) parts.push("<h3>Facts</h3>" + facts.map(f =>
+    '<div class="card"><h4>' + factTag(f.id, "yield") + " " + esc(f.label) + "</h4><p>" +
+    esc(f.description) + "</p></div>").join(""));
+  if (tools.length) parts.push("<h3>Tools</h3>" + tools.map(x =>
+    '<div class="card"><h4>' + esc(x.name) + "</h4><p>" + esc(x.purpose) + "</p></div>").join(""));
+
   body.innerHTML = "<h2>" + esc(term) + "</h2>" +
-    (pay.length ? "<h3>Payloads</h3><table><tr><th>File</th><th>Name</th><th>Payload</th></tr>" +
-      pay.slice(0, 40).map(([p, e]) => "<tr><td>" + esc(p.id) + "</td><td>" + esc(e.name) +
-        "</td><td><code>" + esc(e.payload) + "</code></td></tr>").join("") + "</table>" : "") +
-    "<h3>Units</h3>" + (hits.length ? hits.map(u => '<div class="card" data-unit="' + esc(u.id) +
-      '" style="cursor:pointer"><h4><span class="id">' + esc(u.id) + "</span> · " + esc(u.title) +
-      "</h4><p>" + esc(u.objective) + "</p></div>").join("") : '<p class="empty">nothing</p>');
+    (parts.length ? parts.join("") : '<p class="empty">nothing carries that</p>');
   body.scrollTop = 0;
 }
 

@@ -40,6 +40,24 @@ class TheArtefactIsSelfContained(unittest.TestCase):
             self.assertNotIn(tag, self.page.lower())
 
 
+class TheArtefactRendersWhatItCarries(unittest.TestCase):
+    """Embedding something and showing it are different, and the difference is
+    invisible from the data alone."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.page = render(catalogue(REPO_ROOT))
+
+    def test_the_tools_a_unit_names_are_rendered(self):
+        # Nine units name a tool whose commands and flag rationale are embedded.
+        self.assertIn("D.toolbox[id]", self.page)
+
+    def test_a_payload_cell_keeps_its_whitespace_when_displayed(self):
+        # The browser collapses whitespace inside an inline element, so the
+        # trailing space would be lost on copy even though the data is right.
+        self.assertIn("td code, .payload { white-space: pre; }", self.page)
+
+
 class TheArtefactCarriesTheCatalogue(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -72,6 +90,26 @@ class TheArtefactCarriesTheCatalogue(unittest.TestCase):
             rel = unit.get("payloads")
             if rel:
                 self.assertIn(rel[len("payloads/"):-len(".yaml")], ids, unit["id"])
+
+    def test_payload_whitespace_survives_the_journey(self):
+        """Whitespace in a payload is syntax, not formatting.
+
+        A MySQL comment is "-- " and stops being one without the trailing
+        space; a numeric-context probe begins with one because it is appended
+        to a bare number. The folding that tidies prose would silently take
+        both, and the reader would copy something that does not work.
+        """
+        import yaml
+
+        significant = 0
+        for path in sorted((REPO_ROOT / "payloads").rglob("*.yaml")):
+            source = yaml.safe_load(path.read_text(encoding="utf-8"))
+            embedded = self.embedded["payloads"][source["id"]]["entries"]
+            for original, carried in zip(source["entries"], embedded):
+                self.assertEqual(original["payload"], carried["payload"], source["id"])
+                if original["payload"] != original["payload"].strip():
+                    significant += 1
+        self.assertGreater(significant, 0, "no payload exercises the rule any more")
 
     def test_it_states_the_version_it_was_built_from(self):
         self.assertEqual(self.embedded["version"], __version__)
