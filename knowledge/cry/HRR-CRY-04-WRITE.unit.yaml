@@ -7,5 +7,5 @@ objective: >-
   to a value the tester chose.
 
 requires:
-  all_of: [surface.crypto.oracle]
+  all_of: [surface.crypto.oracle.padding]
 yields: [primitive.crypto.forge]

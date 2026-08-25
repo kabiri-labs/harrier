@@ -7,6 +7,6 @@ objective: >-
   is accepted, which shows no verification happens at all.
 
 requires:
-  all_of: [recon.session.identified]
+  all_of: [surface.token.structured]
 yields: [control.signature.unverified]
 closes: [control.signature.unverified]

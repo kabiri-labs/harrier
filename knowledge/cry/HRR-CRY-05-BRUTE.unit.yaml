@@ -7,5 +7,7 @@ objective: >-
   a single captured token.
 
 requires:
-  all_of: [recon.session.identified]
+  all_of: [surface.token.structured]
 yields: [artifact.key.recovered]
+dimensions:
+  signature: [hmac]
