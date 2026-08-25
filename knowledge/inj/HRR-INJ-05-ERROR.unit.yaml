@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.xpath.injectable]
-yields: [primitive.doc.read]
+yields: [recon.query.structure]

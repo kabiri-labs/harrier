@@ -7,5 +7,5 @@ objective: >-
   the response relative to the same query without it.
 
 requires:
-  all_of: [surface.graphql.injectable]
-yields: [primitive.db.read]
+  all_of: [recon.schema.known]
+yields: [surface.graphql.injectable]

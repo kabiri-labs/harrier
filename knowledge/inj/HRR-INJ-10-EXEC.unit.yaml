@@ -1,0 +1,12 @@
+id: HRR-INJ-10-EXEC
+topic: HRR-INJ-10
+status: outline
+title: "Command execution from the evaluation context"
+objective: >-
+  Determine whether the evaluation context exposes an object that runs a command
+  of the tester's choosing.
+
+requires:
+  all_of: [surface.template.injectable]
+motivated_by: [recon.engine.identified]
+yields: [primitive.exec.server]

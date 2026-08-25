@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.graphql.injectable]
-yields: [recon.platform.identified]
+yields: [recon.engine.identified]

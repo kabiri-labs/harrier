@@ -9,4 +9,3 @@ objective: >-
 
 requires:
   all_of: [recon.schema.known]
-yields: [surface.graphql.injectable]

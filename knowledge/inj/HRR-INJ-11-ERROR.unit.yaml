@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.ws.injectable]
-yields: [recon.platform.identified]
+yields: [recon.engine.identified]

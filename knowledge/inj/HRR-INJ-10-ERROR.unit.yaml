@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.template.injectable]
-yields: [recon.approot.disclosed]
+yields: [recon.query.structure]

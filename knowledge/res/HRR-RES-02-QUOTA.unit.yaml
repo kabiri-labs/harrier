@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.upload.accepts]
-yields: [impact.availability.degraded]
+yields: [control.limit.absent]

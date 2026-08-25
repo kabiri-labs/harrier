@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.fetch.controlled]
-yields: [primitive.fs.read]
+yields: [primitive.fetch.readable]

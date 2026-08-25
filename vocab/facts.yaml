@@ -414,3 +414,48 @@ facts:
     description: >
       Work forced by what a single request contains, rather than by how many
       were sent, is enough to degrade the service.
+
+  - id: primitive.exec.client
+    label: Code runs in a visitor's browser
+    description: >
+      Script of the tester's choosing executes in the browser of somebody who
+      visits the application. Kept apart from server execution because the two
+      are different findings with different victims, and the chain must never
+      report one as the other.
+
+  - id: primitive.fetch.readable
+    label: The fetched response body is returned
+    description: >
+      The body of a request the server made on the caller's behalf comes back
+      to the caller. Separate from reading the filesystem: an internal HTTP
+      response is not a file, and a fetcher that refuses a file scheme returns
+      one without permitting the other.
+
+  - id: surface.upload.parsed
+    label: Uploaded content reaches a parser
+    description: >
+      Content the caller supplies is parsed, converted or extracted by the
+      server. The precondition for what a crafted document can do, and not yet
+      evidence that it does anything.
+
+  - id: control.limit.absent
+    label: A resource limit is not enforced
+    description: >
+      A stated or implied limit on a resource -- per request, per period, or
+      in total -- is not enforced. Recorded as a control failing rather than
+      as damage done, because whether it degrades anything depends on the
+      deployment.
+
+  - id: primitive.blind.oracle
+    label: A reproducible conditional signal exists
+    description: >
+      A condition the tester controls produces an observable difference with
+      no content returned. Enough to infer data one answer at a time, and not
+      by itself evidence of what is being inferred from.
+
+  - id: recon.query.structure
+    label: The constructed query is disclosed
+    description: >
+      The expression, filter or path the application builds is visible in an
+      error, which turns writing a working payload into editing a known
+      string.
