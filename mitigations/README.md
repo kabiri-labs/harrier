@@ -10,4 +10,6 @@ weakness and units reference it.
 Text here is **originally written**. ASVS requirement identifiers are cited as
 cross-references for report writing; no ASVS prose is copied.
 
-Empty until phase 4.
+One file so far: `path-resolution.md`, written alongside the topic that
+referenced it. That is the intended order -- a mitigation is written when a unit
+needs it, not speculatively, for the same reason a card is.

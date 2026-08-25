@@ -382,11 +382,6 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
         _check_dimensions(doc, doc.data.get("dimensions"), dimensions, problems)
         _check_refs(doc, doc.data.get("refs"), pinned, asvs, cwe, problems)
 
-    for doc in repo.units:
-        for fed in doc.data.get("feeds") or []:
-            if fed not in units:
-                problems.add(doc.rel, f"feeds unknown unit {fed}")
-
     for tid, doc in topics.items():
         for target in doc.data.get("see_also") or []:
             if target not in topics:

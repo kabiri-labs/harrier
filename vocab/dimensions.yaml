@@ -99,6 +99,16 @@ dimensions:
         label: Nested path
         note: "Reached as a child of another type, where the parent's authorization is the only one applied."
 
+  os:
+    label: Operating system resolving the path
+    values:
+      - value: unix
+        label: Unix-like
+        note: "Forward separators; the readable proof files are text and world-readable by default."
+      - value: windows
+        label: Windows
+        note: "Back separators, drive letters and UNC paths; case-insensitive, and a trailing dot or space is stripped by the filesystem."
+
   platform:
     label: Server-side platform
     values:
