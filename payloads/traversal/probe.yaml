@@ -1,0 +1,36 @@
+# Establishing that a parameter names a path at all, before spending anything on
+# depth or encoding. Every entry here is chosen to change the answer in a way a
+# missing file cannot imitate: a 404 proves nothing, because a parameter that
+# reaches no filesystem returns one too.
+#
+# {{FILE}} is the resource the unmodified request asks for.
+id: traversal/probe
+reviewed: "2026-08-25"
+title: Traversal survival probes
+variables: [FILE]
+credits:
+  - "Traversal probing is long-standing public technique; every entry here is written for this project."
+entries:
+  - name: baseline
+    payload: "{{FILE}}"
+    detect: "The unmodified request. Record status, length and content type -- every entry below is read against this and nothing else."
+
+  - name: same-directory no-op
+    payload: "./{{FILE}}"
+    detect: "Identical response to the baseline means the value reaches a path resolver that normalises. A 404 means it does not: the value is a key, not a path."
+    note: "The strongest single probe in this file, because it separates a path from an identifier without leaving the intended directory at all."
+
+  - name: up-and-back no-op
+    payload: "subdir/../{{FILE}}"
+    detect: "Identical to the baseline proves traversal sequences are resolved rather than rejected, while still resolving inside the intended root."
+    note: "Use this before any payload that leaves the root. It answers the same question and cannot read anything it should not."
+
+  - name: separator sensitivity
+    os: [windows]
+    payload: ".\\{{FILE}}"
+    detect: "A baseline response to the back-separator form says the resolver is Windows, or a Windows-aware library on any host."
+
+  - name: depth overshoot
+    payload: "../../../../../../../../{{FILE}}"
+    detect: "Most resolvers clamp at the filesystem root, so an overshoot that still returns the baseline file proves the sequence is being resolved rather than matched."
+    note: "Overshooting deliberately: guessing the exact depth wastes requests, and the clamp does the arithmetic instead."

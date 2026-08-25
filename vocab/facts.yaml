@@ -228,3 +228,38 @@ facts:
       fact and not a surface: an index establishes that a path was once
       published, never that it is served now. Whether any of them still answers
       is a separate question, asked where the answer is a finding.
+
+  - id: surface.path.traversable
+    label: A parameter selects a file by path
+    description: >
+      A request value has been shown to select which file the server opens, and
+      a traversal sequence in it changes the answer. The condition every read
+      and inclusion below is built on.
+
+  - id: recon.approot.disclosed
+    label: The application's absolute path is known
+    description: >
+      The absolute filesystem path the application resolves from is known, which
+      turns depth guessing into arithmetic.
+
+  - id: control.pathfilter.identified
+    label: The path filter's behaviour is known
+    description: >
+      How the application normalises and filters a supplied path is known --
+      what it strips, how many times it decodes, whether it checks before or
+      after normalising. A negative result means something different on each
+      side of this fact.
+
+  - id: primitive.fs.read
+    label: Arbitrary file read
+    description: >
+      Files the application never meant to serve can be read at will. What that
+      is worth depends entirely on what is on the disk, which is why the reach
+      of it is recorded separately from the fact of it.
+
+  - id: primitive.exec.server
+    label: Server-side code execution
+    description: >
+      Code of the tester's choosing runs on the server. Terminal for almost
+      every chain that reaches it, and the point past which an engagement stops
+      and talks to the client.

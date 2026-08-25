@@ -28,6 +28,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 2 | Topic map | `done` | 99 topics across 13 domains. Every resolvable WSTG identifier is claimed by a topic, and the validator now rejects one that is not. |
 | 3 | Unit outline pass | `done` | Every topic decomposed to units carrying an identifier, a title and a falsifiable objective. **This is where the artefact becomes genuinely useful.** Done in six batches of two or three domains, because a review of 350 files at once is not a review. |
 | 4 | Chain model spike | `done` | Five units authored across five domains and five shapes, plus the fact layer they needed. The point was to break the model while it was cheap to change, not to add coverage. |
+| 4.5 | One topic at depth | `done` | `HRR-RES-01` written all the way down: five authored units, four payload files, a shared card, the first mitigation. A calibration pass, not a coverage one -- it settles how concrete a written unit is before three hundred more are written to match it. |
 | 5 | Chain pass | `not started` | `requires` and `yields` for all 365 units, in six domain batches, `RCN` first because recon produces most of the base facts. Ends with the gate that every non-given fact has a producer. |
 | 6 | Published artefact | `not started` | Single self-contained HTML file: surface-first entry, a now/next view driven by the facts in hand, coverage views, and the graph. Versioning starts here. |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. This is the clearest differentiation from restating WSTG. |
@@ -60,9 +61,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 99 |
-| Units — outlined | 360 |
-| Units — authored | 5 |
-| Units — charted | 26 |
+| Units — outlined | 355 |
+| Units — authored | 10 |
+| Units — charted | 31 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -83,6 +84,7 @@ declaring requirements against facts nothing yet establishes.
 | Batch | Domains | Units | Status |
 |---|---|---|---|
 | 1 | `RCN` | 17 | `done` |
+| — | `HRR-RES-01` | 5 | `done` (with the depth pass) |
 | 2 | `INJ` `RES` | 79 | `not started` |
 | 3 | `CLT` `PRT` | 80 | `not started` |
 | 4 | `SES` `CRY` | 64 | `not started` |
@@ -136,8 +138,11 @@ against real material rather than an empty tree:
 | `standards/wstg.yaml` | 109 identifiers, pinned by commit and SHA-256, every entry verified. |
 | `standards/wstg-map.yaml` | All 109 resolved to a domain by the ordered procedure, with the deciding rule and a note on each contested one. |
 | `payloads/sqli/` | 99 SQL injection payloads across 10 files, covering probe, fingerprint, seven techniques and evasion. |
-| `toolbox/registry.yaml` | 6 tools with per-flag rationale. |
+| `payloads/traversal/` | 4 files: survival probes, encodings and what each distinguishes, read targets with fingerprints, and the read-versus-interpret pair. |
+| `toolbox/registry.yaml` | 7 tools with per-flag rationale. |
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
+| `cards/traversal/path-resolution.md` | The second card, shared by all five units of `HRR-RES-01`. |
+| `mitigations/path-resolution.md` | The first mitigation, written because a unit referenced it. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
 | `knowledge/` | 99 topics across 13 domains, and 365 outlined units across all thirteen domains. |

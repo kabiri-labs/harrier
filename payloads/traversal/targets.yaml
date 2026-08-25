@@ -1,0 +1,55 @@
+# What to ask for once the path resolves, and the marker that proves the answer
+# came off the disk rather than out of a template.
+#
+# Chosen for one property above all: a fingerprint no error page imitates. A file
+# that merely exists is not proof, because the response body is what is being
+# read and a friendly 404 has a body too.
+#
+# {{DEPTH}} is the traversal prefix at the depth already established.
+id: traversal/targets
+reviewed: "2026-08-25"
+title: Read targets and their fingerprints
+variables: [DEPTH]
+safety: >-
+  Every target here is a system file with no personal data in it, chosen so that
+  proving the read does not take anything belonging to the client's users. Read
+  one, record the marker, and stop. Application configuration is where the
+  credentials are, and reading it is a decision to make with the client rather
+  than a step in a procedure.
+credits:
+  - "The proof files and their markers are common knowledge among testers; the selection and the reasoning are written for this project."
+entries:
+  - name: unix account file
+    os: [unix]
+    payload: "{{DEPTH}}etc/passwd"
+    detect: "A line matching root:x:0:0 at the start of the body."
+    note: "World-readable on every Unix by design, which is exactly why it is the proof file: reading it takes nothing and proves everything."
+
+  - name: unix mount table
+    os: [unix]
+    payload: "{{DEPTH}}proc/self/mounts"
+    detect: "Lines of the form device mountpoint fstype options."
+    note: "Use when /etc/passwd is filtered by name. It also names the container runtime, which /etc/passwd does not."
+
+  - name: unix process command line
+    os: [unix]
+    payload: "{{DEPTH}}proc/self/cmdline"
+    detect: "NUL-separated arguments naming the interpreter and the application entry point."
+    note: "Gives the absolute application root without an error message, which is the same fact the error-based unit is trying to get."
+
+  - name: windows initialisation file
+    os: [windows]
+    payload: "{{DEPTH}}Windows\\win.ini"
+    detect: "The literal ; for 16-bit app support in the body."
+
+  - name: windows host table
+    os: [windows]
+    payload: "{{DEPTH}}Windows\\System32\\drivers\\etc\\hosts"
+    detect: "Commented lines ending in localhost."
+    note: "Readable without privileges where win.ini has been removed from newer installs."
+
+  - name: java deployment descriptor
+    platform: [java]
+    payload: "{{DEPTH}}WEB-INF/web.xml"
+    detect: "An XML root element named web-app."
+    note: "Relative to the application root rather than the filesystem root, so it needs less depth, not more."
