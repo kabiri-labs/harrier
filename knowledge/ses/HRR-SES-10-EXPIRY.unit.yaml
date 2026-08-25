@@ -5,3 +5,8 @@ title: "Expiry claim enforcement"
 objective: >-
   Determine whether a token presented after the moment its expiry claim names
   is refused.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.unbounded]
+closes: [control.session.unbounded]

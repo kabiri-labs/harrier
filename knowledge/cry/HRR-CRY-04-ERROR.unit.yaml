@@ -5,3 +5,8 @@ title: "Error-distinguished padding failure"
 objective: >-
   Determine whether a padding failure produces a response distinguishable from
   a decryption that succeeded and then failed validation.
+
+requires:
+  all_of: [surface.appcrypto]
+motivated_by: [control.crypto.unsound]
+yields: [surface.crypto.oracle]

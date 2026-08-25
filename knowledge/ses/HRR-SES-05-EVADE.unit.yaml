@@ -6,3 +6,7 @@ title: "Anti-forgery and same-site evasion"
 objective: >-
   Determine whether a negative result is caused by a same-site restriction or a
   content-type check that a method override or a form encoding defeats.
+
+requires:
+  all_of: [access.user]
+yields: [control.filter.identified]

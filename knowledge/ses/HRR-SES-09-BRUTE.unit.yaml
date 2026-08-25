@@ -5,3 +5,8 @@ title: "Enumeration of the identifier space"
 objective: >-
   Determine whether valid identifiers can be found at a practical rate, which
   is a different claim from whether the value looks random.
+
+requires:
+  all_of: [recon.session.identified]
+motivated_by: [control.session.predictable]
+yields: [artifact.session.captured]

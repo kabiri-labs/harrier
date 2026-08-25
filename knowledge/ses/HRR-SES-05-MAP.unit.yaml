@@ -6,3 +6,6 @@ title: "State-changing request inventory"
 objective: >-
   Establish which requests change state, and what each of them requires beyond
   the session cookie itself.
+
+requires:
+  all_of: [access.user]

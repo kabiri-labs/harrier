@@ -6,3 +6,6 @@ title: "Sensitive payload inventory"
 objective: >-
   Establish which requests and responses carry credentials, tokens, personal
   data or payment details, and over which channel each travels.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

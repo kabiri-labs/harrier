@@ -5,3 +5,7 @@ title: "Key and algorithm confusion"
 objective: >-
   Determine whether a token signed under an algorithm or key other than the one
   intended is accepted as valid.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.signature.unverified]

@@ -5,3 +5,8 @@ title: "Signature verification presence"
 objective: >-
   Determine whether a token with an altered payload and an unaltered signature
   is accepted, which shows no verification happens at all.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.signature.unverified]
+closes: [control.signature.unverified]

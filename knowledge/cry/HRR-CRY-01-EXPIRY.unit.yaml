@@ -5,3 +5,7 @@ title: "Certificate validity window"
 objective: >-
   Determine whether the presented certificate is within its stated validity
   period.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.tls.certificate.invalid]

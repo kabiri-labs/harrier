@@ -5,3 +5,7 @@ title: "Declared cookie protections"
 objective: >-
   Determine, for each cookie carrying session state, whether Secure, HttpOnly
   and a same-site restriction are all present.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.cookie.weak]

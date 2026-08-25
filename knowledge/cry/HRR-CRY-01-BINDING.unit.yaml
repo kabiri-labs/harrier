@@ -5,3 +5,7 @@ title: "Certificate to name binding"
 objective: >-
   Determine whether the presented certificate is valid for the name the client
   requested.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.tls.certificate.invalid]

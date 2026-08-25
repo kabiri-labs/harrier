@@ -5,3 +5,8 @@ title: "Plaintext acceptance"
 objective: >-
   Determine whether the listener serves the application over an unencrypted
   channel rather than refusing or redirecting.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.transport.plaintext]
+closes: [control.transport.plaintext]

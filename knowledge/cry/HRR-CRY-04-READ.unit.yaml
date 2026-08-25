@@ -5,3 +5,7 @@ title: "Confirmed plaintext recovery"
 objective: >-
   Determine whether the oracle recovers plaintext the application never
   returned.
+
+requires:
+  all_of: [surface.crypto.oracle]
+yields: [primitive.crypto.decrypt]

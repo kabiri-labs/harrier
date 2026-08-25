@@ -5,3 +5,8 @@ title: "Attacker-set identifier acceptance"
 objective: >-
   Determine whether the application accepts and continues to use a session
   identifier the tester chose rather than issuing its own.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.fixable]
+closes: [control.session.fixable]

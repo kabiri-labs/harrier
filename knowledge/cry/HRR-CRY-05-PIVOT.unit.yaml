@@ -5,3 +5,7 @@ title: "Verifier-initiated key retrieval"
 objective: >-
   Determine whether a key-locating header causes the verifier to fetch material
   from a location the token named.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [primitive.fetch.outbound]

@@ -5,3 +5,7 @@ title: "Completed change from a foreign origin"
 objective: >-
   Determine whether a document on an origin the tester controls causes the
   state change to complete in a victim's browser.
+
+requires:
+  all_of: [control.csrf.absent]
+yields: [primitive.action.victim]

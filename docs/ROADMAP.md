@@ -63,7 +63,7 @@ work read as phase 2's:
 | Topics | 99 |
 | Units — outlined | 356 |
 | Units — authored | 10 |
-| Units — charted | 183 |
+| Units — charted | 247 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -87,7 +87,7 @@ declaring requirements against facts nothing yet establishes.
 
 | 2 | `INJ` `RES` | 80 | `done` |
 | 3 | `CLT` `PRT` | 80 | `done` |
-| 4 | `SES` `CRY` | 64 | `not started` |
+| 4 | `SES` `CRY` | 64 | `done` |
 | 5 | `AUT` `IDN` `ACL` | 67 | `not started` |
 | 6 | `BIZ` `ERR` `CFG` | 58 | `not started` |
 

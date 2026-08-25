@@ -6,3 +6,7 @@ title: "Application cryptography inventory"
 objective: >-
   Establish where the application performs cryptography of its own rather than
   relying on the transport layer.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.appcrypto]

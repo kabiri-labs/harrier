@@ -5,3 +5,7 @@ title: "Chain of trust"
 objective: >-
   Determine whether the presented chain terminates at a root the client
   population already trusts.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.tls.certificate.invalid]

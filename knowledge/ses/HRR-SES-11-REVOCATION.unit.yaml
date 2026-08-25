@@ -5,3 +5,7 @@ title: "Displacement of an older session"
 objective: >-
   Determine whether establishing a session ends an existing one where the
   declared rule says it should.
+
+requires:
+  all_of: [access.user, recon.session.identified]
+yields: [control.session.persists]

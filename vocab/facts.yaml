@@ -664,3 +664,147 @@ facts:
     description: >
       The service accepts an unencrypted connection where an encrypted one is
       available.
+
+  - id: recon.session.identified
+    label: The session identifier is known
+    description: >
+      Which value identifies an authenticated session, where it is carried and
+      which component issues it. Read by nearly every unit in the domain,
+      which is why it is a fact rather than an ordering.
+
+  - id: artifact.session.captured
+    label: Another principal's session identifier is held
+    description: >
+      An identifier belonging to somebody else is in hand, however it was
+      obtained -- guessed at a practical rate, read out of a URL, taken from a
+      log.
+
+  - id: surface.session.inurl
+    label: The identifier travels in a URL
+    description: >
+      The session identifier appears in a path or query string, where proxies,
+      logs, history and referrers all retain it.
+
+  - id: control.session.unbound
+    label: The identifier is accepted from anyone
+    description: >
+      The issued value is honoured for whoever presents it rather than being
+      tied to the subject, client or channel it was issued to.
+
+  - id: control.session.predictable
+    label: The identifier can be narrowed
+    description: >
+      The issued value carries too little unpredictable material for many
+      observations to leave the next one unguessable.
+
+  - id: control.session.fixable
+    label: A caller-chosen identifier is accepted
+    description: >
+      The application adopts an identifier the caller supplied instead of
+      issuing its own.
+
+  - id: control.session.norotate
+    label: The identifier survives authentication
+    description: >
+      A value that existed before sign-in is still valid after it, which is
+      what turns a planted identifier into a session.
+
+  - id: control.session.persists
+    label: The identifier outlives what should end it
+    description: >
+      Signing out, or an explicit revocation, leaves the identifier acceptable
+      to the server that issued it.
+
+  - id: control.session.unbounded
+    label: No enforced lifetime
+    description: >
+      Neither inactivity nor elapsed time ends the session where the issuer
+      enforces it, whether because no limit exists or because the holder can
+      edit the one that does.
+
+  - id: control.cookie.weak
+    label: The carrier is weakly protected
+    description: >
+      A cookie carrying session state is missing a protection its role
+      requires -- an attribute, a scope, or a lifetime beyond the browsing
+      session.
+
+  - id: control.csrf.absent
+    label: A state change needs nothing the attacker cannot supply
+    description: >
+      A state-changing request succeeds without an anti-forgery value, or with
+      one that was issued to a different session.
+
+  - id: control.token.audience
+    label: A token from elsewhere is accepted
+    description: >
+      A token minted for a different audience, or by a different issuer, is
+      honoured.
+
+  - id: surface.sessionvar.crossflow
+    label: A session variable crosses flows
+    description: >
+      A value written into server-side session state by one flow is read as
+      authoritative by another that never set it.
+
+  - id: control.tls.weak
+    label: A negotiated parameter is no longer sound
+    description: >
+      The listener agrees to a protocol version or cipher suite that is not
+      considered sound.
+
+  - id: control.tls.certificate.invalid
+    label: The certificate does not establish identity
+    description: >
+      The presented certificate is not valid for the requested name, not
+      within its validity period, or does not chain to a root the client
+      population trusts.
+
+  - id: surface.appcrypto
+    label: The application performs its own cryptography
+    description: >
+      Cryptography is done by the application rather than left to the
+      transport, which is where the questions below it start.
+
+  - id: control.crypto.unsound
+    label: The scheme is not sound for its purpose
+    description: >
+      An algorithm, a mode, a source of randomness or an absent rotation makes
+      the construction unsound for what it is protecting.
+
+  - id: control.crypto.keyexposed
+    label: Key material is exposed by ordinary events
+    description: >
+      Keys are held somewhere that a source-code disclosure or a backup
+      restore would hand over.
+
+  - id: surface.crypto.oracle
+    label: The system answers questions about a ciphertext
+    description: >
+      Altering an opaque value produces responses that distinguish one kind of
+      failure from another, which is what an attack against the construction
+      is built from.
+
+  - id: primitive.crypto.decrypt
+    label: Ciphertext is recovered
+    description: >
+      Plaintext the application never returned is recovered from a value it
+      issued.
+
+  - id: primitive.crypto.forge
+    label: Ciphertext is manufactured
+    description: >
+      A value the application accepts and decrypts to something the tester
+      chose can be produced.
+
+  - id: control.signature.unverified
+    label: A signature is not verified as intended
+    description: >
+      An altered payload, or a token signed under another algorithm or key, is
+      accepted as valid.
+
+  - id: artifact.key.recovered
+    label: A signing key is recovered
+    description: >
+      The key protecting issued tokens is in hand, which makes every property
+      the signature was carrying the tester's to choose.
