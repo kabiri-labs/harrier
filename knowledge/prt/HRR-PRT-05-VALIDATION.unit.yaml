@@ -8,5 +8,5 @@ objective: >-
 
 requires:
   all_of: [recon.channels.mapped]
-yields: [control.origin.unchecked]
-closes: [control.origin.unchecked]
+yields: [control.handshake.origin.unchecked]
+closes: [control.handshake.origin.unchecked]

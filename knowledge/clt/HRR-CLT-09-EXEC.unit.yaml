@@ -7,5 +7,5 @@ objective: >-
   evaluates it as script.
 
 requires:
-  all_of: [control.origin.unchecked]
+  all_of: [control.message.origin.unchecked]
 yields: [primitive.exec.client]

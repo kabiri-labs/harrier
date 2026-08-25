@@ -8,5 +8,5 @@ objective: >-
 
 requires:
   all_of: [surface.postmessage.listener]
-yields: [control.origin.unchecked]
-closes: [control.origin.unchecked]
+yields: [control.message.origin.unchecked]
+closes: [control.message.origin.unchecked]

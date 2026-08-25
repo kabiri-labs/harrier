@@ -8,4 +8,4 @@ objective: >-
 
 requires:
   all_of: [surface.duplicate.accepted]
-yields: [surface.parser.divergence]
+yields: [surface.parameter.divergence]
