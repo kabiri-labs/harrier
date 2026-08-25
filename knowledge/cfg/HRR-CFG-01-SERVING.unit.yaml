@@ -6,3 +6,8 @@ objective: >-
   Determine whether the platform serves components that are not the
   application -- sample content, management consoles, status endpoints -- to a
   caller who should not reach them.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.platform.extra]
+closes: [control.platform.extra]

@@ -6,3 +6,8 @@ title: "Acceptance of a captured request a second time"
 objective: >-
   Establish whether a request captured once is acted on again, which is a
   separate failure from accepting one that was never legitimate.
+
+requires:
+  all_of: [access.user]
+yields: [control.request.replayable]
+closes: [control.request.replayable]

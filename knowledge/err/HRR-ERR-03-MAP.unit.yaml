@@ -7,3 +7,6 @@ objective: >-
   Record which artefacts the application serves alongside its pages --
   scripts, source maps, documents, generated files -- since each is content it
   chose to deliver and may not have read.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

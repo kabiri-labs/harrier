@@ -6,3 +6,7 @@ title: "Whether the altered value carries authority"
 objective: >-
   Establish whether any value the server accepts back altered decides what the
   caller is owed or permitted, rather than what is displayed to them.
+
+requires:
+  all_of: [control.clientstate.trusted]
+yields: [impact.value.obtained]

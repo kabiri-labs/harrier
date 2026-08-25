@@ -5,3 +5,7 @@ title: "Whether objects are served without the application in front"
 objective: >-
   Determine whether objects are retrievable directly from the store, bypassing
   whatever authorization the application applies to the same content.
+
+requires:
+  all_of: [control.objectstore.public]
+yields: [primitive.check.bypassed]

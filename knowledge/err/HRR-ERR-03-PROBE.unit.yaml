@@ -6,3 +6,8 @@ objective: >-
   Determine whether delivered content carries internal detail the interface
   never displays -- host names, filesystem paths, identifiers of other
   accounts, credentials -- any one of which is the same finding.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.content.internal]

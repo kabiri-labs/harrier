@@ -6,3 +6,8 @@ title: "Acceptance of a request the client never issues"
 objective: >-
   Establish whether the server acts on a hand-built request that the
   legitimate client would never construct in that form or at that point.
+
+requires:
+  all_of: [access.user]
+yields: [control.request.forgeable]
+closes: [control.request.forgeable]

@@ -5,3 +5,7 @@ title: "The same operation applied more than once concurrently"
 objective: >-
   Determine whether an operation subject to a limit is applied more times than
   the limit allows when its requests overlap in time.
+
+requires:
+  all_of: [recon.workflow.mapped, access.user]
+yields: [primitive.limit.exceeded]

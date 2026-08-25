@@ -6,3 +6,8 @@ objective: >-
   Determine, where the engagement grants access to the host, whether the
   ownership and mode of the application's files and directories give the
   serving process, or any other account on the host, more than it needs.
+
+requires:
+  all_of: [recon.platform.identified]
+yields: [control.permissions.excessive]
+closes: [control.permissions.excessive]

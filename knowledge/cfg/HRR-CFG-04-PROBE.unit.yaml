@@ -5,3 +5,8 @@ title: "Methods accepted beyond those the application uses"
 objective: >-
   Determine which request methods a resource accepts beyond the ones its own
   client issues.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.method.extra]
+closes: [surface.method.extra]

@@ -666,12 +666,20 @@ def check_chain(repo: Repository, problems: Problems) -> None:
             )
 
     for name, fact in sorted(facts.items()):
-        if name in referenced:
+        if name not in referenced:
+            problems.add(
+                "vocab/facts.yaml",
+                f"{name} is declared but no unit requires, yields or is motivated by "
+                f"it -- an unreachable fact is vocabulary nobody can use",
+            )
+            continue
+        if fact.get("given") or producers.get(name):
             continue
         problems.add(
             "vocab/facts.yaml",
-            f"{name} is declared but no unit requires, yields or is motivated by "
-            f"it -- an unreachable fact is vocabulary nobody can use",
+            f"{name} is required but no unit establishes it -- a condition with "
+            f"no producer is a hole in the chain, and it reads from the outside "
+            f"exactly like a route nobody has taken yet",
         )
 
 

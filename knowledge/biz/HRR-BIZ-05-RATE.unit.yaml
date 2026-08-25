@@ -6,3 +6,7 @@ title: "Enforcement of how often the function may be exercised"
 objective: >-
   Establish whether the cap on how frequently a function may be invoked is
   enforced by the server.
+
+requires:
+  all_of: [access.user]
+yields: [control.limit.absent]

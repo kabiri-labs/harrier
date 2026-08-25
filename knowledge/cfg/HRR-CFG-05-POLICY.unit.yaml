@@ -5,3 +5,7 @@ title: "What the declared policies permit"
 objective: >-
   Determine what the security headers a response carries actually permit, as
   opposed to what their presence suggests.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [control.headers.permissive]

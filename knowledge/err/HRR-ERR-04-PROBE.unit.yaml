@@ -5,3 +5,8 @@ title: "Content exposed publicly that the application no longer serves"
 objective: >-
   Determine whether any indexed or archived copy exposes content the
   application has since withdrawn or never meant to publish.
+
+requires:
+  all_of: [recon.paths.indexed]
+yields: [control.content.withdrawn]
+closes: [control.content.withdrawn]

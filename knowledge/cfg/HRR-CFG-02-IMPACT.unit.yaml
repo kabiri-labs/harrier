@@ -5,3 +5,7 @@ title: "Whether the served file carries what it should not"
 objective: >-
   Determine whether any such file carries content the operator would not have
   chosen to publish, which is what separates a stray asset from a disclosure.
+
+requires:
+  all_of: [surface.file.unlinked]
+yields: [control.content.internal]

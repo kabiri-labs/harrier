@@ -6,3 +6,8 @@ title: "Whether a client-supplied value reaches the charge"
 objective: >-
   Establish whether any component of the amount charged is taken from a value
   the client supplies rather than one the server holds.
+
+requires:
+  all_of: [recon.workflow.mapped, access.user]
+yields: [control.price.clientset]
+closes: [control.price.clientset]

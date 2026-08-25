@@ -5,3 +5,8 @@ title: "Whether written files land where they are served"
 objective: >-
   Determine whether files the application writes are placed in a location the
   server publishes, which turns a storage decision into a disclosure.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [control.storage.served]
+closes: [control.storage.served]
