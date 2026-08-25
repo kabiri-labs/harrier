@@ -6,3 +6,8 @@ title: "Parameters accepted but never sent by the client"
 objective: >-
   Record parameters the application accepts that its own client never sends,
   since those are the ones no interface constrains.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.param.hidden]
+closes: [surface.param.hidden]

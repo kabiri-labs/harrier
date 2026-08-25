@@ -6,3 +6,8 @@ title: "Paths present in public indexes but not linked"
 objective: >-
   Record paths that search indexes, caches and archives hold for the target
   and that the application does not link to.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [surface.path.unlinked]
+closes: [surface.path.unlinked]

@@ -6,3 +6,8 @@ title: "Endpoints beyond those the client uses"
 objective: >-
   Record endpoints the interface answers that its own client never calls,
   including superseded versions still routed.
+
+requires:
+  all_of: [recon.api.mapped]
+yields: [surface.api.undocumented]
+closes: [surface.api.undocumented]

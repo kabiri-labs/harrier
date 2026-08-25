@@ -121,3 +121,107 @@ facts:
     description: >
       A name the target still delegates points at a resource that no longer
       exists at the provider and that another account could register.
+
+  - id: recon.platform.confirmed
+    label: Platform identification corroborated
+    description: >
+      The product identification is supported by a signal the operator is
+      unlikely to have edited, which is what a version-specific decision may
+      safely rest on.
+
+  - id: recon.names.mapped
+    label: In-scope names and addresses recorded
+    description: >
+      The names, certificate subjects and address ranges belonging to the
+      target are written down. Everything the engagement may touch is inside
+      this list.
+
+  - id: recon.hosts.enumerated
+    label: Distinct applications behind the names identified
+    description: >
+      Which of the in-scope names serve applications distinct from one another
+      is known, including hosts reachable only by naming them in the request.
+
+  - id: recon.entrypoints.mapped
+    label: Requests and parameters inventoried
+    description: >
+      The requests the application issues and the parameters each carries are
+      recorded. Every injection and access-control test reads this inventory
+      as its input.
+
+  - id: recon.tiers.mapped
+    label: Tiers a request crosses recorded
+    description: >
+      The sequence of intermediaries between the tester and the origin, and
+      where the request is finally answered, are known.
+
+  - id: recon.intermediary.identified
+    label: Intermediaries identified by product
+    description: >
+      Each intermediary in front of the origin is identified as a product,
+      which is what makes its request rewriting predictable rather than
+      surprising.
+
+  - id: recon.channels.mapped
+    label: Clients and channels recorded
+    description: >
+      Which clients speak to the application, and over which channels, is
+      recorded. A channel nobody listed is a surface nobody tested.
+
+  - id: recon.traffic.captured
+    label: Traffic observable and modifiable
+    description: >
+      The tester can see and alter the traffic of at least one client. Most
+      manual testing is impossible without it, which is why almost nothing
+      else assumes it silently.
+
+  - id: recon.api.mapped
+    label: Machine interface inventoried
+    description: >
+      The endpoints, operations and parameters of the machine interface are
+      recorded, from specifications, client bundles and observed traffic.
+
+  - id: recon.schema.known
+    label: Schema types and fields recorded
+    description: >
+      The types, fields, arguments and mutations a schema exposes are known,
+      whether introspection answered or the client's own documents supplied
+      them.
+
+  - id: recon.metafiles.read
+    label: Published metafiles read
+    description: >
+      The paths and directives the target itself publishes -- robots,
+      sitemaps, well-known documents -- have been read and recorded.
+
+  - id: surface.param.hidden
+    label: A parameter the client never sends is accepted
+    description: >
+      The application accepts a parameter its own interface never submits, so
+      nothing in the interface constrains what may be put in it.
+
+  - id: surface.origin.direct
+    label: The origin answers without its intermediary
+    description: >
+      A request that does not pass through the intermediary in front of the
+      origin is still answered, which puts every control that intermediary
+      applies out of the path.
+
+  - id: surface.api.undocumented
+    label: Endpoints beyond those the client calls
+    description: >
+      The interface answers endpoints its own client never calls, including
+      superseded versions still routed, which are the ones nobody has reviewed
+      lately.
+
+  - id: surface.graphql.introspectable
+    label: Introspection answers
+    description: >
+      The endpoint answers an introspection query, which hands over the schema
+      rather than requiring it to be reconstructed.
+
+  - id: surface.path.unlinked
+    label: Paths reachable but not linked
+    description: >
+      Paths the application serves but does not link to are known, from public
+      indexes, caches and archives.

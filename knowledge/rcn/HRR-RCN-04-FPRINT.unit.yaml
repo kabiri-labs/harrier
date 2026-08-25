@@ -7,3 +7,7 @@ objective: >-
   Record which product each intermediary is -- content delivery, filtering,
   load balancing, gateway -- since each rewrites requests in ways the tests
   downstream must account for.
+
+requires:
+  all_of: [recon.tiers.mapped]
+yields: [recon.intermediary.identified]

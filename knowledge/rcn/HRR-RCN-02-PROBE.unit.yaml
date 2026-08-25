@@ -6,3 +6,7 @@ title: "Which recorded names serve a distinct application"
 objective: >-
   Record which of the collected names serve an application distinct from the
   others, including hosts reachable only by naming them in the request.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [recon.hosts.enumerated]

@@ -7,3 +7,8 @@ objective: >-
   Record every request the application itself issues and the parameters each
   carries, since this inventory is the input every injection and access-
   control test reads.
+
+requires:
+  all_of: [recon.target.reachable]
+motivated_by: [recon.traffic.captured]
+yields: [recon.entrypoints.mapped]

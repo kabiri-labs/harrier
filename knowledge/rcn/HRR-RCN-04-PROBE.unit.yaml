@@ -6,3 +6,8 @@ title: "Whether the origin answers without the intermediary"
 objective: >-
   Record whether the origin answers a request that does not pass through the
   intermediary in front of it.
+
+requires:
+  all_of: [recon.tiers.mapped, recon.names.mapped]
+yields: [surface.origin.direct]
+closes: [surface.origin.direct]
