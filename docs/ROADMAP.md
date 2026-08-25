@@ -151,7 +151,7 @@ against real material rather than an empty tree:
 | `knowledge/` | 99 topics across 13 domains, and 366 units across all thirteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
 | `harrier/` | Nine schemas, seven validation passes, the derived chain and the artefact builder. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 134 offline tests, almost all of them negative — asserting what must be rejected. |
+| `tests/` | 137 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until a depth pass

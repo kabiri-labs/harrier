@@ -72,7 +72,7 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 134 tests, offline
+python -m unittest discover -s tests -t .   # 137 tests, offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
 python -m harrier chain HRR-INJ-01-UNION    # what a unit needs, gives and opens
