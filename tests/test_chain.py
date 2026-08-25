@@ -11,7 +11,7 @@ import unittest
 
 from harrier.chain import Chain
 from harrier.validate import validate
-from tests.support import Sandbox, messages
+from tests.support import REPO_ROOT, Sandbox, messages
 
 REAL_FACT = "surface.sql.injectable"
 
@@ -224,3 +224,88 @@ class AnAlternativeNotTakenIsNotAssumedHeld(unittest.TestCase):
         chain = Chain.load(self.box.root)
         unlocked = {n.id for n in chain.next_after("HRR-INJ-01-UNION")["unlocks"]}
         self.assertIn("HRR-INJ-01-ERROR", unlocked)
+
+
+class TheReadingOrderIsAnOpinionWithReasons(unittest.TestCase):
+    """The order units are met in is the product's answer to "what next", so it
+    is pinned rather than left to whatever order a directory listing gives."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chain = Chain.load(REPO_ROOT)
+        cls.order = cls.chain.reading_order()
+
+    def test_every_unit_gets_exactly_one_position(self):
+        self.assertEqual(len(self.order), len(self.chain.nodes))
+        self.assertEqual(len(set(self.order.values())), len(self.order))
+
+    def test_a_unit_written_in_full_comes_before_one_that_is_not(self):
+        """An outline hands the tester an objective and leaves them where they
+        started. Burying the written ones under several hundred of those is how
+        a reader concludes the catalogue is empty."""
+        authored = [n.id for n in self.chain.nodes.values() if n.status == "authored"]
+        outline = [n.id for n in self.chain.nodes.values() if n.status != "authored"]
+        self.assertTrue(authored and outline, "the fixture no longer has both")
+        self.assertLess(max(self.order[i] for i in authored),
+                        min(self.order[i] for i in outline))
+
+    def test_a_topic_declared_order_is_followed_within_that_topic(self):
+        checked = 0
+        for tid, declared in self.chain.topic_order.items():
+            known = [u for u in declared if u in self.order]
+            if len(known) < 2:
+                continue
+            positions = [self.order[u] for u in known]
+            same_depth = len({self.chain.nodes[u].status for u in known}) == 1
+            if same_depth:
+                self.assertEqual(positions, sorted(positions), tid)
+                checked += 1
+        self.assertGreater(checked, 0, "no topic exercises the rule any more")
+
+    def test_units_of_one_topic_are_not_scattered(self):
+        """A run that jumps between unrelated topics is a run that loses its
+        place. Within one depth, a topic's units are contiguous."""
+        seen = {}
+        for uid, position in sorted(self.order.items(), key=lambda kv: kv[1]):
+            node = self.chain.nodes[uid]
+            seen.setdefault((node.status == "authored", node.topic), []).append(position)
+        for key, positions in seen.items():
+            self.assertEqual(
+                positions, list(range(min(positions), min(positions) + len(positions))),
+                f"{key} is split across the order",
+            )
+
+
+class ReachabilityStaysDenyByDefault(unittest.TestCase):
+    """The board offers a unit only when its conditions are met. A unit offered
+    early is worse than one offered late: it sends a tester at a test that
+    cannot work and costs them the time to find out."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chain = Chain.load(REPO_ROOT)
+
+    def test_the_opening_position_is_not_empty(self):
+        opening = self.chain.available(self.chain.given())
+        self.assertTrue(opening, "a tester opening the artefact must have somewhere to start")
+
+    def test_every_opening_unit_is_reachable_on_the_given_facts_alone(self):
+        given = self.chain.given()
+        for node in self.chain.available(given):
+            self.assertTrue(node.reachable_with(given), node.id)
+
+    def test_a_unit_needing_an_unheld_fact_is_never_offered(self):
+        given = self.chain.given()
+        offered = {n.id for n in self.chain.available(given)}
+        withheld = 0
+        for node in self.chain.nodes.values():
+            if any(f not in given for f in node.all_of):
+                self.assertNotIn(node.id, offered, node.id)
+                withheld += 1
+        self.assertGreater(withheld, 0, "nothing in the catalogue is gated any more")
+
+    def test_an_any_of_group_is_not_satisfied_by_holding_none_of_it(self):
+        gated = [n for n in self.chain.nodes.values() if n.any_of and not n.all_of]
+        self.assertTrue(gated, "no unit exercises the rule any more")
+        for node in gated:
+            self.assertFalse(node.reachable_with(set()), node.id)

@@ -10,8 +10,10 @@ import json
 import re
 import unittest
 
+import yaml
+
 from harrier import __version__
-from harrier.build import catalogue, render
+from harrier.build import catalogue, render, surface_closure
 from harrier.validate import coverage
 from tests.support import REPO_ROOT
 
@@ -114,3 +116,107 @@ class TheArtefactCarriesTheCatalogue(unittest.TestCase):
     def test_it_states_the_version_it_was_built_from(self):
         self.assertEqual(self.embedded["version"], __version__)
         self.assertIn(__version__, self.page)
+
+
+class TheBoardIsWhatTheTesterMeetsFirst(unittest.TestCase):
+    """The catalogue already computes where to start. The failure worth testing
+    for is the one this replaced: computing it and then opening on something
+    else, so the tester is asked the question the file could have answered."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+        cls.page = render(cls.data)
+
+    def test_the_board_is_the_view_the_page_opens_on(self):
+        self.assertIn('let view = "board"', self.page)
+        self.assertIn('data-view="board" class="on"', self.page)
+
+    def test_every_unit_carries_the_position_the_board_ranks_it_by(self):
+        for unit in self.data["units"].values():
+            self.assertIn("order_hint", unit, unit["id"])
+
+    def test_all_four_result_states_are_offered(self):
+        # Three results and "not yet". Without the negative one, a test nobody
+        # ran and a test that came back clean look identical, which is the whole
+        # thing a tester needs the file to keep straight.
+        for state in ("found", "clean", "unclear", "undo"):
+            self.assertIn(state, self.page)
+
+    def test_a_clean_result_closes_what_the_unit_says_it_closes(self):
+        self.assertIn('if (outcome === "clean") (u.closes || []).forEach', self.page)
+        closing = [u for u in self.data["units"].values() if u.get("closes")]
+        self.assertTrue(closing, "no unit declares what a clean result closes")
+
+
+class TheRunNeverTravelsInsideTheArtefact(unittest.TestCase):
+    """A run holds a client's target name and what was found on it. The file is
+    published; the run is not, and the two must not be able to become one."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+        cls.page = render(cls.data)
+
+    def test_the_catalogue_carries_no_run(self):
+        for key in ("run", "results", "held", "target", "anchor"):
+            self.assertNotIn(key, self.data, f"the catalogue must not carry {key}")
+
+    def test_the_embedded_data_is_the_catalogue_and_nothing_else(self):
+        blob = self.page.split('type="application/json">', 1)[1].split("</script>", 1)[0]
+        embedded = json.loads(blob.replace("<\\/", "</"))
+        self.assertEqual(set(embedded), set(self.data))
+
+    def test_it_still_makes_no_network_call(self):
+        # Storing a run must not have become a way to send one.
+        self.assertIsNone(NETWORK_CALLS.search(self.page))
+
+    def test_storage_failure_is_reported_rather_than_swallowed(self):
+        # Opening a file from disk blocks storage in some browsers. Losing four
+        # hours of a run silently is worse than saying so up front.
+        self.assertIn("storageBroken", self.page)
+        self.assertIn("Export before you finish", self.page)
+
+
+class SurfacesCloseOverWhatTheyImply(unittest.TestCase):
+    """A tester names the thing in front of them, not the set of things it drags
+    in with it. A login form is a session cookie whether or not they said so."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.surfaces = [
+            s for s in yaml.safe_load(
+                (REPO_ROOT / "vocab" / "surfaces.yaml").read_text(encoding="utf-8")
+            )["surfaces"]
+        ]
+        cls.closed = surface_closure(cls.surfaces)
+
+    def test_a_tag_always_implies_itself(self):
+        for tag in self.closed:
+            self.assertIn(tag, self.closed[tag])
+
+    def test_what_a_tag_emits_is_included(self):
+        exercised = 0
+        for surface in self.surfaces:
+            for emitted in surface.get("emits") or []:
+                self.assertIn(emitted, self.closed[surface["tag"]])
+                exercised += 1
+        self.assertGreater(exercised, 0, "no surface emits anything any more")
+
+    def test_it_follows_a_chain_more_than_one_step_long(self):
+        deep = [t for t, implied in self.closed.items()
+                if len(implied) > 1 + len(
+                    dict((s["tag"], s.get("emits") or []) for s in self.surfaces)[t])]
+        self.assertTrue(deep, "no surface implies anything transitively any more")
+
+    def test_a_cycle_in_the_vocabulary_does_not_hang_the_page(self):
+        # Closure runs in a browser on an engagement. A cycle must come back
+        # wrong rather than not come back.
+        cyclic = [{"tag": "a", "emits": ["b"]}, {"tag": "b", "emits": ["a"]}]
+        self.assertEqual(surface_closure(cyclic), {"a": ["a", "b"], "b": ["a", "b"]})
+
+    def test_a_scope_names_only_topics_that_exist(self):
+        data = catalogue(REPO_ROOT)
+        for tag, topics in data["scope"].items():
+            for tid in topics:
+                self.assertIn(tid, data["topics"], f"{tag} claims a topic that is not there")

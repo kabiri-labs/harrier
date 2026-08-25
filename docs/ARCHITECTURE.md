@@ -139,24 +139,73 @@ therefore two layers, in this order:
 If the recall block does not fit on a laptop screen without scrolling, the unit
 is too big and rule §2 was applied too loosely.
 
-## 8. Navigation — surface-first
+## 8. Navigation — the run, not the catalogue
 
-A tester mid-test does not browse by standard. Ranked by actual use:
+A tester does not arrive wanting to browse. They arrive with something in front
+of them and a decision to make: what to test first, and what comes after it.
+Everything here follows from treating that as the product's job rather than the
+reader's.
 
-1. **By surface.** *"There is a login form in front of me — what applies?"*
-   This is the default entry point, and it is why surface tags are a first-class
-   controlled vocabulary rather than a loose set of labels.
-2. **By search.** Three characters to a payload.
-3. **By what is in hand.** *"I have a session and a SQL-injectable parameter —
-   what is possible now?"* This is the working view during an engagement, and it
-   is derived from the facts units declare rather than from any stored ordering.
-   See [`CHAINING.md`](CHAINING.md).
-4. **By standard.** WSTG, CWE, ASVS coverage views. Real, but its audience is
-   report-writing and scoping, not testing.
+### The run
+
+The one piece of state that is about a target rather than about the catalogue:
+what is being tested, what is in front of the tester, what they hold, and what
+they have settled. It lives in the browser and in a file the tester exports on
+purpose. It is never embedded in the artefact — a run carries a client's target
+name and what was found on it, and the artefact is published.
+
+### Two filters, applied together
+
+**The anchor** is what is in front of the tester, and it moves with the
+granularity of the question. A whole application at the start of an engagement,
+one section of it, or one technical thing — a cookie, a redirect parameter, a
+web form. Surface tags are how it is expressed, which is why they are a
+first-class controlled vocabulary. A tag closes over what it `emits`, so naming
+a login form also names the session cookie, and naming a search box also names
+the database-backed parameter behind it.
+
+**Reachability** is what the held facts allow, derived from the facts units
+declare rather than from any stored ordering. See [`CHAINING.md`](CHAINING.md).
+
+Neither is useful alone. The anchor without the chain is a flat list of
+everything that could ever apply; the chain without the anchor answers for the
+whole target when the tester asked about one form.
+
+### Order
+
+Within what is both in scope and reachable, three things decide what comes
+first: whether something held makes a unit more likely to pay (`motivated_by`),
+whether the unit is written in full or is still an outline, and the performance
+order its topic declares. The first is decided in the page because only the page
+knows what is held; the other two are decided at build time and travel as an
+integer, so the opinion is one a test can pin down.
+
+### Naming what is shown
+
+Titles lead and identifiers follow. An identifier is how two people refer to the
+same test and how a finding is written down — it is not what a tester reads. The
+same holds for facts: a unit needs *"the session identifier is known"*, not
+`recon.session.identified`.
+
+### Results
+
+Four states, because three of them are results and the fourth is "not yet". A
+positive result hands over what the unit yields; a clean one closes what the
+unit closes. Without the clean state there is no difference between a test
+nobody ran and a test that came back empty, and that difference is the only
+thing that makes coverage a claim rather than a hope.
+
+### The other views
+
+**Surfaces** is a reference listing of every surface the catalogue knows, and a
+way into the board from one. **Search** is three characters to a payload.
+**Coverage** is WSTG, CWE and ASVS — real, but its audience is report-writing
+and scoping, not testing.
 
 The published artefact is a **single self-contained HTML file**: no external
 stylesheet, script or font. It is opened from a laptop on an engagement network
-and must not emit a request a monitored target could observe.
+and must not emit a request a monitored target could observe. Storing a run must
+not become a way to send one.
 
 ## 9. Repository layout
 
