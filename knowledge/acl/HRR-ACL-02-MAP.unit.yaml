@@ -9,5 +9,5 @@ objective: >-
   aimed at the whole object space rather than one endpoint.
 
 requires:
-  all_of: [access.user]
+  all_of: [access.user, access.peer]
 yields: [artifact.objectid.known]

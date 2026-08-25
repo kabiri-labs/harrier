@@ -120,19 +120,27 @@ class Chain:
         """
         node = self.nodes[unit_id]
         opened = set(node.yields)
-        before = self.given() | set(node.requires)
-        after = before | opened
-        unlocks = [
-            n
-            for n in self.available(after)
-            if n.id != unit_id and not n.reachable_with(before)
-        ]
+        unlocked: Dict[str, Node] = {}
+        # Each alternative in `any_of` is a different way to have reached this
+        # unit, and they leave the tester holding different facts. Pooling them
+        # into one `before` set would assume every alternative was held at once,
+        # which suppresses exactly the units that the alternative not taken would
+        # have reached anyway. So each is evaluated on its own and the results
+        # are unioned.
+        for choice in node.any_of or [None]:
+            before = self.given() | set(node.all_of) | ({choice} if choice else set())
+            after = before | opened
+            for candidate in self.available(after):
+                if candidate.id == unit_id or candidate.reachable_with(before):
+                    continue
+                unlocked[candidate.id] = candidate
+        unlocks = sorted(unlocked.values(), key=lambda n: n.id)
         motivates = [
             n
             for n in self.nodes.values()
             if n.id != unit_id
             and opened & set(n.motivated_by)
-            and n not in unlocks
+            and n.id not in unlocked
         ]
         return {"unlocks": unlocks, "motivates": sorted(motivates, key=lambda n: n.id)}
 

@@ -135,3 +135,41 @@ class TheDerivedGraph(unittest.TestCase):
         opening = {n.id for n in self.chain.available(self.chain.given())}
         self.assertNotIn("HRR-INJ-01-UNION", opening)
         self.assertIn("HRR-INJ-01-PROBE", opening)
+
+    def test_an_account_is_not_assumed_to_have_been_handed_over(self):
+        # Engagements that supply no credentials exist. Treating an account as a
+        # root would open the catalogue with tests the tester cannot run.
+        self.assertNotIn("access.user", self.chain.given())
+        opening = {n.id for n in self.chain.available(self.chain.given())}
+        self.assertNotIn("HRR-ACL-02-MAP", opening)
+        self.assertIn("HRR-ACL-02-MAP", {
+            n.id for n in self.chain.available(self.chain.given() | {"access.user", "access.peer"})
+        })
+
+    def test_one_account_does_not_reach_the_two_account_test(self):
+        held = self.chain.given() | {"access.user", "artifact.objectid.known"}
+        self.assertNotIn("HRR-ACL-02-PEER", {n.id for n in self.chain.available(held)})
+
+
+class AnAlternativeNotTakenIsNotAssumedHeld(unittest.TestCase):
+    """`any_of` is a choice, and the choice leaves the tester holding different
+    facts. Pooling the alternatives would hide the units the other route reaches."""
+
+    def setUp(self):
+        self.box = Sandbox()
+        self.addCleanup(self.box.close)
+
+    def test_a_unit_reachable_by_the_alternative_still_appears(self):
+        # UNION may be reached as an anonymous or an authenticated caller. A unit
+        # needing the authenticated route must still be reported as unlocked when
+        # UNION's own result is what makes it possible.
+        self.box.edit(
+            "knowledge/inj/HRR-INJ-01-ERROR.unit.yaml",
+            lambda u: u.update(
+                requires={"all_of": ["access.user", "primitive.db.read"]},
+                yields=["recon.engine.identified"],
+            ),
+        )
+        chain = Chain.load(self.box.root)
+        unlocked = {n.id for n in chain.next_after("HRR-INJ-01-UNION")["unlocks"]}
+        self.assertIn("HRR-INJ-01-ERROR", unlocked)

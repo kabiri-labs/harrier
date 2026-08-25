@@ -11,6 +11,20 @@ from tests.support import messages
 from tests.test_identifiers_and_axes import SandboxCase
 
 
+class FactIdentifiersAreUnique(SandboxCase):
+    """Two entries for one fact means one meaning is silently discarded, and a
+    graph node whose meaning is uncertain is worse than a missing one."""
+
+    def test_a_duplicate_fact_id_is_rejected(self):
+        def duplicate(vocab):
+            first = dict(vocab["facts"][0])
+            first["label"] = "The same id, a different meaning"
+            vocab["facts"].append(first)
+
+        self.box.edit("vocab/facts.yaml", duplicate)
+        self.assertRejected("duplicate fact")
+
+
 class TheDomainMapMustMatchThePin(SandboxCase):
     def test_a_pinned_identifier_left_unmapped_is_rejected(self):
         def drop_one(data):
