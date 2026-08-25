@@ -7,6 +7,5 @@ objective: >-
   failure when the responses themselves are uniform.
 
 requires:
-  all_of: [surface.appcrypto]
-motivated_by: [control.crypto.unsound]
-yields: [surface.crypto.oracle]
+  all_of: [surface.crypto.oracle]
+yields: [surface.crypto.oracle.padding]

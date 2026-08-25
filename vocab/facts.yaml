@@ -808,3 +808,26 @@ facts:
     description: >
       The key protecting issued tokens is in hand, which makes every property
       the signature was carrying the tester's to choose.
+
+  - id: surface.token.structured
+    label: The identifier is a structured signed token
+    description: >
+      The value carrying the session is a token with a readable payload and a
+      signature over it, and the algorithm and key-locating mechanism the
+      issuer declares are known. An opaque server-side identifier is none of
+      these, and nothing about signature verification can be asked of one.
+
+  - id: surface.crypto.oracle.padding
+    label: The distinguishable failure is a padding failure
+    description: >
+      The response separates a padding failure from a decryption that
+      succeeded and then failed validation. Narrower than a differential
+      existing at all, and it is this one, not the general one, that an attack
+      against the construction needs.
+
+  - id: surface.session.thirdparty
+    label: The identifier reaches a third party
+    description: >
+      A page carrying the identifier in its URL links or loads across an
+      origin boundary, so somebody the application never authorised receives
+      it in the ordinary course of use.

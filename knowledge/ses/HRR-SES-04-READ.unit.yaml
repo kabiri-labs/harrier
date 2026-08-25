@@ -8,4 +8,5 @@ objective: >-
 
 requires:
   all_of: [surface.session.inurl]
+motivated_by: [surface.session.thirdparty]
 yields: [artifact.session.captured]

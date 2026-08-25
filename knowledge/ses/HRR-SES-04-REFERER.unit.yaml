@@ -7,5 +7,5 @@ objective: >-
   party that will receive it in the referrer.
 
 requires:
-  all_of: [recon.session.identified]
-yields: [surface.session.inurl]
+  all_of: [surface.session.inurl]
+yields: [surface.session.thirdparty]

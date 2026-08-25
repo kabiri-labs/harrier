@@ -7,5 +7,5 @@ objective: >-
   returned.
 
 requires:
-  all_of: [surface.crypto.oracle]
+  all_of: [surface.crypto.oracle.padding]
 yields: [primitive.crypto.decrypt]

@@ -109,6 +109,19 @@ dimensions:
         label: Windows
         note: "Back separators, drive letters and UNC paths; case-insensitive, and a trailing dot or space is stripped by the filesystem."
 
+  signature:
+    label: How an issued token is signed
+    values:
+      - value: hmac
+        label: Shared secret (HMAC)
+        note: "One key both signs and verifies, so recovering it offline makes every property the signature carried the tester's to choose."
+      - value: rsa
+        label: RSA
+        note: "Signing key is never held by the verifier; offline recovery from a captured token is not a route."
+      - value: ecdsa
+        label: ECDSA
+        note: "As RSA for reachability; nonce reuse rather than key strength is where its failures live."
+
   platform:
     label: Server-side platform
     values:

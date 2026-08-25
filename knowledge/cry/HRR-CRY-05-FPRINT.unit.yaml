@@ -9,3 +9,4 @@ objective: >-
 
 requires:
   all_of: [recon.session.identified]
+yields: [surface.token.structured]
