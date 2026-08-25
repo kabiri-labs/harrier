@@ -16,31 +16,33 @@ enter_when:
   - "A read has been confirmed and the sink might interpret rather than return."
 
 oracle:
-  positive: "The response carries the result of interpreting a file rather than its bytes -- source returned encoded through a wrapper while the plain path returned nothing, or output where the file's own text was expected."
-  negative: "Every file returns verbatim, including one whose interpretation would visibly differ from its text."
-  inconclusive: "The sink returns nothing for both forms, so reading and interpreting cannot be told apart from outside."
+  positive: "A source file of the application, requested through the parameter, comes back as rendered output or as nothing -- its text was interpreted rather than returned."
+  negative: "That same source file comes back as source, with its opening tag or its imports visible, which is a sink that reads."
+  inconclusive: "No file of the application's own source could be named, so the only files available are ones both sink kinds return identically."
 
 sequence:
-  - "Ask for a file whose text and whose interpretation differ visibly -- a system file an interpreter would mangle."
-  - "If it returns verbatim, the sink reads; record that and stop."
-  - "If it returns empty or mangled, ask for the same file through a source-reading wrapper."
-  - "Compare the two answers. That comparison, not either response alone, is the result."
+  - "Name a source file of the application itself, from the paths it serves or from the disclosed application root."
+  - "Request it through the parameter. Source text returned means the sink reads; record that and stop."
+  - "Rendered output or an empty body means the sink interpreted it. Confirm by requesting the same file through a source-reading wrapper, which returns the source the plain request would not give."
+  - "Record the pair. A system file proves nothing here: a sink that includes emits a file containing no code exactly as a sink that reads does."
 
 first_false_positive: >-
-  An empty response read as execution. A file can be empty, unreadable, or
-  refused by permissions, and all three look like an interpreter swallowing it.
-  The wrapper comparison is what separates them, which is why it is a step rather
-  than an alternative.
+  A system file returned intact, read as proof that the sink only reads. It is
+  not: an interpreter emits a file with no code in it unchanged, so /etc/passwd
+  coming back whole says nothing at all about interpretation. Only a file whose
+  interpretation differs from its text can answer this, which on every platform
+  here means the application's own source.
 
 false_positives:
-  - "Output buffering returning nothing for a file that was in fact only read."
-  - "A response that is empty because the depth was wrong, not because the sink interpreted."
+  - "An empty body because the path was wrong, not because the sink interpreted what it found. The wrapper confirmation is what separates those."
+  - "A source-reading wrapper returning encoded source, read as evidence of inclusion. A read sink returns the same bytes through the same wrapper."
 
 preconditions:
-  - "The platform is identified: the wrapper that makes this comparison possible is platform-specific, and there is no generic substitute."
+  - "A file of the application's own source can be named. Without one there is no file whose interpretation differs from its text, and the question cannot be answered from outside."
+  - "The platform is identified: the wrapper that confirms a positive is platform-specific, and there is no generic substitute."
 
 evidence:
-  - "The verbatim-versus-interpreted pair of responses for the same path."
+  - "The response to the application source file, and where the sink interpreted, the wrapper response returning the same file as source."
 
 done_when: >-
   The sink is recorded as reading or as interpreting, with the pair of responses

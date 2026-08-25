@@ -5,17 +5,23 @@
 # that merely exists is not proof, because the response body is what is being
 # read and a friendly 404 has a body too.
 #
-# {{DEPTH}} is the traversal prefix at the depth already established.
+# {{DEPTH}} is the traversal prefix, overshot rather than counted: resolvers
+# clamp at the filesystem root, so more levels than necessary land in the same
+# place. These payloads leave the intended directory by design, which is what
+# separates this file from probe.yaml.
 id: traversal/targets
 reviewed: "2026-08-25"
 title: Read targets and their fingerprints
 variables: [DEPTH]
 safety: >-
-  Every target here is a system file with no personal data in it, chosen so that
-  proving the read does not take anything belonging to the client's users. Read
-  one, record the marker, and stop. Application configuration is where the
-  credentials are, and reading it is a decision to make with the client rather
-  than a step in a procedure.
+  Every target here is a system file whose contents are fixed by the operating
+  system rather than by the deployment, chosen so that proving the read takes
+  nothing belonging to the client or its users. Read one, record the marker, and
+  stop. Two categories are deliberately absent and need the client's agreement
+  before either is touched: application configuration, which is where the
+  credentials are, and anything under /proc that reflects the running process --
+  its arguments and environment carry secrets as often as configuration files
+  do.
 credits:
   - "The proof files and their markers are common knowledge among testers; the selection and the reasoning are written for this project."
 entries:
@@ -31,11 +37,15 @@ entries:
     detect: "Lines of the form device mountpoint fstype options."
     note: "Use when /etc/passwd is filtered by name. It also names the container runtime, which /etc/passwd does not."
 
-  - name: unix process command line
+  - name: unix kernel version
     os: [unix]
-    payload: "{{DEPTH}}proc/self/cmdline"
-    detect: "NUL-separated arguments naming the interpreter and the application entry point."
-    note: "Gives the absolute application root without an error message, which is the same fact the error-based unit is trying to get."
+    payload: "{{DEPTH}}proc/version"
+    detect: "A single line beginning Linux version."
+    note: >-
+      Use where /etc/passwd is filtered by name. Deliberately not
+      /proc/self/cmdline or /proc/self/environ: both routinely carry passwords,
+      tokens and connection strings passed as arguments or environment, which is
+      the client's data and not a proof marker.
 
   - name: windows initialisation file
     os: [windows]
