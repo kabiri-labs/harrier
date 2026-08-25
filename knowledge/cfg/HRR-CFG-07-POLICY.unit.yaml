@@ -8,6 +8,6 @@ objective: >-
   serving process, or any other account on the host, more than it needs.
 
 requires:
-  all_of: [recon.platform.identified]
+  all_of: [access.host]
 yields: [control.permissions.excessive]
 closes: [control.permissions.excessive]

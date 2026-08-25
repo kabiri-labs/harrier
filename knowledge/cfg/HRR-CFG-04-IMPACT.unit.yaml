@@ -9,4 +9,4 @@ objective: >-
 
 requires:
   all_of: [surface.method.extra]
-yields: [primitive.privileged.action]
+yields: [surface.method.effective]

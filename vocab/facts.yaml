@@ -26,9 +26,16 @@
 #   control.*    the state of a defence
 #   impact.*     a business outcome; terminal, and never required by anything
 #
-# `given: true` marks a fact the engagement supplies rather than a test
-# producing it -- credentials handed over at kick-off, a target in scope. Those
-# are the roots of the graph. Everything else has to be earned.
+# `given: true` marks a fact the engagement supplies unconditionally -- a target
+# in scope, the ability to make a request carrying no session. Those are the
+# roots of the graph.
+#
+# `granted: true` marks one an engagement may supply and often does not, such as
+# access to the host itself. It is never assumed at the start, and the tester
+# states it with `harrier chain --held` when they have it. The producer gate
+# exempts both, since neither is earned by a test.
+#
+# Everything else has to be earned.
 version: 1
 facts:
   - id: recon.target.reachable
@@ -1146,3 +1153,26 @@ facts:
     description: >
       The workflow delivers goods, money, entitlement or standing that the
       caller was not owed. Where a business-logic chain ends.
+
+  - id: access.host
+    label: Access to the host itself is available
+    granted: true
+    description: >
+      Shell or filesystem access to the machine serving the application.
+      Granted rather than given: an engagement whose scope includes the host
+      supplies it at kick-off, and a remote-only engagement never does.
+      Server-side execution reaches the same place by force.
+
+  - id: artifact.request.captured
+    label: A legitimate request has been captured
+    description: >
+      A request the real client issued is in hand, in the form it was sent.
+      What replay is performed against, and what a forgery is written from.
+
+  - id: surface.method.effective
+    label: An unused method has an effect
+    description: >
+      A method the client never issues does something -- changes state, or
+      returns content the ordinary method does not. Distinct from a method
+      merely being answered, and distinct again from it defeating an
+      authorization check.

@@ -10,3 +10,4 @@ objective: >-
 
 requires:
   all_of: [recon.entrypoints.mapped]
+yields: [artifact.request.captured]

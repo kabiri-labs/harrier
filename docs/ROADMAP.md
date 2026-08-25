@@ -93,7 +93,7 @@ declaring requirements against facts nothing yet establishes.
 
 The pass ended with a gate rather than a count: every fact that is not `given`
 has at least one unit producing it, and the validator enforces it from here on.
-174 facts, 366 units, and no condition in the graph without a route to it.
+177 facts, 366 units, and no condition in the graph without a route to it.
 
 ### Phase 3 batches
 
@@ -147,7 +147,7 @@ against real material rather than an empty tree:
 | `knowledge/` | 99 topics across 13 domains, and 366 units across all thirteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
 | `harrier/` | Nine schemas, seven validation passes and the derived chain. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 125 offline tests, almost all of them negative — asserting what must be rejected. |
+| `tests/` | 126 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until a depth pass
