@@ -5,3 +5,6 @@ title: "Controllable plugin parameter probe"
 objective: >-
   Determine whether embedded plugin content consumes a parameter the tester
   supplies, given that the runtimes interpreting it are retired.
+
+requires:
+  all_of: [surface.plugin.content]

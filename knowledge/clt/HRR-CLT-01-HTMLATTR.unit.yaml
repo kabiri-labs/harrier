@@ -5,3 +5,7 @@ title: "Attribute value context"
 objective: >-
   Determine whether a value landing inside an attribute can escape its quoting
   or introduce an event-handler attribute.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [primitive.exec.client]

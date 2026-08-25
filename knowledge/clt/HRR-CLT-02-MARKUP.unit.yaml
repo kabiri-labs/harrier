@@ -5,3 +5,7 @@ title: "Document-writing sink"
 objective: >-
   Determine whether a source reaches a document write that inserts markup into
   the page while it is still parsing.
+
+requires:
+  all_of: [surface.dom.flow]
+yields: [primitive.markup.inject]

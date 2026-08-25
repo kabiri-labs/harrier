@@ -6,3 +6,7 @@ title: "Source and sink inventory"
 objective: >-
   Establish which attacker-influenceable sources the loaded script reads, and
   which sinks it writes each of them into.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.dom.flow]

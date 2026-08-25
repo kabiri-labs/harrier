@@ -5,3 +5,8 @@ title: "Credentialed cross-origin access"
 objective: >-
   Determine whether the endpoint permits credentials to accompany a request
   from an origin it accepted.
+
+requires:
+  all_of: [control.cors.permissive]
+yields: [control.cors.credentialed]
+closes: [control.cors.credentialed]

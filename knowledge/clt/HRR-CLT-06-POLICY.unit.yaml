@@ -6,3 +6,6 @@ title: "Declared sharing policy"
 objective: >-
   Establish which origins, methods and headers the endpoint declares as
   permitted, and whether the declaration varies by request.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

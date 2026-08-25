@@ -5,3 +5,7 @@ title: "Confirmed disclosure through style"
 objective: >-
   Determine whether a value the page holds but does not display is returned to
   a listener the tester controls.
+
+requires:
+  all_of: [surface.css.injectable]
+yields: [primitive.data.read.victim]

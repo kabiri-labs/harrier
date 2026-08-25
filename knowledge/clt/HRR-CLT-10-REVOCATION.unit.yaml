@@ -5,3 +5,6 @@ title: "Clearance on sign-out"
 objective: >-
   Determine whether client-side storage holding session or personal data is
   cleared when the user signs out.
+
+requires:
+  all_of: [control.storage.sensitive]

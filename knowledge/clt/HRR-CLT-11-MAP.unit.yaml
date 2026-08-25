@@ -6,3 +6,7 @@ title: "Script-includable endpoint inventory"
 objective: >-
   Establish which endpoints return authenticated data in a form a script tag
   would parse, including callback-wrapped and array-literal responses.
+
+requires:
+  all_of: [access.user]
+yields: [surface.xssi.endpoint]

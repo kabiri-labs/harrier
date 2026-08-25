@@ -5,3 +5,7 @@ title: "Executable script context"
 objective: >-
   Determine whether a value is placed directly into executable script rather
   than into a literal, so no escape is required at all.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [primitive.exec.client]

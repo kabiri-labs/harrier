@@ -5,3 +5,7 @@ title: "Script string literal context"
 objective: >-
   Determine whether a value landing inside a JavaScript string literal can
   terminate the literal and continue as code.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [primitive.exec.client]

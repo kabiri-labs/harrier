@@ -6,3 +6,6 @@ title: "Front-end and origin parser pair"
 objective: >-
   Establish which intermediary fronts the origin and which framing headers each
   of the two honours when both are present.
+
+requires:
+  all_of: [recon.tiers.mapped]

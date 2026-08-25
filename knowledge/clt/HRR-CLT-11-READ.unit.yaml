@@ -5,3 +5,7 @@ title: "Confirmed disclosure through inclusion"
 objective: >-
   Determine whether the including page obtains another user's data from the
   included response.
+
+requires:
+  all_of: [surface.xssi.endpoint]
+yields: [primitive.data.read.victim]

@@ -5,3 +5,7 @@ title: "Style context"
 objective: >-
   Determine whether a value landing in a style attribute or block can introduce
   a declaration the browser acts on.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [primitive.exec.client]

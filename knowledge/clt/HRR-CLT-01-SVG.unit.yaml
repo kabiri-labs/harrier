@@ -5,3 +5,7 @@ title: "Inline SVG context"
 objective: >-
   Determine whether a value landing inside inline SVG is parsed under XML rules
   that revive constructs the HTML parser would have neutralised.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [primitive.exec.client]

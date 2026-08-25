@@ -5,3 +5,7 @@ title: "Completed action through a framed page"
 objective: >-
   Determine whether a state-changing action can be completed by a victim's
   clicks on a document that disguises the framed page.
+
+requires:
+  all_of: [surface.frameable]
+yields: [primitive.action.victim]

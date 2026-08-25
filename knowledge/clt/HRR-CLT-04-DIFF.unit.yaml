@@ -5,3 +5,7 @@ title: "Selector-differential extraction"
 objective: >-
   Determine whether attribute selectors can be made to load distinct resources
   per matched character, yielding a value one character at a time.
+
+requires:
+  all_of: [surface.css.injectable]
+yields: [primitive.data.read.victim]

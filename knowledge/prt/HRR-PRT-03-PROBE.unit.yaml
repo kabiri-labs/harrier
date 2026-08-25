@@ -5,3 +5,9 @@ title: "Duplicate resolution probe"
 objective: >-
   Determine whether supplying one name twice changes the response relative to
   supplying it once.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.duplicate.accepted]
+closes: [surface.duplicate.accepted]

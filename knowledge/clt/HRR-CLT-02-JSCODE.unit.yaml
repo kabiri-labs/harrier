@@ -5,3 +5,7 @@ title: "Script-evaluating sink"
 objective: >-
   Determine whether a source reaches an evaluation sink such as eval, Function,
   or a timer called with a string.
+
+requires:
+  all_of: [surface.dom.flow]
+yields: [primitive.exec.client]

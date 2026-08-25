@@ -5,3 +5,7 @@ title: "Resource exposed by the divergence"
 objective: >-
   Determine whether the divergence returns a resource that the intermediary's
   own rules were meant to keep unreachable.
+
+requires:
+  all_of: [surface.parser.divergence]
+yields: [primitive.check.bypassed]

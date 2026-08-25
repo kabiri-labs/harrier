@@ -7,3 +7,7 @@ objective: >-
   Determine whether a negative result at a sink is caused by a client-side
   sanitiser or a content security policy rather than by the source never
   arriving.
+
+requires:
+  all_of: [surface.dom.flow]
+yields: [control.filter.identified]

@@ -6,3 +6,7 @@ title: "Front-end normalisation evasion"
 objective: >-
   Determine whether a negative result is caused by the intermediary rewriting
   the header before the application reads it.
+
+requires:
+  all_of: [recon.intermediary.identified]
+yields: [control.filter.identified]

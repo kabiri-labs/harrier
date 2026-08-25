@@ -6,3 +6,7 @@ title: "Encoding and traversal variant evasion"
 objective: >-
   Determine whether a negative result is caused by one component decoding a
   variant the other does not, rather than by the two agreeing.
+
+requires:
+  all_of: [recon.tiers.mapped]
+yields: [control.filter.identified]

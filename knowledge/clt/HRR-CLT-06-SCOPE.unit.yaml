@@ -5,3 +5,8 @@ title: "Accepted origin set"
 objective: >-
   Determine whether the endpoint accepts an origin it should not, including a
   reflected one, a null one, or one matched by prefix or suffix.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [control.cors.permissive]
+closes: [control.cors.permissive]

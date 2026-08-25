@@ -5,3 +5,7 @@ title: "Element content context"
 objective: >-
   Determine whether a value landing between tags can introduce a new element
   that the browser executes.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [primitive.exec.client]

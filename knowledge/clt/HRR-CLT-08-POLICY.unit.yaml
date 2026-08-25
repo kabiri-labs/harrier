@@ -6,3 +6,6 @@ title: "Declared framing restriction"
 objective: >-
   Establish which framing restriction each state-changing page declares,
   through frame-ancestors or a legacy framing header.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

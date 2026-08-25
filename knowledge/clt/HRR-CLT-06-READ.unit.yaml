@@ -5,3 +5,7 @@ title: "Confirmed cross-origin disclosure"
 objective: >-
   Determine whether a document on an origin the tester controls can read a
   response containing another user's data.
+
+requires:
+  all_of: [control.cors.credentialed, access.user]
+yields: [primitive.data.read.victim]

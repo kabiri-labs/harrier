@@ -6,3 +6,6 @@ title: "Declared handshake requirements"
 objective: >-
   Establish which headers, subprotocols and authentication the handshake
   requires before a connection is accepted.
+
+requires:
+  all_of: [recon.channels.mapped]

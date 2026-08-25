@@ -5,3 +5,7 @@ title: "Divergent path resolution"
 objective: >-
   Determine whether a crafted path is matched against one rule set by the
   intermediary and a different one by the origin.
+
+requires:
+  all_of: [recon.tiers.mapped]
+yields: [surface.parser.divergence]
