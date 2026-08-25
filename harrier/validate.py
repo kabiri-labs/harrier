@@ -168,6 +168,17 @@ def check_vocabularies(repo: Repository, problems: Problems) -> None:
             if emitted == surface["tag"]:
                 problems.add("vocab/surfaces.yaml", f"{surface['tag']} emits itself")
 
+    seen_facts: Set[str] = set()
+    for fact in _vocab(repo, "facts", "facts") or []:
+        if fact["id"] in seen_facts:
+            problems.add(
+                "vocab/facts.yaml",
+                f"duplicate fact {fact['id']} -- a fact is the meaning of a node "
+                f"in the graph, and two entries for one id means one of the two "
+                f"meanings is silently discarded",
+            )
+        seen_facts.add(fact["id"])
+
     for dim, body in (_vocab(repo, "dimensions", "dimensions") or {}).items():
         values = [v["value"] for v in body["values"]]
         if len(set(values)) != len(values):

@@ -7,7 +7,7 @@ objective: >-
   served to a caller who does not own it.
 
 requires:
-  all_of: [access.user, artifact.objectid.known]
+  all_of: [access.user, access.peer, artifact.objectid.known]
 yields: [primitive.data.read.peer]
 closes: [primitive.data.read.peer]
 

@@ -44,6 +44,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     chain.add_argument("unit", nargs="?", metavar="UNIT-ID", help="a unit identifier; omit for a summary")
     chain.add_argument("--fact", metavar="FACT-ID", help="show which units produce and consume one fact")
+    chain.add_argument(
+        "--held",
+        metavar="FACT-ID[,FACT-ID...]",
+        help="facts already in hand, added to the given ones; without this only the "
+        "roots of the graph count as held, which is the correct opening position "
+        "and rarely the tester's actual one",
+    )
     return parser
 
 
@@ -89,11 +96,28 @@ def _chain(root, args) -> int:
                     print(f"    {nxt.id}  {nxt.title}")
         return EXIT_OK
 
-    given = chain.given()
+    held = chain.given()
+    if args.held:
+        named = {name.strip() for name in args.held.split(",") if name.strip()}
+        unknown = sorted(named - set(chain.facts))
+        if unknown:
+            print(f"harrier: no such fact: {', '.join(unknown)}", file=sys.stderr)
+            return EXIT_FAILED
+        held |= named
+
+    available = chain.available(held)
+    if args.held:
+        print(f"held             {len(held)}")
+        for node in available[:40]:
+            print(f"  {node.id}  {node.title}")
+        if len(available) > 40:
+            print(f"  ... and {len(available) - 40} more")
+        return EXIT_OK
+
     print(f"facts            {len(chain.facts)}")
     print(f"units charted    {chain.charted()} of {len(chain.nodes)}")
-    print(f"given facts      {len(given)}")
-    print(f"available at start {len(chain.available(given))}")
+    print(f"given facts      {len(held)}")
+    print(f"available        {len(available)}")
     return EXIT_OK
 
 

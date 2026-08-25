@@ -90,8 +90,17 @@ The families are fixed in the schema rather than declared in the file. A family
 is a decision about what kind of thing a fact is, and a file that could add one
 could quietly file an impact as a primitive.
 
-`given: true` marks a fact the engagement supplies — credentials handed over at
-kick-off, a target in scope. Those are the roots. Everything else is earned.
+`given: true` marks a fact the engagement supplies unconditionally — the target
+being reachable, requests being possible without a session. Those are the roots.
+
+Credentials are **not** among them. An engagement that hands over no account
+leaves one to be earned by registering, and a root that assumed otherwise would
+open the catalogue with tests the tester cannot run. What is actually in hand is
+stated at read time instead:
+
+```
+harrier chain --held access.user,access.peer
+```
 
 ## 5. What the validator enforces
 
@@ -103,6 +112,7 @@ kick-off, a target in scope. Those are the roots. Everything else is earned.
   nothing cannot be reached from anywhere and leads nowhere.
 - Every declared fact is referenced by at least one unit. Vocabulary must not
   outrun use.
+- No fact id is declared twice.
 
 One rule is deliberately **not** enforced yet: that every non-`given` fact has at
 least one unit producing it. While the catalogue is partly charted, that rule

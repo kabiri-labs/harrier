@@ -73,10 +73,17 @@ facts:
 
   - id: access.user
     label: Ordinary account held
-    given: true
     description: >
-      A working account with no special role is held. Supplied by the client in
-      most engagements; earned through registration in some.
+      A working account with no special role is held. Not a given: an engagement
+      that hands over no credentials leaves it to be earned through registration,
+      and a chain that assumed it would open with tests the tester cannot run.
+
+  - id: access.peer
+    label: Second account of the same role held
+    description: >
+      A second account holding the same role as the first. Separate from
+      access.user because one account cannot demonstrate anything about the
+      boundary between two, and half the access-control catalogue needs both.
 
   - id: surface.sql.injectable
     label: A parameter reaches a SQL statement
