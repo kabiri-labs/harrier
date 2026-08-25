@@ -14,6 +14,10 @@ Status: `done` · `in progress` · `not started`
 > objective, and at least two topics authored to full depth so the model can be
 > judged on real content rather than on its own description.
 
+At **0.1.0**: the first two clauses are met and the artefact exists. One topic is
+written to full depth, not two. The version tracks the artefact because that is
+the only thing anybody consumes.
+
 Explicitly **not** in 1.0: a full card for every unit. At the granularity this
 model produces, that is a 300-hour writing project — and it is not what makes the
 taxonomy useful. Cards are written on demand, indefinitely.
@@ -30,7 +34,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 4 | Chain model spike | `done` | Five units authored across five domains and five shapes, plus the fact layer they needed. The point was to break the model while it was cheap to change, not to add coverage. |
 | 4.5 | One topic at depth | `done` | `HRR-RES-01` written all the way down: five authored units, four payload files, a shared card, the first mitigation. A calibration pass, not a coverage one -- it settles how concrete a written unit is before three hundred more are written to match it. |
 | 5 | Chain pass | `done` | `requires` and `yields` for all 366 units, in six domain batches, `RCN` first because recon produces most of the base facts. 174 facts, and the gate at the end -- every non-given fact has a producer -- is enforced from here on. |
-| 6 | Published artefact | `not started` | Single self-contained HTML file: surface-first entry, a now/next view driven by the facts in hand, coverage views, and the graph. Versioning starts here. |
+| 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file: surface-first entry, a now/next view driven by the facts in hand, coverage views, full-text search, and every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. This is the clearest differentiation from restating WSTG. |
 | 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. |
 
@@ -146,8 +150,8 @@ against real material rather than an empty tree:
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
 | `knowledge/` | 99 topics across 13 domains, and 366 units across all thirteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
-| `harrier/` | Nine schemas, seven validation passes and the derived chain. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 126 offline tests, almost all of them negative — asserting what must be rejected. |
+| `harrier/` | Nine schemas, seven validation passes, the derived chain and the artefact builder. See [`VALIDATION.md`](VALIDATION.md). |
+| `tests/` | 134 offline tests, almost all of them negative — asserting what must be rejected. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until a depth pass

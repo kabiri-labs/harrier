@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 from typing import List, Optional
 
-from . import HarrierError, find_root
+from . import HarrierError, __version__, find_root
+from .build import build
 from .chain import Chain
 from .validate import coverage, validate
 
@@ -25,6 +27,9 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Harrier -- validate the taxonomy and its vocabularies.",
     )
     parser.add_argument(
+        "--version", action="version", version=f"harrier {__version__}"
+    )
+    parser.add_argument(
         "--root",
         metavar="DIR",
         help="repository root (default: the nearest ancestor holding vocab/, knowledge/ and standards/)",
@@ -37,6 +42,14 @@ def _build_parser() -> argparse.ArgumentParser:
     check.add_argument("-q", "--quiet", action="store_true", help="print nothing on success")
 
     sub.add_parser("coverage", help="print the counts the roadmap reports")
+
+    artefact = sub.add_parser(
+        "build", help="write the published artefact: one self-contained HTML file"
+    )
+    artefact.add_argument(
+        "-o", "--output", metavar="FILE", default="harrier.html",
+        help="where to write it (default: harrier.html)",
+    )
 
     chain = sub.add_parser(
         "chain",
@@ -141,6 +154,11 @@ def main(argv: Optional[List[str]] = None) -> int:
                 return EXIT_FAILED
             if not args.quiet:
                 print(f"harrier: {root} is valid")
+            return EXIT_OK
+        if args.command == "build":
+            target = build(root, Path(args.output))
+            size = target.stat().st_size
+            print(f"harrier: wrote {target} ({size // 1024} KiB)")
             return EXIT_OK
         if args.command == "chain":
             return _chain(root, args)

@@ -72,9 +72,11 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 103 tests, offline
+python -m unittest discover -s tests -t .   # 134 tests, offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
+python -m harrier chain HRR-INJ-01-UNION    # what a unit needs, gives and opens
+python -m harrier build -o harrier.html     # the artefact
 ```
 
 Both of the first two must pass; CI runs exactly them.
@@ -83,10 +85,17 @@ rule is mechanical rather than a review comment.
 
 ## Status
 
-Phases 0 to 2 of seven, and phase 3 in progress. The model, the vocabularies and the machine checks are
-settled, and the taxonomy's top level exists: **99 topics across 13 domains**,
-every resolvable WSTG identifier claimed by one, with the boundaries between
-neighbouring topics written down.
+**0.1.0.** The taxonomy is complete and the artefact exists.
+
+- **99 topics across 13 domains**, every resolvable WSTG identifier claimed by one, with the boundaries between neighbouring topics written down.
+- **366 units**, each with an identifier and a falsifiable objective; 10 of them written to full depth.
+- **177 facts** and the chain they derive: every unit declares what makes it possible and what it establishes, and every condition in the graph has a route to it.
+- **One self-contained HTML file** carrying all of it, including every card, payload and mitigation. It fetches nothing, which is the point: it is opened on an engagement network.
+
+What is not done: depth. Ten units of 366 are written in full, and the rest
+carry an objective and nothing more. That is deliberate -- see the standing rule
+in [`docs/ROADMAP.md`](docs/ROADMAP.md) -- but it is what the next release is
+for.
 
 The level below — the units a person actually performs — is being written now, in
 batches of two or three domains. **223 units exist across six domains**; the remaining eleven domains are outstanding.
