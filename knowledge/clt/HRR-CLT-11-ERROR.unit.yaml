@@ -5,3 +5,7 @@ title: "Error-channel leakage"
 objective: >-
   Determine whether parsing or runtime errors raised by the included response
   disclose part of its content to the including page.
+
+requires:
+  all_of: [surface.xssi.endpoint]
+yields: [primitive.data.read.victim]

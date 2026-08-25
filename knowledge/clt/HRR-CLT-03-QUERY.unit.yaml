@@ -5,3 +5,7 @@ title: "Query-supplied destination"
 objective: >-
   Determine whether a destination supplied in the query string is used without
   being checked against an allowed set.
+
+requires:
+  all_of: [surface.redirect.controlled]
+yields: [primitive.redirect.offsite]

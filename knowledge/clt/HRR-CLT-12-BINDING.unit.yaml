@@ -5,3 +5,8 @@ title: "Opener reference severance"
 objective: >-
   Determine whether the opened document retains a reference to the opener
   rather than having it severed.
+
+requires:
+  all_of: [surface.newcontext.link]
+yields: [surface.opener.retained]
+closes: [surface.opener.retained]

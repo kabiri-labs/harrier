@@ -7,3 +7,7 @@ objective: >-
   Determine whether a negative result in another context is caused by an
   encoder, a filter or a content security policy rather than by the value never
   reaching the page.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [control.filter.identified]

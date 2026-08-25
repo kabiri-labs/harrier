@@ -5,3 +5,7 @@ title: "Query string duplication"
 objective: >-
   Determine whether the component that authorises a request and the component
   that acts on it select different occurrences from the query string.
+
+requires:
+  all_of: [surface.duplicate.accepted]
+yields: [primitive.check.bypassed]

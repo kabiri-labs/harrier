@@ -5,3 +5,7 @@ title: "Opener navigation from the opened document"
 objective: >-
   Determine whether the opened document can navigate the original tab to a
   destination it chose.
+
+requires:
+  all_of: [surface.opener.retained]
+yields: [primitive.redirect.offsite]

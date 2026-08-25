@@ -5,3 +5,7 @@ title: "Referrer-derived destination"
 objective: >-
   Determine whether the page navigates to a location taken from the referrer,
   which the tester sets from a page of their own.
+
+requires:
+  all_of: [surface.redirect.controlled]
+yields: [primitive.redirect.offsite]

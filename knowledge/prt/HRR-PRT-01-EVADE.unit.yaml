@@ -6,3 +6,7 @@ title: "Framing normalisation evasion"
 objective: >-
   Determine whether a negative result is caused by the intermediary rewriting
   framing headers rather than by both parsers agreeing.
+
+requires:
+  all_of: [recon.tiers.mapped]
+yields: [control.filter.identified]

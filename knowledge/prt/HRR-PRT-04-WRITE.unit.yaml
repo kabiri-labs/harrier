@@ -5,3 +5,7 @@ title: "Cache entry created under a divergent key"
 objective: >-
   Determine whether the divergence stores a response under a key that a later,
   ordinary request will match.
+
+requires:
+  all_of: [surface.parser.divergence]
+yields: [primitive.content.poisoned]

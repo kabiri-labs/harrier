@@ -5,3 +5,7 @@ title: "Body field duplication"
 objective: >-
   Determine whether a duplicated body field is resolved differently from a
   duplicated query parameter by the same application.
+
+requires:
+  all_of: [surface.duplicate.accepted]
+yields: [surface.parser.divergence]

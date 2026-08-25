@@ -459,3 +459,189 @@ facts:
       The expression, filter or path the application builds is visible in an
       error, which turns writing a working payload into editing a known
       string.
+
+  - id: surface.reflection.unencoded
+    label: A submitted value returns unencoded
+    description: >
+      Characters a caller submits come back in the response without the
+      encoding the position they land in requires. Which characters and which
+      position, not merely that something was reflected.
+
+  - id: surface.dom.flow
+    label: A source reaches a sink in client script
+    description: >
+      Loaded script carries a value the caller can influence into a call that
+      acts on it. Established by reading the script rather than by sending a
+      payload.
+
+  - id: surface.redirect.controlled
+    label: The page's destination is caller-supplied
+    description: >
+      Where the application navigates is decided by a value the caller
+      supplies.
+
+  - id: surface.css.injectable
+    label: A value reaches a stylesheet
+    description: >
+      An injected declaration is parsed and applied rather than escaped, which
+      is what makes a stylesheet an exfiltration channel.
+
+  - id: surface.resource.controlled
+    label: A resource location is caller-influenced
+    description: >
+      Which resource the loaded page fetches at runtime derives from input an
+      attacker can influence.
+
+  - id: surface.plugin.content
+    label: Plugin-hosted content is still served
+    description: >
+      Content requiring a browser plugin is served and embedded somewhere.
+      Recorded because the runtimes are retired, not because the finding is
+      likely.
+
+  - id: surface.frameable
+    label: The page renders inside a foreign frame
+    description: >
+      A state-changing page loads in a frame on an origin the tester controls
+      rather than refusing to.
+
+  - id: surface.postmessage.listener
+    label: The page listens for cross-document messages
+    description: >
+      A message listener is registered, and what it does with what arrives is
+      the question every unit under it asks.
+
+  - id: surface.xssi.endpoint
+    label: An endpoint returns authenticated data a script tag would parse
+    description: >
+      A response carrying one user's data is in a form another origin's script
+      tag can load.
+
+  - id: surface.newcontext.link
+    label: The page opens documents in a new context
+    description: >
+      Links or script calls open a new browsing context, and where they point
+      is influenceable.
+
+  - id: surface.opener.retained
+    label: The opened document keeps a reference back
+    description: >
+      A document opened by the page can still address the tab that opened it.
+
+  - id: surface.desync.confirmed
+    label: Two parsers disagree about where a request ends
+    description: >
+      An intermediary and an origin read the same framing differently, which
+      is the condition every desync consequence is built on.
+
+  - id: surface.host.controlled
+    label: The application composes a caller-supplied host
+    description: >
+      A host the request supplied is used by the application when it builds an
+      absolute location.
+
+  - id: surface.duplicate.accepted
+    label: A repeated name changes the answer
+    description: >
+      Supplying one parameter or header twice produces a different result from
+      supplying it once.
+
+  - id: surface.parser.divergence
+    label: Two components read one request differently
+    description: >
+      An intermediary and an origin resolve the same input to different values
+      -- a different occurrence, a different path, a different field.
+
+  - id: primitive.markup.inject
+    label: Markup injected without script
+    description: >
+      Markup that changes the page's meaning can be introduced while script
+      execution stays blocked. A separate result from execution, and
+      frequently the only one available under a policy.
+
+  - id: primitive.redirect.offsite
+    label: A victim is navigated to a chosen destination
+    description: >
+      The application, or a document it opened, can send somebody to a
+      location the tester chose.
+
+  - id: primitive.data.read.victim
+    label: Another user's data is read from a foreign context
+    description: >
+      Data belonging to a user of the application is obtained by a document
+      the attacker controls -- through a stylesheet, a script tag, a
+      permissive sharing policy, or shared client-side storage.
+
+  - id: primitive.resource.load
+    label: The page loads a chosen resource
+    description: >
+      A resource of the tester's choosing is fetched by the page. Whether its
+      content then executes is a separate result.
+
+  - id: primitive.action.victim
+    label: A state change is driven as a victim
+    description: >
+      An action the victim is entitled to perform is performed from a context
+      the attacker controls.
+
+  - id: primitive.request.victim
+    label: Another user's request is altered
+    description: >
+      A request the tester did not send is changed before the origin answers
+      it, which is what separates a desync from a self-inflicted oddity.
+
+  - id: primitive.content.poisoned
+    label: Delivered content carries an attacker's value
+    description: >
+      Content the application serves or sends later carries a value the tester
+      supplied -- a link in a message, a response under a cache key an
+      ordinary request will match.
+
+  - id: primitive.check.bypassed
+    label: A guard is satisfied while the action receives something else
+    description: >
+      The component that authorises a request and the component that acts on
+      it read different values, so the check passes on one thing and the work
+      happens on another.
+
+  - id: control.cors.permissive
+    label: The endpoint accepts an origin it should not
+    description: >
+      A reflected, null, or loosely matched origin is accepted by the sharing
+      policy.
+
+  - id: control.cors.credentialed
+    label: Credentials are permitted from an accepted origin
+    description: >
+      The endpoint allows a credentialed request from an origin it accepts,
+      which is what turns a permissive policy into a readable response.
+
+  - id: control.origin.unchecked
+    label: The origin of an incoming message is not checked
+    description: >
+      A message or handshake is acted on without its origin being verified, or
+      with a comparison that a substring defeats.
+
+  - id: control.storage.sensitive
+    label: Sensitive data persists on the client
+    description: >
+      Something is kept in client-side storage that would be damaging in the
+      hands of somebody with later access to the device.
+
+  - id: control.cache.permissive
+    label: Personal responses may be stored
+    description: >
+      Responses carrying one user's data are returned with directives that let
+      a browser or a shared cache keep them.
+
+  - id: control.binding.absent
+    label: A connection is not bound to the session that opened it
+    description: >
+      An accepted connection serves whoever holds it rather than the
+      authenticated session that established it.
+
+  - id: control.transport.plaintext
+    label: An unencrypted channel is accepted
+    description: >
+      The service accepts an unencrypted connection where an encrypted one is
+      available.

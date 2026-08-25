@@ -6,3 +6,6 @@ title: "Intermediary and normalisation inventory"
 objective: >-
   Establish which intermediary handles the path and which normalisation each of
   it and the origin applies before matching.
+
+requires:
+  all_of: [recon.tiers.mapped]

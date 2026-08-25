@@ -6,3 +6,7 @@ title: "Plugin content inventory"
 objective: >-
   Establish whether any plugin-hosted content is still served, and by which
   pages it is embedded.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.plugin.content]

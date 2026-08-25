@@ -5,3 +5,7 @@ title: "State change driven by a message"
 objective: >-
   Determine whether a message from an origin the tester controls causes the
   page to change state the sender should not be able to change.
+
+requires:
+  all_of: [control.origin.unchecked]
+yields: [primitive.action.victim]

@@ -5,3 +5,7 @@ title: "URL-bearing attribute context"
 objective: >-
   Determine whether a value landing in an href, src or formaction attribute can
   supply a scheme the browser executes.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+yields: [primitive.exec.client]

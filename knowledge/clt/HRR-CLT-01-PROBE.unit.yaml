@@ -6,3 +6,8 @@ title: "Reflection point and survival probe"
 objective: >-
   Determine which characters of a submitted value survive into the response
   unencoded, and in which syntactic position they land.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.reflection.unencoded]

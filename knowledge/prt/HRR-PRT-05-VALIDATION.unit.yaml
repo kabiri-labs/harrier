@@ -5,3 +5,8 @@ title: "Origin checking at the handshake"
 objective: >-
   Determine whether a handshake carrying an origin the application does not own
   is accepted rather than refused.
+
+requires:
+  all_of: [recon.channels.mapped]
+yields: [control.origin.unchecked]
+closes: [control.origin.unchecked]

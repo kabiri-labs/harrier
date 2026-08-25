@@ -5,3 +5,7 @@ title: "Execution of a substituted resource"
 objective: >-
   Determine whether a substituted location is loaded as script or as a
   template, so its content executes rather than being displayed.
+
+requires:
+  all_of: [primitive.resource.load]
+yields: [primitive.exec.client]

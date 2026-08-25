@@ -5,3 +5,7 @@ title: "Header duplication"
 objective: >-
   Determine whether the intermediary and the origin disagree about which
   occurrence of a repeated header is authoritative.
+
+requires:
+  all_of: [surface.duplicate.accepted, recon.tiers.mapped]
+yields: [surface.parser.divergence]

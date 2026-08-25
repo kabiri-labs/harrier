@@ -6,3 +6,6 @@ title: "Client-side storage inventory"
 objective: >-
   Establish what the application writes into local storage, session storage,
   indexed storage and the browser cache, and when.
+
+requires:
+  all_of: [access.user]
