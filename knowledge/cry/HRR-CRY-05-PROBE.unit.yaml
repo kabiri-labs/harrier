@@ -9,4 +9,3 @@ objective: >-
 requires:
   all_of: [surface.token.structured]
 yields: [control.signature.unverified]
-closes: [control.signature.unverified]

@@ -7,6 +7,6 @@ objective: >-
   will, which turns the protection into the attack.
 
 requires:
-  all_of: [control.limit.absent]
+  all_of: [control.lockout.enforced]
 motivated_by: [artifact.accountlist]
 yields: [impact.account.denied]

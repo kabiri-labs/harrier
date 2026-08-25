@@ -835,10 +835,11 @@ facts:
   - id: recon.roles.mapped
     label: The roles and the accounts holding them are recorded
     description: >
-      Which roles the application distinguishes, and which test account
-      exercises each. Every access-control comparison is only as strong as the
-      pair of accounts behind it, so this is a condition rather than a
-      courtesy.
+      Which roles the application distinguishes, and which of them the tester
+      actually holds an account for -- including the ones nobody supplied,
+      because a role with no account is a gap in the coverage rather than an
+      absence of the role. Units that need two accounts to compare say so
+      themselves.
 
   - id: access.principal.other
     label: A session belonging to somebody else is held
@@ -980,3 +981,24 @@ facts:
     description: >
       The server acts on a method other than the one the request line named,
       and other than the one an access-control check inspected.
+
+  - id: control.lockout.enforced
+    label: Repeated failures lock the account out
+    description: >
+      A counter exists, and reaching it stops attempts against that account. A
+      precondition for the lockout being usable as an attack, and the opposite
+      of the fact its sibling records.
+
+  - id: control.channel.bypass
+    label: A weaker channel's session is honoured by the primary one
+    description: >
+      A session established where less evidence was demanded is accepted where
+      more was. What makes a secondary channel a bypass rather than a separate
+      surface.
+
+  - id: primitive.field.bound
+    label: A field the interface never exposed is persisted
+    description: >
+      A value the form never submits is bound from the request and stored.
+      What it decides is a separate question, and the one that decides whether
+      this matters.

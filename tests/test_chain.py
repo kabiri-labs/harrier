@@ -103,6 +103,24 @@ class ANegativeResultClosesOnlyWhatItCouldOpen(SandboxCase):
         self.assertRejected("closes recon.engine.identified without yielding it")
 
 
+class OnlyASoleProducerMayCloseAFact(SandboxCase):
+    """A clean result rules out the route the unit took, not the fact itself.
+    Where several units establish one fact, closing it from any of them hides
+    the routes that are still open -- which reads, in a coverage view, exactly
+    like having tried them."""
+
+    def test_closing_a_fact_another_unit_also_yields_is_rejected(self):
+        # primitive.exec.client is established by ten units across two topics.
+        self.box.edit(
+            "knowledge/clt/HRR-CLT-01-HTMLBODY.unit.yaml",
+            lambda u: u.update(closes=["primitive.exec.client"]),
+        )
+        self.assertRejected("other unit(s) also establish")
+
+    def test_a_sole_producer_may_close_what_it_yields(self):
+        self.assertAccepted()
+
+
 class AnAuthoredUnitEstablishesSomething(SandboxCase):
     def test_an_authored_test_without_yields_is_rejected(self):
         def strip(unit):

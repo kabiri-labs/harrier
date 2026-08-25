@@ -108,6 +108,7 @@ harrier chain --held access.user,access.peer
 - No unit both requires and yields the same fact.
 - Nothing requires an `impact.*` fact: an impact is where a chain ends.
 - `closes` never names a fact `yields` does not.
+- `closes` names only facts this unit is the sole producer of.
 - An authored `test` or `recon` unit yields something. A unit that establishes
   nothing cannot be reached from anywhere and leads nowhere.
 - Every declared fact is referenced by at least one unit. Vocabulary must not

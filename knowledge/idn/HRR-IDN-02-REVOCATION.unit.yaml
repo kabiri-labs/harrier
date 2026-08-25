@@ -9,4 +9,3 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.session.persists]
-closes: [control.session.persists]

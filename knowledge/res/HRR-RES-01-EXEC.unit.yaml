@@ -10,7 +10,6 @@ requires:
   all_of: [primitive.fs.read]
 motivated_by: [recon.platform.identified]
 yields: [primitive.exec.server]
-closes: [primitive.exec.server]
 
 enter_when:
   - "A read has been confirmed and the sink might interpret rather than return."

@@ -86,7 +86,8 @@ produces a route that silently does not exist rather than an error. Every fact a
 unit names must be in `vocab/facts.yaml`; no unit may require what it yields; an
 `impact.*` fact may never be required, because an impact is where a chain ends;
 `closes` may not name a fact `yields` does not, since a negative result can only
-rule out what a positive one would have established; an authored test or recon
+rule out what a positive one would have established, nor a fact another unit
+also establishes, since a clean result rules out the route and not the fact; an authored test or recon
 unit must yield something, or it can be reached from nowhere and leads nowhere;
 a fact no unit references at all is rejected, because vocabulary must not outrun
 use; and two entries for one fact id are rejected, since a graph node whose
@@ -94,7 +95,7 @@ meaning is uncertain is worse than one that is missing. See [`CHAINING.md`](CHAI
 
 ## What the suite adds
 
-121 tests, offline, no network and no fixtures of their own: every mutation test
+123 tests, offline, no network and no fixtures of their own: every mutation test
 copies the real repository and breaks exactly one thing in it. A hand-built
 miniature drifts from what it stands in for, and then the suite passes while the
 repository is broken.
