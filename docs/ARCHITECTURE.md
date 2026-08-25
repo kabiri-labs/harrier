@@ -169,8 +169,9 @@ docs/
   VALIDATION.md     what the validator checks, and why each rule is mechanical
   ROADMAP.md        build state; updated in the same change as the work
 
-harrier/            the validator -- the only executable code in the repository
+harrier/            the validator and the builder -- the only executable code
   chain.py          the derived attack graph; nothing about it is stored
+  build.py          the published artefact: one self-contained HTML file
   schema/           nine JSON Schemas, selected by a document's location
 tests/              offline suite; mutation tests copy the repository itself
 
