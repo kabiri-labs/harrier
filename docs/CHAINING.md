@@ -37,13 +37,14 @@ The edge means: *if A succeeds, B may become relevant.* It does not mean B is
 now possible. B may need three other things as well, and one of them may be
 something no test can supply.
 
-**Why not name the next test directly.** With 366 units and an average of three
-onward routes each, an explicit edge list is over a thousand hand-maintained
-links. Every new unit has to be inserted into the `next` list of every unit that
-could precede it — which means the cost of adding a unit grows with the size of
-the catalogue, and the edges that were never updated look exactly like edges that
-were checked and found not to exist. Facts are the join key instead: a unit
-declares what it needs and what it gives, and the graph reconnects itself.
+**Why not name the next test directly.** The derivation currently yields 561
+unit-to-unit edges across 366 units, and that is with the far half of the chain
+barely charted. Written down they would be 561 hand-maintained links, each
+needing to be inserted into the `next` list of every unit that could precede it
+— so the cost of adding a unit grows with the size of the catalogue, and the
+edges nobody updated look exactly like edges that were checked and found not to
+exist. Facts are the join key instead: a unit declares what it needs and what it
+gives, and the graph reconnects itself.
 
 The graph is derived at read time and never stored. There is no file to fall out
 of date.
@@ -188,10 +189,23 @@ looks helpful and is not: it sorts every conditional continuation below the
 first few a reader sees, which hides precisely the part that keeps the view
 honest.
 
-**A capability nothing consumes is an outcome, not a gap.** An `impact.*` fact
-is terminal by construction — the validator rejects anything requiring one — and
-is shown as where a chain ends. A non-impact capability with no consumer is a
-reportable result and is described as one rather than as an empty graph.
+**A capability nothing consumes is an outcome, not a gap** — and the two kinds
+of outcome are counted apart. An `impact.*` fact is terminal by construction, the
+validator rejects anything requiring one, and it is shown as where a chain is
+*meant* to end. A non-impact capability with no consumer is a **dead end**: a
+reportable result where the chart simply does not go on. Folding impacts into
+that count would inflate it and would describe arriving as failing to arrive.
+
+This is currently the common case rather than the rare one. 78 of 177
+capabilities are established by a test and used by none, including 26 of 32
+`primitive.*` and 39 of 59 `control.*`. Of 366 tests, 138 have a potential
+continuation, 7 establish an impact, 182 stop short, and 39 declare no
+capability at all — a partition, and the four sum to the catalogue. Phase 5
+charted reconnaissance through to primitives and stopped there; primitive to
+impact is largely unwritten. `harrier chain` reports the split and the artefact
+reports it on the Attack Chains page, because a reader meeting a dozen dead ends
+should be told it is the chart's reach rather than inferring the catalogue is
+broken.
 
 **A negative result excludes less than it appears to.** `closes` is a subset of
 `yields` and may name only a fact this unit is the *sole* producer of, so

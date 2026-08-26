@@ -225,15 +225,44 @@ class Chain:
         """How many units carry chain declarations at all."""
         return sum(1 for n in self.nodes.values() if n.requires or n.yields)
 
-    def unconsumed(self) -> List[str]:
-        """Capabilities no unit declares a use for.
+    def impacts(self) -> List[str]:
+        """The terminal capabilities. Nothing may require one; the validator says so."""
+        return sorted(fid for fid in self.facts if family_of(fid) == "impact")
 
-        Not a defect in any one unit: it is how far the chart reaches. Each is
-        where some chain currently stops, and the count is the honest measure of
-        how much of the graph runs all the way through to an impact.
+    def dead_ends(self) -> List[str]:
+        """Capabilities no unit declares a use for, **excluding impacts**.
+
+        The exclusion is the whole point. Every impact is unconsumed by
+        construction -- requiring one is rejected -- so counting impacts here
+        would describe reaching an outcome as failing to continue to one, and
+        would inflate the number by exactly the set already reported as where
+        chains are *meant* to end.
+
+        What is left is the honest measure: a capability some test establishes
+        and nothing goes on to use. Not a defect in any one unit -- it is how far
+        the chart reaches.
         """
         return sorted(
             fid
             for fid in self.facts
-            if not self.consumers.get(fid) and not self.motivates.get(fid)
+            if family_of(fid) != "impact"
+            and not self.consumers.get(fid)
+            and not self.motivates.get(fid)
         )
+
+    def reach(self) -> Dict[str, int]:
+        """How the tests divide by where their chain goes. A partition, and the
+        four counts sum to the whole catalogue -- which is what stops any one of
+        them from quietly meaning something else."""
+        index = self.index()
+        counts = {"continuation": 0, "impact": 0, "short": 0, "uncharted": 0}
+        for edge in index.values():
+            if not edge["yields"]:
+                counts["uncharted"] += 1
+            elif edge["out"]:
+                counts["continuation"] += 1
+            elif any(family_of(f) == "impact" for f in edge["yields"]):
+                counts["impact"] += 1
+            else:
+                counts["short"] += 1
+        return counts

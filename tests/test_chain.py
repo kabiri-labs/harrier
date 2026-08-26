@@ -239,19 +239,30 @@ class TheChartsReachIsMeasuredRatherThanAssumed(unittest.TestCase):
     def setUpClass(cls):
         cls.chain = Chain.load(Sandbox.REPO_ROOT)
 
-    def test_an_unconsumed_capability_is_one_nothing_requires_or_is_motivated_by(self):
-        for fid in self.chain.unconsumed():
+    def test_a_dead_end_is_a_capability_nothing_requires_or_is_motivated_by(self):
+        for fid in self.chain.dead_ends():
             self.assertIn(fid, self.chain.facts)
             self.assertFalse(self.chain.consumers.get(fid), fid)
             self.assertFalse(self.chain.motivates.get(fid), fid)
 
-    def test_every_impact_is_unconsumed_because_an_impact_is_terminal(self):
-        impacts = [f for f in self.chain.facts if family_of(f) == "impact"]
+    def test_an_impact_is_never_counted_as_a_dead_end(self):
+        """Every impact is unconsumed -- requiring one is rejected -- so a count
+        that included them would describe arriving at an outcome as failing to
+        continue to one, and would be inflated by exactly the terminal set."""
+        impacts = self.chain.impacts()
         self.assertTrue(impacts)
         for fid in impacts:
-            self.assertIn(fid, self.chain.unconsumed())
+            self.assertEqual(family_of(fid), "impact")
+            self.assertFalse(self.chain.consumers.get(fid), fid)
+            self.assertNotIn(fid, self.chain.dead_ends())
 
-    def test_a_unit_whose_capabilities_are_all_unconsumed_is_marked_terminal(self):
+    def test_the_four_ways_a_chain_can_go_account_for_every_test(self):
+        reach = self.chain.reach()
+        self.assertEqual(sum(reach.values()), len(self.chain.nodes))
+        self.assertTrue(all(v >= 0 for v in reach.values()))
+        self.assertGreater(reach["impact"], 0, "nothing reaches an impact any more")
+
+    def test_a_unit_whose_capabilities_are_all_terminal_is_marked_as_such(self):
         index = self.chain.index()
         stops = 0
         for uid, edge in index.items():

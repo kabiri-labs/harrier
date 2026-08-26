@@ -169,11 +169,13 @@ What is not done, and both are visible in the product rather than only here:
 - **Depth.** Ten units of 366 are written in full and the rest carry an
   objective and nothing more. That is deliberate — see the standing rule in
   [`docs/ROADMAP.md`](docs/ROADMAP.md).
-- **The far half of the chain.** 81 of 177 capabilities have no test declaring a
-  use for them, so 189 of 366 tests currently lead nowhere in the chart. Phase 5
+- **The far half of the chain.** 78 of 177 capabilities are established by a
+  test and used by none — impacts excluded, since those are where a chain is
+  meant to end. So of 366 tests, 138 have a potential continuation, 7 establish
+  an impact, 182 stop short, and 39 declare no capability at all. Phase 5
   charted reconnaissance through to primitives; primitive-to-impact is largely
-  unwritten. The artefact says so on the page and `harrier chain` reports the
-  count, rather than letting a reader meet it one dead end at a time.
+  unwritten. Both the Attack Chains page and `harrier chain` report the split,
+  rather than letting a reader meet it one dead end at a time.
 
 ## Licence and attribution
 

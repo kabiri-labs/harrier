@@ -544,19 +544,49 @@ class TheLocalChainIsDerivedAndBoundedToTheReason(unittest.TestCase):
             index["HRR-A-01-P"]["out"][0]["also"], {"all_of": ["access.host"]}
         )
 
-    def test_the_reach_of_the_chart_is_carried_rather_than_discovered(self):
-        """189 of 366 tests currently lead nowhere, because most primitives and
-        controls have no consumer. That is the chart's reach, not a defect in
-        any one unit, and the artefact reports it rather than letting a reader
-        infer it one dead end at a time."""
-        for fact in self.data["unconsumed"]:
+    def test_a_dead_end_is_a_capability_nothing_uses_and_is_not_an_impact(self):
+        """Most tests stop short, because most primitives and controls have no
+        consumer. That is the chart's reach, not a defect in any one unit, and
+        the artefact reports it rather than letting a reader infer it one dead
+        end at a time. Impacts are counted separately: every one of them is
+        unconsumed by construction, so folding them in would inflate the number
+        by the set already reported as where a chain is meant to end."""
+        for fact in self.data["deadEnds"]:
             self.assertIn(fact, self.data["facts"])
+            self.assertNotEqual(family_of(fact), "impact", fact)
             self.assertFalse(self.data["requiredBy"].get(fact), fact)
             self.assertFalse(self.data["motivates"].get(fact), fact)
         for fact in self.data["facts"]:
             consumed = self.data["requiredBy"].get(fact) or self.data["motivates"].get(fact)
-            if not consumed:
-                self.assertIn(fact, self.data["unconsumed"], fact)
+            if not consumed and family_of(fact) != "impact":
+                self.assertIn(fact, self.data["deadEnds"], fact)
+        self.assertFalse(set(self.data["deadEnds"]) & set(self.data["impacts"]))
+
+    def test_the_reach_of_every_test_is_carried_as_a_partition(self):
+        reach = self.data["reach"]
+        self.assertEqual(
+            sum(reach.values()), len(self.data["units"]),
+            "the four counts must account for every test exactly once",
+        )
+        recomputed = {"continuation": 0, "impact": 0, "short": 0, "uncharted": 0}
+        for edge in self.data["chain"].values():
+            if not edge["yields"]:
+                recomputed["uncharted"] += 1
+            elif edge["out"]:
+                recomputed["continuation"] += 1
+            elif any(family_of(f) == "impact" for f in edge["yields"]):
+                recomputed["impact"] += 1
+            else:
+                recomputed["short"] += 1
+        self.assertEqual(reach, recomputed)
+
+    def test_a_test_that_establishes_an_impact_is_not_counted_as_stopping_short(self):
+        reaching = [
+            uid for uid, edge in self.data["chain"].items()
+            if any(family_of(f) == "impact" for f in edge["yields"])
+        ]
+        self.assertTrue(reaching, "nothing reaches an impact any more")
+        self.assertEqual(len(reaching), self.data["reach"]["impact"])
 
     def test_an_impact_is_terminal(self):
         for fact in self.data["impacts"]:
