@@ -62,8 +62,6 @@ class Chain:
     producers: Dict[str, List[str]] = field(default_factory=dict)
     #: fact id -> units that need it
     consumers: Dict[str, List[str]] = field(default_factory=dict)
-    #: topic id -> the order its units are meant to be performed in
-    topic_order: Dict[str, List[str]] = field(default_factory=dict)
 
     @classmethod
     def load(cls, root: Path) -> "Chain":
@@ -72,8 +70,6 @@ class Chain:
         facts_doc = repo.vocab.get("facts")
         for fact in (facts_doc.data.get("facts") if facts_doc else None) or []:
             chain.facts[fact["id"]] = fact
-        for doc in repo.topics:
-            chain.topic_order[doc.data["id"]] = list(doc.data.get("order") or [])
         for doc in repo.units:
             data = doc.data
             requires = data.get("requires") or {}
@@ -149,41 +145,6 @@ class Chain:
             and n.id not in unlocked
         ]
         return {"unlocks": unlocks, "motivates": sorted(motivates, key=lambda n: n.id)}
-
-    def reading_order(self) -> Dict[str, int]:
-        """One integer per unit: the order to meet them, before anything is held.
-
-        Three things decide it, and the order of the three is the whole opinion:
-
-        1. **Depth.** A unit written in full tells the tester what proves it; an
-           outline gives them an objective and leaves them where they started.
-           Ten of several hundred are written, and burying them under the rest
-           is how a reader concludes the catalogue is empty.
-        2. **Topic**, so a run does not scatter across unrelated work.
-        3. **The topic's declared order**, which is a deliberate performance
-           sequence -- probe before verify, verify before evade -- and the one
-           piece of sequencing a human already wrote down.
-
-        Held facts are deliberately not an input. What the tester holds changes
-        which units are *reachable*, and that is applied separately; folding it
-        in here would make the ordering re-derive itself on every result and
-        stop being something a test can pin down.
-        """
-
-        def key(node: Node):
-            order = self.topic_order.get(node.topic) or []
-            position = order.index(node.id) if node.id in order else len(order)
-            return (
-                0 if node.status == "authored" else 1,
-                node.topic,
-                position,
-                node.id,
-            )
-
-        return {
-            node.id: index
-            for index, node in enumerate(sorted(self.nodes.values(), key=key))
-        }
 
     def charted(self) -> int:
         """How many units carry chain declarations at all."""

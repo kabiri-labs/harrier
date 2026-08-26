@@ -8,7 +8,10 @@ repository, with one thing deliberately changed.
 
 from __future__ import annotations
 
+import json
+import os
 import shutil
+import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any, Callable
@@ -166,3 +169,84 @@ class Sandbox:
 
 def messages(problems: Any) -> str:
     return "\n".join(problems.items)
+
+
+# --- helpers for exercising the artefact itself ------------------------------
+
+def _artefact(name: str) -> Path:
+    return REPO_ROOT / "harrier" / "artefact" / name
+
+
+def node_available() -> bool:
+    return bool(shutil.which("node"))
+
+
+def run_in_node(body: str, data: Any) -> Any:
+    """Run one snippet against the artefact's own script and return its result.
+
+    The graph model, its layout and the search index are JavaScript, and every
+    assertion about them was previously a substring match on the rendered page
+    -- which a script with an unterminated literal satisfies exactly as well as
+    a working one. `app.js` exports its pure functions and runs nothing on load
+    without a document, so the real implementation can be called directly.
+
+    Offline and local: node is already how the suite checks the script parses.
+    """
+    tmp = Path(tempfile.mkdtemp(prefix="harrier-node-"))
+    try:
+        (tmp / "data.json").write_text(json.dumps(data), encoding="utf-8")
+        script = (
+            "const H = require(%s);\n"
+            "const D = JSON.parse(require('fs').readFileSync(%s, 'utf8'));\n"
+            "const result = (function () {\n%s\n})();\n"
+            "process.stdout.write(JSON.stringify(result === undefined ? null : result));\n"
+        ) % (json.dumps(str(_artefact("app.js"))), json.dumps(str(tmp / "data.json")), body)
+        (tmp / "run.js").write_text(script, encoding="utf-8")
+        done = subprocess.run(
+            ["node", str(tmp / "run.js")], capture_output=True, text=True
+        )
+        if done.returncode != 0:
+            raise AssertionError(done.stderr.strip() or "node exited non-zero")
+        return json.loads(done.stdout)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+#: Where a browser might be. Checked in order; absent is not a failure, because
+#: the suite has to run offline on a machine that has never installed one.
+_BROWSER_NAMES = ("chromium", "chromium-browser", "google-chrome", "chrome")
+
+
+def find_browser() -> str | None:
+    for name in _BROWSER_NAMES:
+        found = shutil.which(name)
+        if found:
+            return found
+    root = os.environ.get("PLAYWRIGHT_BROWSERS_PATH")
+    if root and Path(root).is_dir():
+        for candidate in sorted(Path(root).glob("chromium-*/chrome-linux/chrome")):
+            if candidate.is_file():
+                return str(candidate)
+        for candidate in sorted(Path(root).glob("chromium*/chrome-mac/Chromium.app/Contents/MacOS/Chromium")):
+            if candidate.is_file():
+                return str(candidate)
+    return None
+
+
+def render_in_browser(browser: str, page: Path, fragment: str = "") -> str:
+    """Load the artefact from disk and return the DOM after its script has run.
+
+    `file://` on purpose: that is how the artefact is opened, and it is the mode
+    where a browser is strictest about what an inline block may do.
+    """
+    done = subprocess.run(
+        [
+            browser, "--headless", "--no-sandbox", "--disable-gpu",
+            "--disable-dev-shm-usage", "--disable-background-networking",
+            "--no-first-run", "--no-default-browser-check",
+            "--virtual-time-budget=8000", "--dump-dom",
+            "file://" + str(page) + fragment,
+        ],
+        capture_output=True, text=True, timeout=120,
+    )
+    return done.stdout
