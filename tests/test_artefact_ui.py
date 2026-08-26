@@ -369,6 +369,86 @@ class TheGeneralGraph(unittest.TestCase):
                 carried += 1
         self.assertGreater(carried, 0, "no step in any route still owes anything")
 
+    def test_performing_a_unit_establishes_everything_it_yields(self):
+        """Carrying only the capability the route continues through understated
+        what the route had in hand, so a later step was reported as still owing
+        a condition an earlier step had already established."""
+        multi = {
+            "facts": {"a.1": {}, "b.1": {}, "b.2": {}, "impact.done": {}},
+            "given": [],
+            "units": {
+                "HRR-A-01-X": {"id": "HRR-A-01-X", "requires": {"all_of": ["a.1"]},
+                               "yields": ["b.1", "b.2"]},
+                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"all_of": ["b.1", "b.2"]},
+                               "yields": ["impact.done"]},
+            },
+            "requiredBy": {"a.1": ["HRR-A-01-X"], "b.1": ["HRR-A-01-Z"], "b.2": ["HRR-A-01-Z"]},
+        }
+        routes = run_in_node(
+            "return H.pathsToImpact(D, 'a.1', {maxPaths: 9, maxDepth: 5});", multi
+        )
+        self.assertTrue(routes)
+        for route in routes:
+            final = route["steps"][-1]
+            self.assertEqual(final["unit"], "HRR-A-01-Z")
+            self.assertEqual(
+                final["also"], {"all_of": [], "any_of": []},
+                "X yielded both, so Z owes nothing on either route",
+            )
+
+    def test_one_unit_reached_by_two_capabilities_is_two_routes(self):
+        """A route is its whole shape -- the capability each step arrives on,
+        the unit, the capability it leaves on -- not its unit list. Identifying
+        it by units alone collapses these two into one and drops the other."""
+        multi = {
+            "facts": {"a.1": {}, "b.1": {}, "b.2": {}, "impact.done": {}},
+            "given": [],
+            "units": {
+                "HRR-A-01-X": {"id": "HRR-A-01-X", "requires": {"all_of": ["a.1"]},
+                               "yields": ["b.1", "b.2"]},
+                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"any_of": ["b.1", "b.2"]},
+                               "yields": ["impact.done"]},
+            },
+            "requiredBy": {"a.1": ["HRR-A-01-X"], "b.1": ["HRR-A-01-Z"], "b.2": ["HRR-A-01-Z"]},
+        }
+        routes = run_in_node(
+            "return H.pathsToImpact(D, 'a.1', {maxPaths: 9, maxDepth: 5});", multi
+        )
+        shapes = sorted(
+            tuple((s["from"], s["unit"], s["to"]) for s in r["steps"]) for r in routes
+        )
+        self.assertEqual(shapes, [
+            (("a.1", "HRR-A-01-X", "b.1"), ("b.1", "HRR-A-01-Z", "impact.done")),
+            (("a.1", "HRR-A-01-X", "b.2"), ("b.2", "HRR-A-01-Z", "impact.done")),
+        ])
+        self.assertEqual(
+            {tuple(s["unit"] for s in r["steps"]) for r in routes},
+            {("HRR-A-01-X", "HRR-A-01-Z")},
+            "the two routes share their units, which is why units alone cannot identify them",
+        )
+
+    def test_a_route_that_revisits_a_capability_is_not_extended(self):
+        """The yields now added wholesale must not become a way back round: a
+        capability already in the path's history is not stepped onto again."""
+        loop = {
+            "facts": {"a.1": {}, "a.2": {}, "impact.done": {}},
+            "given": [],
+            "units": {
+                "HRR-A-01-X": {"id": "HRR-A-01-X", "requires": {"all_of": ["a.1"]},
+                               "yields": ["a.2", "a.1"]},
+                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"all_of": ["a.2"]},
+                               "yields": ["impact.done"]},
+            },
+            "requiredBy": {"a.1": ["HRR-A-01-X"], "a.2": ["HRR-A-01-Z"]},
+        }
+        routes = run_in_node(
+            "return H.pathsToImpact(D, 'a.1', {maxPaths: 9, maxDepth: 6});", loop
+        )
+        self.assertEqual(
+            [tuple(s["to"] for s in r["steps"]) for r in routes],
+            [("a.2", "impact.done")],
+        )
+
     def test_what_earlier_steps_established_counts_at_a_later_one(self):
         """The same unit owes different things depending on how it was reached.
 
@@ -568,22 +648,50 @@ class SearchRetrievesEverythingTheFileCarries(unittest.TestCase):
         self.assertEqual(bad, [])
 
     def test_a_route_a_result_points_at_names_something_that_exists(self):
+        """Every kind is checked, not only the kinds that happen to have a
+        store. The earlier version skipped any href whose head it did not
+        recognise, so a result pointing at a route the router never implemented
+        passed silently -- which is exactly what payloads and tools were doing."""
         bad = run_in_node("""
+            const stores = {
+              unit: D.units, topic: D.topics, case: D.wstg, capability: D.facts,
+              payloads: D.payloads, tools: D.toolbox
+            };
             const bad = [];
-            ["union", "injection", "WSTG-INPV", "cookie"].forEach(function (term) {
+            ["union", "injection", "WSTG-INPV", "cookie", "sqlmap", "burp",
+             "traversal", "session"].forEach(function (term) {
               H.searchAll(D, term).forEach(function (group) {
                 group.items.forEach(function (item) {
                   if (!item.href) return;
                   const parts = item.href.replace("#/", "").split("/").map(decodeURIComponent);
-                  const store = {unit: D.units, topic: D.topics, case: D.wstg,
-                                 capability: D.facts, payloads: D.payloads}[parts[0]];
-                  if (store && !H.own(store, parts[1])) bad.push(item.href);
+                  if (!H.own(stores, parts[0])) { bad.push(["unknown kind", item.href]); return; }
+                  if (parts.length < 2 || !parts[1]) { bad.push(["no identifier", item.href]); return; }
+                  if (!H.own(stores[parts[0]], parts[1])) bad.push(["unknown id", item.href]);
                 });
               });
             });
             return bad;
         """, self.data)
         self.assertEqual(bad, [])
+
+    def test_every_kind_search_advertises_has_a_route(self):
+        """The search page names eight kinds of content. A kind that reaches
+        nothing is a kind the page should not be advertising."""
+        kinds = run_in_node("""
+            const seen = {};
+            ["union", "sqlmap", "WSTG-INPV-05", "session", "traversal", "path",
+             "injection", "cookie"].forEach(function (term) {
+              H.searchAll(D, term).forEach(function (group) {
+                group.items.forEach(function (item) {
+                  if (item.href) seen[group.kind] = item.href.replace("#/", "").split("/")[0];
+                });
+              });
+            });
+            return seen;
+        """, self.data)
+        for kind in ("Test cases", "Tests", "Topics", "Capabilities", "Payloads",
+                     "Cards", "Tools"):
+            self.assertIn(kind, kinds, f"{kind} reaches nothing")
 
     def test_a_term_too_short_to_mean_anything_returns_nothing(self):
         self.assertEqual(self.kinds("u"), [])
@@ -643,6 +751,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         cls._tmp = TemporaryDirectory(prefix="harrier-browser-")
         target = Path(cls._tmp.name) / "harrier.html"
         build(REPO_ROOT, target)
+        cls.data = catalogue(REPO_ROOT)
         cls.driver = Page(target)
 
     @classmethod
@@ -756,6 +865,29 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertGreater(filled.count(), 5)
         self.assertRegex(filled.first.inner_text(), r"^\d+$")
 
+    def test_reaching_an_impact_is_not_counted_as_stopping_short(self):
+        """Every impact is unconsumed by construction, so folding impacts into
+        the stops-short count inflates it by the set listed directly above and
+        describes arriving as failing to arrive."""
+        page = self.open("#/chains")
+        text = self.driver.text()
+        self.assertShows(text, "Where chains are meant to end")
+        self.assertShows(text, "impacts, which are excluded here")
+        dead = len(self.data["deadEnds"])
+        impacts = len(self.data["impacts"])
+        self.assertShows(text, str(dead) + " of " + str(len(self.data["facts"])))
+        self.assertNotIn(str(dead + impacts) + " of ", text)
+
+    def test_the_status_page_partitions_every_test_by_where_its_chain_goes(self):
+        text = self.text("#/status")
+        reach = self.data["reach"]
+        self.assertEqual(sum(reach.values()), len(self.data["units"]))
+        for label in ("Has a potential continuation", "Establishes an impact",
+                      "Stops short", "Declares no capability"):
+            self.assertShows(text, label)
+        for value in reach.values():
+            self.assertShows(text, str(value))
+
     def test_the_general_view_claims_no_ordering_the_families_do_not_have(self):
         text = self.text("#/chains").lower()
         self.assertNotIn("a chain runs left to right", text)
@@ -771,6 +903,38 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertShows(text, str(counted) + " test")
         self.assertShows(text, "Requires:")
         self.assertShows(text, "Establishes:")
+
+    def test_a_route_to_an_impact_names_what_each_step_still_owes(self):
+        """A route drawn as an unbroken capability → test → capability chain
+        reads as executable when one of its tests is not performable from what
+        the route supplies."""
+        page = self.open("#/capability/access.anon")
+        text = self.driver.text()
+        self.assertShows(text, "Routes to an impact")
+        self.assertShows(text, "Still required here")
+        self.assertShows(text, "unmet condition")
+        # The condition named is one the step's own unit actually declares.
+        owed = page.locator(".rstep.unit").first
+        self.assertGreater(page.locator(".rstep.unit").count(), 1)
+        self.assertTrue(owed.inner_text())
+
+    def test_a_search_result_for_a_payload_or_a_tool_reaches_its_own_page(self):
+        """Both used to land on Standards: the router had no branch for either,
+        so retrieval was broken for two of the kinds search advertises."""
+        for term, expect in (("sqlmap", "Automated SQL injection"),
+                             ("NULL-padded arity probe", "reviewed")):
+            with self.subTest(term=term):
+                page = self.open("#/search/" + term.replace(" ", "%20"))
+                card = page.locator("a.card").first
+                target = card.get_attribute("href")
+                card.click()
+                self.driver.wait_for_render(lambda: self.driver.hash() == target)
+                page.wait_for_selector("main h2")
+                text = self.driver.text()
+                self.assertNotEqual(page.inner_text("main h2"), "Standards",
+                                    f"{target} fell through to the landing page")
+                self.assertShows(text, expect)
+                self.assertShows(text, "Tests that")
 
     def test_a_focused_capability_shows_a_smaller_view_than_the_catalogue(self):
         text = self.text("#/capability/surface.sql.injectable")

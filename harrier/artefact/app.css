@@ -204,3 +204,16 @@ details.fold {
 details.fold > summary { cursor: pointer; color: var(--dim); font-size: .82rem; }
 details.fold > summary:hover { color: var(--ink); }
 details.fold[open] > summary { margin-bottom: .4rem; }
+
+/* One route to an impact, step by step. Each test carries the conditions that
+   step still declares, because a route drawn as an unbroken line reads as
+   executable when one of its tests is not. */
+.route { margin: .4rem 0 .1rem; }
+.rstep { padding: .18rem 0 .18rem .9rem; border-left: 2px solid var(--line); position: relative; }
+.rstep.start { border-left-color: var(--accent); }
+.rstep.unit { padding-top: .3rem; padding-bottom: .3rem; }
+.rstep.unit::before {
+  content: "↓"; position: absolute; left: -.42rem; top: .1rem;
+  color: var(--faint); font-size: .7rem; background: var(--panel); line-height: 1;
+}
+.rstep .also { margin: .1rem 0 0; }
