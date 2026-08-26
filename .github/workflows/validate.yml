@@ -15,6 +15,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Callable, so the release workflow runs exactly these checks rather than a
+  # copy of them. A release that could pass a weaker set than a pull request is
+  # a release nobody has actually checked.
+  workflow_call:
 
 permissions:
   contents: read

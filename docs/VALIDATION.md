@@ -145,6 +145,17 @@ Both are installed in CI. Optional locally and absent in CI is a suite that
 reports green while never having run a third of itself, so the workflow installs
 them and then fails the job if either is missing.
 
+Three properties are asserted about the workflows, because a workflow is the one
+place here that runs somebody else's code with a token in the environment:
+
+- every action is GitHub's own or one of this project's -- no third-party action
+  enters the supply chain of a project whose own supply chain is part of its
+  threat model, and `gh` is already on the runner
+- no workflow starts from more than `contents: read`, and the only job that may
+  write is the one that attaches a file to a release
+- the release path cannot create a tag or a release, and the step that touches
+  one runs only on a published release
+
 Three properties are asserted about the repository rather than the code:
 
 - the roadmap's coverage figures match what the validator counts, so the number

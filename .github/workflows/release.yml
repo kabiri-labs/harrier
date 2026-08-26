@@ -1,0 +1,144 @@
+# Attach the built artefact to a release a person has already published.
+#
+# The trigger is deliberately `release: published` rather than a tag push. A
+# release object then already exists when this runs, which means this workflow
+# can only ever add a file to a publication somebody made on purpose -- it has
+# no path by which it publishes anything of its own. Tags and releases are made
+# from the GitHub UI here; nothing in this repository creates one.
+#
+# `workflow_dispatch` is the way to exercise all of it without publishing. On a
+# dispatch the file is built, checked and kept as a workflow artifact for a few
+# days, and no release is touched.
+#
+# The checks are not restated here. This calls validate.yml, so a release runs
+# exactly what a pull request runs: a release that could pass a weaker set than
+# a pull request is a release nobody has actually checked.
+name: release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    uses: ./.github/workflows/validate.yml
+
+  artefact:
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      # Only this job, and only to attach a file to an existing release. The
+      # dispatch path never uses it.
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # The builder's own dependencies. The browser the test suite drives is not
+      # installed here -- the checks job has already run it, and nothing it does
+      # is needed to write the file.
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check "PyYAML>=6,<7" "jsonschema>=4,<5"
+
+      - name: Read the version the artefact will state
+        id: version
+        run: echo "value=$(python -c 'import harrier; print(harrier.__version__)')" >> "$GITHUB_OUTPUT"
+
+      # A release tagged v0.4.1 carrying a file that says 0.4.0 is worse than no
+      # release: the tag and the artefact are the two things anybody quotes, and
+      # they would disagree silently. Checked before anything is built.
+      - name: Check the tag and the version agree
+        if: github.event_name == 'release'
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          if [ "$TAG" != "$VERSION" ] && [ "$TAG" != "v$VERSION" ]; then
+            echo "::error::release is tagged $TAG but the artefact states $VERSION"
+            exit 1
+          fi
+          echo "$TAG matches __version__ $VERSION"
+
+      - name: Build the artefact
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          mkdir -p dist
+          python -m harrier build -o "dist/harrier-$VERSION.html"
+
+      # The build is deterministic -- the suite asserts it -- so the digest is a
+      # claim anybody can re-make from this commit rather than a number only
+      # this run could produce.
+      - name: Record the digest
+        id: digest
+        working-directory: dist
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          sha256sum "harrier-$VERSION.html" > "harrier-$VERSION.html.sha256"
+          cat "harrier-$VERSION.html.sha256"
+          echo "value=$(cut -d' ' -f1 "harrier-$VERSION.html.sha256")" >> "$GITHUB_OUTPUT"
+
+      # Rebuilt from a clean checkout and compared. If two builds of one commit
+      # differ, the digest published beside the file means nothing.
+      - name: Rebuild and confirm the digest is reproducible
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+          EXPECTED: ${{ steps.digest.outputs.value }}
+        run: |
+          python -m harrier build -o "/tmp/again-$VERSION.html"
+          actual=$(sha256sum "/tmp/again-$VERSION.html" | cut -d' ' -f1)
+          if [ "$actual" != "$EXPECTED" ]; then
+            echo "::error::the build is not reproducible: $actual != $EXPECTED"
+            exit 1
+          fi
+          echo "two builds of this commit are byte-identical"
+
+      - name: Report what was built
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+          DIGEST: ${{ steps.digest.outputs.value }}
+        run: |
+          {
+            echo "### Harrier $VERSION"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| file | \`harrier-$VERSION.html\` |"
+            echo "| size | $(stat -c%s "dist/harrier-$VERSION.html") bytes |"
+            echo "| sha256 | \`$DIGEST\` |"
+            echo "| commit | \`${{ github.sha }}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Dispatch stops here. Nothing is published; the file is downloadable from
+      # the run for anyone who wants to look at it.
+      - name: Keep the artefact on the run
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: harrier-${{ steps.version.outputs.value }}
+          path: dist/
+          retention-days: 7
+          if-no-files-found: error
+
+      # Attaching to a release that already exists. `gh` ships on the runner, so
+      # no third-party action enters the supply chain of a project whose own
+      # supply chain is part of its threat model.
+      - name: Attach to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          gh release upload "$TAG" \
+            "dist/harrier-$VERSION.html" \
+            "dist/harrier-$VERSION.html.sha256" \
+            --clobber --repo "${{ github.repository }}"

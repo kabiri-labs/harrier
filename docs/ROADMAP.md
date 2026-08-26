@@ -191,3 +191,16 @@ Recorded so they are decisions rather than omissions. None is being built.
 | Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
 | More units at full depth | Ten of 366. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
+
+## Releasing
+
+`release.yml` attaches the built artefact to a release published from the GitHub
+UI. It runs the same checks a pull request runs -- by calling `validate.yml`,
+not by restating them -- refuses to continue if the tag and `__version__`
+disagree, and publishes the SHA-256 beside the file after rebuilding from
+scratch to prove the digest is reproducible.
+
+The trigger is `release: published` rather than a tag push, so the workflow can
+only ever add a file to a publication a person made; it has no path by which it
+publishes anything of its own. `workflow_dispatch` exercises the whole thing and
+publishes nothing.
