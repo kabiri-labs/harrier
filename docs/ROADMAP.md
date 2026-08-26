@@ -14,9 +14,10 @@ Status: `done` · `in progress` · `not started`
 > objective, and at least two topics authored to full depth so the model can be
 > judged on real content rather than on its own description.
 
-At **0.1.0**: the first two clauses are met and the artefact exists. One topic is
+At **0.4.0**: the first two clauses are met and the artefact exists. One topic is
 written to full depth, not two. The version tracks the artefact because that is
-the only thing anybody consumes.
+the only thing anybody consumes -- and 0.4.0 changed what the artefact is, which
+is why the jump is a breaking one taken deliberately while it still can be.
 
 Explicitly **not** in 1.0: a full card for every unit. At the granularity this
 model produces, that is a 300-hour writing project — and it is not what makes the
@@ -34,8 +35,9 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 4 | Chain model spike | `done` | Five units authored across five domains and five shapes, plus the fact layer they needed. The point was to break the model while it was cheap to change, not to add coverage. |
 | 4.5 | One topic at depth | `done` | `HRR-RES-01` written all the way down: five authored units, four payload files, a shared card, the first mitigation. A calibration pass, not a coverage one -- it settles how concrete a written unit is before three hundred more are written to match it. |
 | 5 | Chain pass | `done` | `requires` and `yields` for all 366 units, in six domain batches, `RCN` first because recon produces most of the base facts. 174 facts, and the gate at the end -- every non-given fact has a producer -- is enforced from here on. |
-| 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file: surface-first entry, a now/next view driven by the facts in hand, coverage views, full-text search, and every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. |
-| 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. This is the clearest differentiation from restating WSTG. |
+| 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file with every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. Its first navigation model -- a surface-anchored board driven by the facts a tester ticked -- was replaced in phase 6.5. |
+| 6.5 | Product pivot | `done` | Harrier becomes an execution companion to a standard rather than a workspace about a target. Standard-first navigation, atomic decomposition per WSTG test case, a derived local chain per unit, a progressively disclosed general graph, and the removal of every piece of engagement state. **Breaking, and deliberate.** See [`PIVOT.md`](PIVOT.md). |
+| 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. Harrier Extensions exists to receive them. This is the clearest differentiation from restating WSTG. |
 | 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. |
 
 Phases 2–5 are 1.0. Phase 6 is what makes it usable; phase 7 is what makes it
@@ -44,6 +46,14 @@ better than the standard it is built on.
 The order changed after phase 3: the artefact's main view is driven by the chain,
 so the chain has to exist first, and depth waits until real use says which units
 deserve it.
+
+Phase 6.5 changed what the artefact is for. The board it removed was coherent,
+and it asserted things about a target the file has never seen. What replaced it
+answers a narrower question honestly: what is inside this test case, how is each
+piece performed, and where can a success lead. The decision, the trade-offs and
+the full list of non-goals are in [`PIVOT.md`](PIVOT.md) rather than here,
+because a roadmap records what is being built and that document records why one
+thing stopped being built.
 
 ## The standing rule
 
@@ -77,7 +87,7 @@ the validator does not ask anything to.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
-5's, and the one the now/next view depends on entirely.
+5's, and the one every local chain in the artefact is derived from.
 
 ### Phase 5 batches
 
@@ -149,10 +159,24 @@ against real material rather than an empty tree:
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
 | `knowledge/` | 99 topics across 13 domains, and 366 units across all thirteen domains. |
-| `vocab/surfaces.yaml` | 52 attack-surface tags — the primary navigation axis. |
-| `harrier/` | Nine schemas, seven validation passes, the derived chain and the artefact builder. See [`VALIDATION.md`](VALIDATION.md). |
-| `tests/` | 137 offline tests, almost all of them negative — asserting what must be rejected. |
+| `vocab/surfaces.yaml` | 52 attack-surface tags, describing where a topic applies. |
+| `vocab/facts.yaml` | 177 capabilities in seven families — the join keys the chain is derived from. |
+| `harrier/` | Nine schemas, seven validation passes, the derived chain, and the builder plus the artefact's own template, stylesheet and script. See [`VALIDATION.md`](VALIDATION.md). |
+| `tests/` | An offline suite, almost all of it negative — asserting what must be rejected. Two further runners, `node` and a browser, are used when present and skipped when not. |
 
 The payload files and the tool registry are volatile content and carry a
 `reviewed` date that predates phase 0. Treat them as unreviewed until a depth pass
 re-verifies them against current engine and tool behaviour.
+
+## Considered, not scheduled
+
+Recorded so they are decisions rather than omissions. None is being built.
+
+| Item | Note |
+|---|---|
+| A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Harrier improves as much as it improves WSTG's. |
+| OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
+| ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
+| Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
+| More units at full depth | Ten of 366. Governed by the standing rule above: written when an engagement makes one worth writing. |
+| Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |

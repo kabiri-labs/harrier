@@ -95,10 +95,14 @@ meaning is uncertain is worse than one that is missing. See [`CHAINING.md`](CHAI
 
 ## What the suite adds
 
-126 tests, offline, no network and no fixtures of their own: every mutation test
-copies the real repository and breaks exactly one thing in it. A hand-built
-miniature drifts from what it stands in for, and then the suite passes while the
+Offline, no network and no fixtures of its own: every mutation test copies the
+real repository and breaks exactly one thing in it. A hand-built miniature
+drifts from what it stands in for, and then the suite passes while the
 repository is broken.
+
+The count is deliberately not written down here. A number maintained by hand in
+three documents is a number that is wrong in at least one of them; run the suite
+if you want it.
 
 Almost every test is a **negative** one — it asserts that something is rejected.
 A suite that only checks good cases cannot tell a working rule from one that has
@@ -120,6 +124,19 @@ Each pin carries assertions of its own, and they differ because the licences do:
   bytes as the thing it should have been, which is exactly when the mistake looks
   harmless.
 
+Two runners are used when present and skipped when not, so the suite still runs
+on a machine that has installed neither:
+
+- **node** executes the artefact's own script. The graph model, the layout, the
+  path walk, the search index and the Markdown renderer are called against the
+  real catalogue rather than matched as substrings of a rendered page — which a
+  script with an unterminated string literal satisfies exactly as well as a
+  working one.
+- **a browser**, if one is installed, opens the built file over `file://` and
+  reports the DOM its script produced. It is the only way to check the routing,
+  the Content-Security-Policy and the rendered wording together: under a
+  hash-based policy, a script whose hash no longer matches simply never runs.
+
 Three properties are asserted about the repository rather than the code:
 
 - the roadmap's coverage figures match what the validator counts, so the number
@@ -129,3 +146,12 @@ Three properties are asserted about the repository rather than the code:
   into every contributor's machine and into CI
 - no payload carries a destructive operation, and no payload or command template
   carries a literal host where a placeholder belongs
+
+The artefact carries three more, asserted on the built file:
+
+- it fetches nothing — no element, no stylesheet rule, no script call, and no
+  meta refresh reaches the network, and the policy denies `connect-src` outright
+- it holds no engagement state: no browser storage, no target, no recorded
+  result, and no wording that claims to know what is true of a reader's target
+- catalogue content cannot become executable markup, on any path through the
+  Markdown renderer or the JSON block
