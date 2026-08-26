@@ -375,7 +375,12 @@
    * ranks at fixed x, each column centred on a common axis.
    * --------------------------------------------------------------------- */
 
-  var NODE_W = 172, NODE_H = 58, VGAP = 20, HGAP = 62, TOP = 34, PAD = 14;
+  /* Sized so all five ranks fit inside the reading column on a laptop rather
+     than putting the most important one -- what may follow -- off the right edge
+     behind a scrollbar. 5 x 148 + 4 x 45 + 2 x 10 = 940, against roughly 947 of
+     content width. The scroll container stays for anything narrower. */
+  var NODE_W = 148, NODE_H = 58, VGAP = 20, HGAP = 45, TOP = 34, PAD = 10;
+  var TITLE_CHARS = 21, SUB_CHARS = 27;
 
   var wrap = function (text, perLine, maxLines) {
     var words = String(text == null ? "" : text).split(/\s+/).filter(Boolean);
@@ -447,8 +452,6 @@
 
   var D = JSON.parse(document.getElementById("data").textContent);
   var main = document.getElementById("main");
-
-  var expanded = {};
 
   var href = function (kind, id) { return "#/" + kind + "/" + encodeURIComponent(id); };
   var idChip = function (id) { return '<span class="idchip">' + esc(id) + "</span>"; };
@@ -820,12 +823,12 @@
         '" text-anchor="middle">' + esc(e.label) + "</text>");
     });
     plan.nodes.forEach(function (node) {
-      var lines = wrap(node.title, 25, 2);
+      var lines = wrap(node.title, TITLE_CHARS, 2);
       var body = '<rect x="0" y="0" width="' + node.w + '" height="' + node.h + '" rx="4"></rect>' +
         lines.map(function (line, i) {
           return '<text x="9" y="' + (18 + i * 13) + '">' + esc(line) + "</text>";
         }).join("") +
-        '<text class="s" x="9" y="' + (node.h - 9) + '">' + esc(wrap(node.sub, 32, 1)[0] || "") + "</text>";
+        '<text class="s" x="9" y="' + (node.h - 9) + '">' + esc(wrap(node.sub, SUB_CHARS, 1)[0] || "") + "</text>";
       var cls = "gnode " + node.kind + (node.href ? " link" : "");
       parts.push('<g class="' + cls + '" transform="translate(' + node.x + "," + node.y + ')"' +
         (node.href ? ' data-go="' + esc(node.href) + '"' : "") + ">" + body + "</g>");
@@ -895,7 +898,7 @@
     return "<h3>If this test is unsuccessful</h3><div class=\"card\">" + parts.join("") + "</div>";
   };
 
-  var viewUnit = function (uid) {
+  var viewUnit = function (uid, open) {
     var unit = get(D.units, uid);
     if (!unit) return notFound("test", uid);
     var topic = get(D.topics, unit.topic) || {};
@@ -1013,13 +1016,15 @@
     if (refs.asvs) mappings.push("<tr><th>ASVS</th><td>" + refs.asvs.map(esc).join(", ") + "</td></tr>");
     if (mappings.length) out.push("<h3>Standards and weakness mappings</h3><table>" + mappings.join("") + "</table>");
 
-    out.push(chainSection(uid));
+    out.push(chainSection(uid, open));
     out.push(negativeSection(uid));
     return out.join("");
   };
 
-  var chainSection = function (uid) {
-    var open = !!get(expanded, uid);
+  /* The expanded graph is a route rather than a toggle held in memory. It costs
+     nothing, it survives a reload, and it is a link a tester can hand to
+     somebody else -- which a piece of state in a closure is not. */
+  var chainSection = function (uid, open) {
     var model = localGraph(D, uid, open ? 12 : LIMIT);
     var full = localGraph(D, uid, 9999);
     var out = ["<h3>Local attack chain</h3>"];
@@ -1034,10 +1039,10 @@
       (full.outgoing.shown.length - model.outgoing.shown.length) +
       (full.yields.shown.length - model.yields.shown.length);
     if (hidden > 0) {
-      out.push('<button class="more" data-expand="' + esc(uid) + '">Show more · ' +
-        hidden + " further relationship" + (hidden === 1 ? "" : "s") + "</button>");
+      out.push('<a class="more" href="' + href("unit", uid) + '/all">Show more · ' +
+        hidden + " further relationship" + (hidden === 1 ? "" : "s") + "</a>");
     } else if (open) {
-      out.push('<button class="more" data-expand="' + esc(uid) + '">Show less</button>');
+      out.push('<a class="more" href="' + href("unit", uid) + '">Show less</a>');
     }
 
     if (model.leaf) {
@@ -1066,16 +1071,19 @@
     var byName = {};
     model.nodes.forEach(function (n) { byName[n.name] = n; });
 
-    var W = 150, H = 62, GAP = 26;
-    var width = 2 * 14 + model.nodes.length * W + (model.nodes.length - 1) * GAP;
-    var y = 78, height = 190;
+    /* Seven families across the reading column, so Impact -- the whole point of
+       the picture, the place a chain stops -- is on screen rather than behind a
+       horizontal scrollbar. 7 x 108 + 6 x 25 + 2 x 12 = 930. */
+    var W = 108, H = 72, GAP = 25;
+    var width = 2 * 12 + model.nodes.length * W + (model.nodes.length - 1) * GAP;
+    var y = 84, height = 196;
     var parts = [];
-    model.nodes.forEach(function (n, i) { n.x = 14 + i * (W + GAP); });
+    model.nodes.forEach(function (n, i) { n.x = 12 + i * (W + GAP); });
     model.edges.forEach(function (e) {
       var a = byName[e.from], b = byName[e.to];
       if (!a || !b || a === b) return;
       var x1 = a.x + W / 2, x2 = b.x + W / 2;
-      var lift = Math.min(58, 14 + Math.abs(x2 - x1) / 9);
+      var lift = Math.min(62, 14 + Math.abs(x2 - x1) / 9);
       parts.push('<path class="gedge hard" d="M' + x1 + " " + y + " Q" + ((x1 + x2) / 2) +
         " " + (y - lift) + " " + x2 + " " + y + '"></path>');
     });
@@ -1083,9 +1091,10 @@
       parts.push('<g class="gnode cap link" data-go="' + href("chains/family", n.name) +
         '" transform="translate(' + n.x + "," + y + ')">' +
         '<rect x="0" y="0" width="' + W + '" height="' + H + '" rx="4"></rect>' +
-        '<text x="9" y="20">' + esc(n.label) + "</text>" +
-        '<text class="s" x="9" y="36">' + n.facts + " capabilities</text>" +
-        '<text class="s" x="9" y="50">' + n.produced + " established · " + n.required + " consumed</text>" +
+        '<text x="8" y="19">' + esc(n.label) + "</text>" +
+        '<text class="s" x="8" y="35">' + n.facts + " capabilities</text>" +
+        '<text class="s" x="8" y="49">' + n.produced + " established</text>" +
+        '<text class="s" x="8" y="63">' + n.required + " consumed</text>" +
         "</g>");
     });
 
@@ -1300,7 +1309,9 @@
     }
     if (head === "case") return { nav: "standards", html: viewCase(arg) };
     if (head === "topic") return { nav: "standards", html: viewTopic(arg) };
-    if (head === "unit") return { nav: "standards", html: viewUnit(arg) };
+    if (head === "unit") {
+      return { nav: "standards", html: viewUnit(arg, parts[2] === "all") };
+    }
     if (head === "extensions") return { nav: "standards", html: viewExtensions() };
     if (head === "chains") {
       if (arg === "family") return { nav: "chains", html: viewFamily(parts[2] || "") };
@@ -1326,13 +1337,7 @@
 
   document.addEventListener("click", function (e) {
     var node = e.target.closest ? e.target.closest("[data-go]") : null;
-    if (node) { location.hash = node.dataset.go; return; }
-    var more = e.target.closest ? e.target.closest("[data-expand]") : null;
-    if (more) {
-      var id = more.dataset.expand;
-      expanded[id] = !get(expanded, id);
-      draw();
-    }
+    if (node) { location.hash = node.dataset.go; }
   });
 
   var box = document.getElementById("q");

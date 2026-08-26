@@ -604,6 +604,33 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                         "Establishes", "Potential continuation"):
             self.assertIn(heading, text, heading)
 
+    def test_the_bounded_graph_expands_and_the_expansion_is_a_place(self):
+        """The interaction is a route, not a toggle in memory: it survives a
+        reload and it is a link that can be handed to somebody else."""
+        small = self.dom("#/unit/HRR-INJ-01-PROBE")
+        large = self.dom("#/unit/HRR-INJ-01-PROBE/all")
+        self.assertIn("Show more", self.text(small))
+        self.assertNotIn("Show less", self.text(small))
+        self.assertGreater(large.count('class="gnode'), small.count('class="gnode'))
+        self.assertGreater(
+            self.text(large).count("Potential continuation"),
+            self.text(small).count("Potential continuation"),
+        )
+        self.assertIn("Show less", self.text(large))
+        self.assertNotIn("Show more", self.text(large))
+
+    def test_a_graph_node_carries_the_route_to_its_own_page(self):
+        # Scoped to <main>: the dumped DOM also contains the script that writes
+        # the attribute, and matching its source would prove nothing.
+        dom = self.dom("#/unit/HRR-INJ-01-PROBE")
+        rendered = re.search(r"<main[^>]*>(.*)</main>", dom, re.S).group(1)
+        targets = re.findall(r'data-go="([^"]+)"', rendered)
+        self.assertTrue(targets, "no node in the graph navigates anywhere")
+        for target in targets:
+            self.assertTrue(target.startswith("#/"), target)
+        self.assertTrue(any(t.startswith("#/unit/") for t in targets))
+        self.assertTrue(any(t.startswith("#/capability/") for t in targets))
+
     def test_a_continuation_states_what_success_here_does_not_supply(self):
         # Chosen because succeeding here supplies one condition of each
         # continuation and not the rest, which is the ordinary case and the one
@@ -624,6 +651,20 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertLessEqual(dom.count('class="gnode'), 12)
         self.assertIn("Reconnaissance", self.text(dom))
         self.assertIn("Impact", self.text(dom))
+
+    def test_a_graph_fits_the_reading_column_rather_than_scrolling_away(self):
+        """Both graphs put their most important rank last -- what may follow, and
+        where a chain ends. A drawing wider than the column hides exactly that
+        behind a horizontal scrollbar, which is the same as not drawing it."""
+        # main is max-width 62rem with 1.4rem of padding: 992 - 44.8 of content.
+        column = 947
+        for fragment in ("#/unit/HRR-INJ-01-PROBE", "#/chains"):
+            with self.subTest(fragment=fragment):
+                dom = self.dom(fragment)
+                widths = [int(w) for w in re.findall(r'<svg width="(\d+)"', dom)]
+                self.assertTrue(widths, "nothing is drawn")
+                for width in widths:
+                    self.assertLessEqual(width, column, fragment)
 
     def test_a_focused_capability_shows_a_smaller_graph_than_the_catalogue(self):
         text = self.text(self.dom("#/capability/surface.sql.injectable"))
