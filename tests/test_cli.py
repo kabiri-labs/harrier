@@ -100,3 +100,73 @@ class OneStructuralErrorDoesNotHideTheRest(unittest.TestCase):
         self.assertEqual(status, EXIT_FAILED)
         self.assertIn(".topic.yaml or <id>.unit.yaml", err)
         self.assertIn("unknown axis vibes", err)
+
+
+class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
+    """The pivot is the product's, not the artefact's.
+
+    A command line that still asks what the tester holds and answers with what
+    is "available" leaves Harrier carrying two contradictory models: the page
+    saying it knows nothing about a target, and the tool a step away claiming to
+    compute reachability for one. Whichever a reader meets first is the one they
+    believe.
+    """
+
+    def chain(self, *args):
+        status, out, err = run(["--root", str(REPO_ROOT), "chain", *args])
+        self.assertEqual(status, EXIT_OK, err)
+        return out
+
+    def test_there_is_no_way_to_state_what_is_held(self):
+        # argparse exits rather than returning, which is the right behaviour for
+        # an unrecognised option and is what a caller would meet.
+        with self.assertRaises(SystemExit) as raised:
+            run(["--root", str(REPO_ROOT), "chain", "--held", "access.user"])
+        self.assertEqual(raised.exception.code, EXIT_USAGE)
+
+    def test_no_output_claims_a_test_is_now_possible(self):
+        text = (
+            self.chain()
+            + self.chain("HRR-INJ-01-PROBE")
+            + self.chain("--fact", "surface.sql.injectable")
+        ).lower()
+        for phrase in ("unlocks", "available", "you hold", "reachable", "ruled out"):
+            self.assertNotIn(phrase, text, f"target-state wording: {phrase}")
+
+    def test_a_continuation_names_the_capability_it_travels_through(self):
+        out = self.chain("HRR-INJ-01-PROBE")
+        self.assertIn("potential continuations:", out)
+        self.assertIn("requires what this establishes:", out)
+        self.assertIn("UNION-based extraction", out)
+
+    def test_a_continuation_states_what_success_here_does_not_supply(self):
+        out = self.chain("HRR-ACL-02-MAP")
+        self.assertIn("still required:", out)
+
+    def test_a_continuation_with_nothing_further_owed_says_that_precisely(self):
+        out = self.chain("HRR-RES-01-READ")
+        self.assertIn("no additional declared hard prerequisite", out)
+
+    def test_a_motivation_is_labelled_as_one(self):
+        out = self.chain("HRR-INJ-01-FPRINT")
+        self.assertIn("motivated by what this establishes:", out)
+
+    def test_a_capability_nothing_uses_is_reported_as_where_a_chain_stops(self):
+        out = self.chain("--fact", "primitive.db.read")
+        self.assertIn("no test declares a use for this", out)
+
+    def test_a_test_whose_result_leads_nowhere_says_so(self):
+        out = self.chain("HRR-INJ-01-UNION")
+        self.assertIn("terminal:", out)
+        self.assertIn("reportable outcome", out)
+
+    def test_the_summary_reports_the_reach_of_the_chart(self):
+        out = self.chain()
+        self.assertIn("with a continuation", out)
+        self.assertIn("unconsumed", out)
+
+    def test_an_unknown_identifier_is_reported_rather_than_raised(self):
+        for args, word in ((["chain", "NOPE"], "test"), (["chain", "--fact", "no.such"], "capability")):
+            status, _, err = run(["--root", str(REPO_ROOT), *args])
+            self.assertEqual(status, EXIT_FAILED)
+            self.assertIn(word, err)

@@ -9,7 +9,7 @@ satisfied at all.
 
 import unittest
 
-from harrier.chain import Chain
+from harrier.chain import Chain, family_of, still_required
 from harrier.validate import validate
 from tests.support import REPO_ROOT, Sandbox, messages
 
@@ -136,18 +136,22 @@ class EveryConditionHasAProducer(SandboxCase):
         )
         self.assertRejected("recon.entrypoints.mapped is required but no unit establishes it")
 
-    def test_a_granted_fact_is_exempt_but_not_held_at_the_start(self):
-        # Host access is supplied by an engagement whose scope includes it and
-        # by no test. It must not be assumed before the tester says they have it.
+    def test_a_granted_fact_is_never_treated_as_supplied(self):
+        # Host access is supplied by an engagement whose scope includes it, and
+        # by no test. It is not a root of the graph, and a continuation that
+        # needs it must still say so rather than assuming it away.
         chain = Chain.load(self.box.root)
         self.assertNotIn("access.host", chain.given())
-        self.assertNotIn(
-            "HRR-CFG-07-POLICY", {n.id for n in chain.available(chain.given())}
+        needs_host = [
+            uid
+            for uid, unit in chain.units.items()
+            if "access.host" in ((unit.get("requires") or {}).get("all_of") or [])
+        ]
+        self.assertTrue(needs_host, "nothing requires a granted capability any more")
+        still = still_required(
+            chain.units[needs_host[0]], established=set(), given=chain.given()
         )
-        self.assertIn(
-            "HRR-CFG-07-POLICY",
-            {n.id for n in chain.available(chain.given() | {"access.host"})},
-        )
+        self.assertIn("access.host", still.get("all_of", []))
 
     def test_a_given_fact_needs_no_producer(self):
         # access.anon is a root: the engagement supplies it and no test earns it.
@@ -164,101 +168,94 @@ class AnAuthoredUnitEstablishesSomething(SandboxCase):
 
 
 class TheDerivedGraph(unittest.TestCase):
-    """Asserted against the real repository: these are the routes the catalogue
-    actually offers, not ones a fixture invented."""
+    """Asserted against the real repository: these are the relationships the
+    catalogue actually declares, not ones a fixture invented.
+
+    Every claim here is generic. An edge means *if this succeeds, that may
+    become relevant* -- it is never a statement that something is now possible,
+    and the wording of the assertions has to stay as careful as the product's.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chain = Chain.load(Sandbox.REPO_ROOT)
+        cls.index = cls.chain.index()
+
+    def onward(self, uid):
+        return {link["unit"]: link for link in self.index[uid]["out"]}
+
+    def test_a_probe_leads_to_the_technique_that_needs_what_it_establishes(self):
+        link = self.onward("HRR-INJ-01-PROBE").get("HRR-INJ-01-UNION")
+        self.assertIsNotNone(link)
+        self.assertEqual(link["kind"], "requires")
+        self.assertIn("surface.sql.injectable", link["via"])
+
+    def test_a_fingerprint_motivates_rather_than_conditions(self):
+        link = self.onward("HRR-INJ-01-FPRINT").get("HRR-INJ-01-UNION")
+        self.assertIsNotNone(link)
+        self.assertEqual(link["kind"], "motivated_by")
+        self.assertEqual(link["via"], [])
+        self.assertIn("recon.engine.identified", link["hint"])
+
+    def test_an_account_is_not_a_root_of_the_graph(self):
+        # Engagements that supply no credentials exist. Treating an account as a
+        # root would present tests whose condition nothing has established.
+        self.assertNotIn("access.user", self.chain.given())
+        self.assertTrue(self.chain.producers.get("access.user"))
+
+    def test_a_condition_success_does_not_supply_is_reported_as_still_required(self):
+        link = self.onward("HRR-ACL-02-MAP").get("HRR-ACL-02-PEER")
+        self.assertIsNotNone(link)
+        self.assertIn("artifact.objectid.known", link["via"])
+        # Reaching it through one capability is not the same as being able to
+        # perform it: the second account is still owed, and is named.
+        self.assertIn("access.peer", link["also"].get("all_of", []))
+
+    def test_every_edge_names_the_capability_it_travels_through(self):
+        for uid, edge in self.index.items():
+            for link in edge["out"]:
+                self.assertTrue(
+                    link["via"] or link.get("hint"), f"{uid} -> {link['unit']}"
+                )
+
+    def test_an_alternative_route_is_not_pooled_into_one_condition(self):
+        """`any_of` is a choice, and the two branches leave different things
+        owed. Treating the group as satisfied because one member is establishes
+        a capability nobody has."""
+        unit = {"requires": {"any_of": ["access.anon", "access.user"]}}
+        self.assertEqual(still_required(unit, set(), set()), {"any_of": ["access.anon", "access.user"]})
+        self.assertEqual(still_required(unit, {"access.user"}, set()), {})
+        self.assertEqual(still_required(unit, set(), {"access.anon"}), {})
+
+
+class TheChartsReachIsMeasuredRatherThanAssumed(unittest.TestCase):
+    """A capability nothing declares a use for is where some chain stops.
+
+    Not a defect in any one unit, and not something to hide: it is how far the
+    chart currently runs, and the artefact says so on the page rather than
+    rendering a dead end with no explanation."""
 
     @classmethod
     def setUpClass(cls):
         cls.chain = Chain.load(Sandbox.REPO_ROOT)
 
-    def test_a_probe_unlocks_the_technique_that_needs_it(self):
-        onward = self.chain.next_after("HRR-INJ-01-PROBE")
-        self.assertIn("HRR-INJ-01-UNION", [n.id for n in onward["unlocks"]])
+    def test_an_unconsumed_capability_is_one_nothing_requires_or_is_motivated_by(self):
+        for fid in self.chain.unconsumed():
+            self.assertIn(fid, self.chain.facts)
+            self.assertFalse(self.chain.consumers.get(fid), fid)
+            self.assertFalse(self.chain.motivates.get(fid), fid)
 
-    def test_a_fingerprint_motivates_rather_than_unlocks(self):
-        onward = self.chain.next_after("HRR-INJ-01-FPRINT")
-        self.assertIn("HRR-INJ-01-UNION", [n.id for n in onward["motivates"]])
-        self.assertNotIn("HRR-INJ-01-UNION", [n.id for n in onward["unlocks"]])
+    def test_every_impact_is_unconsumed_because_an_impact_is_terminal(self):
+        impacts = [f for f in self.chain.facts if family_of(f) == "impact"]
+        self.assertTrue(impacts)
+        for fid in impacts:
+            self.assertIn(fid, self.chain.unconsumed())
 
-    def test_only_given_facts_are_available_before_anything_is_done(self):
-        # A unit that needs an earned fact must not appear in the opening set,
-        # or the chain would be telling a tester to do something impossible.
-        opening = {n.id for n in self.chain.available(self.chain.given())}
-        self.assertNotIn("HRR-INJ-01-UNION", opening)
-        self.assertIn("HRR-INJ-01-PROBE", opening)
-
-    def test_an_account_is_not_assumed_to_have_been_handed_over(self):
-        # Engagements that supply no credentials exist. Treating an account as a
-        # root would open the catalogue with tests the tester cannot run.
-        self.assertNotIn("access.user", self.chain.given())
-        opening = {n.id for n in self.chain.available(self.chain.given())}
-        self.assertNotIn("HRR-ACL-02-MAP", opening)
-        self.assertIn("HRR-ACL-02-MAP", {
-            n.id for n in self.chain.available(self.chain.given() | {"access.user", "access.peer"})
-        })
-
-    def test_one_account_does_not_reach_the_two_account_test(self):
-        held = self.chain.given() | {"access.user", "artifact.objectid.known"}
-        self.assertNotIn("HRR-ACL-02-PEER", {n.id for n in self.chain.available(held)})
-
-
-class AnAlternativeNotTakenIsNotAssumedHeld(unittest.TestCase):
-    """`any_of` is a choice, and the choice leaves the tester holding different
-    facts. Pooling the alternatives would hide the units the other route reaches."""
-
-    def setUp(self):
-        self.box = Sandbox()
-        self.addCleanup(self.box.close)
-
-    def test_a_unit_reachable_by_the_alternative_still_appears(self):
-        # UNION may be reached as an anonymous or an authenticated caller. A unit
-        # needing the authenticated route must still be reported as unlocked when
-        # UNION's own result is what makes it possible.
-        self.box.edit(
-            "knowledge/inj/HRR-INJ-01-ERROR.unit.yaml",
-            lambda u: u.update(
-                requires={"all_of": ["access.user", "primitive.db.read"]},
-                yields=["recon.engine.identified"],
-            ),
-        )
-        chain = Chain.load(self.box.root)
-        unlocked = {n.id for n in chain.next_after("HRR-INJ-01-UNION")["unlocks"]}
-        self.assertIn("HRR-INJ-01-ERROR", unlocked)
-
-
-class ReachabilityStaysDenyByDefault(unittest.TestCase):
-    """`harrier chain --held` answers what a stated set of facts makes possible.
-
-    It is the command line's question, not the artefact's: the published file
-    holds nothing about a target and never asks. The rule that matters here is
-    that a condition is met or the unit is not offered -- naming a unit whose
-    conditions are unmet sends somebody at a test that cannot work."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.chain = Chain.load(REPO_ROOT)
-
-    def test_the_opening_position_is_not_empty(self):
-        opening = self.chain.available(self.chain.given())
-        self.assertTrue(opening, "a tester opening the artefact must have somewhere to start")
-
-    def test_every_opening_unit_is_reachable_on_the_given_facts_alone(self):
-        given = self.chain.given()
-        for node in self.chain.available(given):
-            self.assertTrue(node.reachable_with(given), node.id)
-
-    def test_a_unit_needing_an_unheld_fact_is_never_offered(self):
-        given = self.chain.given()
-        offered = {n.id for n in self.chain.available(given)}
-        withheld = 0
-        for node in self.chain.nodes.values():
-            if any(f not in given for f in node.all_of):
-                self.assertNotIn(node.id, offered, node.id)
-                withheld += 1
-        self.assertGreater(withheld, 0, "nothing in the catalogue is gated any more")
-
-    def test_an_any_of_group_is_not_satisfied_by_holding_none_of_it(self):
-        gated = [n for n in self.chain.nodes.values() if n.any_of and not n.all_of]
-        self.assertTrue(gated, "no unit exercises the rule any more")
-        for node in gated:
-            self.assertFalse(node.reachable_with(set()), node.id)
+    def test_a_unit_whose_capabilities_are_all_unconsumed_is_marked_terminal(self):
+        index = self.chain.index()
+        stops = 0
+        for uid, edge in index.items():
+            if edge["yields"] and not edge["out"]:
+                self.assertTrue(edge["terminal"], uid)
+                stops += 1
+        self.assertGreater(stops, 0, "no chain in the catalogue stops any more")

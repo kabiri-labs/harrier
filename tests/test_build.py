@@ -124,9 +124,15 @@ class TheContentSecurityPolicyMatchesWhatTheFileContains(unittest.TestCase):
                 f"{directive} does not name what the file contains",
             )
 
-    def test_nothing_may_be_framed_or_reparented(self):
-        for directive in ("frame-ancestors 'none'", "base-uri 'none'", "object-src 'none'"):
+    def test_nothing_may_be_reparented_or_embedded(self):
+        for directive in ("base-uri 'none'", "object-src 'none'", "frame-src 'none'"):
             self.assertIn(directive, self.policy)
+
+    def test_the_policy_claims_no_control_a_meta_element_cannot_deliver(self):
+        """A directive that is ignored where it is written reads as a control
+        that is in place. There is no HTTP header here and never will be."""
+        for directive in ("frame-ancestors", "sandbox", "report-uri", "report-to"):
+            self.assertNotIn(directive, self.policy, directive)
 
     def test_no_inline_style_attribute_survives_the_policy(self):
         # style-src by hash does not cover style attributes, so one would simply
@@ -537,6 +543,20 @@ class TheLocalChainIsDerivedAndBoundedToTheReason(unittest.TestCase):
         self.assertEqual(
             index["HRR-A-01-P"]["out"][0]["also"], {"all_of": ["access.host"]}
         )
+
+    def test_the_reach_of_the_chart_is_carried_rather_than_discovered(self):
+        """189 of 366 tests currently lead nowhere, because most primitives and
+        controls have no consumer. That is the chart's reach, not a defect in
+        any one unit, and the artefact reports it rather than letting a reader
+        infer it one dead end at a time."""
+        for fact in self.data["unconsumed"]:
+            self.assertIn(fact, self.data["facts"])
+            self.assertFalse(self.data["requiredBy"].get(fact), fact)
+            self.assertFalse(self.data["motivates"].get(fact), fact)
+        for fact in self.data["facts"]:
+            consumed = self.data["requiredBy"].get(fact) or self.data["motivates"].get(fact)
+            if not consumed:
+                self.assertIn(fact, self.data["unconsumed"], fact)
 
     def test_an_impact_is_terminal(self):
         for fact in self.data["impacts"]:

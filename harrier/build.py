@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Set, Tuple
 
 from . import Repository, __version__
-from .chain import Chain
+from .chain import Chain, chain_index, family_of
 from .validate import coverage
 
 ARTEFACT_DIR = Path(__file__).resolve().parent / "artefact"
@@ -69,11 +69,6 @@ def _clean(data: Any) -> Any:
     return _text(data)
 
 
-def family_of(fact: str) -> str:
-    """The family a fact belongs to. It is the first segment of its identifier."""
-    return fact.split(".", 1)[0]
-
-
 def wstg_groups(standard: Dict[str, Any]) -> List[Dict[str, Any]]:
     """The standard's groups, in the standard's order, each with its identifiers.
 
@@ -107,124 +102,6 @@ def unit_order(topic: Dict[str, Any], units: Dict[str, Any]) -> List[str]:
         if unit.get("topic") == topic["id"] and uid not in declared
     )
     return declared + rest
-
-
-def _still_required(
-    consumer: Dict[str, Any], established: Set[str], given: Set[str]
-) -> Dict[str, List[str]]:
-    """What a downstream unit needs that succeeding here does not supply.
-
-    The honest half of a continuation. A unit reached because it consumes a fact
-    this one establishes may need three other things as well, and showing the
-    edge without them reads as *do this next* when the truth is *this is one of
-    the conditions*. `given` facts are the roots of the graph and are not listed:
-    naming them would bury the conditions that matter under the ones that always
-    hold.
-
-    `granted` facts are deliberately *not* treated as satisfied. An engagement
-    may supply host access and usually does not, so a unit needing it is still
-    waiting on something the reader has to recognise.
-    """
-    have = established | given
-    requires = consumer.get("requires") or {}
-    all_of = [f for f in requires.get("all_of") or [] if f not in have]
-    any_of = list(requires.get("any_of") or [])
-    if not any_of or any(f in have for f in any_of):
-        any_of = []
-    out: Dict[str, List[str]] = {}
-    if all_of:
-        out["all_of"] = all_of
-    if any_of:
-        out["any_of"] = any_of
-    return out
-
-
-def chain_index(units: Dict[str, Any], given: Set[str]) -> Dict[str, Dict[str, Any]]:
-    """Per unit: what it needs, what success establishes, and what may follow.
-
-    Derived from the same four fields the CLI reads, in the same direction. The
-    edges are never unit-to-unit in the data: each one carries the capability it
-    travels through, because the reason an edge exists is the only part of it a
-    reader can act on.
-    """
-    hard: Dict[str, List[str]] = {}
-    hinted: Dict[str, List[str]] = {}
-    for uid in sorted(units):
-        unit = units[uid]
-        requires = unit.get("requires") or {}
-        for fact in (requires.get("all_of") or []) + (requires.get("any_of") or []):
-            hard.setdefault(fact, []).append(uid)
-        for fact in unit.get("motivated_by") or []:
-            hinted.setdefault(fact, []).append(uid)
-
-    index: Dict[str, Dict[str, Any]] = {}
-    for uid in sorted(units):
-        unit = units[uid]
-        requires = unit.get("requires") or {}
-        incoming = [
-            {"fact": fact, "kind": kind}
-            for kind, names in (
-                ("all_of", requires.get("all_of") or []),
-                ("any_of", requires.get("any_of") or []),
-                ("motivated_by", unit.get("motivated_by") or []),
-            )
-            for fact in names
-        ]
-
-        established = set(unit.get("yields") or [])
-        onward: Dict[str, Dict[str, Any]] = {}
-        for fact in sorted(established):
-            for other, key in ((hard.get(fact, []), "via"), (hinted.get(fact, []), "hint")):
-                for consumer_id in other:
-                    if consumer_id == uid:
-                        continue
-                    edge = onward.setdefault(
-                        consumer_id, {"unit": consumer_id, "via": [], "hint": []}
-                    )
-                    if fact not in edge[key]:
-                        edge[key].append(fact)
-        for edge in onward.values():
-            consumer = units[edge["unit"]]
-            edge["kind"] = "requires" if edge["via"] else "motivated_by"
-            edge["also"] = _still_required(consumer, established, given)
-            if not edge["hint"]:
-                del edge["hint"]
-
-        # Hard continuations first, then the ones in the same topic, then by
-        # identifier. Deliberately *not* ranked by how little each still needs:
-        # that reads as helpful and is not, because it sorts every continuation
-        # with unmet conditions below the initial three and hides exactly the
-        # honesty this view exists for. A reader taking the first three should
-        # meet the conditional ones as readily as the direct ones.
-        topic = unit.get("topic")
-        outgoing = sorted(
-            onward.values(),
-            key=lambda e: (
-                0 if e["kind"] == "requires" else 1,
-                0 if units[e["unit"]].get("topic") == topic else 1,
-                e["unit"],
-            ),
-        )
-
-        # A yielded capability nothing consumes is where a chain stops. Saying so
-        # is the point: an empty continuation list with no explanation reads as
-        # missing data, and an impact is not missing data -- it is the outcome.
-        terminal = [
-            {
-                "fact": fact,
-                "why": "impact" if family_of(fact) == "impact" else "unconsumed",
-            }
-            for fact in sorted(established)
-            if family_of(fact) == "impact" or not (hard.get(fact) or hinted.get(fact))
-        ]
-
-        index[uid] = {
-            "in": incoming,
-            "yields": sorted(established),
-            "out": outgoing,
-            "terminal": terminal,
-        }
-    return index
 
 
 def family_edges(units: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -371,7 +248,10 @@ def catalogue(root: Path) -> Dict[str, Any]:
             + (u.get("requires") or {}).get("any_of", []),
         ),
         "motivates": _index_by_fact(units, lambda u: u.get("motivated_by")),
-        "chain": chain_index(units, given),
+        # Capabilities no unit declares a use for. Where the chart currently
+        # stops, counted rather than discovered one dead end at a time.
+        "unconsumed": chain.unconsumed(),
+        "chain": chain.index(),
         "impacts": sorted(f for f in facts if family_of(f) == "impact"),
         "given": sorted(given),
         "granted": sorted(f for f, body in facts.items() if body.get("granted")),
@@ -401,6 +281,13 @@ def content_security_policy(css: str, script: str, blob: str) -> str:
     The JSON block is data and no browser executes it, but `script-src` applies
     to `<script>` elements and enforcement of non-executable types has varied.
     Naming it costs one hash and removes the question.
+
+    `frame-ancestors` is deliberately absent. It is ignored when the policy
+    arrives in a `<meta>` element, and there is no HTTP header here because there
+    is no server -- so including it protects nothing and prints a warning into
+    the console of every reader who opens the developer tools. A directive that
+    cannot take effect is worse than no directive: it reads as a control that is
+    in place.
     """
     inline = " ".join(
         sorted({_sha256_source(script), _sha256_source(blob)})
@@ -420,7 +307,6 @@ def content_security_policy(css: str, script: str, blob: str) -> str:
             "manifest-src 'none'",
             "form-action 'none'",
             "base-uri 'none'",
-            "frame-ancestors 'none'",
         )
     )
 

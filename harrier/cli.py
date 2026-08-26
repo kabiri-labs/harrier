@@ -53,84 +53,113 @@ def _build_parser() -> argparse.ArgumentParser:
 
     chain = sub.add_parser(
         "chain",
-        help="show what a unit needs, what it gives, and what a positive result opens up",
+        help="show what a test needs, what success establishes, and what may follow",
     )
     chain.add_argument("unit", nargs="?", metavar="UNIT-ID", help="a unit identifier; omit for a summary")
-    chain.add_argument("--fact", metavar="FACT-ID", help="show which units produce and consume one fact")
     chain.add_argument(
-        "--held",
-        metavar="FACT-ID[,FACT-ID...]",
-        help="facts already in hand, added to the given ones; without this only the "
-        "roots of the graph count as held, which is the correct opening position "
-        "and rarely the tester's actual one",
+        "--fact", metavar="FACT-ID",
+        help="show which tests establish one capability and which declare a use for it",
     )
     return parser
 
 
 def _chain(root, args) -> int:
-    """Print one view of the derived graph. Never writes: the graph is not stored."""
+    """Print one view of the derived graph. Never writes: the graph is not stored.
+
+    Everything printed is generic, and the wording has to keep saying so. A
+    continuation is a statement about two tests -- *if this succeeds, that may
+    become relevant* -- never a claim that it is now possible, and never a claim
+    about a target. The command line has no more idea what is true of an
+    application than the published artefact does, and it reads the same
+    derivation so the two cannot describe different models.
+    """
     chain = Chain.load(root)
+
     if args.fact:
         if args.fact not in chain.facts:
-            print(f"harrier: no such fact: {args.fact}", file=sys.stderr)
+            print(f"harrier: no such capability: {args.fact}", file=sys.stderr)
             return EXIT_FAILED
         fact = chain.facts[args.fact]
-        print(f"{fact['id']}  {fact['label']}" + ("  [given]" if fact.get("given") else ""))
+        note = " [given]" if fact.get("given") else (" [granted]" if fact.get("granted") else "")
+        print(f"{fact['id']}  {fact['label']}{note}")
         for label, ids in (
             ("established by", chain.producers.get(args.fact, [])),
-            ("needed by", chain.consumers.get(args.fact, [])),
+            ("required by", chain.consumers.get(args.fact, [])),
+            ("makes worth doing sooner", chain.motivates.get(args.fact, [])),
         ):
             print(f"  {label}:")
             for uid in sorted(ids):
-                print(f"    {uid}")
+                print(f"    {uid}  {chain.nodes[uid].title}")
             if not ids:
                 print("    (nothing yet)")
+        if not chain.consumers.get(args.fact) and not chain.motivates.get(args.fact):
+            print("  no test declares a use for this: a chain reaching it stops here")
         return EXIT_OK
+
+    index = chain.index()
 
     if args.unit:
         if args.unit not in chain.nodes:
-            print(f"harrier: no such unit: {args.unit}", file=sys.stderr)
+            print(f"harrier: no such test: {args.unit}", file=sys.stderr)
             return EXIT_FAILED
         node = chain.nodes[args.unit]
+        edge = index[args.unit]
+        label = lambda fid: chain.facts.get(fid, {}).get("label", fid)
+
         print(f"{node.id}  {node.title}")
-        for label, ids in (
-            ("requires all of", node.all_of),
-            ("requires any of", node.any_of),
-            ("motivated by", node.motivated_by),
-            ("yields", node.yields),
+        for heading, ids in (
+            ("prerequisite (all of)", node.all_of),
+            ("prerequisite (any of)", node.any_of),
+            ("worth doing sooner given", node.motivated_by),
         ):
-            if ids:
-                print(f"  {label}: {', '.join(ids)}")
-        onward = chain.next_after(args.unit)
-        for label in ("unlocks", "motivates"):
-            if onward[label]:
-                print(f"  {label}:")
-                for nxt in onward[label]:
-                    print(f"    {nxt.id}  {nxt.title}")
+            for fid in ids:
+                producers = [u for u in chain.producers.get(fid, []) if u != node.id]
+                route = (
+                    "given -- a root of the graph"
+                    if fid in chain.given()
+                    else f"{len(producers)} test(s) establish it"
+                    if producers
+                    else "no test establishes it"
+                )
+                print(f"  {heading}: {label(fid)}  [{fid}] -- {route}")
+        for fid in edge["yields"]:
+            print(f"  success establishes: {label(fid)}  [{fid}]")
+
+        if edge["out"]:
+            print("  potential continuations:")
+            for link in edge["out"]:
+                other = chain.nodes[link["unit"]]
+                via = link["via"] or link.get("hint") or []
+                how = "requires" if link["kind"] == "requires" else "motivated by"
+                print(f"    {other.id}  {other.title}")
+                print(f"      {how} what this establishes: {', '.join(label(f) for f in via)}")
+                also = link["also"]
+                if also:
+                    parts = [label(f) for f in also.get("all_of", [])]
+                    if also.get("any_of"):
+                        parts.append(
+                            "any one of " + ", ".join(label(f) for f in also["any_of"])
+                        )
+                    print(f"      still required: {'; '.join(parts)}")
+                else:
+                    print("      no additional declared hard prerequisite")
+        for item in edge["terminal"]:
+            reason = (
+                "an impact -- a chain ends here"
+                if item["why"] == "impact"
+                else "no test declares a use for it -- a reportable outcome"
+            )
+            print(f"  terminal: {label(item['fact'])}  [{item['fact']}] -- {reason}")
+        if not edge["out"] and not edge["terminal"]:
+            print("  this test declares no capability, so nothing is derived from it")
         return EXIT_OK
 
-    held = chain.given()
-    if args.held:
-        named = {name.strip() for name in args.held.split(",") if name.strip()}
-        unknown = sorted(named - set(chain.facts))
-        if unknown:
-            print(f"harrier: no such fact: {', '.join(unknown)}", file=sys.stderr)
-            return EXIT_FAILED
-        held |= named
-
-    available = chain.available(held)
-    if args.held:
-        print(f"held             {len(held)}")
-        for node in available[:40]:
-            print(f"  {node.id}  {node.title}")
-        if len(available) > 40:
-            print(f"  ... and {len(available) - 40} more")
-        return EXIT_OK
-
-    print(f"facts            {len(chain.facts)}")
-    print(f"units charted    {chain.charted()} of {len(chain.nodes)}")
-    print(f"given facts      {len(held)}")
-    print(f"available        {len(available)}")
+    reached = sum(1 for e in index.values() if e["out"])
+    print(f"capabilities     {len(chain.facts)}")
+    print(f"tests charted    {chain.charted()} of {len(chain.nodes)}")
+    print(f"given            {len(chain.given())}")
+    print(f"with a continuation {reached}")
+    print(f"unconsumed       {len(chain.unconsumed())} capabilities no test declares a use for")
     return EXIT_OK
 
 
