@@ -8,8 +8,17 @@
 # WSTG is a coverage skeleton here, not the table of contents. It proves nothing
 # standard is missing; it does not bound the scope. See docs/TAXONOMY.md section 5.
 #
-# Only identifiers and official test titles are recorded here. WSTG is CC BY-SA;
-# no WSTG prose is reproduced anywhere in this repository.
+# Only identifiers, official test titles and the checklist's own section headings
+# are recorded here. WSTG is CC BY-SA; no WSTG prose is reproduced anywhere in
+# this repository.
+#
+# `groups` carries the twelve testing groups in the order the checklist lists
+# them, keyed by the four-letter code every identifier in that group already
+# embeds. It comes from the same file at the same pin as `wstg` -- the section
+# headings of checklist.md -- so it is evidence of the same kind and refreshes
+# by the same procedure. It is here rather than derived in code because the
+# order is the standard's, not this project's, and a navigation order invented
+# by the reader of an identifier prefix would be exactly that.
 #
 # This file is generated. Do not hand-edit it -- correct the source or the
 # generator instead, so the pin below stays true.
@@ -33,6 +42,31 @@ source_ref: "master"
 source_commit: "2fab1ade827ee2336f14b7c695014191b7e2f3e1"
 source_sha256: "1b69e92583c329f101797041b6fd26bef53f86189d8143d210e618b2e2ccbd32"
 retrieved: "2026-08-23"
+groups:
+  - code: INFO
+    name: "Information Gathering"
+  - code: CONF
+    name: "Configuration and Deployment Management Testing"
+  - code: IDNT
+    name: "Identity Management Testing"
+  - code: ATHN
+    name: "Authentication Testing"
+  - code: ATHZ
+    name: "Authorization Testing"
+  - code: SESS
+    name: "Session Management Testing"
+  - code: INPV
+    name: "Input Validation Testing"
+  - code: ERRH
+    name: "Testing for Error Handling"
+  - code: CRYP
+    name: "Testing for Weak Cryptography"
+  - code: BUSL
+    name: "Business Logic Testing"
+  - code: CLNT
+    name: "Client-side Testing"
+  - code: APIT
+    name: "API Testing"
 wstg:
   - id: WSTG-APIT-01
     title: "API Reconnaissance"

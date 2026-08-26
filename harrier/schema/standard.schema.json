@@ -12,6 +12,18 @@
     "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "retrieved": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "groups": {
+      "description": "The standard's own testing groups, in the standard's own order, keyed by the code every identifier in the group embeds. Navigation order is the standard's decision; deriving it from an identifier prefix would make it this project's.",
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["code", "name"],
+        "properties": {
+          "code": {"type": "string", "pattern": "^[A-Z]{4}$"},
+          "name": {"type": "string", "minLength": 3}
+        }
+      }
+    },
     "wstg": {
       "type": "array", "minItems": 1,
       "items": {
