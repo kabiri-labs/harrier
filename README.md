@@ -44,13 +44,18 @@ Standard → Testing group → WSTG test case → Harrier Test Units → Test Un
 
 ```
 Choose WSTG
-→ choose a group          Input Validation Testing
-→ choose a test case      WSTG-INPV-05, Testing for SQL Injection
-→ inspect its atomic tests    ten of them, probe through evade
-→ open one Test Unit      HRR-INJ-01-UNION, UNION-based extraction
-→ see how to perform it   oracle, sequence, payloads, false positives, safety
-→ see where success may lead  the local chain, and what each next test still needs
+→ choose a group              Authorization Testing
+→ choose a test case          WSTG-ATHZ-01, Testing Directory Traversal File Include
+→ inspect its atomic tests    five of them, probe through execution
+→ open one Test Unit          HRR-RES-01-READ, confirmed read outside the intended root
+→ see where success may lead  named under the objective, before the procedure
+→ see how to perform it       oracle, sequence, payloads, false positives, safety
+→ follow the continuation     HRR-RES-01-EXEC, and what it still requires
 ```
+
+`WSTG-INPV-05` is the decomposition in its clearest form: one checklist line,
+ten materially different tests. `WSTG-ATHZ-01` is the chain in its clearest
+form: the one topic written to full depth, running probe → read → execution.
 
 ## What this is not
 
@@ -118,15 +123,22 @@ pip install PyYAML jsonschema
 python -m unittest discover -s tests -t .   # offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
-python -m harrier chain HRR-INJ-01-UNION    # what a unit needs, gives and opens
+python -m harrier chain HRR-RES-01-READ     # what a test needs, establishes and may lead to
 python -m harrier build -o harrier.html     # the artefact, then open it
 ```
 
-The first two must pass; CI runs exactly them. Two further checks run only when
-the tool is present and skip cleanly otherwise: `node` executes the artefact's
-own graph, layout, path and search functions against the real catalogue, and a
-Chromium-family browser opens the built file over `file://` to check routing,
-the Content-Security-Policy and the rendered wording together.
+The first two must pass, and CI runs exactly them. Two runners inside the suite
+are optional locally and installed in CI, because a suite that quietly skipped
+a third of itself would look identical to one that passed it:
+
+```bash
+pip install playwright && playwright install chromium   # plus node, for the rest
+```
+
+`node` executes the artefact's own graph, layout, path and search functions
+against the real catalogue; a browser opens the built file over `file://` and
+uses it — typing in the search box, clicking a node in the graph, pressing Enter
+on one — while recording every request it attempts and every console error.
 [`docs/VALIDATION.md`](docs/VALIDATION.md) explains what is checked and why each
 rule is mechanical rather than a review comment.
 
@@ -152,9 +164,16 @@ and run files written by 0.3.0 cannot be read. That is deliberate, it is taken
 during the pre-1.0 period so it can be taken at all, and the reasoning is
 recorded in [`docs/PIVOT.md`](docs/PIVOT.md).
 
-What is not done: depth. Ten units of 366 are written in full and the rest carry
-an objective and nothing more. That is deliberate — see the standing rule in
-[`docs/ROADMAP.md`](docs/ROADMAP.md) — and it is what the next release is for.
+What is not done, and both are visible in the product rather than only here:
+
+- **Depth.** Ten units of 366 are written in full and the rest carry an
+  objective and nothing more. That is deliberate — see the standing rule in
+  [`docs/ROADMAP.md`](docs/ROADMAP.md).
+- **The far half of the chain.** 81 of 177 capabilities have no test declaring a
+  use for them, so 189 of 366 tests currently lead nowhere in the chart. Phase 5
+  charted reconnaissance through to primitives; primitive-to-impact is largely
+  unwritten. The artefact says so on the page and `harrier chain` reports the
+  count, rather than letting a reader meet it one dead end at a time.
 
 ## Licence and attribution
 

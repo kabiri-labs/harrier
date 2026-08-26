@@ -268,6 +268,16 @@ This is not house style. Target-state wording is how the rejected model comes
 back — as a phrase first, then as the feature that phrase implies — so the suite
 asserts on its absence in the rendered page.
 
+### The command line describes the same model
+
+`harrier chain` reads the derivation in `chain.py`, which is the same one the
+artefact reads. That is not a tidiness argument: a command line that still asked
+what the tester held and answered with what was *available* would leave the
+product carrying two contradictory models one step apart, and whichever a reader
+met first is the one they would believe. So `--held`, `available` and `unlocks`
+went with the board, and the tool prints prerequisites, established capabilities,
+potential continuations and what each still owes — in the page's words.
+
 ### One file, and it reaches for nothing
 
 The published artefact is a **single self-contained HTML file**: no external

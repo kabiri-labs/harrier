@@ -106,19 +106,16 @@ could quietly file an impact as a primitive.
 being reachable, requests being possible without a session. Those are the roots.
 
 `granted: true` marks one an engagement *may* supply and often does not: access
-to the host itself is the first of them. It is never assumed at the start, and
-the tester names it with `--held` when they have it. Both are exempt from the
-producer gate, because neither is earned by a test — but only `given` facts are
-held before anything is done.
+to the host itself is the first of them. Both are exempt from the producer gate,
+because neither is earned by a test. Only `given` facts are treated as holding at
+the start: a `granted` capability stays visible as an unmet condition, so a
+continuation that needs one names it rather than assuming an engagement supplied
+it.
 
 Credentials are **not** among them. An engagement that hands over no account
 leaves one to be earned by registering, and a root that assumed otherwise would
-open the catalogue with tests the tester cannot run. What is actually in hand is
-stated at read time instead:
-
-```
-harrier chain --held access.user,access.peer
-```
+present tests whose condition nothing has established. `access.user` has a
+producer like anything else, and a test that needs it says so.
 
 ## 5. What the validator enforces
 
@@ -142,17 +139,22 @@ rather than left to be remembered.
 ## 6. Reading the graph
 
 ```
-harrier chain                          summary
-harrier chain HRR-INJ-01-UNION         one unit: what it needs, gives, and opens
-harrier chain --fact primitive.db.read one fact: who establishes it, who needs it
+harrier chain                          summary, and how far the chart reaches
+harrier chain HRR-INJ-01-UNION         one test: what it needs, establishes, and may lead to
+harrier chain --fact primitive.db.read one capability: who establishes it, who declares a use
 ```
 
-`unlocks` and `motivates` are reported separately, because they mean different
-things to somebody deciding what to do next: one had an unmet condition that a
-success here supplies; the other had no unmet condition and has simply become
-worth reaching for. Both are statements about declarations, not about a target;
-`--held` is the reader telling the command line what to assume, and the tool
-never assumes it for them. The published artefact asks nothing of the kind.
+The command line reads **the same derivation the artefact does** — one
+implementation in `chain.py`, two consumers — so the two cannot drift into
+describing different models. It prints the same things and says them the same
+way: prerequisites, what success establishes, potential continuations with the
+capability each travels through, and what each continuation still declares that
+succeeding here does not supply.
+
+There is no way to tell it what you hold, and it computes nothing about a
+target. `--held`, `available` and `unlocks` were removed in 0.4.0: a tool that
+answers *what is possible now* is making a claim about somebody's application,
+and it made that claim one command away from a page that says it cannot.
 
 ## 7. Reading a continuation honestly
 
