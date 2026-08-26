@@ -3,7 +3,7 @@
   "title": "Pinned published standard",
   "description": "A generated index of a published standard's identifiers and official titles. The pin fields are required so a future regeneration cannot quietly drop the evidence: a commit plus the SHA-256 of the file read at it lets anyone re-fetch the exact bytes, which a branch name cannot do because a branch moves.",
   "type": "object",
-  "required": ["version", "source", "source_commit", "source_sha256", "retrieved", "wstg"],
+  "required": ["version", "source", "source_commit", "source_sha256", "retrieved", "groups", "wstg"],
   "additionalProperties": false,
   "properties": {
     "version": {"const": 1},
@@ -13,7 +13,7 @@
     "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "retrieved": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
     "groups": {
-      "description": "The standard's own testing groups, in the standard's own order, keyed by the code every identifier in the group embeds. Navigation order is the standard's decision; deriving it from an identifier prefix would make it this project's.",
+      "description": "The standard's own testing groups, in the standard's own order, keyed by the code every identifier in the group embeds. Navigation order is the standard's decision; deriving it from an identifier prefix would make it this project's. Required, not optional: without it the artefact's entire navigation is empty, and a pin that validates while producing an unusable artefact is the failure this schema exists to catch.",
       "type": "array", "minItems": 1,
       "items": {
         "type": "object", "additionalProperties": false,
