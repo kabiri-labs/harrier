@@ -31,7 +31,7 @@ SAFE_LOADER = _SafeLoader
 #: the only thing anybody consumes. A change that alters what the artefact says
 #: bumps this; a change to the tests, the documents or the validator's internals
 #: does not. Not 1.0: that needs two topics written to full depth, and one is.
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     "SAFE_LOADER",

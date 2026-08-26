@@ -171,6 +171,23 @@ Neither is useful alone. The anchor without the chain is a flat list of
 everything that could ever apply; the chain without the anchor answers for the
 whole target when the tester asked about one form.
 
+### When nothing is ready
+
+Naming a surface is not the same as holding what testing it needs, so a board
+can open with nothing in reach. It does not answer "nothing", and it does not
+ask the tester to assert the missing fact either: `recon.entrypoints.mapped` is
+not an observation, it is what a unit establishes, and handing it over because
+somebody named a surface would record reconnaissance nobody performed. The
+vocabulary is explicit that everything outside `given` and `granted` has to be
+earned.
+
+So the answer is the unit that earns it, offered with its result controls in
+place. That unit is usually outside the surface being looked at — which is
+exactly why the tester could not find it. Where the unit is itself blocked, what
+it is waiting on is named, and the chain resolves to something that can be done
+now. A fact no unit yields is one the engagement supplies, and there the only
+honest control is the tester saying so.
+
 ### Order
 
 Within what is both in scope and reachable, three things decide what comes

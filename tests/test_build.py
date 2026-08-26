@@ -339,3 +339,64 @@ class TheGeneratedScriptIsValidJavaScript(unittest.TestCase):
             self.assertEqual(done.returncode, 0, done.stderr)
         finally:
             os.unlink(path)
+
+
+class ABlockedBoardOffersTheTestThatUnblocksIt(unittest.TestCase):
+    """A board with nothing ready must not answer "nothing", and must not answer
+    by asking the tester to assert the fact either.
+
+    `recon.entrypoints.mapped` is not something a person observes -- it is what
+    `HRR-RCN-03-MAP` establishes. Handing it over because somebody named a
+    surface would record reconnaissance nobody performed, which is the same
+    mistake as treating a clean result as a positive one. The graph already
+    knows which unit earns each fact, so the way in is a test to go and run.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+        cls.page = render(cls.data)
+
+    def test_the_catalogue_carries_what_establishes_each_fact(self):
+        producers = self.data["producers"]
+        self.assertTrue(producers)
+        for fact, units in producers.items():
+            self.assertIn(fact, self.data["facts"])
+            for uid in units:
+                self.assertIn(uid, self.data["units"])
+                self.assertIn(fact, self.data["units"][uid].get("yields") or [],
+                              f"{uid} is listed as establishing {fact} but does not yield it")
+
+    def test_every_unit_that_yields_something_is_listed_against_it(self):
+        for unit in self.data["units"].values():
+            for fact in unit.get("yields") or []:
+                self.assertIn(unit["id"], self.data["producers"].get(fact, []), unit["id"])
+
+    def test_a_fact_no_test_earns_is_one_the_engagement_supplies(self):
+        """The fallback to a manual tick has to be reachable, and it has to be
+        rare: if many facts had no producer, the board would be asking the
+        tester to fill in the catalogue."""
+        unearned = [
+            f for f in self.data["facts"]
+            if not self.data["producers"].get(f)
+            and not self.data["facts"][f].get("given")
+        ]
+        for fact in unearned:
+            self.assertTrue(
+                self.data["facts"][fact].get("granted"),
+                f"{fact} is earned by nothing and is not marked granted",
+            )
+        self.assertLess(len(unearned), 5, "too much of the graph has no route into it")
+
+    def test_the_way_in_names_the_unit_rather_than_asking_for_the_fact(self):
+        block = self.page.split("What would open this up", 1)[1].split("if (now.length)", 1)[0]
+        self.assertIn("D.producers", block)
+        self.assertIn("outcomeRow(u)", block, "the offered test must be actionable in place")
+
+    def test_a_blocked_producer_is_shown_with_what_it_needs(self):
+        block = self.page.split("What would open this up", 1)[1].split("if (now.length)", 1)[0]
+        self.assertIn("Itself waiting on", block)
+
+    def test_the_producer_lookup_rejects_inherited_names(self):
+        block = self.page.split("What would open this up", 1)[1].split("if (now.length)", 1)[0]
+        self.assertIn("own(D.producers, f)", block)

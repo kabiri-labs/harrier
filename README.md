@@ -72,7 +72,7 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 169 tests, offline
+python -m unittest discover -s tests -t .   # 175 tests, offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
 python -m harrier chain HRR-INJ-01-UNION    # what a unit needs, gives and opens
@@ -85,7 +85,7 @@ rule is mechanical rather than a review comment.
 
 ## Status
 
-**0.2.0.** The taxonomy is complete, and the artefact is something a tester
+**0.3.0.** The taxonomy is complete, and the artefact is something a tester
 works from rather than looks things up in.
 
 - **99 topics across 13 domains**, every resolvable WSTG identifier claimed by one, with the boundaries between neighbouring topics written down.
@@ -94,8 +94,10 @@ works from rather than looks things up in.
 - **One self-contained HTML file** carrying all of it, including every card, payload and mitigation. It fetches nothing, which is the point: it is opened on an engagement network.
 - **A board that opens on what to do next.** The tester says what is in front of
   them — a whole application, one section, or one cookie — and gets the tests
-  that apply and are possible now, in the order to work in. Results are recorded
-  as found, clean or unclear, and the run survives a reload.
+  that apply and are possible now, in the order to work in. Where nothing is
+  ready, it offers the test that would open the most, which is usually one they
+  were not looking at. Results are recorded as found, clean or unclear, and the
+  run survives a reload.
 
 What is not done: depth. Ten units of 366 are written in full, and the rest
 carry an objective and nothing more. That is deliberate -- see the standing rule

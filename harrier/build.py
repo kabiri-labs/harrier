@@ -153,6 +153,14 @@ def catalogue(root: Path) -> Dict[str, Any]:
         "payloads": payloads,
         "wstg": wstg,
         "claims": claims,
+        # Fact -> the units that establish it. The page needs it to answer the
+        # only question a blocked board raises: not "is this true of your
+        # target" but "what would make it true". Derived from `yields`, never
+        # stored, and restricted to units that travel with the artefact.
+        "producers": {
+            fact: sorted(uid for uid in uids if uid in units)
+            for fact, uids in sorted(chain.producers.items())
+        },
         "scope": surface_scope(surfaces, topics),
         "always": sorted(
             tid
@@ -295,6 +303,9 @@ label.fact input { margin-right: .4rem; }
   background: var(--bg); border: 1px solid var(--line); border-radius: 3px;
   color: var(--ink); padding: .3rem .5rem; font-size: .85rem; width: 100%;
 }
+.want { border-left: 2px solid var(--line); padding-left: .8rem; margin: .9rem 0 1.2rem; }
+.want > h4 { margin: .1rem 0 .2rem; font-size: 1rem; }
+.want > .k { color: var(--accent); }
 .notice { background: #2a2118; border: 1px solid var(--warn); color: var(--warn);
   border-radius: 4px; padding: .5rem .8rem; margin: .5rem 0; font-size: .84rem; }
 .done-row { display: flex; justify-content: space-between; gap: .6rem;
@@ -735,25 +746,53 @@ function showBoard() {
 
   /* Naming a surface is not the same as holding what testing it needs. Somebody
      looking at a login form has not necessarily inventoried the application's
-     entry points, and the catalogue is right to ask rather than assume. What it
-     must not do is answer "nothing" and stop: the way in is one or two facts,
-     so they are put in front of the tester as questions about their target,
-     ordered by how much each one opens. */
+     entry points, and the catalogue is right to ask rather than assume.
+
+     What it must not do is answer "nothing", and what it must not do instead is
+     ask the tester to assert the fact: `recon.entrypoints.mapped` is not an
+     observation, it is the result of a test, and a surface handing it over
+     would record work nobody did. The graph already knows which unit earns it.
+     So the way in is a test to go and run -- usually one outside the surface
+     being looked at, which is exactly why the tester could not find it. */
   if (!now.length && blocked.length) {
     const opens = {};
     blocked.forEach(u => missing(u).forEach(f => {
       if (!ruled.has(f)) opens[f] = (opens[f] || 0) + 1;
     }));
     const keys = Object.keys(opens).sort((a, b) => opens[b] - opens[a]).slice(0, 4);
+
     out.push('<div class="lane"><h3>What would open this up</h3></div>' +
-      "<p class=\"why\">Nothing is ready yet. These are true of most targets -- " +
-      "tick the ones true of yours.</p>" +
-      keys.map(f => '<div class="card"><label class="fact" title="' + esc(f) + '">' +
-        '<input type="checkbox" data-hold="' + esc(f) + '">' + esc(factLabel(f)) +
-        ' <span class="idchip">opens ' + opens[f] + "</span></label>" +
-        (D.facts[f] && D.facts[f].description
-          ? '<p class="muted">' + esc(D.facts[f].description) + "</p>" : "") +
-        "</div>").join(""));
+      "<p class=\"why\">Nothing here is ready yet. Each of these is one test away, " +
+      "and the test is usually somewhere you were not looking.</p>" +
+      keys.map(f => {
+        const made = (own(D.producers, f) ? D.producers[f] : [])
+          .map(id => D.units[id]).filter(u => u && !isDone(u));
+        const ready = made.filter(u => missing(u).length === 0 && !ruledOut(u));
+        const later = made.filter(u => missing(u).length > 0 || ruledOut(u));
+
+        let how;
+        if (ready.length) {
+          how = ready.map(u => unitCard(u, outcomeRow(u))).join("");
+        } else if (later.length) {
+          how = later.map(u => unitCard(u,
+            '<p class="muted">Itself waiting on ' +
+            missing(u).map(g => factTag(g, "req")).join(" ") + "</p>")).join("");
+        } else {
+          /* No unit establishes it, so no test earns it. That is the engagement
+             supplying something -- host access, a second account -- and the
+             only honest control is the tester saying so. */
+          how = '<div class="card"><label class="fact" title="' + esc(f) + '">' +
+            '<input type="checkbox" data-hold="' + esc(f) + '">' +
+            "Nothing here establishes this. Tick it if the engagement gives it to you." +
+            "</label></div>";
+        }
+
+        return '<div class="want"><div class="k">Opens ' + opens[f] + " test" +
+          (opens[f] === 1 ? "" : "s") + "</div><h4>" + esc(factLabel(f)) + "</h4>" +
+          (D.facts[f] && D.facts[f].description
+            ? '<p class="muted">' + esc(D.facts[f].description) + "</p>" : "") +
+          how + "</div>";
+      }).join(""));
   }
 
   if (now.length) {
