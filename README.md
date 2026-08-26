@@ -142,6 +142,34 @@ on one — while recording every request it attempts and every console error.
 [`docs/VALIDATION.md`](docs/VALIDATION.md) explains what is checked and why each
 rule is mechanical rather than a review comment.
 
+## Releases
+
+The artefact is built by CI and attached to a release, never committed. A stale
+committed copy is indistinguishable from a current one at a glance, and only one
+of those is safe to hand to someone.
+
+The trigger is a release published from the GitHub UI — deliberately, rather
+than a tag push — so the workflow can only ever add a file to a publication a
+person made. It has no path by which it publishes anything of its own. It then:
+
+1. runs the same checks a pull request runs, by calling `validate.yml` rather
+   than restating them;
+2. refuses to continue if the release tag and `__version__` disagree, because
+   those are the two things anybody quotes and they must not diverge silently;
+3. builds `harrier-<version>.html`, records its SHA-256 beside it, and rebuilds
+   from scratch to prove the two are byte-identical — a digest published next to
+   a file nobody can reproduce means nothing;
+4. attaches both to the release.
+
+`workflow_dispatch` runs all of it and publishes nothing: the file is kept on
+the run for seven days so it can be inspected without a release existing.
+
+Verify a downloaded artefact with:
+
+```bash
+sha256sum -c harrier-<version>.html.sha256
+```
+
 ## Status
 
 **0.4.0.** The taxonomy is complete and the artefact is a companion to the
