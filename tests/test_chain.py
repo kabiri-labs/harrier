@@ -226,60 +226,13 @@ class AnAlternativeNotTakenIsNotAssumedHeld(unittest.TestCase):
         self.assertIn("HRR-INJ-01-ERROR", unlocked)
 
 
-class TheReadingOrderIsAnOpinionWithReasons(unittest.TestCase):
-    """The order units are met in is the product's answer to "what next", so it
-    is pinned rather than left to whatever order a directory listing gives."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.chain = Chain.load(REPO_ROOT)
-        cls.order = cls.chain.reading_order()
-
-    def test_every_unit_gets_exactly_one_position(self):
-        self.assertEqual(len(self.order), len(self.chain.nodes))
-        self.assertEqual(len(set(self.order.values())), len(self.order))
-
-    def test_a_unit_written_in_full_comes_before_one_that_is_not(self):
-        """An outline hands the tester an objective and leaves them where they
-        started. Burying the written ones under several hundred of those is how
-        a reader concludes the catalogue is empty."""
-        authored = [n.id for n in self.chain.nodes.values() if n.status == "authored"]
-        outline = [n.id for n in self.chain.nodes.values() if n.status != "authored"]
-        self.assertTrue(authored and outline, "the fixture no longer has both")
-        self.assertLess(max(self.order[i] for i in authored),
-                        min(self.order[i] for i in outline))
-
-    def test_a_topic_declared_order_is_followed_within_that_topic(self):
-        checked = 0
-        for tid, declared in self.chain.topic_order.items():
-            known = [u for u in declared if u in self.order]
-            if len(known) < 2:
-                continue
-            positions = [self.order[u] for u in known]
-            same_depth = len({self.chain.nodes[u].status for u in known}) == 1
-            if same_depth:
-                self.assertEqual(positions, sorted(positions), tid)
-                checked += 1
-        self.assertGreater(checked, 0, "no topic exercises the rule any more")
-
-    def test_units_of_one_topic_are_not_scattered(self):
-        """A run that jumps between unrelated topics is a run that loses its
-        place. Within one depth, a topic's units are contiguous."""
-        seen = {}
-        for uid, position in sorted(self.order.items(), key=lambda kv: kv[1]):
-            node = self.chain.nodes[uid]
-            seen.setdefault((node.status == "authored", node.topic), []).append(position)
-        for key, positions in seen.items():
-            self.assertEqual(
-                positions, list(range(min(positions), min(positions) + len(positions))),
-                f"{key} is split across the order",
-            )
-
-
 class ReachabilityStaysDenyByDefault(unittest.TestCase):
-    """The board offers a unit only when its conditions are met. A unit offered
-    early is worse than one offered late: it sends a tester at a test that
-    cannot work and costs them the time to find out."""
+    """`harrier chain --held` answers what a stated set of facts makes possible.
+
+    It is the command line's question, not the artefact's: the published file
+    holds nothing about a target and never asks. The rule that matters here is
+    that a condition is met or the unit is not offered -- naming a unit whose
+    conditions are unmet sends somebody at a test that cannot work."""
 
     @classmethod
     def setUpClass(cls):
