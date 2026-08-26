@@ -206,6 +206,23 @@ def check_standards(repo: Repository, problems: Problems) -> None:
             f"{len(unverified)} identifier(s) marked unverified: {', '.join(sorted(unverified)[:5])}",
         )
 
+    # Every identifier carries its group in its own prefix, so the two can be
+    # checked against each other rather than trusted. A group with no
+    # identifiers is a heading the standard no longer has; an identifier whose
+    # group is undeclared would have no place to appear in the navigation and
+    # would be silently unreachable, which is the failure this instrument exists
+    # to prevent.
+    groups = {g["code"] for g in wstg.data.get("groups") or []}
+    if groups:
+        seen = {wid.split("-")[1] for wid in pinned}
+        for code in sorted(seen - groups):
+            problems.add("standards/wstg.yaml", f"identifiers in group {code} but no group declares it")
+        for code in sorted(groups - seen):
+            problems.add("standards/wstg.yaml", f"group {code} is declared but no identifier belongs to it")
+        counted = [g["code"] for g in wstg.data["groups"]]
+        for code in sorted({c for c in counted if counted.count(c) > 1}):
+            problems.add("standards/wstg.yaml", f"duplicate group {code}")
+
     domains = {d["code"] for d in _vocab(repo, "domains", "domains")}
     mapped: Set[str] = set()
     for entry in wmap.data["map"]:
