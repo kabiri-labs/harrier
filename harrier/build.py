@@ -301,6 +301,10 @@ label.fact input { margin-right: .4rem; }
   padding: .3rem .5rem; border-bottom: 1px solid var(--line); font-size: .85rem; }
 .done-row .o { font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; }
 .o.found { color: var(--good); } .o.clean { color: var(--accent); } .o.unclear { color: var(--warn); }
+.done-row button.undo { background: transparent; color: var(--dim); border: 1px solid var(--line);
+  border-radius: 3px; padding: .05rem .4rem; font-size: .72rem; cursor: pointer; margin-left: .4rem; }
+.done-row button.undo:hover { color: var(--ink); border-color: var(--accent); }
+.done-row [data-unit] { cursor: pointer; }
 </style>
 </head>
 <body>
@@ -334,12 +338,25 @@ const OUTCOMES = { found: "Found", clean: "Clean", unclear: "Unclear" };
 let view = "board", current = null;
 let anchor = null;              /* a surface tag, or null for the whole target */
 let held = new Set(D.given);
+/* Facts a clean result ruled out. Kept apart from `held` because the two mean
+   opposite things: `closes` is a subset of `yields`, so folding a clean result
+   into `held` would establish exactly what the test just disproved -- a probe
+   that found no injection would unlock extraction from the injection it did not
+   find. What a ruled-out fact does is prune, never open. */
+let ruled = new Set();
 let results = {};               /* unit id -> { outcome, at } */
 let target = "";
 let allFacts = false;
 let storageBroken = false;
 
 const alwaysTopics = new Set(D.always || []);
+
+/* `D.facts`, `D.units` and `D.scope` are plain objects, so "constructor" and
+   "__proto__" index truthy on every one of them. A run naming one would pass a
+   bare truthiness check, and `inScope` would then call `.indexOf` on a function
+   and take the board down -- permanently, because the run is saved before it is
+   drawn. Membership is asked properly instead. */
+const own = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 
 function runOut() {
   return {
@@ -348,6 +365,7 @@ function runOut() {
     target: target,
     anchor: anchor,
     held: [...held].sort(),
+    closed: [...ruled].sort(),
     results: results
   };
 }
@@ -361,14 +379,16 @@ function runOut() {
 function runIn(raw) {
   if (!raw || typeof raw !== "object" || raw.format !== RUN_KEY) return false;
   target = typeof raw.target === "string" ? raw.target.slice(0, 200) : "";
-  anchor = (typeof raw.anchor === "string" && D.scope[raw.anchor]) ? raw.anchor : null;
-  held = new Set((Array.isArray(raw.held) ? raw.held : []).filter(f => D.facts[f]));
+  anchor = (typeof raw.anchor === "string" && own(D.scope, raw.anchor)) ? raw.anchor : null;
+  const facts = list => new Set((Array.isArray(list) ? list : []).filter(f => own(D.facts, f)));
+  held = facts(raw.held);
+  ruled = facts(raw.closed);
   D.given.forEach(f => held.add(f));
   results = {};
   const src = (raw.results && typeof raw.results === "object") ? raw.results : {};
   Object.keys(src).forEach(id => {
     const r = src[id];
-    if (!D.units[id] || !r || !OUTCOMES[r.outcome]) return;
+    if (!own(D.units, id) || !r || !own(OUTCOMES, r.outcome)) return;
     results[id] = { outcome: r.outcome, at: typeof r.at === "string" ? r.at : "" };
   });
   return true;
@@ -388,7 +408,7 @@ function restore() {
 }
 
 function clearRun() {
-  anchor = null; held = new Set(D.given); results = {}; target = "";
+  anchor = null; held = new Set(D.given); ruled = new Set(); results = {}; target = "";
   try { localStorage.removeItem(RUN_KEY); } catch (e) { storageBroken = true; }
 }
 
@@ -462,7 +482,17 @@ const factTag = (f, cls) => '<span class="tag ' + cls + '" data-fact="' + esc(f)
 
 const isDone = u => !!results[u.id];
 const inScope = u => !anchor ||
-  (D.scope[anchor] || []).indexOf(u.topic) >= 0;
+  (own(D.scope, anchor) ? D.scope[anchor] : []).indexOf(u.topic) >= 0;
+
+/* A unit is ruled out when something it needs was actively disproved, which is
+   different from not having got to it yet. Showing the two together is what
+   makes a long "waiting" list stop meaning anything. */
+function ruledOut(u) {
+  const r = u.requires || {};
+  if ((r.all_of || []).some(f => ruled.has(f))) return true;
+  const any = r.any_of || [];
+  return any.length > 0 && any.every(f => ruled.has(f));
+}
 
 /* The facts a unit still needs. An `any_of` group is one missing requirement
    with several ways to satisfy it, so it contributes its alternatives only when
@@ -679,9 +709,11 @@ function showBoard() {
      a different one: a tester who ticked the fact by hand has already answered
      the question the unit asks. */
   const spent = u => (u.yields || []).length && (u.yields || []).every(f => held.has(f));
-  const now = open.filter(u => missing(u).length === 0 && !spent(u))
+  const dead = open.filter(ruledOut);
+  const live = open.filter(u => !ruledOut(u));
+  const now = live.filter(u => missing(u).length === 0 && !spent(u))
     .sort((a, b) => rank(a) - rank(b));
-  const blocked = open.filter(u => missing(u).length > 0)
+  const blocked = live.filter(u => missing(u).length > 0)
     .sort((a, b) => (missing(a).length - missing(b).length) || rank(a) - rank(b));
 
   const surface = anchor && D.surfaces.find(s => s.tag === anchor);
@@ -690,7 +722,8 @@ function showBoard() {
   out.push("<h2>" + (target ? esc(target) : "Untitled run") + "</h2>" +
     '<div class="sub">' + (surface ? esc(surface.label) : "The whole target") +
     " · " + done.length + " settled · " + now.length + " ready · " +
-    blocked.length + " waiting on something</div>");
+    blocked.length + " waiting on something" +
+    (dead.length ? " · " + dead.length + " ruled out" : "") + "</div>");
 
   if (storageBroken) out.push('<div class="notice">This browser will not keep the run ' +
     "when the tab closes -- opening a file from disk often blocks storage. " +
@@ -708,7 +741,9 @@ function showBoard() {
      ordered by how much each one opens. */
   if (!now.length && blocked.length) {
     const opens = {};
-    blocked.forEach(u => missing(u).forEach(f => { opens[f] = (opens[f] || 0) + 1; }));
+    blocked.forEach(u => missing(u).forEach(f => {
+      if (!ruled.has(f)) opens[f] = (opens[f] || 0) + 1;
+    }));
     const keys = Object.keys(opens).sort((a, b) => opens[b] - opens[a]).slice(0, 4);
     out.push('<div class="lane"><h3>What would open this up</h3></div>' +
       "<p class=\"why\">Nothing is ready yet. These are true of most targets -- " +
@@ -755,9 +790,23 @@ function showBoard() {
       "</span></div><p class=\"why\">A test recorded clean is the half of coverage " +
       "nothing else records.</p>" +
       done.sort((a, b) => rank(a) - rank(b)).map(u =>
-        '<div class="done-row" data-unit="' + esc(u.id) + '"><span>' + esc(u.title) +
-        "</span><span class=\"o " + esc(results[u.id].outcome) + '">' +
-        esc(OUTCOMES[results[u.id].outcome]) + "</span></div>").join(""));
+        '<div class="done-row"><span data-unit="' + esc(u.id) + '">' + esc(u.title) +
+        "</span><span><span class=\"o " + esc(results[u.id].outcome) + '">' +
+        esc(OUTCOMES[results[u.id].outcome]) + '</span> <button class="undo" data-out="undo"' +
+        ' data-for="' + esc(u.id) + '">Undo</button></span></div>').join(""));
+  }
+
+  if (dead.length) {
+    out.push('<div class="lane"><h3>Ruled out</h3><span class="n">' + dead.length +
+      "</span></div><p class=\"why\">A clean result disproved something these need. " +
+      "Not skipped -- answered.</p>" +
+      dead.sort((a, b) => rank(a) - rank(b)).slice(0, 15).map(u => unitCard(u,
+        '<p class="muted">Ruled out by ' +
+        [...new Set([...((u.requires || {}).all_of || []),
+                     ...((u.requires || {}).any_of || [])])]
+          .filter(f => ruled.has(f)).map(f => factTag(f, "req")).join(" ") +
+        "</p>")).join("") +
+      (dead.length > 15 ? '<p class="muted">' + (dead.length - 15) + " more.</p>" : ""));
   }
 
   body.innerHTML = out.join("");
@@ -765,11 +814,15 @@ function showBoard() {
 }
 
 /* Four states, because three of them are results and the fourth is "not yet".
-   A positive result hands the tester what the unit yields; a clean one closes
-   what a clean result closes, which is the only way an outline of a catalogue
-   ever narrows. Undo forgets the result and leaves the facts alone: a fact can
-   have been established by more than one route, and retracting it here would
-   quietly withdraw a route the tester still has. */
+   Found establishes what the unit yields. Clean rules out what it closes, into
+   a separate set: `closes` is a subset of `yields`, so adding it to `held` would
+   record the finding as its own opposite -- a probe that found no injection
+   would open the extraction units that need one.
+
+   Undo retracts a ruling-out but not an establishing. The asymmetry is in the
+   data: a unit may only close a fact it is the sole producer of, so undoing a
+   clean result can safely withdraw it, while a yielded fact may have been
+   established by another route the tester still holds. */
 function outcomeRow(u) {
   const r = results[u.id];
   return '<div class="outcomes">' +
@@ -780,13 +833,17 @@ function outcomeRow(u) {
 }
 
 function record(id, outcome) {
+  if (!own(D.units, id)) return;
   const u = D.units[id];
-  if (!u) return;
-  if (outcome === "undo") { delete results[id]; }
-  else {
+  if (outcome === "undo") {
+    if (results[id] && results[id].outcome === "clean") {
+      (u.closes || []).forEach(f => ruled.delete(f));
+    }
+    delete results[id];
+  } else {
     results[id] = { outcome: outcome, at: new Date().toISOString() };
     if (outcome === "found") (u.yields || []).forEach(f => held.add(f));
-    if (outcome === "clean") (u.closes || []).forEach(f => held.add(f));
+    if (outcome === "clean") (u.closes || []).forEach(f => ruled.add(f));
   }
   save();
   draw();

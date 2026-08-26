@@ -189,11 +189,26 @@ same holds for facts: a unit needs *"the session identifier is known"*, not
 
 ### Results
 
-Four states, because three of them are results and the fourth is "not yet". A
-positive result hands over what the unit yields; a clean one closes what the
-unit closes. Without the clean state there is no difference between a test
-nobody ran and a test that came back empty, and that difference is the only
-thing that makes coverage a claim rather than a hope.
+Four states, because three of them are results and the fourth is "not yet".
+Without the clean state there is no difference between a test nobody ran and a
+test that came back empty, and that difference is the only thing that makes
+coverage a claim rather than a hope.
+
+What a result does to the graph is asymmetric, and the asymmetry is the point.
+A positive result **establishes** what the unit yields, and those facts open
+what needs them. A clean result **rules out** what the unit closes, into a set
+of its own — never into the held facts. `closes` is a subset of `yields`, so
+merging the two would record a finding as its own opposite: a probe that found
+no injection would establish that the parameter is injectable and offer the
+extraction that needs it.
+
+A ruled-out fact prunes rather than opens. Units that need it are not pending —
+they were answered — and they are shown that way, with the fact that answered
+them.
+
+Undo withdraws a ruling-out but not an establishing, because a unit may only
+close a fact it is the sole producer of, while a yielded fact may have been
+established by another route the tester still holds.
 
 ### The other views
 

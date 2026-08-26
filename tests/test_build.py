@@ -7,7 +7,11 @@ target somebody is testing and when.
 """
 
 import json
+import os
 import re
+import shutil
+import subprocess
+import tempfile
 import unittest
 
 import yaml
@@ -220,3 +224,118 @@ class SurfacesCloseOverWhatTheyImply(unittest.TestCase):
         for tag, topics in data["scope"].items():
             for tid in topics:
                 self.assertIn(tid, data["topics"], f"{tag} claims a topic that is not there")
+
+
+class ACleanResultRulesOutRatherThanEstablishes(unittest.TestCase):
+    """The failure this guards against inverted a finding.
+
+    `closes` is a subset of `yields` -- enforced -- and for every unit that
+    declares it, the two sets are identical. So folding a clean result into the
+    held facts records the test as its own opposite: a probe that found no SQL
+    injection would establish that the parameter is injectable and offer the
+    extraction units that need it. Found and Clean would be the same button.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+        cls.page = render(cls.data)
+        body = cls.page.split("function record(id, outcome) {", 1)[1]
+        cls.record = body.split("\n}", 1)[0]
+
+    def test_only_a_positive_result_establishes_a_fact(self):
+        adding = [l for l in self.record.splitlines() if "held.add" in l]
+        self.assertTrue(adding, "nothing establishes a fact any more")
+        for line in adding:
+            self.assertIn("yields", line)
+            self.assertNotIn("closes", line)
+
+    def test_a_clean_result_goes_to_the_ruled_out_set(self):
+        self.assertIn('if (outcome === "clean") (u.closes || []).forEach(f => ruled.add(f));',
+                      self.record)
+
+    def test_reachability_reads_the_held_set_and_not_the_ruled_out_one(self):
+        missing = self.page.split("function missing(u) {", 1)[1].split("\n}", 1)[0]
+        self.assertNotIn("ruled", missing)
+
+    def test_the_data_is_what_makes_the_mistake_possible(self):
+        """If this stops holding, the guard above stops being about anything."""
+        overlapping = 0
+        for unit in self.data["units"].values():
+            closes, yields = set(unit.get("closes") or []), set(unit.get("yields") or [])
+            if closes:
+                self.assertLessEqual(closes, yields, unit["id"])
+                overlapping += 1
+        self.assertGreater(overlapping, 0, "no unit declares closes any more")
+
+    def test_a_ruled_out_requirement_is_not_shown_as_merely_pending(self):
+        self.assertIn("function ruledOut(u) {", self.page)
+        self.assertIn("Ruled out", self.page)
+
+
+class ARecordedResultStaysCorrectable(unittest.TestCase):
+    """A settled unit leaves the lanes that render the result controls, so an
+    Undo built only there is a button nobody can reach: a mistaken result would
+    cost the whole run to correct."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.page = render(catalogue(REPO_ROOT))
+
+    def test_the_settled_row_carries_an_undo_control(self):
+        block = self.page.split('<div class="done-row"', 1)[1].split("join", 1)[0]
+        self.assertIn("esc(u.id)", block, "the settled row is no longer rendered")
+        self.assertIn('data-out="undo"', block)
+
+    def test_undoing_a_clean_result_withdraws_what_it_ruled_out(self):
+        # Safe only because a unit may close a fact it is the sole producer of.
+        record = self.page.split("function record(id, outcome) {", 1)[1].split("\n}", 1)[0]
+        self.assertIn("ruled.delete(f)", record)
+
+
+class ImportedRunsAreCheckedAgainstThisCatalogue(unittest.TestCase):
+    """`D.facts`, `D.units` and `D.scope` are plain objects, so "constructor"
+    and "__proto__" index truthy on all of them. A bare truthiness check lets an
+    imported run name one; the board then calls a list method on a function and
+    goes down -- permanently, because the run is saved before it is drawn."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.page = render(catalogue(REPO_ROOT))
+        cls.runin = cls.page.split("function runIn(raw) {", 1)[1].split("\n}", 1)[0]
+
+    def test_membership_is_asked_rather_than_assumed(self):
+        self.assertIn("Object.prototype.hasOwnProperty.call", self.page)
+        for lookup in ("D.scope[raw.anchor]", "D.facts[f]", "D.units[id]"):
+            self.assertNotIn(
+                lookup + ")", self.runin,
+                f"{lookup} is truthy for inherited names; ask own() instead",
+            )
+
+    def test_every_gate_in_the_importer_uses_it(self):
+        for guard in ("own(D.scope, raw.anchor)", "own(D.facts, f)", "own(D.units, id)",
+                      "own(OUTCOMES, r.outcome)"):
+            self.assertIn(guard, self.runin)
+
+    def test_the_scope_lookup_that_draws_the_board_is_guarded_too(self):
+        self.assertIn("own(D.scope, anchor) ? D.scope[anchor] : []", self.page)
+
+
+@unittest.skipUnless(shutil.which("node"), "node is not installed")
+class TheGeneratedScriptIsValidJavaScript(unittest.TestCase):
+    """Every other test here asserts on substrings of the page, which a broken
+    page satisfies just as well as a working one: an unterminated string literal
+    left the whole script dead and the suite green. Offline, local, no network."""
+
+    def test_it_parses(self):
+        page = render(catalogue(REPO_ROOT))
+        script = page.rsplit("<script>", 1)[1].rsplit("</script>", 1)[0]
+        with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as handle:
+            handle.write(script)
+            path = handle.name
+        try:
+            done = subprocess.run(["node", "--check", path],
+                                  capture_output=True, text=True)
+            self.assertEqual(done.returncode, 0, done.stderr)
+        finally:
+            os.unlink(path)
