@@ -270,6 +270,17 @@
      on to an impact when the first could not. Cycles still terminate, because
      the thing that stops them is the path's own history.
 
+     Performing a unit establishes **everything it yields**, not only the one
+     capability the route continues through. Carrying only the latter understated
+     what the route had in hand, so a later step was reported as still owing a
+     condition an earlier step had already established -- cautious in a way that
+     is simply wrong, and the kind of wrong a reader cannot detect.
+
+     A route is identified by its whole shape -- the capability each step
+     arrives on, the unit, and the capability it leaves on -- rather than by its
+     units alone. Two routes through the same tests by different capabilities are
+     different routes, and collapsing them on the unit list would drop one.
+
      The exploration budget is what keeps that affordable. Without a global
      visited set the frontier can branch widely, so the walk stops after a fixed
      number of expansions and reports the routes it has -- an honest "here are
@@ -304,7 +315,9 @@
             { from: here.fact, unit: uid, to: next, also: also }
           ]);
           if (familyOf(next) === "impact") {
-            var signature = steps.map(function (s) { return s.unit; }).join(">");
+            var signature = steps.map(function (s) {
+              return s.from + ">" + s.unit + ">" + s.to;
+            }).join("|");
             if (own(signatures, signature)) continue;
             signatures[signature] = true;
             found.push({ start: startFact, steps: steps, impact: next });
@@ -315,7 +328,9 @@
           Object.keys(here.units).forEach(function (k) { units[k] = true; });
           Object.keys(here.facts).forEach(function (k) { facts[k] = true; });
           units[uid] = true;
-          facts[next] = true;
+          // Everything the unit yields, not only the capability continued
+          // through: performing it established all of them.
+          produced.forEach(function (f) { facts[f] = true; });
           queue.push({ fact: next, steps: steps, units: units, facts: facts });
         }
       }
@@ -402,7 +417,10 @@
       var tool = D.toolbox[id];
       return has(id) || has(tool.name) || has(tool.purpose);
     }).sort().map(function (id) {
-      return { title: D.toolbox[id].name, sub: id, note: D.toolbox[id].purpose, href: "#/tools" };
+      return {
+        title: D.toolbox[id].name, sub: id, note: D.toolbox[id].purpose,
+        href: "#/tools/" + encodeURIComponent(id)
+      };
     }));
 
     return groups;
@@ -1259,18 +1277,26 @@
         return rowLink(href("chains/family", n.name), n.label, n.note,
           n.facts + " capabilities");
       }).join("") + "</div>" +
-      "<h3>Where chains end</h3>" +
+      "<h3>Where chains are meant to end</h3>" +
       '<p class="muted">Nothing in the catalogue requires an impact: it is where a ' +
-      "chain stops, and the validator enforces that. Open one to see the routes " +
-      "charted to it.</p>" +
+      "chain stops on purpose, and the validator enforces that. Open one to see the " +
+      "routes charted to it.</p>" +
       '<div class="rows">' + (D.impacts || []).map(function (f) {
         return rowLink(href("capability", f), factLabel(f), f,
           (get(D.producers, f) || []).length + " tests establish it");
       }).join("") + "</div>" +
       "<h3>Where the chart stops short</h3>" +
-      '<p class="muted">' + (D.unconsumed || []).length + " of " +
-      Object.keys(D.facts).length + " capabilities have no test declaring a use for " +
-      "them, so a chain reaching one ends there rather than continuing to an impact. " +
+      /* Counted with the impacts excluded. Every impact is unconsumed by
+         construction, so folding them in would inflate this number by the set
+         listed directly above and would describe reaching an outcome as failing
+         to reach one. */
+      '<p class="muted">A different thing from the list above. ' +
+      (D.deadEnds || []).length + " of " + Object.keys(D.facts).length +
+      " capabilities are established by a test and used by none — not impacts, " +
+      "which are excluded here, but places a chain runs out rather than arrives. " +
+      (D.reach ? D.reach.short + " of " + Object.keys(D.units).length +
+        " tests end at one, against " + D.reach.impact + " that establish an impact and " +
+        D.reach.continuation + " with a continuation. " : "") +
       "That is the current reach of the chart, not a claim that nothing follows — " +
       'see <a href="#/status">catalogue status</a>.</p>';
   };
@@ -1353,14 +1379,34 @@
     var pathHtml = routes.length
       ? "<h3>Routes to an impact</h3>" +
         '<p class="muted">Shortest first. Each step is a test that requires the capability ' +
-        "on its left and establishes the one on its right. Whether any of it applies to a " +
+        "above it and establishes the one below. A step may declare conditions the route " +
+        "does not supply, and those are named: a route drawn as an unbroken line would " +
+        "read as executable when one of its tests is not. Whether any of it applies to a " +
         "given target is not something this file can know.</p>" +
-        routes.map(function (route) {
-          return '<div class="card"><p>' + esc(factLabel(route.start)) + " " +
+        routes.map(function (route, n) {
+          var owed = route.steps.reduce(function (t, step) {
+            return t + step.also.all_of.length + step.also.any_of.length;
+          }, 0);
+          return '<div class="card"><span class="k">Route ' + (n + 1) + " · " +
+            route.steps.length + " step" + (route.steps.length === 1 ? "" : "s") +
+            (owed
+              ? " · " + owed + " unmet condition" + (owed === 1 ? "" : "s") + " along the way"
+              : " · nothing further declared") +
+            "</span>" +
+            '<div class="route"><div class="rstep start">' + capTag(route.start, "req") + "</div>" +
             route.steps.map(function (step) {
-              return '→ <a href="' + href("unit", step.unit) + '">' + esc(unitTitle(step.unit)) +
-                "</a> → " + esc(factLabel(step.to));
-            }).join(" ") + "</p></div>";
+              var still = step.also.all_of.map(function (f) { return capTag(f, "req"); }).join("") +
+                (step.also.any_of.length
+                  ? '<span class="muted">any one of </span>' +
+                    step.also.any_of.map(function (f) { return capTag(f, "req"); }).join("")
+                  : "");
+              return '<div class="rstep unit"><a href="' + href("unit", step.unit) + '">' +
+                esc(unitTitle(step.unit)) + "</a>" +
+                (still
+                  ? '<div class="also"><b>Still required here:</b> ' + still + "</div>"
+                  : '<div class="also muted">No additional declared hard prerequisite.</div>') +
+                '</div><div class="rstep">' + capTag(step.to, "cap") + "</div>";
+            }).join("") + "</div></div>";
         }).join("")
       : (familyOf(fid) === "impact"
           ? '<p class="muted">This is an impact. A chain ends here.</p>'
@@ -1386,6 +1432,68 @@
       listing("Motivated by", motivated,
         "Already possible without it; this makes them worth doing sooner. Never a gate.") +
       pathHtml;
+  };
+
+  /* Payload files and tools have their own pages because search already
+     offered them and the router had nowhere to send either -- a result that
+     silently landed on Standards, for two of the content types the search page
+     advertises. Linking to a unit instead would be wrong as often as not: a
+     payload file is shared by several units, and a tool by nine. */
+  var usedBy = function (test) {
+    return Object.keys(D.units || {}).sort().filter(function (uid) {
+      return test(D.units[uid]);
+    });
+  };
+
+  var viewPayloads = function (pid) {
+    var pack = get(D.payloads, pid);
+    if (!pack) return notFound("payload file", pid);
+    var rel = "payloads/" + pid + ".yaml";
+    var users = usedBy(function (u) { return u.payloads === rel; });
+    return crumbs([{ text: "Search", href: "#/search" }, { text: pack.title }]) +
+      "<h2>" + esc(pack.title) + "</h2>" +
+      '<div class="sub">' + idChip(rel) + " · reviewed " + esc(pack.reviewed) + "</div>" +
+      (pack.safety ? '<div class="notice">' + esc(pack.safety) + "</div>" : "") +
+      '<div class="scroller"><table><tr><th>Name</th><th>Payload</th><th>Detect</th></tr>' +
+      (pack.entries || []).map(function (e) {
+        return "<tr><td>" + esc(e.name) + "</td><td><code>" + esc(e.payload) + "</code></td><td>" +
+          esc(e.detect || "") +
+          (e.note ? '<br><span class="muted">' + esc(e.note) + "</span>" : "") + "</td></tr>";
+      }).join("") + "</table></div>" +
+      "<h3>Tests that use this file · " + users.length + "</h3>" +
+      (users.length
+        ? '<div class="rows">' + users.map(function (uid) {
+            return rowLink(href("unit", uid), D.units[uid].title, uid,
+              D.units[uid].status === "outline" ? "outline" : "written in full");
+          }).join("") + "</div>"
+        : '<p class="empty">No test names this file.</p>');
+  };
+
+  var viewTool = function (id) {
+    var tool = get(D.toolbox, id);
+    if (!tool) return notFound("tool", id);
+    var users = usedBy(function (u) { return (u.tools || []).indexOf(id) >= 0; });
+    return crumbs([{ text: "Search", href: "#/search" }, { text: tool.name }]) +
+      "<h2>" + esc(tool.name) + "</h2>" +
+      '<div class="sub">' + idChip(id) + "</div>" +
+      "<p>" + esc(tool.purpose) + "</p>" +
+      (tool.invocations || []).map(function (v) {
+        return '<div class="card"><span class="k">' + esc(v.purpose) + "</span><pre><code>" +
+          esc(v.cmd) + "</code></pre>" +
+          (v.flags
+            ? '<div class="scroller"><table><tr><th>Flag</th><th>Why</th></tr>' +
+              Object.keys(v.flags).map(function (f) {
+                return "<tr><td><code>" + esc(f) + "</code></td><td>" + esc(v.flags[f]) + "</td></tr>";
+              }).join("") + "</table></div>"
+            : "") + "</div>";
+      }).join("") +
+      "<h3>Tests that name this tool · " + users.length + "</h3>" +
+      (users.length
+        ? '<div class="rows">' + users.map(function (uid) {
+            return rowLink(href("unit", uid), D.units[uid].title, uid,
+              D.units[uid].status === "outline" ? "outline" : "written in full");
+          }).join("") + "</div>"
+        : '<p class="empty">No test names this tool.</p>');
   };
 
   /* ------------------------------ the rest ------------------------------ */
@@ -1421,6 +1529,8 @@
 
   var viewStatus = function () {
     var c = D.counts;
+    var reach = D.reach || {continuation: 0, impact: 0, short: 0, uncharted: 0};
+    var total = reach.continuation + reach.impact + reach.short + reach.uncharted;
     var domains = {};
     Object.keys(D.topics).forEach(function (tid) {
       var d = D.topics[tid].domain;
@@ -1441,7 +1551,29 @@
       "</table>" +
       '<p class="muted">A test that exists as an outline already appears here, already ' +
       "counts, and already stops a test being skipped silently. Depth is written on " +
-      "demand and never speculatively.</p>";
+      "demand and never speculatively.</p>" +
+      "<h3>How far the chain runs</h3>" +
+      '<p class="lede">Every test is in exactly one of these four, and the four sum to ' +
+      "the catalogue. Reported rather than left to be inferred one page at a time.</p>" +
+      "<table>" +
+      "<tr><th>Has a potential continuation</th><td>" + reach.continuation + "</td></tr>" +
+      "<tr><th>Establishes an impact</th><td>" + reach.impact +
+      ' <span class="muted">— where a chain is meant to end</span></td></tr>' +
+      "<tr><th>Stops short</th><td>" + reach.short +
+      ' <span class="muted">— establishes something no test uses</span></td></tr>' +
+      "<tr><th>Declares no capability</th><td>" + reach.uncharted +
+      ' <span class="muted">— nothing is derived from it either way</span></td></tr>' +
+      "<tr><th>Total</th><td>" + total + "</td></tr>" +
+      "</table>" +
+      "<table>" +
+      "<tr><th>Capabilities that are impacts</th><td>" + (D.impacts || []).length + "</td></tr>" +
+      "<tr><th>Capabilities no test uses</th><td>" + (D.deadEnds || []).length +
+      ' <span class="muted">— impacts excluded</span></td></tr>' +
+      "</table>" +
+      '<p class="muted">Phase 5 charted reconnaissance through to primitives and stopped ' +
+      "there; primitive to impact is largely unwritten. That is why most chains end at " +
+      "the test that established a capability, and it is a gap in the chart rather than " +
+      "a claim that nothing follows.</p>";
   };
 
   var viewAbout = function () {
@@ -1513,6 +1645,8 @@
       return { nav: "chains", html: viewChains() };
     }
     if (head === "capability") return { nav: "chains", html: viewCapability(arg) };
+    if (head === "payloads") return { nav: "search", html: viewPayloads(arg) };
+    if (head === "tools") return { nav: "search", html: viewTool(arg) };
     if (head === "search") return { nav: "search", html: viewSearch(arg) };
     if (head === "about") return { nav: "about", html: viewAbout() };
     if (head === "status") return { nav: "about", html: viewStatus() };
