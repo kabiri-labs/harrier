@@ -94,6 +94,10 @@ Harrier adds two things at a granularity the standard does not reach:
 - Build-time reading-order ranking (`order_hint`), which existed to sort a board
   that no longer exists.
 - Every phrase asserting reachability, availability or completion for a target.
+- `harrier chain --held`, `Chain.available` and `Chain.reachable_with`, and the
+  `unlocks` wording in the command line. The pivot is the product's, not the
+  artefact's: a tool one step away that still computed what was *possible now*
+  would carry the rejected model in a place nothing on the page could correct.
 
 ## 6. Non-goals
 

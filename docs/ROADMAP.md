@@ -109,6 +109,14 @@ The pass ended with a gate rather than a count: every fact that is not `given`
 has at least one unit producing it, and the validator enforces it from here on.
 177 facts, 366 units, and no condition in the graph without a route to it.
 
+The gate is one-directional, and the asymmetry is worth stating plainly. Every
+capability has a producer; most have no *consumer*. 81 of 177 are declared as a
+use by nothing at all, so the chain runs from reconnaissance to a primitive and
+then stops. That is the shape of what phase 5 set out to do -- place every unit
+in the graph -- and not the shape of a complete attack model. Charting the far
+half is listed under **Considered, not scheduled** rather than left to be
+noticed one dead end at a time.
+
 ### Phase 3 batches
 
 | Batch | Domains | Topics | Units | Status |
@@ -174,6 +182,7 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
+| **Chart the far half of the chain** | The largest known gap, and the one that most limits the product. 81 of 177 capabilities have no test declaring a use for them — 26 of 32 `primitive.*` and 39 of 59 `control.*` — so 189 of 366 tests lead nowhere. Phase 5 ran recon → surface → primitive and stopped; primitive → impact is barely written. Until it is, most local graphs honestly end at the test that established a capability. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Harrier improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |

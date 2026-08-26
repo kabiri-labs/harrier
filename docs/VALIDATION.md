@@ -132,10 +132,18 @@ on a machine that has installed neither:
   real catalogue rather than matched as substrings of a rendered page — which a
   script with an unterminated string literal satisfies exactly as well as a
   working one.
-- **a browser**, if one is installed, opens the built file over `file://` and
-  reports the DOM its script produced. It is the only way to check the routing,
-  the Content-Security-Policy and the rendered wording together: under a
-  hash-based policy, a script whose hash no longer matches simply never runs.
+- **a browser**, driven through Playwright, opens the built file over `file://`
+  and *uses* it: navigates, types in the search box, clicks a node in the graph,
+  presses Enter on one, expands a bounded graph. A static DOM dump cannot reach
+  any of that, and a single-page application is where it breaks. The same run
+  records every request the page attempts and every console error, so the two
+  guarantees -- no network, no blocked resource -- are checked as behaviour
+  rather than as text. Under a hash-based policy a script whose hash no longer
+  matches simply never runs, and nothing would render at all.
+
+Both are installed in CI. Optional locally and absent in CI is a suite that
+reports green while never having run a third of itself, so the workflow installs
+them and then fails the job if either is missing.
 
 Three properties are asserted about the repository rather than the code:
 
