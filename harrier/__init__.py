@@ -31,7 +31,12 @@ SAFE_LOADER = _SafeLoader
 #: the only thing anybody consumes. A change that alters what the artefact says
 #: bumps this; a change to the tests, the documents or the validator's internals
 #: does not. Not 1.0: that needs two topics written to full depth, and one is.
-__version__ = "0.3.0"
+#:
+#: 0.4.0 is a breaking change to the artefact rather than a feature on top of
+#: 0.3.0 -- the engagement board and every run file it wrote are gone. Minor
+#: rather than major because the project is pre-1.0 and this is exactly the
+#: period in which such a change is meant to be taken. See docs/PIVOT.md.
+__version__ = "0.4.0"
 
 __all__ = [
     "SAFE_LOADER",

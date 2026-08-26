@@ -139,105 +139,144 @@ therefore two layers, in this order:
 If the recall block does not fit on a laptop screen without scrolling, the unit
 is too big and rule §2 was applied too loosely.
 
-## 8. Navigation — the run, not the catalogue
+## 8. Navigation — the standard, then the tests inside it
 
-A tester does not arrive wanting to browse. They arrive with something in front
-of them and a decision to make: what to test first, and what comes after it.
-Everything here follows from treating that as the product's job rather than the
-reader's.
+A tester arrives with a standard they are working through and a line item that
+is too coarse to perform. Everything here follows from treating *what is
+actually inside this test case, and where does a success lead* as the product's
+job.
 
-### The run
+The old model is recorded in [`PIVOT.md`](PIVOT.md), along with why it was
+rejected. In short: it asked the tester to describe their target, then made
+claims about that target from what they had ticked. Harrier has never seen the
+target, and a product that talks as though it has will eventually be believed.
 
-The one piece of state that is about a target rather than about the catalogue:
-what is being tested, what is in front of the tester, what they hold, and what
-they have settled. It lives in the browser and in a file the tester exports on
-purpose. It is never embedded in the artefact — a run carries a client's target
-name and what was found on it, and the artefact is published.
+### Standard-first
 
-### Two filters, applied together
+```
+Standard → Testing group → WSTG test case → Test Units → Test Unit detail
+```
 
-**The anchor** is what is in front of the tester, and it moves with the
-granularity of the question. A whole application at the start of an engagement,
-one section of it, or one technical thing — a cookie, a redirect parameter, a
-web form. Surface tags are how it is expressed, which is why they are a
-first-class controlled vocabulary. A tag closes over what it `emits`, so naming
-a login form also names the session cookie, and naming a search box also names
-the database-backed parameter behind it.
+The artefact opens on **Standards**. WSTG is the initial execution standard;
+the internal shape allows another to be added, and none is. Groups appear in the
+standard's own order, pinned with the identifiers in `standards/wstg.yaml`,
+because a navigation order invented from an identifier prefix would silently be
+this project's opinion presented as the standard's. That order is the standard's
+default coverage structure and is described as that — not as a mandatory
+workflow.
 
-**Reachability** is what the held facts allow, derived from the facts units
-declare rather than from any stored ordering. See [`CHAINING.md`](CHAINING.md).
+A **test case page** is the bridge. It carries the pinned identifier and
+official title, the Harrier topic or topics that claim it, and the Test Units
+each of those decomposes it into, in the order the topic declares. One
+identifier may resolve to several topics in several domains — `WSTG-APIT-99` is
+reconnaissance, authorization, business logic and injection at once — and the
+page shows all of them rather than forcing a one-to-one relationship. An
+identifier the domain map deliberately does not resolve says so instead of
+rendering as an empty page.
 
-Neither is useful alone. The anchor without the chain is a flat list of
-everything that could ever apply; the chain without the anchor answers for the
-whole target when the tester asked about one form.
+Content with no WSTG identifier appears under **Harrier Extensions**. It is the
+home for beyond-WSTG material, and it exists before that material does so the
+material never has to be filed somewhere it does not belong.
 
-### When nothing is ready
+### The Test Unit detail
 
-Naming a surface is not the same as holding what testing it needs, so a board
-can open with nothing in reach. It does not answer "nothing", and it does not
-ask the tester to assert the missing fact either: `recon.entrypoints.mapped` is
-not an observation, it is what a unit establishes, and handing it over because
-somebody named a surface would record reconnaissance nobody performed. The
-vocabulary is explicit that everything outside `given` and `granted` has to be
-earned.
+The most important page in the product, and ordered by what a person needs in
+the order they need it: title, what it is for, why it is a separate test at all,
+what has to be in place, what settles it, how to perform it, what will fool you,
+what counts as finished, where to stop, then payloads, tools, depth, mitigation,
+mappings, and the local chain. The objective, the oracle, the first false
+positive and the safety boundary are never behind an identifier or a taxonomy
+label.
 
-So the answer is the unit that earns it, offered with its result controls in
-place. That unit is usually outside the surface being looked at — which is
-exactly why the tester could not find it. Where the unit is itself blocked, what
-it is waiting on is named, and the chain resolves to something that can be done
-now. A fact no unit yields is one the engagement supplies, and there the only
-honest control is the tester saying so.
+"Test Unit" is the term in this document and in the schemas. The page says
+*test* or *atomic test*, which reads better and cannot be confused with a unit
+test in the software sense.
 
-### Order
+An outline unit stays useful: its objective and its position in the chain are
+real, and the page says the procedure has not been written rather than filling
+the gap with something plausible.
 
-Within what is both in scope and reachable, three things decide what comes
-first: whether something held makes a unit more likely to pay (`motivated_by`),
-whether the unit is written in full or is still an outline, and the performance
-order its topic declares. The first is decided in the page because only the page
-knows what is held; the other two are decided at build time and travel as an
-integer, so the opinion is one a test can pin down.
+### The local chain
+
+Every Test Unit carries a graph derived from the four chain fields — never a
+stored edge list. Five ranks:
+
+```
+tests that establish a prerequisite → prerequisites → this test
+    → what success establishes → tests that capability may make relevant
+```
+
+Capabilities are the intermediate nodes, so the reason for every edge is on the
+screen. Hard prerequisites and `motivated_by` are drawn differently, because a
+hint that looks like a gate is the failure the two fields exist to prevent. A
+unit may have several routes in and several out, and the drawing does not
+flatten that into a line. Three per side initially, with *Show more* when there
+is more; the whole catalogue is never drawn around one unit.
+
+Each continuation states **what succeeding here does not supply**. Being reached
+through one capability is not the same as being possible: the page names the
+other conditions and does not claim they hold. The continuations are
+deliberately *not* ordered by how few of those remain — that ordering sorts
+every conditional continuation below the three a reader sees, and the conditions
+are the honest half.
+
+Where a capability is an impact, or where nothing in the catalogue consumes it,
+the page says the result is terminal or reportable. An empty graph with no
+explanation reads as missing data; an impact is not missing data.
+
+Beneath it, **if this test is unsuccessful** — read from `closes`, from the
+other producers of the same capability, and from the sibling tests in the topic.
+A clean UNION result does not mean there is no SQL injection while boolean and
+timing routes remain untried, and the page is the thing that has to say so. No
+result is offered, recorded or stored: this is interpretation, not bookkeeping.
+
+### The general graph
+
+`Attack Chains` is for understanding the model, not for working. Three hundred
+and sixty-six units and a hundred and seventy-seven capabilities drawn at once
+is a picture of nothing, so the entry point is the seven fact families and how
+often a test spans one to another. From there: a family, a capability, the tests
+that establish and consume it, and the shortest routes from it to an impact.
+Progressive disclosure throughout — useful omission beats completeness in one
+image on a laptop screen.
+
+### Search
+
+Everything the file carries: test cases, tests, topics, capabilities, payloads,
+cards, mitigations and tools. Every result says what kind of thing it is and
+where it goes. Search is retrieval; the tests inside a test case are reached by
+navigating to the test case, never by having to search for them.
 
 ### Naming what is shown
 
 Titles lead and identifiers follow. An identifier is how two people refer to the
 same test and how a finding is written down — it is not what a tester reads. The
-same holds for facts: a unit needs *"the session identifier is known"*, not
-`recon.session.identified`.
+same holds for capabilities: a unit needs *"the session identifier is known"*,
+not `recon.session.identified`. The word *fact* is internal; the page says
+capability or condition.
 
-### Results
+### Wording is part of the model
 
-Four states, because three of them are results and the fourth is "not yet".
-Without the clean state there is no difference between a test nobody ran and a
-test that came back empty, and that difference is the only thing that makes
-coverage a claim rather than a hope.
+The chain is generic. It says a test requires conditions, that success
+establishes capabilities, and that those capabilities may make other tests
+relevant. It never says *you hold this*, *unlocked*, *available now*, *ruled out
+for this target*, or *completed*. The vocabulary is prerequisite, previous
+possibility, resulting capability, potential continuation, becomes relevant
+when, additional condition, alternative route, may lead to.
 
-What a result does to the graph is asymmetric, and the asymmetry is the point.
-A positive result **establishes** what the unit yields, and those facts open
-what needs them. A clean result **rules out** what the unit closes, into a set
-of its own — never into the held facts. `closes` is a subset of `yields`, so
-merging the two would record a finding as its own opposite: a probe that found
-no injection would establish that the parameter is injectable and offer the
-extraction that needs it.
+This is not house style. Target-state wording is how the rejected model comes
+back — as a phrase first, then as the feature that phrase implies — so the suite
+asserts on its absence in the rendered page.
 
-A ruled-out fact prunes rather than opens. Units that need it are not pending —
-they were answered — and they are shown that way, with the fact that answered
-them.
-
-Undo withdraws a ruling-out but not an establishing, because a unit may only
-close a fact it is the sole producer of, while a yielded fact may have been
-established by another route the tester still holds.
-
-### The other views
-
-**Surfaces** is a reference listing of every surface the catalogue knows, and a
-way into the board from one. **Search** is three characters to a payload.
-**Coverage** is WSTG, CWE and ASVS — real, but its audience is report-writing
-and scoping, not testing.
+### One file, and it reaches for nothing
 
 The published artefact is a **single self-contained HTML file**: no external
-stylesheet, script or font. It is opened from a laptop on an engagement network
-and must not emit a request a monitored target could observe. Storing a run must
-not become a way to send one.
+stylesheet, script, font or image, and no network call of any kind. It is opened
+from disk on an engagement network, and a request to a third party would tell
+that party which target is being tested and when. A `Content-Security-Policy`
+names the three inline blocks by content hash and denies everything else,
+`connect-src` included, so the guarantee is enforced by the browser rather than
+only by review.
 
 ## 9. Repository layout
 
@@ -249,10 +288,12 @@ docs/
   CHAINING.md       how one test leads to the next, and why no unit names another
   VALIDATION.md     what the validator checks, and why each rule is mechanical
   ROADMAP.md        build state; updated in the same change as the work
+  PIVOT.md          why the engagement board was removed, and what replaced it
 
 harrier/            the validator and the builder -- the only executable code
   chain.py          the derived attack graph; nothing about it is stored
-  build.py          the published artefact: one self-contained HTML file
+  build.py          catalogue, derived indexes, and safe embedding into one file
+  artefact/         the page itself: template.html, app.css, app.js
   schema/           nine JSON Schemas, selected by a document's location
 tests/              offline suite; mutation tests copy the repository itself
 

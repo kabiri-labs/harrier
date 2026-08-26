@@ -1,61 +1,104 @@
 # Harrier
 
-> A complete, non-overlapping decomposition of web application security testing
-> into named, addressable test units — each with the one thing that proves it,
-> and the notes a practitioner needs to perform it without re-reading a textbook.
+> An interactive execution companion for web security testing standards. It
+> decomposes large standard test cases into atomic, independently understandable
+> Test Units, and shows what attack-chain paths may become relevant when each
+> Test Unit succeeds.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
+[![version](https://img.shields.io/badge/version-0.4.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
-[![phase](https://img.shields.io/badge/phase-2%20of%207-lightgrey)](docs/ROADMAP.md)
+
+**WSTG tells you what to cover. Harrier shows you the real tests inside it and
+where each successful test can lead.**
 
 ## What this is
 
 Published testing standards are exhaustive at the wrong granularity. One WSTG
-identifier is a chapter, not a task: `WSTG-INPV-01` covers six materially
-different tests with different payloads, different oracles and different
-outcomes. So a practitioner reads it once, then works from personal notes —
-which is where coverage quietly goes.
+identifier is a chapter, not a task: `WSTG-INPV-05` is a single line on a
+checklist and ten materially different tests in practice, with different
+payloads, different oracles and different outcomes. So a practitioner reads it
+once, then works from personal notes — which is where coverage quietly goes.
 
-Harrier is the missing layer between the standard and the work: the complete set
-of distinct tests, at the granularity a person actually performs them, each with
-a stable name, an explicit boundary against its neighbours, and a one-sentence
-statement of what settles it.
+Harrier is the layer between the standard and the work. It adds two things the
+standard does not reach:
+
+1. **Atomic decomposition.** A WSTG test case is made explicit as the set of
+   independently performable Test Units inside it, each with a stable
+   identifier, a falsifiable objective, an explicit boundary against its
+   neighbours, and the one thing that settles it.
+2. **Attack-chain continuity.** A successful Test Unit establishes a capability
+   that can make other tests — or an impact — relevant. Harrier derives those
+   possible continuations so a test is not read as an isolated checklist item.
+
+The initial supported execution standard is OWASP WSTG, which provides the
+primary coverage and navigation structure:
+
+```
+Standard → Testing group → WSTG test case → Harrier Test Units → Test Unit detail
+```
+
+## The journey
+
+```
+Choose WSTG
+→ choose a group          Input Validation Testing
+→ choose a test case      WSTG-INPV-05, Testing for SQL Injection
+→ inspect its atomic tests    ten of them, probe through evade
+→ open one Test Unit      HRR-INJ-01-UNION, UNION-based extraction
+→ see how to perform it   oracle, sequence, payloads, false positives, safety
+→ see where success may lead  the local chain, and what each next test still needs
+```
 
 ## What this is not
 
+- **Not a scanner or an exploit framework.** Nothing here scans, exploits, or
+  talks to a target.
+- **Not an engagement tracker.** It holds no target, no engagement, no results
+  and no findings, and it stores nothing in your browser.
+- **Not an automatic decision-maker.** It is context-free by design: it has
+  never seen your target and never claims to know what is true of it. Chain
+  statements are about the relationship between two tests — *potential
+  continuation*, never *unlocked*.
 - **Not a tutorial.** The reader already knows what cross-site scripting is.
   PortSwigger's Academy teaches it better than this ever will, and has labs.
-- **Not an automation tool.** Nothing here scans, exploits, or talks to a target.
-- **Not another vulnerability encyclopedia.** The content is the second layer.
-  The taxonomy is the product.
+
+The full list of deliberate exclusions, and why, is in
+[`docs/PIVOT.md`](docs/PIVOT.md).
 
 ## Who it is for
 
 An experienced tester who is not learning the technique but recovering a detail
-they knew six months ago. Cards are written for **recall**, not for reading:
-oracle, sequence, payload pointer, the first false positive, and what counts as
-finished — on one screen, with the explanation collapsed underneath.
+they knew six months ago, and who wants to see what a standard line item
+actually contains. Content is written for **recall**, not for reading: oracle,
+sequence, payload pointer, the first false positive, and what counts as
+finished.
 
 ## Scope
 
-Web application testing, not the WSTG table of contents. WSTG is used as a
-coverage skeleton — proof that nothing standard is missing — but a large part of
-current practice has no WSTG identifier at all: JWT, OAuth and OIDC, GraphQL,
-WebSocket, HTTP request smuggling, cache poisoning and deception, prototype
-pollution, race conditions, dependency confusion, cloud metadata, and
-LLM-integrated surfaces. Those are in scope and carry Harrier identifiers of
-their own.
+Web application testing, not the WSTG table of contents. WSTG is the execution
+and navigation standard, and it is also the coverage skeleton — proof that
+nothing standard is missing. A large part of current practice has no WSTG
+identifier at all: JWT, OAuth and OIDC, GraphQL, WebSocket, HTTP request
+smuggling, cache poisoning and deception, prototype pollution, race conditions,
+dependency confusion, cloud metadata, and LLM-integrated surfaces. Those are in
+scope, carry Harrier identifiers of their own, and appear under **Harrier
+Extensions** rather than being forced into a group they do not belong to.
+
+ASVS is a control and remediation mapping. CWE is a weakness classification.
+Neither is an execution methodology and neither is presented as one.
 
 ## Structure
 
 | Directory | Holds |
 |---|---|
-| `docs/` | The model, the naming methodology, the authoring rules, the roadmap |
-| `harrier/` | The validator and its schemas — the only executable code here |
+| `docs/` | The model, the naming methodology, the authoring rules, the roadmap, the pivot record |
+| `harrier/` | The validator and the builder — the only executable code here |
+| `harrier/artefact/` | The published page: template, stylesheet, script |
 | `standards/` | Pinned WSTG, ASVS and CWE references — generated, never hand-edited |
-| `vocab/` | Controlled vocabularies: domains, axes, surface tags, dimensions |
+| `vocab/` | Controlled vocabularies: domains, axes, surface tags, dimensions, facts |
 | `knowledge/` | The taxonomy: topics and units |
 | `cards/` | Recall-first prose, organised by technique |
 | `payloads/` | The only place a payload is written |
@@ -72,50 +115,55 @@ Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
 ```bash
 pip install PyYAML jsonschema
 
-python -m unittest discover -s tests -t .   # 175 tests, offline
+python -m unittest discover -s tests -t .   # offline
 python -m harrier validate                  # the repository
 python -m harrier coverage                  # the counts the roadmap publishes
 python -m harrier chain HRR-INJ-01-UNION    # what a unit needs, gives and opens
 python -m harrier build -o harrier.html     # the artefact, then open it
 ```
 
-Both of the first two must pass; CI runs exactly them.
+The first two must pass; CI runs exactly them. Two further checks run only when
+the tool is present and skip cleanly otherwise: `node` executes the artefact's
+own graph, layout, path and search functions against the real catalogue, and a
+Chromium-family browser opens the built file over `file://` to check routing,
+the Content-Security-Policy and the rendered wording together.
 [`docs/VALIDATION.md`](docs/VALIDATION.md) explains what is checked and why each
 rule is mechanical rather than a review comment.
 
 ## Status
 
-**0.3.0.** The taxonomy is complete, and the artefact is something a tester
-works from rather than looks things up in.
+**0.4.0.** The taxonomy is complete and the artefact is a companion to the
+standard rather than a workspace about a target.
 
-- **99 topics across 13 domains**, every resolvable WSTG identifier claimed by one, with the boundaries between neighbouring topics written down.
-- **366 units**, each with an identifier and a falsifiable objective; 10 of them written to full depth.
-- **177 facts** and the chain they derive: every unit declares what makes it possible and what it establishes, and every condition in the graph has a route to it.
-- **One self-contained HTML file** carrying all of it, including every card, payload and mitigation. It fetches nothing, which is the point: it is opened on an engagement network.
-- **A board that opens on what to do next.** The tester says what is in front of
-  them — a whole application, one section, or one cookie — and gets the tests
-  that apply and are possible now, in the order to work in. Where nothing is
-  ready, it offers the test that would open the most, which is usually one they
-  were not looking at. Results are recorded as found, clean or unclear, and the
-  run survives a reload.
+- **99 topics across 13 domains**, every resolvable WSTG identifier claimed by
+  at least one, with the boundaries between neighbouring topics written down.
+- **366 Test Units**, each with an identifier and a falsifiable objective; 10
+  written to full depth.
+- **177 capabilities** and the chain they derive: every unit declares what makes
+  it possible and what it establishes, every condition in the graph has a route
+  to it, and no unit names another unit anywhere.
+- **One self-contained HTML file** carrying all of it, including every card,
+  payload and mitigation. It fetches nothing and stores nothing, which is the
+  point: it is opened from disk on an engagement network.
 
-What is not done: depth. Ten units of 366 are written in full, and the rest
-carry an objective and nothing more. That is deliberate -- see the standing rule
-in [`docs/ROADMAP.md`](docs/ROADMAP.md) -- but it is what the next release is
-for.
+**0.4.0 is a breaking change to the artefact.** The stateful board — target
+input, held facts, recorded results, run export and import — has been removed,
+and run files written by 0.3.0 cannot be read. That is deliberate, it is taken
+during the pre-1.0 period so it can be taken at all, and the reasoning is
+recorded in [`docs/PIVOT.md`](docs/PIVOT.md).
 
-The level below — the units a person actually performs — is being written now, in
-batches of two or three domains. **223 units exist across six domains**; the remaining eleven domains are outstanding.
-[`docs/ROADMAP.md`](docs/ROADMAP.md) carries the plan and the definition of 1.0.
+What is not done: depth. Ten units of 366 are written in full and the rest carry
+an objective and nothing more. That is deliberate — see the standing rule in
+[`docs/ROADMAP.md`](docs/ROADMAP.md) — and it is what the next release is for.
 
 ## Licence and attribution
 
 Apache-2.0. See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
 
 Harrier is not affiliated with, endorsed by, or sponsored by OWASP. WSTG and
-ASVS identifiers are referenced for cross-mapping only; no prose from either is
-reproduced here. Both are share-alike licensed, and everything in this
-repository is originally written.
+ASVS identifiers, titles and section headings are referenced for cross-mapping
+and navigation only; no prose from either is reproduced here. Both are
+share-alike licensed, and everything in this repository is originally written.
 
 CWE is used under the [CWE Terms of Use](https://cwe.mitre.org/about/termsofuse.html).
 Copyright (c) 2006-2026, The MITRE Corporation. CWE is a trademark of The MITRE

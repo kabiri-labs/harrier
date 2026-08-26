@@ -1,10 +1,18 @@
 # Chaining
 
-How one test leads to the next, and why the links are not written down.
+How one test may lead to the next, and why the links are not written down.
 
-A tester works three questions in a loop: *what do I know*, *what can I do with
-it*, *what does the result make possible*. A catalogue that answers only the
-middle one is a checklist. This is the layer that answers the other two.
+A catalogue that says only *what to perform* is a checklist. This is the layer
+that says what a test needs in order to be possible at all, and what a success
+makes relevant afterwards.
+
+**The graph is generic.** It is a statement about the relationships between
+tests, not about anybody's application. Harrier is context-free: it has never
+seen your target, holds nothing about it, and cannot know which of these
+relationships is live today. So the chain says *requires*, *establishes*,
+*may become relevant* — and never *you hold*, *unlocked*, or *available now*.
+That distinction is load bearing rather than cosmetic; [`PIVOT.md`](PIVOT.md)
+records what happened when the product blurred it.
 
 ---
 
@@ -25,7 +33,11 @@ closes:  []
 An edge from unit A to unit B exists exactly when A yields a fact B requires.
 Nothing else defines the graph, and no unit names another unit anywhere.
 
-**Why not name the next test directly.** With 365 units and an average of three
+The edge means: *if A succeeds, B may become relevant.* It does not mean B is
+now possible. B may need three other things as well, and one of them may be
+something no test can supply.
+
+**Why not name the next test directly.** With 366 units and an average of three
 onward routes each, an explicit edge list is over a thousand hand-maintained
 links. Every new unit has to be inserted into the `next` list of every unit that
 could precede it — which means the cost of adding a unit grows with the size of
@@ -136,5 +148,52 @@ harrier chain --fact primitive.db.read one fact: who establishes it, who needs i
 ```
 
 `unlocks` and `motivates` are reported separately, because they mean different
-things to somebody deciding what to do next: one was impossible before and is
-possible now; the other was always possible and has just become worth doing.
+things to somebody deciding what to do next: one had an unmet condition that a
+success here supplies; the other had no unmet condition and has simply become
+worth reaching for. Both are statements about declarations, not about a target;
+`--held` is the reader telling the command line what to assume, and the tool
+never assumes it for them. The published artefact asks nothing of the kind.
+
+## 7. Reading a continuation honestly
+
+This is what the artefact renders around every unit, and the rules it follows.
+
+**A prerequisite describes possibility, never likelihood.** It is a condition of
+the test being performable at all. Anything that merely makes it more promising
+is `motivated_by`.
+
+**Success here is rarely sufficient for what follows.** A continuation reached
+through one capability may declare several others. Those are shown as *still
+required*, and they are exactly the declared conditions that this unit's
+`yields` and the `given` roots do not cover:
+
+```
+Potential continuation: UNION-based extraction
+
+Established here:
+  - A parameter reaches a SQL statement
+
+Still required:
+  - An ordinary account, or an unauthenticated caller
+```
+
+`granted` facts are deliberately **not** treated as supplied. An engagement may
+give host access and usually does not, so a unit needing it is still waiting on
+something the reader has to recognise as theirs to have or not.
+
+**Continuations are not ranked by how little they still need.** That ordering
+looks helpful and is not: it sorts every conditional continuation below the
+first few a reader sees, which hides precisely the part that keeps the view
+honest.
+
+**A capability nothing consumes is an outcome, not a gap.** An `impact.*` fact
+is terminal by construction — the validator rejects anything requiring one — and
+is shown as where a chain ends. A non-impact capability with no consumer is a
+reportable result and is described as one rather than as an empty graph.
+
+**A negative result excludes less than it appears to.** `closes` is a subset of
+`yields` and may name only a fact this unit is the *sole* producer of, so
+anything yielded and not closed has another route to it. Those routes are named:
+a clean UNION result does not mean there is no SQL injection while boolean,
+timing, error and out-of-band routes are untried. Nothing is recorded — this is
+how to read a result, not a place to store one.

@@ -174,6 +174,36 @@ rejected. A rule with a socially acceptable escape hatch stops being a rule: the
 first unit that cannot state an oracle writes `"not applicable"`, the second
 copies it, and the field stops meaning anything.
 
+**A yielded capability must be specific enough to justify what consumes it.**
+`yields` is what the artefact draws the next arrow from, so a fact that is
+vaguer than the thing it enables produces an edge nobody can act on.
+`primitive.db.read` earns the extraction units; a hypothetical
+`surface.something.interesting` earns nothing and connects everything. If two
+units yield the same fact and mean materially different capabilities, the fact
+is too coarse and belongs split.
+
+**A prerequisite states possibility, never likelihood.** `requires` is what makes
+the test performable at all. Anything that merely makes it more promising is
+`motivated_by`, and the two must not be traded: over-declaring `requires` hides
+the unit from a reader who has not yet met the condition, which is worse than
+offering a test slightly early. One is invisible; the other is merely premature.
+
+**`motivated_by` must never become a hard gate.** It is drawn differently and
+read differently — *worth reaching for sooner*, not *now possible*. If a unit
+genuinely cannot be performed without the fact, it is a `requires`, and saying so
+is not a downgrade.
+
+**A downstream path must not overstate what success proves.** The artefact
+renders every continuation with the conditions this unit's `yields` do not
+supply, so an over-broad `yields` turns into an edge that claims more than the
+test showed. The same applies in reverse to `closes`: it is a subset of `yields`,
+it may name only a fact this unit is the sole producer of, and a negative result
+on one route says nothing about the others.
+
+**A terminal impact is never a prerequisite.** `impact.*` is where a chain ends;
+the validator rejects anything requiring one. A unit that seems to need an impact
+needs the primitive behind it instead.
+
 **The recall block must fit one screen.** If it does not, the unit is too large
 and the boundary rule was applied too loosely. Prose beyond that belongs in the
 card's depth block.
