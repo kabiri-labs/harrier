@@ -248,11 +248,13 @@ def catalogue(root: Path) -> Dict[str, Any]:
             + (u.get("requires") or {}).get("any_of", []),
         ),
         "motivates": _index_by_fact(units, lambda u: u.get("motivated_by")),
-        # Capabilities no unit declares a use for. Where the chart currently
-        # stops, counted rather than discovered one dead end at a time.
-        "unconsumed": chain.unconsumed(),
+        # Where the chart stops, counted rather than discovered one dead end at
+        # a time -- and kept apart from the impacts, which are where a chain is
+        # meant to end rather than where it ran out.
+        "deadEnds": chain.dead_ends(),
+        "reach": chain.reach(),
         "chain": chain.index(),
-        "impacts": sorted(f for f in facts if family_of(f) == "impact"),
+        "impacts": chain.impacts(),
         "given": sorted(given),
         "granted": sorted(f for f, body in facts.items() if body.get("granted")),
         "cards": cards,

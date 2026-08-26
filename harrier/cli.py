@@ -96,9 +96,9 @@ def _chain(root, args) -> int:
             print("  no test declares a use for this: a chain reaching it stops here")
         return EXIT_OK
 
-    index = chain.index()
-
     if args.unit:
+        index = chain.index()
+
         if args.unit not in chain.nodes:
             print(f"harrier: no such test: {args.unit}", file=sys.stderr)
             return EXIT_FAILED
@@ -154,12 +154,18 @@ def _chain(root, args) -> int:
             print("  this test declares no capability, so nothing is derived from it")
         return EXIT_OK
 
-    reached = sum(1 for e in index.values() if e["out"])
-    print(f"capabilities     {len(chain.facts)}")
-    print(f"tests charted    {chain.charted()} of {len(chain.nodes)}")
-    print(f"given            {len(chain.given())}")
-    print(f"with a continuation {reached}")
-    print(f"unconsumed       {len(chain.unconsumed())} capabilities no test declares a use for")
+    reach = chain.reach()
+    dead = chain.dead_ends()
+    print(f"capabilities        {len(chain.facts)}")
+    print(f"  impacts           {len(chain.impacts())}  terminal by construction")
+    print(f"  dead ends         {len(dead)}  established by a test, used by none")
+    print(f"tests               {len(chain.nodes)}")
+    print(f"  charted           {chain.charted()}")
+    print(f"  with a continuation {reach['continuation']}")
+    print(f"  establishing an impact {reach['impact']}")
+    print(f"  stopping short    {reach['short']}  the chart does not go on from here")
+    print(f"  declaring nothing {reach['uncharted']}")
+    print(f"given               {len(chain.given())}")
     return EXIT_OK
 
 

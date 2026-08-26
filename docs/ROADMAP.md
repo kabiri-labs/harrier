@@ -34,7 +34,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 3 | Unit outline pass | `done` | Every topic decomposed to units carrying an identifier, a title and a falsifiable objective. **This is where the artefact becomes genuinely useful.** Done in six batches of two or three domains, because a review of 350 files at once is not a review. |
 | 4 | Chain model spike | `done` | Five units authored across five domains and five shapes, plus the fact layer they needed. The point was to break the model while it was cheap to change, not to add coverage. |
 | 4.5 | One topic at depth | `done` | `HRR-RES-01` written all the way down: five authored units, four payload files, a shared card, the first mitigation. A calibration pass, not a coverage one -- it settles how concrete a written unit is before three hundred more are written to match it. |
-| 5 | Chain pass | `done` | `requires` and `yields` for all 366 units, in six domain batches, `RCN` first because recon produces most of the base facts. 174 facts, and the gate at the end -- every non-given fact has a producer -- is enforced from here on. |
+| 5 | Chain pass | `done` | `requires` and `yields` for all 366 units, in six domain batches, `RCN` first because recon produces most of the base facts. 177 capabilities, and the gate at the end -- every non-given fact has a producer -- is enforced from here on. |
 | 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file with every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. Its first navigation model -- a surface-anchored board driven by the facts a tester ticked -- was replaced in phase 6.5. |
 | 6.5 | Product pivot | `done` | Harrier becomes an execution companion to a standard rather than a workspace about a target. Standard-first navigation, atomic decomposition per WSTG test case, a derived local chain per unit, a progressively disclosed general graph, and the removal of every piece of engagement state. **Breaking, and deliberate.** See [`PIVOT.md`](PIVOT.md). |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. Harrier Extensions exists to receive them. This is the clearest differentiation from restating WSTG. |
@@ -110,12 +110,14 @@ has at least one unit producing it, and the validator enforces it from here on.
 177 facts, 366 units, and no condition in the graph without a route to it.
 
 The gate is one-directional, and the asymmetry is worth stating plainly. Every
-capability has a producer; most have no *consumer*. 81 of 177 are declared as a
-use by nothing at all, so the chain runs from reconnaissance to a primitive and
-then stops. That is the shape of what phase 5 set out to do -- place every unit
-in the graph -- and not the shape of a complete attack model. Charting the far
-half is listed under **Considered, not scheduled** rather than left to be
-noticed one dead end at a time.
+capability has a producer; many have no *consumer*. 78 of 177 are declared as a
+use by nothing at all -- impacts excluded, because those are terminal by
+construction and counting them here would describe arriving as failing to
+arrive. So the chain runs from reconnaissance to a primitive and then stops.
+That is the shape of what phase 5 set out to do -- place every unit in the graph
+-- and not the shape of a complete attack model. Charting the far half is listed
+under **Considered, not scheduled** rather than left to be noticed one dead end
+at a time.
 
 ### Phase 3 batches
 
@@ -182,7 +184,7 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart the far half of the chain** | The largest known gap, and the one that most limits the product. 81 of 177 capabilities have no test declaring a use for them — 26 of 32 `primitive.*` and 39 of 59 `control.*` — so 189 of 366 tests lead nowhere. Phase 5 ran recon → surface → primitive and stopped; primitive → impact is barely written. Until it is, most local graphs honestly end at the test that established a capability. |
+| **Chart the far half of the chain** | The largest known gap, and the one that most limits the product. 78 of 177 capabilities are established by a test and used by none — 26 of 32 `primitive.*` and 39 of 59 `control.*` — so 182 of 366 tests stop short. Phase 5 ran recon → surface → primitive and stopped; primitive → impact is barely written. Until it is, most local graphs honestly end at the test that established a capability. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Harrier improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |

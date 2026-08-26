@@ -160,10 +160,31 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         self.assertIn("terminal:", out)
         self.assertIn("reportable outcome", out)
 
-    def test_the_summary_reports_the_reach_of_the_chart(self):
+    def test_the_summary_partitions_the_tests_by_where_their_chain_goes(self):
+        from harrier.chain import Chain
+
         out = self.chain()
-        self.assertIn("with a continuation", out)
-        self.assertIn("unconsumed", out)
+        reach = Chain.load(REPO_ROOT).reach()
+        self.assertEqual(sum(reach.values()), 366)
+        for label, value in (
+            ("with a continuation", reach["continuation"]),
+            ("establishing an impact", reach["impact"]),
+            ("stopping short", reach["short"]),
+            ("declaring nothing", reach["uncharted"]),
+        ):
+            self.assertRegex(out, label + r"\s+" + str(value))
+
+    def test_the_summary_counts_impacts_apart_from_dead_ends(self):
+        from harrier.chain import Chain
+
+        chain = Chain.load(REPO_ROOT)
+        out = self.chain()
+        self.assertRegex(out, r"impacts\s+" + str(len(chain.impacts())))
+        self.assertRegex(out, r"dead ends\s+" + str(len(chain.dead_ends())))
+        self.assertNotIn(
+            str(len(chain.dead_ends()) + len(chain.impacts())) + " ", out,
+            "the inflated figure must not appear",
+        )
 
     def test_an_unknown_identifier_is_reported_rather_than_raised(self):
         for args, word in ((["chain", "NOPE"], "test"), (["chain", "--fact", "no.such"], "capability")):
