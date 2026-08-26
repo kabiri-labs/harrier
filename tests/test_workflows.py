@@ -101,7 +101,18 @@ class PermissionIsTakenWhereItIsNeededAndNowhereElse(unittest.TestCase):
                     continue
                 with self.subTest(workflow=path.name, job=job):
                     self.assertEqual(path.name, "release.yml")
-                    self.assertEqual(job, "artefact")
+                    self.assertEqual(job, "publish")
+
+    def test_every_job_that_builds_or_tests_says_read_explicitly(self):
+        """Inheriting the workflow default is not the same as declaring it. A
+        job that never states its permissions is one nobody notices when the
+        default above it changes."""
+        for path in WORKFLOWS:
+            for job, body in (load(path).get("jobs") or {}).items():
+                if body.get("uses") or job == "publish":
+                    continue
+                with self.subTest(workflow=path.name, job=job):
+                    self.assertEqual(body.get("permissions"), {"contents": "read"})
 
 
 class TheReleasePathCannotPublishOnItsOwn(unittest.TestCase):
@@ -127,20 +138,32 @@ class TheReleasePathCannotPublishOnItsOwn(unittest.TestCase):
                 with self.subTest(job=job, phrase=phrase):
                     self.assertNotIn(phrase, body)
 
-    def test_the_step_that_touches_a_release_runs_only_on_a_release(self):
-        uploads = [
-            step for _, step in self.steps if "gh release upload" in (step.get("run") or "")
+    def test_the_step_that_touches_a_release_lives_only_in_the_guarded_job(self):
+        touching = [
+            (job, step) for job, step in self.steps
+            if "gh release upload" in (step.get("run") or "")
         ]
-        self.assertEqual(len(uploads), 1, "exactly one step may touch a release")
-        self.assertEqual(uploads[0].get("if"), "github.event_name == 'release'")
+        self.assertEqual(len(touching), 1, "exactly one step may touch a release")
+        job, _ = touching[0]
+        self.assertEqual(job, "publish")
+        # Guarded on the job, not on the step: a step-level guard still creates
+        # a runner holding a write credential on every dispatch.
+        self.assertEqual(self.workflow["jobs"][job]["if"], "github.event_name == 'release'")
 
-    def test_a_dispatch_keeps_the_file_on_the_run_rather_than_publishing_it(self):
+    def test_a_dispatch_cannot_reach_the_publishing_job_at_all(self):
+        """Not "declines to publish" -- cannot. The guard is on the job, so on a
+        dispatch nothing with a write credential is ever created."""
+        publish = self.workflow["jobs"]["publish"]
+        self.assertEqual(publish["if"], "github.event_name == 'release'")
+        self.assertEqual(publish["permissions"], {"contents": "write"})
+
+    def test_the_file_leaves_the_build_by_the_same_route_on_both_paths(self):
         kept = [
             step for _, step in self.steps
             if (step.get("uses") or "").startswith("actions/upload-artifact")
         ]
         self.assertEqual(len(kept), 1)
-        self.assertEqual(kept[0].get("if"), "github.event_name == 'workflow_dispatch'")
+        self.assertIsNone(kept[0].get("if"), "the build must always produce the artefact")
 
     def test_the_tag_and_the_version_are_checked_against_each_other(self):
         """A release tagged v0.4.1 carrying a file that says 0.4.0 is worse than
@@ -156,7 +179,8 @@ class TheReleasePathCannotPublishOnItsOwn(unittest.TestCase):
     def test_nothing_is_attached_until_the_checks_have_passed(self):
         jobs = self.workflow["jobs"]
         self.assertEqual(jobs["checks"]["uses"], "./.github/workflows/validate.yml")
-        self.assertIn("checks", jobs["artefact"]["needs"])
+        self.assertIn("checks", jobs["build"]["needs"])
+        self.assertIn("build", jobs["publish"]["needs"])
 
     def test_the_release_runs_the_same_checks_a_pull_request_runs(self):
         """Not a copy of them. A release that could pass a weaker set than a
@@ -167,6 +191,38 @@ class TheReleasePathCannotPublishOnItsOwn(unittest.TestCase):
         release_runs = " ".join(step.get("run") or "" for _, step in self.steps)
         self.assertNotIn("unittest discover", release_runs)
         self.assertNotIn("harrier validate", release_runs)
+
+    def test_the_job_that_can_write_runs_none_of_this_project_s_code(self):
+        """The finding this workflow was rewritten for.
+
+        Building means installing dependencies and executing the repository at
+        the released ref. A job holding a write credential while doing either is
+        a job where a compromised dependency can push to the repository -- and
+        `actions/checkout` persists the token in `.git/config` by default, so
+        the credential is reachable by anything that runs there. The build now
+        holds `contents: read` and no persisted credential; the job that can
+        write checks nothing out, installs nothing, and runs no Python at all.
+        """
+        publish = self.workflow["jobs"]["publish"]
+        for step in publish["steps"]:
+            uses, run = step.get("uses") or "", step.get("run") or ""
+            with self.subTest(step=step.get("name") or uses):
+                self.assertNotIn("actions/checkout", uses, "no checkout in a write-enabled job")
+                self.assertNotIn("actions/setup-python", uses)
+                for phrase in ("pip install", "python -m", "python "):
+                    self.assertNotIn(phrase, run, f"{phrase} runs with a write credential")
+
+    def test_the_building_job_leaves_no_credential_behind_for_it_to_find(self):
+        build = self.workflow["jobs"]["build"]
+        checkouts = [
+            step for step in build["steps"]
+            if (step.get("uses") or "").startswith("actions/checkout")
+        ]
+        self.assertEqual(len(checkouts), 1)
+        self.assertIs(
+            (checkouts[0].get("with") or {}).get("persist-credentials"), False,
+            "actions/checkout leaves the token in .git/config unless told not to",
+        )
 
     def test_the_digest_is_published_beside_the_file_and_proved_reproducible(self):
         runs = " ".join(step.get("run") or "" for _, step in self.steps)

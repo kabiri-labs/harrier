@@ -7,12 +7,21 @@
 # from the GitHub UI here; nothing in this repository creates one.
 #
 # `workflow_dispatch` is the way to exercise all of it without publishing. On a
-# dispatch the file is built, checked and kept as a workflow artifact for a few
-# days, and no release is touched.
+# dispatch the file is built and checked, the publishing job does not run at
+# all, and the artefact is kept on the run for a few days instead.
 #
 # The checks are not restated here. This calls validate.yml, so a release runs
 # exactly what a pull request runs: a release that could pass a weaker set than
 # a pull request is a release nobody has actually checked.
+#
+# **The job that can write never runs any of this project's code.** Building
+# means installing dependencies and executing the repository at the released
+# ref, and a job holding a write credential while doing either is a job where a
+# compromised dependency can push to the repository. So the build happens with
+# `contents: read` and no persisted credential, and the artefact travels to a
+# publishing job whose entire content is a download and one `gh` call. Intent is
+# not a control: the dispatch path must be unable to write, not merely decline
+# to.
 name: release
 
 on:
@@ -27,15 +36,22 @@ jobs:
   checks:
     uses: ./.github/workflows/validate.yml
 
-  artefact:
+  build:
     needs: checks
     runs-on: ubuntu-latest
     permissions:
-      # Only this job, and only to attach a file to an existing release. The
-      # dispatch path never uses it.
-      contents: write
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+      digest: ${{ steps.digest.outputs.value }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # actions/checkout leaves the token in .git/config unless told not to.
+          # Everything below this line runs third-party dependency code and this
+          # repository's own code; neither has any business holding a credential
+          # that can write to the repository.
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -117,10 +133,9 @@ jobs:
             echo "| commit | \`${{ github.sha }}\` |"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # Dispatch stops here. Nothing is published; the file is downloadable from
-      # the run for anyone who wants to look at it.
+      # How the file leaves this job, on both paths. On a dispatch it is also
+      # where the file stops: nothing downstream runs.
       - name: Keep the artefact on the run
-        if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: harrier-${{ steps.version.outputs.value }}
@@ -128,17 +143,35 @@ jobs:
           retention-days: 7
           if-no-files-found: error
 
-      # Attaching to a release that already exists. `gh` ships on the runner, so
-      # no third-party action enters the supply chain of a project whose own
-      # supply chain is part of its threat model.
+  # The only job that can write, and it runs no code from this repository and
+  # installs nothing: a download and one `gh` call against a release that
+  # already exists. There is no checkout, so there is no persisted credential
+  # for anything to reach either.
+  publish:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: harrier-${{ needs.build.outputs.version }}
+          path: dist
+
+      # `gh` ships on the runner, so no third-party action enters the supply
+      # chain of a project whose own supply chain is part of its threat model.
       - name: Attach to the release
-        if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.event.release.tag_name }}
-          VERSION: ${{ steps.version.outputs.value }}
+          VERSION: ${{ needs.build.outputs.version }}
+          DIGEST: ${{ needs.build.outputs.digest }}
         run: |
+          sha256sum -c "dist/harrier-$VERSION.html.sha256" 2>/dev/null \
+            || (cd dist && sha256sum -c "harrier-$VERSION.html.sha256")
           gh release upload "$TAG" \
             "dist/harrier-$VERSION.html" \
             "dist/harrier-$VERSION.html.sha256" \
             --clobber --repo "${{ github.repository }}"
+          echo "attached harrier-$VERSION.html ($DIGEST) to $TAG" >> "$GITHUB_STEP_SUMMARY"
