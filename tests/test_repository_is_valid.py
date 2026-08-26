@@ -168,3 +168,51 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         self.assertPublished(f"{self.counts['units']} Test Units", where=("README.md",))
         self.assertPublished(f"{len(self.chain.facts)} capabilities")
         self.assertPublished(f"{self.counts['topics']} topics")
+
+    def test_every_row_of_the_readme_table_is_read_from_the_data(self):
+        """The table is what a first-time reader judges the project on. Each row
+        is asserted individually so one going stale fails on its own rather than
+        hiding behind the others."""
+        reach = self.chain.reach()
+        rows = (
+            ("WSTG identifiers pinned", f"{self.counts['wstg_pinned']}, across 12 testing groups"),
+            ("Claimed by a Harrier topic",
+             f"{self.counts['wstg_covered']} of {self.counts['wstg_coverable']} resolvable"),
+            ("Topics", f"{self.counts['topics']}, across 13 domains"),
+            ("Test Units", str(self.counts["units"])),
+            ("Written to full procedural depth", f"**{self.counts['units_authored']}**"),
+            ("Outline only", str(self.counts["units"] - self.counts["units_authored"])),
+            ("Capabilities", str(len(self.chain.facts))),
+            ("Tests with a potential continuation", str(reach["continuation"])),
+            ("Tests that establish an impact", str(reach["impact"])),
+            ("Tests that stop short", str(reach["short"])),
+            ("Tests declaring no capability", str(reach["uncharted"])),
+            ("Capabilities used by no test, impacts excluded",
+             f"{len(self.chain.dead_ends())} of {len(self.chain.facts)}"),
+        )
+        readme = self.docs["README.md"]
+        for label, value in rows:
+            with self.subTest(row=label):
+                self.assertIn(f"| {label} | {value} |", readme)
+
+    def test_the_group_and_domain_counts_in_that_table_are_real(self):
+        from harrier import Repository
+
+        repo = Repository.load(REPO_ROOT)
+        groups = len(repo.standards["wstg"].data["groups"])
+        domains = len({d.data["domain"] for d in repo.topics})
+        self.assertIn(f"{self.counts['wstg_pinned']}, across {groups} testing groups",
+                      self.docs["README.md"])
+        self.assertIn(f"{self.counts['topics']}, across {domains} domains",
+                      self.docs["README.md"])
+
+    def test_the_alpha_notice_states_the_real_depth(self):
+        """The one figure a reader will quote back. It sits above the fold and
+        must not be the optimistic one."""
+        self.assertIn(
+            f"{self.counts['units']} Test Units exist", self.docs["README.md"]
+        )
+        self.assertIn(
+            f"{self.counts['units_authored']} units are written to full procedural depth",
+            self.docs["README.md"],
+        )

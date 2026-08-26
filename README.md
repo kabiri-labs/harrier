@@ -1,9 +1,17 @@
 # Harrier
 
-> An interactive execution companion for web security testing standards. It
-> decomposes large standard test cases into atomic, independently understandable
-> Test Units, and shows what attack-chain paths may become relevant when each
-> Test Unit succeeds.
+**WSTG tells you what to cover. Harrier shows you the real tests inside each
+test case, and where a successful one may lead.**
+
+An offline execution companion for web application security testing standards.
+It breaks broad standard test cases into atomic, separately addressable **Test
+Units**, and derives the attack-chain continuations each success may open.
+
+> **Harrier 0.4.0 is an early public alpha.** The WSTG decomposition is broad —
+> every resolvable identifier is claimed, and 366 Test Units exist. The depth
+> behind them is not: 10 units are written to full procedural depth, and the far
+> half of the attack chain is barely charted. [What that means in
+> numbers](#what-exists-today-and-what-does-not) is below, not buried at the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
 [![version](https://img.shields.io/badge/version-0.4.0-blue)](docs/ROADMAP.md)
@@ -11,220 +19,284 @@
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
 
-**WSTG tells you what to cover. Harrier shows you the real tests inside it and
-where each successful test can lead.**
+---
 
-## What this is
+## The problem
 
-Published testing standards are exhaustive at the wrong granularity. One WSTG
-identifier is a chapter, not a task: `WSTG-INPV-05` is a single line on a
-checklist and ten materially different tests in practice, with different
-payloads, different oracles and different outcomes. So a practitioner reads it
-once, then works from personal notes — which is where coverage quietly goes.
+A testing standard is a coverage structure. It is very good at that, and WSTG in
+particular is the reason nothing standard goes missing from a scope. But two
+things a working tester needs sit outside what a coverage structure is for, and
+Harrier exists for exactly those two.
 
-Harrier is the layer between the standard and the work. It adds two things the
-standard does not reach:
+**A test case is not a test.** `WSTG-INPV-05` is one line on a checklist and ten
+materially different tests in practice — a probe, an engine fingerprint, five
+inference and extraction techniques, a stacked-statement variant, a second-order
+variant, and a filter-evasion pass. Each has its own payloads, its own oracle,
+and its own separately recordable result. A checklist that ticks once for all ten can be complete while most of
+the work was never done, and nothing in it will say so. Harrier makes those
+tests explicit, individually named, and bounded against each other.
 
-1. **Atomic decomposition.** A WSTG test case is made explicit as the set of
-   independently performable Test Units inside it, each with a stable
-   identifier, a falsifiable objective, an explicit boundary against its
-   neighbours, and the one thing that settles it.
-2. **Attack-chain continuity.** A successful Test Unit establishes a capability
-   that can make other tests — or an impact — relevant. Harrier derives those
-   possible continuations so a test is not read as an isolated checklist item.
+**A result is not the end of the test.** Establishing that a parameter reaches a
+SQL statement is not a finding on its own; it is a capability that makes several
+other tests worth performing. Standards enumerate test cases as independent line
+items, so that relationship lives only in the tester's head and leaves with them
+when they move to the next line. Harrier writes each test's prerequisites and
+established capabilities down, and derives the connections between them.
 
-The initial supported execution standard is OWASP WSTG, which provides the
-primary coverage and navigation structure:
+Neither is a criticism of the standard. A coverage structure that also tried to
+be a decomposition and an attack graph would be worse at the thing it is for.
+Harrier is the layer that sits on top of one.
+
+## Standard-first, by construction
+
+Navigation starts at the standard, not at Harrier's own taxonomy:
 
 ```
-Standard → Testing group → WSTG test case → Harrier Test Units → Test Unit detail
+Standard → Testing group → Test case → Harrier Test Units → Potential continuations
 ```
 
-## The journey
+WSTG is the first standard supported, and the structure is deliberately not
+specific to it. A newer WSTG revision, or another execution standard, enters at
+the top of that path and reuses everything below it: identifiers are pinned per
+standard, and a Test Unit is filed under whichever test case claims it. A Harrier
+topic with no test case in the current standard is not lost — it appears under
+**Harrier Extensions**, which is where beyond-WSTG material goes as it is
+written.
+
+OWASP Top 10 is a different shape and would enter differently. It classifies
+risk rather than prescribing execution, so it belongs as a **lens over the same
+catalogue** — a way of reading tests you already have — rather than a second way
+to navigate to one. That distinction is recorded in
+[`docs/PIVOT.md`](docs/PIVOT.md) rather than left to be re-litigated.
+
+## The vocabulary
+
+Five words carry the model, and they are worth two minutes.
+
+| | |
+|---|---|
+| **Test case** | The standard's unit of coverage. `WSTG-INPV-05`, "Testing for SQL Injection". Identifier and title come from a pinned copy of the standard. |
+| **Topic** | Harrier's subject boundary inside a test case — "SQL injection" — declaring the axis its tests are split on and notes marking what belongs to a neighbouring topic instead. One test case may be claimed by several topics; `WSTG-APIT-99` is claimed by four. |
+| **Test Unit** | The atomic thing a person performs and records one result for. `HRR-INJ-01-UNION`, "UNION-based extraction". It has an objective that can be wrong, a boundary against its siblings, and — where written to depth — an oracle, a sequence, payloads, false positives and a safety limit. |
+| **Capability** | What a success establishes, or what a test needs before it is possible at all. "A parameter reaches a SQL statement." Capabilities are the join keys: no Test Unit ever names another Test Unit. |
+| **Impact** | A business outcome. Terminal by construction — nothing may require one, and the validator enforces it. |
+
+Two kinds of relationship, kept apart because conflating them is the failure the
+distinction exists to prevent: a **declared prerequisite** is a condition of the
+test being performable at all, and a **motivation** makes it worth reaching for
+sooner without ever being a gate.
+
+**Harrier has no view of your target.** It has never seen it and does not ask
+about it. Every chain statement is about the relationship between two tests —
+*potential continuation*, *may become relevant*, *no additional declared hard
+prerequisite* — never a claim that something is true of an application. A
+continuation always names what succeeding here does **not** supply, because
+being reached through one capability is not the same as being possible.
+
+## What it looks like
+
+A test case, decomposed into the tests inside it, in the order the topic
+declares:
+
+![A WSTG test case decomposed into its Test Units](docs/assets/decomposition.png)
+
+A Test Unit. The chain strip under the objective answers *where can this lead*
+before the procedure begins, rather than several screens after it:
+
+![A Test Unit page showing its objective and chain strip](docs/assets/test-unit.png)
+
+The Attack Chains view. A row is a capability a test requires, a column is one
+its success establishes, and the number is how many tests span the two — a map
+of what the catalogue declares, not a route anyone should follow:
+
+![The capability-family transition matrix](docs/assets/attack-chains.png)
+
+## Try it
+
+There is no downloadable release yet. Build it from source:
+
+```bash
+git clone https://github.com/kabiri-labs/harrier.git
+cd harrier
+python -m pip install "PyYAML>=6,<7" "jsonschema>=4,<5"
+
+python -m harrier validate          # the catalogue is internally consistent
+python -m harrier build             # writes harrier.html
+```
+
+Open `harrier.html` from disk. It is one self-contained file: no server, no
+install, no network.
+
+The same graph reads from the command line:
+
+```bash
+python -m harrier chain HRR-RES-01-READ
+```
 
 ```
-Choose WSTG
-→ choose a group              Authorization Testing
-→ choose a test case          WSTG-ATHZ-01, Testing Directory Traversal File Include
-→ inspect its atomic tests    five of them, probe through execution
-→ open one Test Unit          HRR-RES-01-READ, confirmed read outside the intended root
-→ see where success may lead  named under the objective, before the procedure
-→ see how to perform it       oracle, sequence, payloads, false positives, safety
-→ follow the continuation     HRR-RES-01-EXEC, and what it still requires
+HRR-RES-01-READ  Confirmed read outside the intended root
+  prerequisite (all of): A parameter selects a file by path -- 1 test(s) establish it
+  worth doing sooner given: The application's absolute path is known -- 2 test(s) establish it
+  success establishes: Arbitrary file read
+  potential continuations:
+    HRR-RES-01-EXEC  Inclusion and execution of the resolved path
+      requires what this establishes: Arbitrary file read
+      no additional declared hard prerequisite
 ```
 
-`WSTG-INPV-05` is the decomposition in its clearest form: one checklist line,
-ten materially different tests. `WSTG-ATHZ-01` is the chain in its clearest
-form: the one topic written to full depth, running probe → read → execution.
+## A real journey
 
-## What this is not
+The one topic written to full depth is path traversal, under `WSTG-ATHZ-01`.
+From the standard down:
+
+1. **Authorization Testing → `WSTG-ATHZ-01`**, "Testing Directory Traversal File
+   Include". Harrier decomposes it into five Test Units.
+2. **`HRR-RES-01-PROBE`** — does a traversal sequence in the parameter change
+   which file is opened? Success establishes *a parameter selects a file by
+   path*.
+3. **`HRR-RES-01-READ`** — is content the application never meant to serve
+   returned in the response body? It declares the probe's capability as a
+   prerequisite, and two other tests as motivations: knowing the application's
+   absolute path, and knowing how the path filter behaves. Success establishes
+   *arbitrary file read*.
+4. **`HRR-RES-01-EXEC`** — is the resolved path included and executed rather than
+   returned? Reached through *arbitrary file read*, with no additional declared
+   hard prerequisite. Success establishes *server-side code execution*.
+
+And there it stops. Nothing in the catalogue currently declares a use for
+*server-side code execution*, so the page says exactly that — a reportable
+outcome rather than a step onward — instead of drawing an edge nobody wrote.
+
+`WSTG-INPV-05` is the better illustration of decomposition, one checklist line
+against ten real tests, but its chain ends the same way at *database read*, which
+nothing consumes yet. It is not the end-to-end example and this README does not
+present it as one.
+
+## What exists today, and what does not
+
+Every figure here is read from the repository by the test suite, so it cannot go
+stale in this file without the suite failing.
+
+| Taxonomy | |
+|---|---|
+| WSTG identifiers pinned | 109, across 12 testing groups |
+| Claimed by a Harrier topic | 108 of 108 resolvable |
+| Topics | 99, across 13 domains |
+| Test Units | 366 |
+| Written to full procedural depth | **10** |
+| Outline only | 356 |
+
+| Chain | |
+|---|---|
+| Capabilities | 177 |
+| Derived unit-to-unit edges | 561 |
+| Tests with a potential continuation | 138 |
+| Tests that establish an impact | 7 |
+| Tests that stop short | 182 |
+| Tests declaring no capability | 39 |
+| Capabilities used by no test, impacts excluded | 78 of 177 |
+| Capabilities with a charted route to an impact | 12 of 174 |
+
+The four test counts partition the catalogue exactly, which is what stops any one
+of them from quietly coming to mean something else.
+
+**An outline Test Unit is real but shallow.** It carries an identifier, a
+falsifiable objective, its boundary against neighbouring tests, and its position
+in the chain — enough to stop a test being skipped silently, and enough to appear
+in every count above. It does not carry a procedure, an oracle, payloads or a
+safety limit. Every page says which of the two you are looking at, and nothing is
+invented to fill the gap.
+
+**The largest known gap is the far half of the chain.** The chain pass charted
+reconnaissance through to primitives and stopped there; `primitive → impact` and
+`control → impact` are barely written. That is why 78 capabilities are
+established by a test and used by none, and why only 12 capabilities have any
+charted route to an impact at all.
+
+This is recorded rather than filled in. Generating plausible edges would make the
+matrix look complete and every route on it untrustworthy — an edge nobody thought
+about is indistinguishable from one that was checked, and the second is the only
+reason the first is worth reading. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+
+## What Harrier is not
 
 - **Not a scanner or an exploit framework.** Nothing here scans, exploits, or
   talks to a target.
-- **Not an engagement tracker.** It holds no target, no engagement, no results
-  and no findings, and it stores nothing in your browser.
-- **Not an automatic decision-maker.** It is context-free by design: it has
-  never seen your target and never claims to know what is true of it. Chain
-  statements are about the relationship between two tests — *potential
-  continuation*, never *unlocked*.
+- **Not a reporting platform or an engagement tracker.** It holds no target, no
+  engagement, no results and no findings.
+- **Not a target-aware recommendation engine.** It cannot tell you what to test
+  next on your application, because it knows nothing about your application.
+- **Not a replacement for judgement.** It tells you what a standard line item
+  contains and what a success may open; deciding which of that applies today is
+  the tester's, and that is where the knowledge is.
+- **Not affiliated with, endorsed by, or sponsored by OWASP.**
 - **Not a tutorial.** The reader already knows what cross-site scripting is.
-  PortSwigger's Academy teaches it better than this ever will, and has labs.
 
-The full list of deliberate exclusions, and why, is in
+Version 0.3.0 shipped a stateful board that asked for a target and claimed to
+know what was reachable on it. It was removed; why is in
 [`docs/PIVOT.md`](docs/PIVOT.md).
 
-## Who it is for
+## Security and privacy properties
 
-An experienced tester who is not learning the technique but recovering a detail
-they knew six months ago, and who wants to see what a standard line item
-actually contains. Content is written for **recall**, not for reading: oracle,
-sequence, payload pointer, the first false positive, and what counts as
-finished.
+The artefact is opened from a laptop on an engagement network, so the property
+that matters is that it emits nothing anyone monitoring that network could
+observe.
 
-## Scope
+- **One self-contained HTML file.** No external stylesheet, script, font or
+  image — everything is embedded.
+- **No outbound request of any kind.** A hash-based `Content-Security-Policy`
+  names the three inline blocks in the file and denies everything else,
+  `connect-src` included. `frame-ancestors` is deliberately absent: it is ignored
+  when a policy is delivered in a `meta` element, and a directive that cannot
+  take effect reads as a control that is in place.
+- **No target or engagement data, ever.** No results are recorded, no run is
+  imported or exported, and nothing is written to `localStorage`.
+- **Verified as behaviour, not as text.** The suite drives a real browser over
+  `file://` through the primary journeys — typing in search, clicking a node in
+  the graph, expanding a bounded view — while recording every request the page
+  attempts and every console error. Both come back empty.
 
-Web application testing, not the WSTG table of contents. WSTG is the execution
-and navigation standard, and it is also the coverage skeleton — proof that
-nothing standard is missing. A large part of current practice has no WSTG
-identifier at all: JWT, OAuth and OIDC, GraphQL, WebSocket, HTTP request
-smuggling, cache poisoning and deception, prototype pollution, race conditions,
-dependency confusion, cloud metadata, and LLM-integrated surfaces. Those are in
-scope, carry Harrier identifiers of their own, and appear under **Harrier
-Extensions** rather than being forced into a group they do not belong to.
+## Contributing
 
-ASVS is a control and remediation mapping. CWE is a weakness classification.
-Neither is an execution methodology and neither is presented as one.
+Read [`docs/AUTHORING.md`](docs/AUTHORING.md) for what a Test Unit must contain,
+[`docs/CHAINING.md`](docs/CHAINING.md) for the chain semantics,
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the model, and
+[`docs/VALIDATION.md`](docs/VALIDATION.md) for what is checked mechanically.
 
-## Structure
+**A chain edge is a security claim.** Declaring a capability a prerequisite
+asserts the test is not performable without it. Declaring that a success
+establishes a capability asserts the result proves that much and no more. Both
+are judgements a reader will rely on, so bulk or speculative edge generation is
+not acceptable here.
 
-| Directory | Holds |
-|---|---|
-| `docs/` | The model, the naming methodology, the authoring rules, the roadmap, the pivot record |
-| `harrier/` | The validator and the builder — the only executable code here |
-| `harrier/artefact/` | The published page: template, stylesheet, script |
-| `standards/` | Pinned WSTG, ASVS and CWE references — generated, never hand-edited |
-| `vocab/` | Controlled vocabularies: domains, axes, surface tags, dimensions, facts |
-| `knowledge/` | The taxonomy: topics and units |
-| `cards/` | Recall-first prose, organised by technique |
-| `payloads/` | The only place a payload is written |
-| `toolbox/` | Tool invocations with per-flag rationale |
-| `mitigations/` | Remediation text, keyed by weakness class |
-| `tests/` | Offline suite; mutation tests copy the repository and break one thing |
-
-Start with [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), then
-[`docs/TAXONOMY.md`](docs/TAXONOMY.md) and
-[`docs/CHAINING.md`](docs/CHAINING.md).
-
-## Working on it
+Before opening a pull request:
 
 ```bash
-pip install PyYAML jsonschema
-
-python -m unittest discover -s tests -t .   # offline
-python -m harrier validate                  # the repository
-python -m harrier coverage                  # the counts the roadmap publishes
-python -m harrier chain HRR-RES-01-READ     # what a test needs, establishes and may lead to
-python -m harrier build -o harrier.html     # the artefact, then open it
+python -m unittest discover -s tests -t .
+python -m harrier validate
 ```
 
-The first two must pass, and CI runs exactly them. Two runners inside the suite
-are optional locally and installed in CI, because a suite that quietly skipped
-a third of itself would look identical to one that passed it:
+Both must pass, and CI runs exactly them. Two runners inside the suite are
+optional locally and installed in CI: `node` executes the artefact's own graph,
+layout, path-walk and search functions against the real catalogue, and a browser
+driven through Playwright uses the built file. Install them with:
 
 ```bash
-pip install playwright && playwright install chromium   # plus node, for the rest
+python -m pip install playwright && python -m playwright install chromium
 ```
 
-`node` executes the artefact's own graph, layout, path and search functions
-against the real catalogue; a browser opens the built file over `file://` and
-uses it — typing in the search box, clicking a node in the graph, pressing Enter
-on one — while recording every request it attempts and every console error.
-[`docs/VALIDATION.md`](docs/VALIDATION.md) explains what is checked and why each
-rule is mechanical rather than a review comment.
-
-## Releases
-
-The artefact is built by CI and attached to a release, never committed. A stale
-committed copy is indistinguishable from a current one at a glance, and only one
-of those is safe to hand to someone.
-
-The trigger is a release published from the GitHub UI — deliberately, rather
-than a tag push — so the workflow can only ever add a file to a publication a
-person made. It has no path by which it publishes anything of its own. It then:
-
-1. runs the same checks a pull request runs, by calling `validate.yml` rather
-   than restating them;
-2. refuses to continue if the release tag and `__version__` disagree, because
-   those are the two things anybody quotes and they must not diverge silently;
-3. builds the artefact, records its SHA-256 beside it, and rebuilds from scratch
-   to prove the two are byte-identical — a digest published next to a file
-   nobody can reproduce means nothing;
-4. attaches both to the release, from a separate job.
-
-The separation is the security property, not tidiness. Building means
-installing dependencies and executing this repository at the released ref, and a
-job holding a write credential while doing either is a job where a compromised
-dependency can push to the repository — `actions/checkout` persists the token in
-`.git/config` unless told not to. So the build runs with `contents: read` and no
-persisted credential, and the only job that can write checks nothing out,
-installs nothing, and runs no Python: a download and one `gh` call.
-
-`workflow_dispatch` runs all of it and publishes nothing. The publishing job is
-guarded on the job rather than the step, so a dispatch never creates a runner
-holding a write credential at all — it cannot publish, rather than declining to.
-The file is kept on the run for seven days so it can be inspected without a
-release existing.
-
-Verify a downloaded artefact with:
-
-```bash
-sha256sum -c harrier-<version>.html.sha256
-```
-
-## Status
-
-**0.4.0.** The taxonomy is complete and the artefact is a companion to the
-standard rather than a workspace about a target.
-
-- **99 topics across 13 domains**, every resolvable WSTG identifier claimed by
-  at least one, with the boundaries between neighbouring topics written down.
-- **366 Test Units**, each with an identifier and a falsifiable objective; 10
-  written to full depth.
-- **177 capabilities** and the chain they derive: every unit declares what makes
-  it possible and what it establishes, every condition in the graph has a route
-  to it, and no unit names another unit anywhere.
-- **One self-contained HTML file** carrying all of it, including every card,
-  payload and mitigation. It fetches nothing and stores nothing, which is the
-  point: it is opened from disk on an engagement network.
-
-**0.4.0 is a breaking change to the artefact.** The stateful board — target
-input, held facts, recorded results, run export and import — has been removed,
-and run files written by 0.3.0 cannot be read. That is deliberate, it is taken
-during the pre-1.0 period so it can be taken at all, and the reasoning is
-recorded in [`docs/PIVOT.md`](docs/PIVOT.md).
-
-What is not done, and both are visible in the product rather than only here:
-
-- **Depth.** Ten units of 366 are written in full and the rest carry an
-  objective and nothing more. That is deliberate — see the standing rule in
-  [`docs/ROADMAP.md`](docs/ROADMAP.md).
-- **The far half of the chain.** 78 of 177 capabilities are established by a
-  test and used by none — impacts excluded, since those are where a chain is
-  meant to end. So of 366 tests, 138 have a potential continuation, 7 establish
-  an impact, 182 stop short, and 39 declare no capability at all. Phase 5
-  charted reconnaissance through to primitives; primitive-to-impact is largely
-  unwritten. Both the Attack Chains page and `harrier chain` report the split,
-  rather than letting a reader meet it one dead end at a time.
-
-## Licence and attribution
+## Standards, attribution and licence
 
 Apache-2.0. See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
 
-Harrier is not affiliated with, endorsed by, or sponsored by OWASP. WSTG and
-ASVS identifiers, titles and section headings are referenced for cross-mapping
-and navigation only; no prose from either is reproduced here. Both are
-share-alike licensed, and everything in this repository is originally written.
+Harrier is not affiliated with, endorsed by, or sponsored by OWASP. WSTG
+identifiers, official test titles and testing-group headings are referenced for
+navigation and cross-mapping only, from a copy pinned by commit and SHA-256. No
+prose from WSTG or ASVS is reproduced anywhere in this repository; both are
+share-alike licensed, and everything here is originally written.
 
-CWE is used under the [CWE Terms of Use](https://cwe.mitre.org/about/termsofuse.html).
-Copyright (c) 2006-2026, The MITRE Corporation. CWE is a trademark of The MITRE
-Corporation. See [`NOTICE`](NOTICE).
+ASVS is referenced as a control and remediation mapping. CWE is referenced as a
+weakness classification, used under the
+[CWE Terms of Use](https://cwe.mitre.org/about/termsofuse.html). Copyright (c)
+2006-2026, The MITRE Corporation. CWE is a trademark of The MITRE Corporation.
+See [`NOTICE`](NOTICE).
