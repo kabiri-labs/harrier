@@ -241,45 +241,83 @@
     };
   };
 
+  /* What a unit still declares that a set of established capabilities does not
+     cover. The same rule the build applies to a single edge, applied here to a
+     whole partial route, so a step in the middle of a path states its own
+     unmet conditions rather than inheriting the first edge's. */
+  var stillRequired = function (D, unitId, established) {
+    var unit = get(D.units, unitId) || {};
+    var requires = unit.requires || {};
+    var have = {};
+    (established || []).forEach(function (f) { have[f] = true; });
+    (D.given || []).forEach(function (f) { have[f] = true; });
+    var all_of = (requires.all_of || []).filter(function (f) { return !own(have, f); });
+    var any_of = (requires.any_of || []);
+    if (!any_of.length || any_of.some(function (f) { return own(have, f); })) any_of = [];
+    return { all_of: all_of, any_of: any_of };
+  };
+
   /* Routes from one capability to a terminal impact.
 
      Breadth-first over capability -> consuming unit -> that unit's capabilities,
-     so the shortest routes come out first. The visited set is what makes a
-     cycle terminate: a capability reached a second time has already been
-     expanded by a shorter route, and re-expanding it is how a graph walk on an
-     engagement laptop stops coming back. */
+     so the shortest routes come out first.
+
+     What terminates a walk is **path-local**: a route may not reuse a unit or
+     revisit a capability it has already passed through. A shared `seen` across
+     the whole search would be cheaper and wrong -- two units can establish the
+     same capability, and marking it globally lets whichever route reached it
+     first claim it, silently discarding a second route that could have carried
+     on to an impact when the first could not. Cycles still terminate, because
+     the thing that stops them is the path's own history.
+
+     The exploration budget is what keeps that affordable. Without a global
+     visited set the frontier can branch widely, so the walk stops after a fixed
+     number of expansions and reports the routes it has -- an honest "here are
+     the shortest ones" rather than an unbounded search on an engagement laptop. */
   var pathsToImpact = function (D, startFact, options) {
     var opts = options || {};
     var maxPaths = opts.maxPaths || 5;
     var maxDepth = opts.maxDepth || 6;
+    var budget = opts.maxExplore || 4000;
     if (!own(D.facts, startFact)) return [];
+
     var found = [];
-    var seen = {};
-    seen[startFact] = true;
-    var queue = [{ fact: startFact, steps: [] }];
-    while (queue.length && found.length < maxPaths) {
+    var signatures = {};
+    var queue = [{ fact: startFact, steps: [], units: {}, facts: {} }];
+    queue[0].facts[startFact] = true;
+
+    while (queue.length && found.length < maxPaths && budget > 0) {
       var here = queue.shift();
+      budget--;
       if (here.steps.length >= maxDepth) continue;
-      var consumers = (get(D.requiredBy, here.fact) || []);
-      for (var c = 0; c < consumers.length; c++) {
+      var consumers = get(D.requiredBy, here.fact) || [];
+      for (var c = 0; c < consumers.length && found.length < maxPaths; c++) {
         var uid = consumers[c];
-        if (!own(D.units, uid)) continue;
-        var repeated = here.steps.some(function (s) { return s.unit === uid; });
-        if (repeated) continue;
-        var produced = (D.units[uid].yields || []);
+        if (!own(D.units, uid) || own(here.units, uid)) continue;
+        var established = Object.keys(here.facts);
+        var also = stillRequired(D, uid, established);
+        var produced = D.units[uid].yields || [];
         for (var y = 0; y < produced.length; y++) {
           var next = produced[y];
-          var steps = here.steps.concat([{ from: here.fact, unit: uid, to: next }]);
+          if (own(here.facts, next)) continue;
+          var steps = here.steps.concat([
+            { from: here.fact, unit: uid, to: next, also: also }
+          ]);
           if (familyOf(next) === "impact") {
+            var signature = steps.map(function (s) { return s.unit; }).join(">");
+            if (own(signatures, signature)) continue;
+            signatures[signature] = true;
             found.push({ start: startFact, steps: steps, impact: next });
             if (found.length >= maxPaths) break;
             continue;
           }
-          if (own(seen, next)) continue;
-          seen[next] = true;
-          queue.push({ fact: next, steps: steps });
+          var units = {}, facts = {};
+          Object.keys(here.units).forEach(function (k) { units[k] = true; });
+          Object.keys(here.facts).forEach(function (k) { facts[k] = true; });
+          units[uid] = true;
+          facts[next] = true;
+          queue.push({ fact: next, steps: steps, units: units, facts: facts });
         }
-        if (found.length >= maxPaths) break;
       }
     }
     return found;
@@ -375,12 +413,14 @@
    * ranks at fixed x, each column centred on a common axis.
    * --------------------------------------------------------------------- */
 
-  /* Sized so all five ranks fit inside the reading column on a laptop rather
-     than putting the most important one -- what may follow -- off the right edge
-     behind a scrollbar. 5 x 148 + 4 x 45 + 2 x 10 = 940, against roughly 947 of
-     content width. The scroll container stays for anything narrower. */
-  var NODE_W = 148, NODE_H = 58, VGAP = 20, HGAP = 45, TOP = 34, PAD = 10;
-  var TITLE_CHARS = 21, SUB_CHARS = 27;
+  /* Four ranks, not five. Squeezing a producer column in as well left every box
+     148px wide and the type at nine pixels, which is a diagram nobody reads --
+     and the producers were the least of what it cost. They are listed in full
+     under the graph instead, with room for all of them rather than the first
+     one, and the capability node says how many there are.
+     4 x 185 + 3 x 60 + 2 x 10 = 940, against roughly 947 of content width. */
+  var NODE_W = 185, NODE_H = 62, VGAP = 20, HGAP = 60, TOP = 36, PAD = 10;
+  var TITLE_CHARS = 25, SUB_CHARS = 32;
 
   var wrap = function (text, perLine, maxLines) {
     var words = String(text == null ? "" : text).split(/\s+/).filter(Boolean);
@@ -437,6 +477,7 @@
     own: own, esc: esc, md: md, bound: bound, familyOf: familyOf,
     localGraph: localGraph, negativeReading: negativeReading,
     familyOverview: familyOverview, pathsToImpact: pathsToImpact,
+    stillRequired: stillRequired,
     searchAll: searchAll, wrap: wrap, layout: layout, LIMIT: LIMIT
   };
   if (typeof module !== "undefined" && module.exports) module.exports = Harrier;
@@ -612,8 +653,9 @@
     }
 
     var body = '<p class="lede">Harrier decomposes this test case into ' +
-      "independently performable tests. Each one has its own objective, its own " +
-      "oracle and its own result." +
+      "independently performable tests. Each one carries its own objective and its " +
+      "own boundary against the others; where it is written in full it carries its " +
+      "own oracle too." +
       (claiming.length > 1
         ? " This identifier is claimed by " + claiming.length +
           " topics, which is the model working rather than a defect: it is more than one test."
@@ -640,6 +682,9 @@
             ? ' <a href="' + href("topic", b.home) + '">' + esc(topicTitle(b.home)) + "</a>"
             : "") + "</li>";
       }).join("");
+      /* Units first. A boundary note explains what is deliberately *not* here,
+         which matters once the reader is oriented and is an obstacle before
+         they are -- so it follows, and it is folded away until asked for. */
       return "<h3>" + esc(topic.title) + " <a class=\"idchip\" href=\"" + href("topic", tid) +
         '">' + esc(tid) + "</a></h3>" +
         (topic.wstg.length > 1
@@ -649,8 +694,13 @@
               return '<a href="' + href("case", w) + '">' + esc(w) + "</a>";
             }).join(", ") + ".</p>"
           : "") +
-        (boundaries ? '<div class="card"><span class="k">Boundaries</span><ul>' + boundaries + "</ul></div>" : "") +
-        units;
+        units +
+        (boundaries
+          ? "<details class=\"fold\"><summary>Boundaries · " +
+            (topic.boundaries || []).length + " note" +
+            ((topic.boundaries || []).length === 1 ? "" : "s") +
+            " on what is deliberately elsewhere</summary><ul>" + boundaries + "</ul></details>"
+          : "");
     }).join("");
 
     return head + body;
@@ -726,7 +776,6 @@
 
   var graphSvg = function (model) {
     var columns = [
-      { heading: "Established by", nodes: [] },
       { heading: "Prerequisite", nodes: [] },
       { heading: "This test", nodes: [] },
       { heading: "Establishes", nodes: [] },
@@ -736,21 +785,23 @@
 
     var selfId = "u:" + model.unit;
     var unit = D.units[model.unit];
-    columns[2].nodes.push({
+    columns[1].nodes.push({
       id: selfId, kind: "self", title: unit.title,
       sub: unit.status === "outline" ? "outline" : "written in full", href: null
     });
 
-    var producerSeen = {};
     model.incoming.shown.forEach(function (link) {
       var capId = "c:" + link.fact;
-      columns[1].nodes.push({
+      columns[0].nodes.push({
         id: capId,
         kind: link.kind === "motivated_by" ? "hintcap" : "req",
         title: factLabel(link.fact),
         sub: link.given ? "given — a root of the graph"
           : link.granted ? "the engagement may supply it"
-          : link.producers.length + (link.producers.length === 1 ? " test establishes it" : " tests establish it"),
+          : link.producers.length
+            ? link.producers.length + (link.producers.length === 1
+                ? " test establishes it" : " tests establish it")
+            : "no test establishes it",
         href: href("capability", link.fact)
       });
       edges.push({
@@ -759,28 +810,14 @@
         label: link.kind === "motivated_by" ? "motivates"
           : link.kind === "any_of" ? "any of" : "requires"
       });
-      link.producers.slice(0, 1).forEach(function (pid) {
-        var nodeId = "p:" + pid;
-        if (!own(producerSeen, nodeId) && columns[0].nodes.length < model.incoming.shown.length) {
-          producerSeen[nodeId] = true;
-          columns[0].nodes.push({
-            id: nodeId, kind: "unit", title: unitTitle(pid),
-            sub: link.producers.length > 1 ? "one of " + link.producers.length + " routes" : "the only route",
-            href: href("unit", pid)
-          });
-        }
-        if (own(producerSeen, nodeId)) {
-          edges.push({ from: nodeId, to: capId, kind: "hard", label: "establishes" });
-        }
-      });
     });
 
     model.yields.shown.forEach(function (y) {
       var capId = "y:" + y.fact;
-      columns[3].nodes.push({
+      columns[2].nodes.push({
         id: capId, kind: "cap", title: factLabel(y.fact),
         sub: y.terminal === "impact" ? "impact — a chain ends here"
-          : y.terminal === "unconsumed" ? "no test consumes it — reportable outcome"
+          : y.terminal === "unconsumed" ? "no test declares a use for it"
           : y.consumers.length + (y.consumers.length === 1 ? " test may follow" : " tests may follow"),
         href: href("capability", y.fact)
       });
@@ -789,11 +826,11 @@
 
     model.outgoing.shown.forEach(function (link) {
       var nodeId = "n:" + link.unit;
-      columns[4].nodes.push({
+      columns[3].nodes.push({
         id: nodeId, kind: "unit", title: unitTitle(link.unit),
         sub: link.alsoCount
           ? link.alsoCount + (link.alsoCount === 1 ? " further condition" : " further conditions")
-          : "nothing further required",
+          : "no further hard prerequisite",
         href: href("unit", link.unit)
       });
       var via = link.via.length ? link.via : link.hint;
@@ -807,7 +844,11 @@
     });
 
     var plan = layout(columns);
-    var parts = [];
+    var parts = [
+      '<defs><marker id="arw" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" ' +
+      'markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="currentColor"></path>' +
+      "</marker></defs>"
+    ];
     plan.headings.forEach(function (h, i) {
       if (!columns[i].nodes.length) return;
       parts.push('<text class="gcol" x="' + h.x + '" y="16">' + esc(h.text) + "</text>");
@@ -815,28 +856,74 @@
     edges.forEach(function (e) {
       var a = plan.node(e.from), b = plan.node(e.to);
       if (!a || !b) return;
-      var x1 = a.x + a.w, y1 = a.y + a.h / 2, x2 = b.x, y2 = b.y + b.h / 2;
+      var x1 = a.x + a.w, y1 = a.y + a.h / 2, x2 = b.x - 9, y2 = b.y + b.h / 2;
       var mid = (x1 + x2) / 2;
-      parts.push('<path class="gedge ' + e.kind + '" d="M' + x1 + " " + y1 +
+      parts.push('<path class="gedge ' + e.kind + '" marker-end="url(#arw)" d="M' + x1 + " " + y1 +
         " C" + mid + " " + y1 + " " + mid + " " + y2 + " " + x2 + " " + y2 + '"></path>');
-      parts.push('<text class="glabel" x="' + mid + '" y="' + ((y1 + y2) / 2 - 4) +
+      parts.push('<text class="glabel" x="' + mid + '" y="' + ((y1 + y2) / 2 - 5) +
         '" text-anchor="middle">' + esc(e.label) + "</text>");
     });
     plan.nodes.forEach(function (node) {
       var lines = wrap(node.title, TITLE_CHARS, 2);
       var body = '<rect x="0" y="0" width="' + node.w + '" height="' + node.h + '" rx="4"></rect>' +
+        "<title>" + esc(node.title + " — " + node.sub) + "</title>" +
         lines.map(function (line, i) {
-          return '<text x="9" y="' + (18 + i * 13) + '">' + esc(line) + "</text>";
+          return '<text x="10" y="' + (20 + i * 15) + '">' + esc(line) + "</text>";
         }).join("") +
-        '<text class="s" x="9" y="' + (node.h - 9) + '">' + esc(wrap(node.sub, SUB_CHARS, 1)[0] || "") + "</text>";
+        '<text class="s" x="10" y="' + (node.h - 10) + '">' +
+        esc(wrap(node.sub, SUB_CHARS, 1)[0] || "") + "</text>";
+      /* A node that navigates is a link, and a link a mouse can use and a
+         keyboard cannot is not one. `tabindex` and the role put it in the tab
+         order and name it; the document handler treats Enter and Space the same
+         as a click. */
       var cls = "gnode " + node.kind + (node.href ? " link" : "");
+      var attrs = node.href
+        ? ' data-go="' + esc(node.href) + '" tabindex="0" role="link" aria-label="' +
+          esc(node.title + ", " + node.sub) + '"'
+        : ' role="img" aria-label="' + esc(node.title + ", " + node.sub) + '"';
       parts.push('<g class="' + cls + '" transform="translate(' + node.x + "," + node.y + ')"' +
-        (node.href ? ' data-go="' + esc(node.href) + '"' : "") + ">" + body + "</g>");
+        attrs + ">" + body + "</g>");
     });
 
     return '<div class="scroller graph"><svg width="' + plan.width + '" height="' + plan.height +
-      '" viewBox="0 0 ' + plan.width + " " + plan.height + '" role="img" ' +
+      '" viewBox="0 0 ' + plan.width + " " + plan.height + '" role="group" ' +
       'aria-label="Local attack chain around this test">' + parts.join("") + "</svg></div>";
+  };
+
+  /* The producers the graph no longer has a column for -- all of them, named,
+     rather than the first of them squeezed into a box. Where a prerequisite has
+     several, that is the thing worth seeing: it is why a clean result on any one
+     of them settles nothing. */
+  var prerequisiteDetail = function (model) {
+    if (!model.incoming.shown.length) return "";
+    return model.incoming.shown.map(function (link) {
+      var how = link.kind === "motivated_by" ? "Worth doing sooner given"
+        : link.kind === "any_of" ? "Prerequisite (any one of the alternatives)"
+        : "Prerequisite";
+      var route;
+      if (link.given) {
+        route = '<p class="also">A root of the graph: nothing has to establish it.</p>';
+      } else if (link.granted) {
+        route = '<p class="also">An engagement may supply this and often does not. ' +
+          "No test in the catalogue establishes it.</p>";
+      } else if (!link.producers.length) {
+        route = '<p class="also">No test in the catalogue establishes this.</p>';
+      } else {
+        route = '<p class="also"><b>Established by:</b> ' +
+          link.producers.map(function (id) {
+            return '<a href="' + href("unit", id) + '">' + esc(unitTitle(id)) + "</a>";
+          }).join(", ") +
+          (link.producers.length > 1
+            ? ' <span class="muted">— more than one route, so a clean result on any ' +
+              "single one does not settle it.</span>"
+            : "") + "</p>";
+      }
+      return '<div class="stack"><span class="k">' + how + "</span>" +
+        "<h4>" + capTag(link.fact, link.kind === "motivated_by" ? "hint" : "req") + "</h4>" +
+        (get(D.facts, link.fact) && D.facts[link.fact].description
+          ? '<p class="muted">' + esc(D.facts[link.fact].description) + "</p>" : "") +
+        route + "</div>";
+    }).join("");
   };
 
   var continuationDetail = function (model) {
@@ -859,8 +946,9 @@
         '<div class="also">' + (still
           ? "<b>Still required:</b> " + still +
             ' <span class="muted">— Harrier has no view of a target and does not claim these hold.</span>'
-          : "<b>Nothing further is required</b> by the declaration; whether it is possible " +
-            "on a given target is still a question for the tester.") +
+          : "<b>No additional declared hard prerequisite.</b> What a unit declares " +
+            "is what the catalogue knows, which may be less than the whole of it — " +
+            "and Harrier has no view of a target either way.") +
         "</div></div>";
     }).join("");
   };
@@ -898,6 +986,53 @@
     return "<h3>If this test is unsuccessful</h3><div class=\"card\">" + parts.join("") + "</div>";
   };
 
+  /* Where this sits and where it can lead, in three lines, immediately.
+
+     The full graph stays below the procedure, because a tester who has decided
+     to perform the test should not have to scroll past a diagram to reach the
+     oracle. But on an authored unit the procedure runs for several screens, and
+     a reader who has to reach the end of it before learning that a success here
+     opens four other tests has been given the product's best feature last. The
+     strip is the answer up front; the graph is the same answer with its
+     reasoning attached. */
+  var chainStrip = function (uid) {
+    var model = localGraph(D, uid, 9999);
+    if (!model) return "";
+    var line = function (label, body) {
+      return '<div class="striprow"><span class="k">' + label + "</span><span>" + body + "</span></div>";
+    };
+    var parts = [];
+
+    var needs = model.incoming.shown.filter(function (l) { return l.kind !== "motivated_by"; });
+    parts.push(line("Needs first", needs.length
+      ? needs.map(function (l) { return capTag(l.fact, "req"); }).join("")
+      : '<span class="muted">Nothing declared: this test states no condition.</span>'));
+
+    parts.push(line("Success establishes", model.yields.shown.length
+      ? model.yields.shown.map(function (y) { return capTag(y.fact, "cap"); }).join("")
+      : '<span class="muted">Nothing declared, so no continuation is derived.</span>'));
+
+    var onward = model.outgoing.shown;
+    var body;
+    if (onward.length) {
+      body = onward.slice(0, 4).map(function (l) {
+        return '<a href="' + href("unit", l.unit) + '">' + esc(unitTitle(l.unit)) + "</a>";
+      }).join(" · ") +
+        (onward.length > 4 ? ' <span class="muted">and ' + (onward.length - 4) + " more</span>" : "") +
+        ' <span class="muted">— each with its own further conditions, below.</span>';
+    } else if (model.terminal.length) {
+      body = model.terminal.some(function (t) { return t.why === "impact"; })
+        ? '<span class="muted">An impact. A chain ends here.</span>'
+        : '<span class="muted">Nothing in the catalogue declares a use for what this ' +
+          "establishes, so the result is reportable rather than a step onward.</span>";
+    } else {
+      body = '<span class="muted">Nothing is derived from this test.</span>';
+    }
+    parts.push(line("May then be relevant", body));
+
+    return '<div class="strip">' + parts.join("") + "</div>";
+  };
+
   var viewUnit = function (uid, open) {
     var unit = get(D.units, uid);
     if (!unit) return notFound("test", uid);
@@ -929,6 +1064,7 @@
     };
 
     block("Objective", "<p>" + esc(unit.objective) + "</p>");
+    out.push(chainStrip(uid));
 
     var axis = axisOf(unit);
     if (axis && axis.note) {
@@ -1060,67 +1196,123 @@
           "reportable outcome rather than a step to a further test.") + "</p></div>");
     }
 
+    out.push(prerequisiteDetail(model));
     out.push(continuationDetail(model));
     return out.join("");
   };
 
   /* --------------------------- attack chains ---------------------------- */
 
+  /* The whole model, at the only scale that reads.
+
+     This was an arc diagram and the arcs were the problem: undirected, all one
+     weight, the counts computed and never drawn, and a dozen curves crossing
+     each other -- a smaller hairball is still a hairball. A matrix says the
+     same thing without a single ambiguity. A row is what a test requires, a
+     column is what it establishes, the number is how many tests span the two,
+     and every cell is a way in.
+
+     The families are an ontology, not the stages of an attack, so nothing here
+     claims a chain runs left to right. What runs somewhere is a route, and a
+     route is chosen rather than drawn over the whole catalogue at once. */
   var viewChains = function () {
     var model = familyOverview(D);
+    var names = model.nodes.map(function (n) { return n.name; });
     var byName = {};
     model.nodes.forEach(function (n) { byName[n.name] = n; });
+    var count = {};
+    model.edges.forEach(function (e) { count[e.from + ">" + e.to] = e.units; });
+    var busiest = model.edges.reduce(function (m, e) { return Math.max(m, e.units); }, 0);
 
-    /* Seven families across the reading column, so Impact -- the whole point of
-       the picture, the place a chain stops -- is on screen rather than behind a
-       horizontal scrollbar. 7 x 108 + 6 x 25 + 2 x 12 = 930. */
-    var W = 108, H = 72, GAP = 25;
-    var width = 2 * 12 + model.nodes.length * W + (model.nodes.length - 1) * GAP;
-    var y = 84, height = 196;
-    var parts = [];
-    model.nodes.forEach(function (n, i) { n.x = 12 + i * (W + GAP); });
-    model.edges.forEach(function (e) {
-      var a = byName[e.from], b = byName[e.to];
-      if (!a || !b || a === b) return;
-      var x1 = a.x + W / 2, x2 = b.x + W / 2;
-      var lift = Math.min(62, 14 + Math.abs(x2 - x1) / 9);
-      parts.push('<path class="gedge hard" d="M' + x1 + " " + y + " Q" + ((x1 + x2) / 2) +
-        " " + (y - lift) + " " + x2 + " " + y + '"></path>');
-    });
-    model.nodes.forEach(function (n) {
-      parts.push('<g class="gnode cap link" data-go="' + href("chains/family", n.name) +
-        '" transform="translate(' + n.x + "," + y + ')">' +
-        '<rect x="0" y="0" width="' + W + '" height="' + H + '" rx="4"></rect>' +
-        '<text x="8" y="19">' + esc(n.label) + "</text>" +
-        '<text class="s" x="8" y="35">' + n.facts + " capabilities</text>" +
-        '<text class="s" x="8" y="49">' + n.produced + " established</text>" +
-        '<text class="s" x="8" y="63">' + n.required + " consumed</text>" +
-        "</g>");
-    });
+    var header = "<tr><th></th>" + names.map(function (n) {
+      return '<th class="rot"><a href="' + href("chains/family", n) + '">' +
+        esc(byName[n].label) + "</a></th>";
+    }).join("") + "</tr>";
+
+    var rows = names.map(function (from) {
+      return "<tr><th><a href=\"" + href("chains/family", from) + '">' +
+        esc(byName[from].label) + "</a></th>" +
+        names.map(function (to) {
+          var n = count[from + ">" + to] || 0;
+          if (!n) return '<td class="cell zero">·</td>';
+          // Shaded by share of the busiest transition, so the shape of the
+          // model is legible before a single number is read.
+          var weight = Math.min(4, 1 + Math.floor((n / busiest) * 4));
+          return '<td class="cell w' + weight + '"><a href="' +
+            href("chains/span", from) + "/" + encodeURIComponent(to) + '">' + n + "</a></td>";
+        }).join("") + "</tr>";
+    }).join("");
 
     return crumbs([{ text: "Attack Chains" }]) +
       "<h2>Attack chains</h2>" +
-      '<p class="lede">The whole model at the only scale that reads: seven families of ' +
-      "capability, and how often a test in one is a condition of a test in another. " +
-      "Drill in rather than drawing five hundred nodes at once.</p>" +
-      '<div class="scroller graph"><svg width="' + width + '" height="' + height +
-      '" viewBox="0 0 ' + width + " " + height + '" role="img" ' +
-      'aria-label="Capability families and the tests that connect them">' +
-      '<text class="gcol" x="14" y="18">A chain runs left to right</text>' +
-      parts.join("") + "</svg></div>" +
-      '<p class="legend">An arc from one family to another counts the tests that require ' +
-      "a capability in the first and establish one in the second.</p>" +
+      '<p class="lede">Seven families of capability, and how many tests require one ' +
+      "in the row and establish one in the column. The families classify what a " +
+      "capability <em>is</em>; they are not the stages of an attack, and a route " +
+      "through them is something you choose rather than something this table draws." +
+      "</p>" +
+      '<div class="scroller"><table class="matrix">' + header + rows + "</table></div>" +
+      '<p class="legend">Row: a capability the test declares as a prerequisite. ' +
+      "Column: a capability its success establishes. Follow a number to the tests " +
+      "that span the two. <b>·</b> means no test does.</p>" +
       "<h3>Drill in</h3>" +
       '<div class="rows">' + model.nodes.map(function (n) {
-        return rowLink(href("chains/family", n.name), n.label, n.note, n.facts + " capabilities");
+        return rowLink(href("chains/family", n.name), n.label, n.note,
+          n.facts + " capabilities");
       }).join("") + "</div>" +
       "<h3>Where chains end</h3>" +
+      '<p class="muted">Nothing in the catalogue requires an impact: it is where a ' +
+      "chain stops, and the validator enforces that. Open one to see the routes " +
+      "charted to it.</p>" +
       '<div class="rows">' + (D.impacts || []).map(function (f) {
         return rowLink(href("capability", f), factLabel(f), f,
-          (get(D.producers, f) || []).length + " routes here");
+          (get(D.producers, f) || []).length + " tests establish it");
       }).join("") + "</div>" +
-      '<p class="muted">Nothing in the catalogue requires an impact: it is where a chain ' +
-      "stops, and the validator enforces that.</p>";
+      "<h3>Where the chart stops short</h3>" +
+      '<p class="muted">' + (D.unconsumed || []).length + " of " +
+      Object.keys(D.facts).length + " capabilities have no test declaring a use for " +
+      "them, so a chain reaching one ends there rather than continuing to an impact. " +
+      "That is the current reach of the chart, not a claim that nothing follows — " +
+      'see <a href="#/status">catalogue status</a>.</p>';
+  };
+
+  /* One cell of the matrix: the tests that span two families, each with the
+     capability it consumed and the one it established. The cell is a number
+     until it is opened; opening it has to say what the number was counting. */
+  var viewSpan = function (from, to) {
+    var families = {};
+    (D.families || []).forEach(function (f) { families[f.name] = f; });
+    if (!own(families, from) || !own(families, to)) return notFound("family transition", from + " to " + to);
+
+    var spanning = Object.keys(D.units || {}).sort().filter(function (uid) {
+      var unit = D.units[uid];
+      var requires = unit.requires || {};
+      var needs = (requires.all_of || []).concat(requires.any_of || []);
+      return needs.some(function (f) { return familyOf(f) === from; }) &&
+        (unit.yields || []).some(function (f) { return familyOf(f) === to; });
+    });
+
+    return crumbs([
+      { text: "Attack Chains", href: "#/chains" },
+      { text: families[from].label + " → " + families[to].label }
+    ]) +
+      "<h2>" + esc(families[from].label) + " → " + esc(families[to].label) + "</h2>" +
+      '<p class="lede">' + spanning.length + " test" + (spanning.length === 1 ? "" : "s") +
+      " require a capability in " + esc(families[from].label.toLowerCase()) +
+      " and establish one in " + esc(families[to].label.toLowerCase()) + ".</p>" +
+      spanning.map(function (uid) {
+        var unit = D.units[uid];
+        var requires = unit.requires || {};
+        var consumed = (requires.all_of || []).concat(requires.any_of || [])
+          .filter(function (f) { return familyOf(f) === from; });
+        var made = (unit.yields || []).filter(function (f) { return familyOf(f) === to; });
+        return '<div class="card"><h4><a href="' + href("unit", uid) + '">' +
+          esc(unit.title) + "</a> " + statusPill(unit) + "</h4>" +
+          '<div class="also"><b>Requires:</b> ' +
+          consumed.map(function (f) { return capTag(f, "req"); }).join("") +
+          " <b>Establishes:</b> " +
+          made.map(function (f) { return capTag(f, "cap"); }).join("") + "</div>" +
+          '<div class="meta">' + idChip(uid) + "</div></div>";
+      }).join("");
   };
 
   var viewFamily = function (name) {
@@ -1315,6 +1507,9 @@
     if (head === "extensions") return { nav: "standards", html: viewExtensions() };
     if (head === "chains") {
       if (arg === "family") return { nav: "chains", html: viewFamily(parts[2] || "") };
+      if (arg === "span") {
+        return { nav: "chains", html: viewSpan(parts[2] || "", parts[3] || "") };
+      }
       return { nav: "chains", html: viewChains() };
     }
     if (head === "capability") return { nav: "chains", html: viewCapability(arg) };
@@ -1335,9 +1530,20 @@
     window.scrollTo(0, 0);
   };
 
-  document.addEventListener("click", function (e) {
-    var node = e.target.closest ? e.target.closest("[data-go]") : null;
-    if (node) { location.hash = node.dataset.go; }
+  var follow = function (target) {
+    var node = target && target.closest ? target.closest("[data-go]") : null;
+    if (!node) return false;
+    location.hash = node.dataset.go;
+    return true;
+  };
+
+  document.addEventListener("click", function (e) { follow(e.target); });
+
+  /* A graph node is a link. Enter and Space have to reach it, or it is a link
+     only a mouse can use. */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+    if (follow(e.target)) e.preventDefault();
   });
 
   var box = document.getElementById("q");

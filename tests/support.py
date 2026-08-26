@@ -13,6 +13,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import time
 from pathlib import Path
 from typing import Any, Callable
 
@@ -224,29 +225,133 @@ def find_browser() -> str | None:
             return found
     root = os.environ.get("PLAYWRIGHT_BROWSERS_PATH")
     if root and Path(root).is_dir():
-        for candidate in sorted(Path(root).glob("chromium-*/chrome-linux/chrome")):
-            if candidate.is_file():
-                return str(candidate)
-        for candidate in sorted(Path(root).glob("chromium*/chrome-mac/Chromium.app/Contents/MacOS/Chromium")):
-            if candidate.is_file():
-                return str(candidate)
+        for pattern in (
+            "chromium-*/chrome-linux/chrome",
+            "chromium-*/chrome-win/chrome.exe",
+            "chromium*/chrome-mac/Chromium.app/Contents/MacOS/Chromium",
+        ):
+            for candidate in sorted(Path(root).glob(pattern)):
+                if candidate.is_file():
+                    return str(candidate)
     return None
 
 
-def render_in_browser(browser: str, page: Path, fragment: str = "") -> str:
-    """Load the artefact from disk and return the DOM after its script has run.
+def playwright_available() -> bool:
+    try:
+        import playwright.sync_api  # noqa: F401
+    except ImportError:
+        return False
+    return True
 
-    `file://` on purpose: that is how the artefact is opened, and it is the mode
+
+_BROWSER_CHECKED: bool | None = None
+
+
+def browser_available() -> bool:
+    """Whether a browser can actually be launched, rather than merely installed.
+
+    Asked properly because the two ways of having one come apart: a machine may
+    carry a browser Playwright did not download (found by `find_browser`), or
+    Playwright's own and nothing on PATH. Guessing from either alone turns a
+    skip into an error on one kind of machine and an error into a skip on the
+    other -- and a silent skip is the failure mode that matters, because a suite
+    that skipped a third of itself looks exactly like one that passed it.
+    """
+    global _BROWSER_CHECKED
+    if _BROWSER_CHECKED is None:
+        _BROWSER_CHECKED = False
+        if playwright_available():
+            if find_browser():
+                _BROWSER_CHECKED = True
+            else:
+                try:
+                    from playwright.sync_api import sync_playwright
+
+                    with sync_playwright() as pw:
+                        _BROWSER_CHECKED = Path(pw.chromium.executable_path).is_file()
+                except Exception:
+                    _BROWSER_CHECKED = False
+    return _BROWSER_CHECKED
+
+
+class Page:
+    """A real browser with the artefact open in it.
+
+    Driving the page rather than dumping its DOM is the difference between
+    testing what the script renders and testing what a person can do with it:
+    typing in the search box, clicking a node in the graph, pressing Enter on
+    one, following a link. None of that is reachable from a static dump, and all
+    of it is where a single-page application breaks.
+
+    It is also the only place the two guarantees can be checked as behaviour
+    rather than as text: every request the page attempts is recorded, and so is
+    every console error -- including the ones a Content-Security-Policy raises
+    when it blocks something the page needed.
+
+    Opened over `file://` on purpose. That is how the artefact is used, and it is
     where a browser is strictest about what an inline block may do.
     """
-    done = subprocess.run(
-        [
-            browser, "--headless", "--no-sandbox", "--disable-gpu",
-            "--disable-dev-shm-usage", "--disable-background-networking",
-            "--no-first-run", "--no-default-browser-check",
-            "--virtual-time-budget=8000", "--dump-dom",
-            "file://" + str(page) + fragment,
-        ],
-        capture_output=True, text=True, timeout=120,
-    )
-    return done.stdout
+
+    def __init__(self, path: Path) -> None:
+        from playwright.sync_api import sync_playwright
+
+        self._url = "file://" + str(path)
+        self._pw = sync_playwright().start()
+        launch: dict = {"args": ["--no-sandbox", "--disable-dev-shm-usage"]}
+        # Playwright ships with a browser build it expects; where the machine has
+        # a different one already, use that rather than reaching for the network.
+        found = find_browser()
+        if found:
+            launch["executable_path"] = found
+        self._browser = self._pw.chromium.launch(**launch)
+        self.page = self._browser.new_page()
+        self.console_errors: list[str] = []
+        self.requests: list[str] = []
+        self.page.on(
+            "console",
+            lambda m: self.console_errors.append(m.text) if m.type == "error" else None,
+        )
+        self.page.on("pageerror", lambda e: self.console_errors.append(str(e)))
+        self.page.on("request", lambda r: self.requests.append(r.url))
+
+    def open(self, fragment: str = ""):
+        self.page.goto(self._url + fragment)
+        self.page.wait_for_selector("main h2")
+        return self.page
+
+    def text(self, selector: str = "main") -> str:
+        return " ".join(self.page.inner_text(selector).split())
+
+    def hash(self) -> str:
+        return self.page.evaluate("location.hash")
+
+    def wait_for_render(self, predicate: "Callable[[], bool]", timeout: float = 5.0) -> None:
+        """Wait for the page to have redrawn, not merely for the URL to change.
+
+        `hashchange` is dispatched in a later task than the assignment that
+        causes it, so `location.hash` reads as the new route while the document
+        is still showing the old one. Asserting in that gap passes or fails on
+        timing rather than on behaviour.
+
+        Polled from here rather than with `wait_for_function`, which compiles a
+        string inside the page and is refused by the artefact's own
+        Content-Security-Policy -- correctly, since `unsafe-eval` is exactly what
+        that policy exists to withhold. A test helper must not be the reason a
+        security control is loosened.
+        """
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if predicate():
+                return
+            self.page.wait_for_timeout(25)
+        raise AssertionError("the page did not reach the expected state in time")
+
+    def count(self, selector: str) -> int:
+        return self.page.locator(selector).count()
+
+    def offsite(self) -> list:
+        return [url for url in self.requests if not url.startswith("file://")]
+
+    def close(self) -> None:
+        self._browser.close()
+        self._pw.stop()

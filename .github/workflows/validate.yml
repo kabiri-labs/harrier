@@ -1,8 +1,14 @@
-# The two commands a contributor runs locally, run again on every change.
+# The commands a contributor runs locally, run again on every change.
 #
-# Deliberately the same two, in the same order, with no CI-only extras: a check
+# Deliberately the same ones, in the same order, with no CI-only extras: a check
 # that only exists here is one nobody can reproduce before pushing, and it gets
 # worked around rather than fixed.
+#
+# node and a browser are installed for the same reason. Both runners are
+# optional in the suite -- it skips them and still passes on a machine that has
+# neither -- but "optional" plus "not installed in CI" is a test suite that
+# reports green while never having run a third of itself. Anyone can install the
+# same two locally and get the same result.
 name: validate
 
 on:
@@ -29,8 +35,34 @@ jobs:
       - name: Install dependencies
         run: python -m pip install --disable-pip-version-check "PyYAML>=6,<7" "jsonschema>=4,<5"
 
+      # Test-only, and only ever on this side of the build. Nothing it installs
+      # reaches the artefact: the published file is one self-contained HTML page
+      # that fetches nothing, and driving a browser to prove that is the point.
+      - name: Install the browser the interaction tests drive
+        run: |
+          python -m pip install --disable-pip-version-check "playwright>=1.40,<2"
+          python -m playwright install --with-deps chromium
+
       - name: Run the test suite
         run: python -m unittest discover -s tests -t .
+
+      # A suite that silently skipped the browser tests would look identical to
+      # one that ran them. Fail the job instead.
+      - name: Check the optional runners actually ran
+        run: |
+          python - <<'EOF'
+          import sys
+          from tests.support import browser_available, node_available
+          missing = [
+              name for name, ok in (
+                  ("node", node_available()),
+                  ("a launchable browser", browser_available()),
+              ) if not ok
+          ]
+          if missing:
+              sys.exit("optional runners not available in CI: " + ", ".join(missing))
+          print("node and a launchable browser are both present")
+          EOF
 
       - name: Validate the repository
         run: python -m harrier validate
