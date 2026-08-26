@@ -148,15 +148,17 @@ button.pick.on { color: var(--ink); border-color: var(--accent); }
 .gnode.cap rect { fill: #1a221d; stroke: #35503f; }
 .gnode.req rect { fill: #241f16; stroke: #4d4024; }
 .gnode.hintcap rect { fill: #221a26; stroke: #46345c; }
-.gnode text { font-size: 11px; fill: var(--ink); }
-.gnode text.s { font-size: 9px; fill: var(--faint); }
+.gnode text { font-size: 12px; fill: var(--ink); }
+.gnode text.s { font-size: 10px; fill: var(--dim); }
 .gnode.link { cursor: pointer; }
-.gnode.link:hover rect { stroke: var(--accent); }
+.gnode.link:hover rect, .gnode.link:focus rect { stroke: var(--accent); }
+.gnode.link:focus { outline: none; }
+.gnode.link:focus rect { stroke-width: 2; }
 .gedge { stroke: var(--line); fill: none; }
-.gedge.hard { stroke: #4d4a3a; }
-.gedge.soft { stroke: #46345c; stroke-dasharray: 4 3; }
-.glabel { font-size: 9px; fill: var(--faint); }
-.gcol { font-size: 9px; fill: var(--faint); letter-spacing: .08em; text-transform: uppercase; }
+.gedge.hard { stroke: #6d6850; color: #6d6850; }
+.gedge.soft { stroke: #6b53884d; stroke: #6b5388; color: #6b5388; stroke-dasharray: 4 3; }
+.glabel { font-size: 10px; fill: var(--dim); }
+.gcol { font-size: 10px; fill: var(--faint); letter-spacing: .08em; text-transform: uppercase; }
 .legend { font-size: .76rem; color: var(--faint); margin: .3rem 0 .8rem; }
 .legend b { font-weight: 500; color: var(--dim); }
 
@@ -167,3 +169,38 @@ button.pick.on { color: var(--ink); border-color: var(--accent); }
 
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .5rem; }
 @media (max-width: 700px) { #q { width: 100%; order: 3; } nav { order: 2; } }
+
+/* The family transition matrix. A table rather than a diagram: rows and columns
+   carry direction unambiguously, the numbers are the thing being reported, and
+   nothing crosses anything. */
+table.matrix { width: auto; min-width: 100%; font-size: .82rem; }
+table.matrix th { font-weight: 500; white-space: nowrap; }
+table.matrix th.rot { font-size: .68rem; }
+table.matrix td.cell { text-align: right; font-family: var(--mono); padding: .3rem .6rem; }
+table.matrix td.cell a { display: block; }
+table.matrix td.zero { color: var(--faint); text-align: center; }
+table.matrix td.w1 { background: #1a2129; }
+table.matrix td.w2 { background: #1e2a35; }
+table.matrix td.w3 { background: #223442; }
+table.matrix td.w4 { background: #27404f; }
+
+/* The chain strip: where this test sits and where it can lead, directly under
+   the objective. Three labelled lines, no diagram -- the diagram is below with
+   the reasoning attached. */
+.strip {
+  border: 1px solid var(--line); border-left: 3px solid var(--accent);
+  border-radius: 4px; padding: .5rem .9rem; margin: .6rem 0 1rem;
+  background: var(--panel);
+}
+.striprow { display: flex; gap: .8rem; align-items: baseline; padding: .18rem 0; flex-wrap: wrap; }
+.striprow > .k { margin: 0; min-width: 11rem; flex: 0 0 auto; }
+.striprow > span:last-child { font-size: .88rem; min-width: 0; }
+@media (max-width: 640px) { .striprow > .k { min-width: 100%; } }
+
+details.fold {
+  border: 1px solid var(--line); border-radius: 4px; padding: .4rem .9rem;
+  margin: .8rem 0; background: var(--panel); font-size: .88rem;
+}
+details.fold > summary { cursor: pointer; color: var(--dim); font-size: .82rem; }
+details.fold > summary:hover { color: var(--ink); }
+details.fold[open] > summary { margin-bottom: .4rem; }

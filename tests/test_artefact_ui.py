@@ -23,10 +23,10 @@ from tempfile import TemporaryDirectory
 
 from harrier.build import build, catalogue
 from tests.support import (
+    Page,
     REPO_ROOT,
-    find_browser,
+    browser_available,
     node_available,
-    render_in_browser,
     run_in_node,
 )
 
@@ -319,6 +319,98 @@ class TheGeneralGraph(unittest.TestCase):
         for lengths in result:
             self.assertEqual(lengths, sorted(lengths))
 
+    def test_two_routes_through_the_same_capability_are_both_reported(self):
+        """The failure a shared visited set caused, and the reason the walk
+        keeps its history per path instead.
+
+        Two tests establish the same capability. Marking it visited globally
+        lets whichever route reached it first claim it and silently discards the
+        other -- and where the first route cannot continue and the second can,
+        the discarded one was the answer."""
+        forked = {
+            "facts": {"a.start": {}, "a.mid": {}, "impact.done": {}},
+            "given": [],
+            "units": {
+                "HRR-A-01-P": {"id": "HRR-A-01-P", "requires": {"all_of": ["a.start"]}, "yields": ["a.mid"]},
+                "HRR-A-01-Q": {"id": "HRR-A-01-Q", "requires": {"all_of": ["a.start"]}, "yields": ["a.mid"]},
+                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"all_of": ["a.mid"]}, "yields": ["impact.done"]},
+            },
+            "requiredBy": {"a.start": ["HRR-A-01-P", "HRR-A-01-Q"], "a.mid": ["HRR-A-01-Z"]},
+        }
+        routes = run_in_node(
+            "return H.pathsToImpact(D, 'a.start', {maxPaths: 9, maxDepth: 5});", forked
+        )
+        self.assertEqual(
+            sorted(tuple(s["unit"] for s in r["steps"]) for r in routes),
+            [("HRR-A-01-P", "HRR-A-01-Z"), ("HRR-A-01-Q", "HRR-A-01-Z")],
+        )
+
+    def test_every_step_carries_the_conditions_that_step_still_owes(self):
+        """A route stated only the first edge's unmet conditions before. A unit
+        three steps in has its own, and they are what makes the route honest."""
+        result = run_in_node("""
+            const out = [];
+            Object.keys(D.facts).sort().forEach(function (f) {
+              H.pathsToImpact(D, f, {maxPaths: 2, maxDepth: 5}).forEach(function (r) {
+                r.steps.forEach(function (s, i) { out.push([s.unit, i, s.also]); });
+              });
+            });
+            return out;
+        """, self.data)
+        self.assertTrue(result)
+        carried = 0
+        for uid, position, also in result:
+            self.assertIsNotNone(also, uid)
+            unit = self.data["units"][uid]
+            declared = set((unit.get("requires") or {}).get("all_of") or [])
+            for fact in also["all_of"]:
+                self.assertIn(fact, declared, uid)
+            if also["all_of"] or also["any_of"]:
+                carried += 1
+        self.assertGreater(carried, 0, "no step in any route still owes anything")
+
+    def test_what_earlier_steps_established_counts_at_a_later_one(self):
+        """The same unit owes different things depending on how it was reached.
+
+        Y declares both capabilities. Reached directly it still owes the one
+        nothing established; reached through X it owes nothing, because X
+        established it on the way. A walk that computed the conditions once, at
+        the first edge, would report the same answer for both -- cautious in one
+        case and wrong in the other."""
+        result = run_in_node("""
+            const chained = {
+              facts: {"a.one": {}, "a.two": {}, "impact.done": {}},
+              given: [],
+              units: {
+                "HRR-A-01-X": {id: "HRR-A-01-X", requires: {all_of: ["a.one"]}, yields: ["a.two"]},
+                "HRR-A-01-Y": {id: "HRR-A-01-Y", requires: {all_of: ["a.two", "a.one"]}, yields: ["impact.done"]}
+              },
+              requiredBy: {"a.one": ["HRR-A-01-X", "HRR-A-01-Y"], "a.two": ["HRR-A-01-Y"]}
+            };
+            return H.pathsToImpact(chained, "a.one", {maxPaths: 5, maxDepth: 4});
+        """, self.data)
+        routes = {
+            tuple(step["unit"] for step in r["steps"]): r["steps"][-1]["also"]
+            for r in result
+        }
+        self.assertEqual(
+            routes.get(("HRR-A-01-Y",)), {"all_of": ["a.two"], "any_of": []},
+            "reached directly, Y still owes what nothing established",
+        )
+        self.assertEqual(
+            routes.get(("HRR-A-01-X", "HRR-A-01-Y")), {"all_of": [], "any_of": []},
+            "reached through X, Y owes nothing: X established it on the way",
+        )
+
+    def test_the_walk_stops_rather_than_running_without_a_bound(self):
+        result = run_in_node("""
+            const before = Date.now();
+            const routes = H.pathsToImpact(D, "recon.target.reachable",
+                                           {maxPaths: 99, maxDepth: 12, maxExplore: 500});
+            return {routes: routes.length, ms: Date.now() - before};
+        """, self.data)
+        self.assertLess(result["ms"], 4000, "the walk is not bounded")
+
     def test_a_cycle_terminates_rather_than_walking_for_ever(self):
         cyclic = {
             "facts": {"a.one": {}, "a.two": {}, "impact.done": {}},
@@ -533,49 +625,55 @@ class TheMarkdownRendererStaysSafe(unittest.TestCase):
         self.assertIn("<code>code</code>", out)
 
 
-BROWSER = find_browser()
-
-
-@unittest.skipUnless(BROWSER, "no browser is installed")
+@unittest.skipUnless(browser_available(), "no browser driver is installed")
 class TheBuiltFileWorksInABrowser(unittest.TestCase):
-    """The one test that exercises routing, the policy and the wording at once.
+    """The artefact, driven the way a person drives it.
 
-    Everything else here calls functions. This opens the artefact the way a
-    tester does -- from disk, over `file://`, where a browser is strictest about
-    what an inline block may do -- and reads what the script actually produced.
-    If the Content-Security-Policy did not name the script's own hash, nothing
-    below renders at all.
+    Everything above calls functions. This opens the built file from disk and
+    uses it: navigates, types, clicks, presses keys. That is the only way to
+    test the routing, the Content-Security-Policy and the rendered wording
+    together -- under a hash-based policy a script whose hash no longer matches
+    simply never runs, and nothing below would render at all.
+
+    One browser for the class: launching one per test costs more than the tests.
     """
 
     @classmethod
     def setUpClass(cls):
         cls._tmp = TemporaryDirectory(prefix="harrier-browser-")
-        cls.page = Path(cls._tmp.name) / "harrier.html"
-        build(REPO_ROOT, cls.page)
+        target = Path(cls._tmp.name) / "harrier.html"
+        build(REPO_ROOT, target)
+        cls.driver = Page(target)
 
     @classmethod
     def tearDownClass(cls):
+        cls.driver.close()
         cls._tmp.cleanup()
 
-    def dom(self, fragment=""):
-        return render_in_browser(BROWSER, self.page, fragment)
+    def open(self, fragment=""):
+        return self.driver.open(fragment)
 
-    @staticmethod
-    def text(dom):
-        body = re.search(r"<main[^>]*>(.*)</main>", dom, re.S)
-        stripped = re.sub(r"<[^>]+>", " ", body.group(1) if body else "")
-        return re.sub(r"\s+", " ", stripped).strip()
+    def text(self, fragment=""):
+        self.open(fragment)
+        return self.driver.text()
+
+    def assertShows(self, text, phrase, note=None):
+        """Case-insensitive: the stylesheet upper-cases section labels, and a
+        test that asserts on the casing is a test that breaks on a font change
+        rather than on a defect."""
+        self.assertIn(phrase.lower(), text.lower(), note or phrase)
+
+    # --- what it renders -------------------------------------------------
 
     def test_it_opens_on_standards(self):
-        dom = self.dom()
-        self.assertIn("Standards", self.text(dom))
-        self.assertIn("OWASP Web Security Testing Guide", self.text(dom))
-        self.assertIn("· Standards</title>", dom)
+        page = self.open()
+        self.assertEqual(page.inner_text("main h2"), "Standards")
+        self.assertIn("OWASP Web Security Testing Guide", self.driver.text())
 
     def test_the_script_runs_under_its_own_policy(self):
         # An empty <main> means the script never executed, which under a
         # hash-based policy means the hash did not match what was embedded.
-        self.assertTrue(self.text(self.dom()))
+        self.assertTrue(self.text())
 
     def test_the_required_journey_reaches_a_test_and_its_chain(self):
         for fragment, expected in (
@@ -583,112 +681,207 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
             ("#/wstg/INPV", "Testing for SQL Injection"),
             ("#/case/WSTG-INPV-05", "SQL injection"),
             ("#/unit/HRR-INJ-01-UNION", "UNION-based extraction"),
+            ("#/wstg/ATHZ", "Testing Directory Traversal File Include"),
+            ("#/unit/HRR-RES-01-READ", "Confirmed read outside the intended root"),
         ):
             with self.subTest(fragment=fragment):
-                self.assertIn(expected, self.text(self.dom(fragment)))
+                self.assertIn(expected, self.text(fragment))
 
     def test_the_test_detail_carries_what_a_tester_performs_it_from(self):
-        text = self.text(self.dom("#/unit/HRR-INJ-01-UNION"))
+        text = self.text("#/unit/HRR-INJ-01-UNION")
         for section in ("Objective", "Why this is a separate test", "Oracle",
                         "Sequence", "First false positive", "Done when",
                         "Safety boundary", "Payloads", "Tool", "Card",
                         "Local attack chain", "If this test is unsuccessful"):
-            self.assertIn(section, text, section)
+            self.assertShows(text, section)
+
+    def test_where_success_may_lead_is_answered_before_the_procedure(self):
+        """On an authored unit the procedure runs for several screens. The
+        product's own feature must not be at the bottom of them."""
+        page = self.open("#/unit/HRR-RES-01-READ")
+        strip = page.evaluate(
+            "document.querySelector('.strip').getBoundingClientRect().top"
+        )
+        oracle = page.evaluate(
+            "[...document.querySelectorAll('.k')].find(e => e.textContent === 'Oracle')"
+            ".getBoundingClientRect().top"
+        )
+        self.assertLess(strip, oracle, "the chain summary is below the procedure")
+        text = self.driver.text(".strip")
+        self.assertShows(text, "Needs first")
+        self.assertShows(text, "Success establishes")
+        self.assertShows(text, "May then be relevant")
+        self.assertShows(text, "Inclusion and execution of the resolved path")
 
     def test_the_local_chain_is_drawn_with_its_reasons(self):
-        dom = self.dom("#/unit/HRR-INJ-01-PROBE")
-        self.assertGreaterEqual(dom.count('class="gnode'), 5)
-        self.assertGreaterEqual(dom.count('class="gedge'), 4)
-        text = self.text(dom)
-        for heading in ("Established by", "Prerequisite", "This test",
-                        "Establishes", "Potential continuation"):
-            self.assertIn(heading, text, heading)
+        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        self.assertGreaterEqual(page.locator(".gnode").count(), 5)
+        self.assertGreaterEqual(page.locator(".gedge").count(), 4)
+        text = self.driver.text()
+        for heading in ("Prerequisite", "This test", "Establishes",
+                        "Potential continuation"):
+            self.assertShows(text, heading)
+        # Direction is drawn, not implied.
+        self.assertGreater(page.locator("path.gedge[marker-end]").count(), 0)
 
-    def test_the_bounded_graph_expands_and_the_expansion_is_a_place(self):
-        """The interaction is a route, not a toggle in memory: it survives a
-        reload and it is a link that can be handed to somebody else."""
-        small = self.dom("#/unit/HRR-INJ-01-PROBE")
-        large = self.dom("#/unit/HRR-INJ-01-PROBE/all")
-        self.assertIn("Show more", self.text(small))
-        self.assertNotIn("Show less", self.text(small))
-        self.assertGreater(large.count('class="gnode'), small.count('class="gnode'))
-        self.assertGreater(
-            self.text(large).count("Potential continuation"),
-            self.text(small).count("Potential continuation"),
-        )
-        self.assertIn("Show less", self.text(large))
-        self.assertNotIn("Show more", self.text(large))
-
-    def test_a_graph_node_carries_the_route_to_its_own_page(self):
-        # Scoped to <main>: the dumped DOM also contains the script that writes
-        # the attribute, and matching its source would prove nothing.
-        dom = self.dom("#/unit/HRR-INJ-01-PROBE")
-        rendered = re.search(r"<main[^>]*>(.*)</main>", dom, re.S).group(1)
-        targets = re.findall(r'data-go="([^"]+)"', rendered)
-        self.assertTrue(targets, "no node in the graph navigates anywhere")
-        for target in targets:
-            self.assertTrue(target.startswith("#/"), target)
-        self.assertTrue(any(t.startswith("#/unit/") for t in targets))
-        self.assertTrue(any(t.startswith("#/capability/") for t in targets))
+    def test_every_producer_of_a_prerequisite_is_named_not_just_the_first(self):
+        text = self.text("#/unit/HRR-RES-01-READ")
+        self.assertShows(text, "Established by")
+        self.assertShows(text, "Traversal sequence survival probe")
 
     def test_a_continuation_states_what_success_here_does_not_supply(self):
-        # Chosen because succeeding here supplies one condition of each
-        # continuation and not the rest, which is the ordinary case and the one
-        # the old model got wrong by calling it "unlocked".
-        text = self.text(self.dom("#/unit/HRR-RCN-07-MAP"))
-        self.assertIn("Potential continuation", text)
-        self.assertIn("Established here", text)
-        self.assertIn("Still required", text)
+        # Succeeding here supplies one condition of each continuation and not
+        # the rest, which is the ordinary case and the one the old model got
+        # wrong by calling it "unlocked".
+        text = self.text("#/unit/HRR-RCN-07-MAP")
+        self.assertShows(text, "Potential continuation")
+        self.assertShows(text, "Established here")
+        self.assertShows(text, "Still required")
 
     def test_a_test_whose_result_leads_nowhere_explains_itself(self):
-        text = self.text(self.dom("#/unit/HRR-INJ-01-UNION"))
-        self.assertIn("reportable outcome", text)
+        text = self.text("#/unit/HRR-INJ-01-UNION")
+        self.assertIn("no test declares a use for it", text.lower())
         self.assertIn("does not rule out", text.lower())
 
-    def test_the_general_graph_does_not_open_as_every_node_at_once(self):
-        dom = self.dom("#/chains")
-        # Seven families, not several hundred units.
-        self.assertLessEqual(dom.count('class="gnode'), 12)
-        self.assertIn("Reconnaissance", self.text(dom))
-        self.assertIn("Impact", self.text(dom))
+    def test_the_general_view_is_a_counted_directed_matrix(self):
+        page = self.open("#/chains")
+        self.assertEqual(page.locator("table.matrix").count(), 1)
+        self.assertEqual(page.locator(".gnode").count(), 0, "the hairball is back")
+        text = self.driver.text()
+        for family in ("Reconnaissance", "Surface", "Access", "Artefact",
+                       "Primitive", "Control", "Impact"):
+            self.assertIn(family, text, family)
+        # The counts are drawn, not merely computed.
+        filled = page.locator("table.matrix td.cell:not(.zero)")
+        self.assertGreater(filled.count(), 5)
+        self.assertRegex(filled.first.inner_text(), r"^\d+$")
 
-    def test_a_graph_fits_the_reading_column_rather_than_scrolling_away(self):
-        """Both graphs put their most important rank last -- what may follow, and
-        where a chain ends. A drawing wider than the column hides exactly that
-        behind a horizontal scrollbar, which is the same as not drawing it."""
-        # main is max-width 62rem with 1.4rem of padding: 992 - 44.8 of content.
-        column = 947
-        for fragment in ("#/unit/HRR-INJ-01-PROBE", "#/chains"):
-            with self.subTest(fragment=fragment):
-                dom = self.dom(fragment)
-                widths = [int(w) for w in re.findall(r'<svg width="(\d+)"', dom)]
-                self.assertTrue(widths, "nothing is drawn")
-                for width in widths:
-                    self.assertLessEqual(width, column, fragment)
+    def test_the_general_view_claims_no_ordering_the_families_do_not_have(self):
+        text = self.text("#/chains").lower()
+        self.assertNotIn("a chain runs left to right", text)
+        self.assertIn("not the stages of an attack", text)
 
-    def test_a_focused_capability_shows_a_smaller_graph_than_the_catalogue(self):
-        text = self.text(self.dom("#/capability/surface.sql.injectable"))
-        self.assertIn("Established by", text)
-        self.assertIn("Required by", text)
+    def test_a_matrix_cell_drills_down_to_the_tests_it_counted(self):
+        page = self.open("#/chains")
+        cell = page.locator("table.matrix td.cell:not(.zero) a").first
+        counted = int(cell.inner_text())
+        cell.click()
+        self.driver.wait_for_render(lambda: "Requires:" in self.driver.text())
+        text = self.driver.text()
+        self.assertShows(text, str(counted) + " test")
+        self.assertShows(text, "Requires:")
+        self.assertShows(text, "Establishes:")
 
-    def test_search_finds_a_payload_and_says_what_it_found(self):
-        text = self.text(self.dom("#/search/sqlmap"))
-        self.assertIn("Tools", text)
+    def test_a_focused_capability_shows_a_smaller_view_than_the_catalogue(self):
+        text = self.text("#/capability/surface.sql.injectable")
+        self.assertShows(text, "Established by")
+        self.assertShows(text, "Required by")
 
     def test_an_unknown_route_says_so_rather_than_rendering_nothing(self):
-        self.assertIn("Not here", self.text(self.dom("#/unit/__proto__")))
+        self.assertIn("Not here", self.text("#/unit/__proto__"))
+
+    # --- what a person can do with it ------------------------------------
+
+    def test_typing_in_the_search_box_searches(self):
+        page = self.open()
+        page.fill("#q", "sqlmap")
+        self.driver.wait_for_render(lambda: "sqlmap" in self.driver.text())
+        self.assertEqual(self.driver.hash(), "#/search/sqlmap")
+        self.assertShows(self.driver.text(), "Tools")
+
+    def test_clearing_the_search_box_leaves_the_results(self):
+        page = self.open()
+        page.fill("#q", "union")
+        self.driver.wait_for_render(lambda: "UNION-based" in self.driver.text())
+        page.fill("#q", "")
+        self.driver.wait_for_render(lambda: "is searchable" in self.driver.text())
+        self.assertEqual(self.driver.hash(), "#/search")
+        self.assertShows(self.driver.text(), "Everything the file carries is searchable")
+
+    def test_clicking_a_node_in_the_graph_opens_what_it_names(self):
+        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        node = page.locator(".gnode.link").first
+        target = node.get_attribute("data-go")
+        node.click()
+        self.driver.wait_for_render(lambda: self.driver.hash() == target)
+        page.wait_for_selector("main h2")
+        self.assertEqual(self.driver.hash(), target)
+        self.assertTrue(self.driver.text())
+
+    def test_a_graph_node_is_reachable_and_usable_from_the_keyboard(self):
+        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        node = page.locator(".gnode.link").first
+        self.assertEqual(node.get_attribute("role"), "link")
+        self.assertTrue(node.get_attribute("aria-label"))
+        target = node.get_attribute("data-go")
+        node.focus()
+        page.keyboard.press("Enter")
+        self.driver.wait_for_render(lambda: self.driver.hash() == target)
+        page.wait_for_selector("main h2")
+        self.assertEqual(self.driver.hash(), target)
+
+    def test_show_more_expands_the_graph_and_is_a_place_to_come_back_to(self):
+        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        before = page.locator(".gnode").count()
+        self.assertShows(self.driver.text(), "Show more")
+        page.click("a.more")
+        self.driver.wait_for_render(lambda: self.driver.count(".gnode") > before)
+        after = page.locator(".gnode").count()
+        self.assertGreater(after, before)
+        self.assertIn("/all", self.driver.hash())
+        self.assertShows(self.driver.text(), "Show less")
+        page.click("a.more")
+        self.driver.wait_for_render(lambda: self.driver.count(".gnode") == before)
+        self.assertNotIn("/all", self.driver.hash())
+
+    def test_a_continuation_navigates_to_its_own_test(self):
+        page = self.open("#/unit/HRR-RES-01-READ")
+        page.click("text=Inclusion and execution of the resolved path")
+        self.driver.wait_for_render(
+            lambda: self.driver.hash().startswith("#/unit/HRR-RES-01-EXEC")
+        )
+        self.assertIn("HRR-RES-01-EXEC", self.driver.hash())
+
+    def test_the_boundary_notes_are_folded_away_until_asked_for(self):
+        page = self.open("#/case/WSTG-INPV-05")
+        fold = page.locator("details.fold").first
+        self.assertFalse(fold.evaluate("e => e.open"))
+        # Units lead; the fold follows them.
+        unit = page.locator("a.card").first.evaluate("e => e.getBoundingClientRect().top")
+        note = fold.evaluate("e => e.getBoundingClientRect().top")
+        self.assertLess(unit, note)
+        fold.locator("summary").click()
+        self.assertTrue(fold.evaluate("e => e.open"))
+
+    def test_the_search_box_has_an_accessible_name(self):
+        page = self.open()
+        self.assertTrue(page.get_attribute("#q", "aria-label"))
+
+    # --- the two guarantees, as behaviour --------------------------------
 
     def test_no_rendered_page_claims_to_know_the_reader_s_target(self):
         forbidden = ("unlocked", "available now", "you hold", "your target",
                      "ruled out for", "is possible now")
         for fragment in ("", "#/wstg", "#/case/WSTG-INPV-05",
-                         "#/unit/HRR-INJ-01-UNION", "#/unit/HRR-INJ-01-PROBE",
+                         "#/unit/HRR-INJ-01-UNION", "#/unit/HRR-RES-01-READ",
                          "#/chains", "#/capability/access.user"):
-            text = self.text(self.dom(fragment)).lower()
+            text = self.text(fragment).lower()
             for phrase in forbidden:
                 self.assertNotIn(phrase, text, f"{fragment}: {phrase}")
 
     def test_the_conditional_wording_the_model_depends_on_is_present(self):
-        text = self.text(self.dom("#/unit/HRR-INJ-01-PROBE"))
-        self.assertIn("may become relevant", text)
-        self.assertIn("Potential continuation", text)
+        text = self.text("#/unit/HRR-INJ-01-PROBE")
+        self.assertShows(text, "may become relevant")
+        self.assertShows(text, "Potential continuation")
+
+    def test_it_asks_the_network_for_nothing_at_any_point(self):
+        """Not a substring check: every request the browser attempted, across
+        every page these tests have opened."""
+        self.assertEqual(self.driver.offsite(), [])
+
+    def test_nothing_it_does_raises_an_error_in_the_console(self):
+        """A policy that blocks something the page needed reports it here and
+        nowhere else. Runs last so it covers what the others did."""
+        self.open("#/chains")
+        self.open("#/unit/HRR-RES-01-READ")
+        self.assertEqual(self.driver.console_errors, [])
