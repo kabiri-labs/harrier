@@ -151,10 +151,16 @@ place here that runs somebody else's code with a token in the environment:
 - every action is GitHub's own or one of this project's -- no third-party action
   enters the supply chain of a project whose own supply chain is part of its
   threat model, and `gh` is already on the runner
-- no workflow starts from more than `contents: read`, and the only job that may
-  write is the one that attaches a file to a release
-- the release path cannot create a tag or a release, and the step that touches
-  one runs only on a published release
+- no workflow starts from more than `contents: read`, every job declares its own
+  rather than inheriting one, and the only job that may write is the one that
+  attaches a file to a release
+- that job runs none of this project's code: no checkout, no dependency install,
+  no Python. The building job holds `contents: read` and checks out without
+  persisting a credential, because a job that installs dependencies while
+  holding a write token is a job a compromised dependency can push from
+- the release path cannot create a tag or a release, and the job that touches
+  one is guarded on the job rather than the step, so a dispatch never creates a
+  runner holding a write credential
 
 Three properties are asserted about the repository rather than the code:
 

@@ -26,6 +26,10 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    # Declared rather than inherited. A job that never states its permissions is
+    # one nobody notices when the default above it changes.
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 

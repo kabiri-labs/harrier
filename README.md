@@ -156,13 +156,24 @@ person made. It has no path by which it publishes anything of its own. It then:
    than restating them;
 2. refuses to continue if the release tag and `__version__` disagree, because
    those are the two things anybody quotes and they must not diverge silently;
-3. builds `harrier-<version>.html`, records its SHA-256 beside it, and rebuilds
-   from scratch to prove the two are byte-identical — a digest published next to
-   a file nobody can reproduce means nothing;
-4. attaches both to the release.
+3. builds the artefact, records its SHA-256 beside it, and rebuilds from scratch
+   to prove the two are byte-identical — a digest published next to a file
+   nobody can reproduce means nothing;
+4. attaches both to the release, from a separate job.
 
-`workflow_dispatch` runs all of it and publishes nothing: the file is kept on
-the run for seven days so it can be inspected without a release existing.
+The separation is the security property, not tidiness. Building means
+installing dependencies and executing this repository at the released ref, and a
+job holding a write credential while doing either is a job where a compromised
+dependency can push to the repository — `actions/checkout` persists the token in
+`.git/config` unless told not to. So the build runs with `contents: read` and no
+persisted credential, and the only job that can write checks nothing out,
+installs nothing, and runs no Python: a download and one `gh` call.
+
+`workflow_dispatch` runs all of it and publishes nothing. The publishing job is
+guarded on the job rather than the step, so a dispatch never creates a runner
+holding a write credential at all — it cannot publish, rather than declining to.
+The file is kept on the run for seven days so it can be inspected without a
+release existing.
 
 Verify a downloaded artefact with:
 

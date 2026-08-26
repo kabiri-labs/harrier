@@ -204,3 +204,9 @@ The trigger is `release: published` rather than a tag push, so the workflow can
 only ever add a file to a publication a person made; it has no path by which it
 publishes anything of its own. `workflow_dispatch` exercises the whole thing and
 publishes nothing.
+
+Building and publishing are separate jobs on purpose. The build installs
+dependencies and runs this repository's code, so it holds `contents: read` and
+checks out without persisting a credential; the job that can write runs neither,
+and is guarded on the job rather than the step so a dispatch never creates a
+runner holding a write credential at all.
