@@ -897,8 +897,9 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         page = self.open("#/chains")
         cell = page.locator("table.matrix td.cell:not(.zero) a").first
         counted = int(cell.inner_text())
+        before = self.driver.heading()
         cell.click()
-        self.driver.wait_for_render(lambda: "Requires:" in self.driver.text())
+        self.driver.wait_for_view(before)
         text = self.driver.text()
         self.assertShows(text, str(counted) + " test")
         self.assertShows(text, "Requires:")
@@ -927,11 +928,12 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                 page = self.open("#/search/" + term.replace(" ", "%20"))
                 card = page.locator("a.card").first
                 target = card.get_attribute("href")
+                before = self.driver.heading()
                 card.click()
-                self.driver.wait_for_render(lambda: self.driver.hash() == target)
-                page.wait_for_selector("main h2")
+                heading = self.driver.wait_for_view(before)
+                self.assertEqual(self.driver.hash(), target)
                 text = self.driver.text()
-                self.assertNotEqual(page.inner_text("main h2"), "Standards",
+                self.assertNotEqual(heading, "Standards",
                                     f"{target} fell through to the landing page")
                 self.assertShows(text, expect)
                 self.assertShows(text, "Tests that")
@@ -966,11 +968,10 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         page = self.open("#/unit/HRR-INJ-01-PROBE")
         node = page.locator(".gnode.link").first
         target = node.get_attribute("data-go")
+        before = self.driver.heading()
         node.click()
-        self.driver.wait_for_render(lambda: self.driver.hash() == target)
-        page.wait_for_selector("main h2")
+        self.assertNotEqual(self.driver.wait_for_view(before), "Standards")
         self.assertEqual(self.driver.hash(), target)
-        self.assertTrue(self.driver.text())
 
     def test_a_graph_node_is_reachable_and_usable_from_the_keyboard(self):
         page = self.open("#/unit/HRR-INJ-01-PROBE")
@@ -978,10 +979,10 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertEqual(node.get_attribute("role"), "link")
         self.assertTrue(node.get_attribute("aria-label"))
         target = node.get_attribute("data-go")
+        before = self.driver.heading()
         node.focus()
         page.keyboard.press("Enter")
-        self.driver.wait_for_render(lambda: self.driver.hash() == target)
-        page.wait_for_selector("main h2")
+        self.assertNotEqual(self.driver.wait_for_view(before), "Standards")
         self.assertEqual(self.driver.hash(), target)
 
     def test_show_more_expands_the_graph_and_is_a_place_to_come_back_to(self):
@@ -1000,10 +1001,9 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
 
     def test_a_continuation_navigates_to_its_own_test(self):
         page = self.open("#/unit/HRR-RES-01-READ")
+        before = self.driver.heading()
         page.click("text=Inclusion and execution of the resolved path")
-        self.driver.wait_for_render(
-            lambda: self.driver.hash().startswith("#/unit/HRR-RES-01-EXEC")
-        )
+        self.driver.wait_for_view(before)
         self.assertIn("HRR-RES-01-EXEC", self.driver.hash())
 
     def test_the_boundary_notes_are_folded_away_until_asked_for(self):

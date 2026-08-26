@@ -349,6 +349,22 @@ class Page:
     def count(self, selector: str) -> int:
         return self.page.locator(selector).count()
 
+    def heading(self) -> str:
+        return self.page.inner_text("main h2")
+
+    def wait_for_view(self, previous: str, timeout: float = 5.0) -> str:
+        """Wait until a new view has been drawn, given the one on screen now.
+
+        The reliable signal, and the reason it is not the URL: the hash is
+        assigned first and `hashchange` is dispatched in a later task, so a test
+        that waits on `location.hash` and then reads the document is asserting
+        against whichever the machine got to first. It passes on a fast one and
+        fails on a slow one, which is the worst kind of test.
+        """
+        self.wait_for_render(lambda: self.heading() != previous, timeout)
+        self.page.wait_for_selector("main h2")
+        return self.heading()
+
     def offsite(self) -> list:
         return [url for url in self.requests if not url.startswith("file://")]
 
