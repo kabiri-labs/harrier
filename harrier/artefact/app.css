@@ -131,12 +131,12 @@ td code, .payload { white-space: pre; }
 }
 .scroller { overflow-x: auto; margin: .6rem 0; }
 
-button.more, button.pick {
-  background: transparent; color: var(--dim); border: 1px solid var(--line);
-  border-radius: 3px; padding: .25rem .7rem; font-size: .8rem; cursor: pointer;
-  margin: .3rem .3rem .3rem 0; font-family: inherit;
+.more, button.pick {
+  display: inline-block; background: transparent; color: var(--dim);
+  border: 1px solid var(--line); border-radius: 3px; padding: .25rem .7rem;
+  font-size: .8rem; cursor: pointer; margin: .3rem .3rem .3rem 0; font-family: inherit;
 }
-button.more:hover, button.pick:hover { color: var(--ink); border-color: var(--accent); }
+.more:hover, button.pick:hover { color: var(--ink); border-color: var(--accent); text-decoration: none; }
 button.pick.on { color: var(--ink); border-color: var(--accent); }
 
 /* The local chain graph. Deterministic five-column layout computed in the
