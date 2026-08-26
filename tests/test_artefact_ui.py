@@ -306,6 +306,34 @@ class TheGeneralGraph(unittest.TestCase):
                 self.assertIn(step["to"], unit.get("yields") or [])
                 previous = step["to"]
 
+    def test_the_readme_states_the_real_number_of_charted_routes_to_an_impact(self):
+        """The figure a reader uses to judge how far the chain actually runs.
+        Only the walk can produce it, so it is pinned where the walk lives."""
+        result = run_in_node("""
+            let withRoute = 0, total = 0;
+            Object.keys(D.facts).forEach(function (f) {
+              if (H.familyOf(f) === "impact") return;
+              total++;
+              if (H.pathsToImpact(D, f, {maxPaths: 5, maxDepth: 6}).length) withRoute++;
+            });
+            return {withRoute: withRoute, total: total};
+        """, self.data)
+        readme = " ".join((REPO_ROOT / "README.md").read_text(encoding="utf-8").split())
+        self.assertIn(
+            f"| Capabilities with a charted route to an impact | "
+            f"{result['withRoute']} of {result['total']} |",
+            readme,
+        )
+        self.assertIn(
+            f"only {result['withRoute']} capabilities have any charted route to an impact",
+            readme,
+        )
+
+    def test_the_readme_states_the_real_number_of_derived_edges(self):
+        edges = sum(len(e["out"]) for e in self.data["chain"].values())
+        readme = " ".join((REPO_ROOT / "README.md").read_text(encoding="utf-8").split())
+        self.assertIn(f"| Derived unit-to-unit edges | {edges} |", readme)
+
     def test_shorter_routes_come_first(self):
         result = run_in_node("""
             const out = [];
@@ -937,6 +965,30 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                                     f"{target} fell through to the landing page")
                 self.assertShows(text, expect)
                 self.assertShows(text, "Tests that")
+
+    def test_the_about_page_states_the_alpha_and_derives_its_figures(self):
+        """A figure maintained separately from the data it describes is wrong
+        somewhere, and this file is the copy a reader has offline."""
+        text = self.text("#/about")
+        authored = sum(
+            1 for u in self.data["units"].values() if u.get("status") != "outline"
+        )
+        self.assertShows(text, "early public alpha")
+        self.assertShows(text, f"{len(self.data['units'])} tests across "
+                               f"{len(self.data['topics'])} topics")
+        self.assertShows(text, f"{authored} are written to full procedural depth")
+
+    def test_the_about_page_says_what_the_file_does_not_know(self):
+        text = self.text("#/about")
+        for phrase in ("never seen the application you are testing", "potential continuation",
+                       "not affiliated with", "no network request",
+                       "stores nothing in this browser"):
+            self.assertShows(text, phrase)
+
+    def test_the_about_page_explains_an_outline_rather_than_hiding_it(self):
+        text = self.text("#/about")
+        self.assertShows(text, "outline")
+        self.assertShows(text, "no procedure")
 
     def test_a_focused_capability_shows_a_smaller_view_than_the_catalogue(self):
         text = self.text("#/capability/surface.sql.injectable")

@@ -55,6 +55,19 @@ the full list of non-goals are in [`PIVOT.md`](PIVOT.md) rather than here,
 because a roadmap records what is being built and that document records why one
 thing stopped being built.
 
+## Public alpha
+
+0.4.0 is the first version published for anyone outside the project to look at,
+and it is an alpha in the honest sense: the decomposition is broad and the depth
+behind it is not. Every resolvable WSTG identifier is claimed and 366 Test Units
+exist; 10 are written to full procedural depth, and the far half of the chain is
+barely charted.
+
+Both figures are in the README rather than at the bottom of it, and the suite
+reads them from the catalogue so neither can go stale in prose. The label is not
+a disclaimer to be dropped once the project feels more finished -- it comes off
+when the numbers say so.
+
 ## The standing rule
 
 **Never let depth block coverage.**

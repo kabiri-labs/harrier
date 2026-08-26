@@ -1577,36 +1577,79 @@
   };
 
   var viewAbout = function () {
+    /* Every number here is read from the catalogue at render time. A figure
+       maintained separately from the data it describes is a figure that is
+       wrong somewhere, and this file is the copy a reader has offline. */
+    var reach = D.reach || {continuation: 0, impact: 0, short: 0, uncharted: 0};
+    var units = Object.keys(D.units).length;
+    var authored = Object.keys(D.units).filter(function (id) {
+      return D.units[id].status !== "outline";
+    }).length;
+
     return crumbs([{ text: "About" }]) +
       "<h2>About Harrier</h2>" +
-      '<p class="lede">An interactive execution companion for web security testing ' +
-      "standards. It decomposes large standard test cases into atomic, independently " +
-      "understandable tests, and shows what attack-chain paths may become relevant when " +
-      "each one succeeds.</p>" +
-      '<div class="card"><p><b>WSTG tells you what to cover. Harrier shows you the real ' +
-      "tests inside it and where each successful test can lead.</b></p></div>" +
+      '<p class="lede">An offline execution companion for web application security ' +
+      "testing standards. It breaks broad standard test cases into atomic, separately " +
+      "addressable tests, and derives the attack-chain continuations each success may " +
+      "open.</p>" +
+      '<div class="card"><p><b>' + esc(D.standard.short) + " tells you what to cover. " +
+      "Harrier shows you the real tests inside each test case, and where a successful " +
+      "one may lead.</b></p></div>" +
+
+      '<div class="notice">Version ' + esc(D.version) + " is an early public alpha. " +
+      "The decomposition is broad — " + units + " tests across " +
+      Object.keys(D.topics).length + " topics — and the depth behind it is not: " +
+      authored + " are written to full procedural depth, and the far half of the chain " +
+      'is barely charted. <a href="#/status">Catalogue status</a> has the figures.</div>' +
+
       "<h3>How to use it</h3>" +
       "<ol><li>Choose the standard, then the testing group you are working in.</li>" +
-      "<li>Choose the test case.</li><li>Read the atomic tests it decomposes into.</li>" +
-      "<li>Open one and perform it.</li>" +
-      "<li>Read the local chain to see where a success may lead.</li></ol>" +
-      "<h3>What it is not</h3>" +
+      "<li>Choose the test case.</li>" +
+      "<li>Read the tests it decomposes into, and open one.</li>" +
+      "<li>Perform it from the objective, oracle, sequence and safety boundary.</li>" +
+      "<li>Read the chain to see which tests a success may make relevant.</li></ol>" +
+
+      "<h3>Tests and capabilities</h3>" +
+      "<p>A <b>test</b> is the atomic thing you perform and record one result for. It " +
+      "carries an objective that can be wrong and a boundary against its siblings; where " +
+      "it is written in full it also carries an oracle, a sequence, payloads, false " +
+      "positives and a limit on how far to take it. A test marked <b>outline</b> has the " +
+      "identifier, the objective, the boundary and its place in the chain, and no " +
+      "procedure — the page says so rather than inventing one.</p>" +
+      "<p>A <b>capability</b> is what a success establishes, or what a test needs before " +
+      "it is possible at all. Capabilities are the join keys: no test ever names another " +
+      "test. A <b>declared prerequisite</b> is a condition of performing the test; a " +
+      "<b>motivation</b> makes it worth reaching for sooner and is never a gate. An " +
+      "<b>impact</b> is terminal — nothing may require one.</p>" +
+
+      "<h3>What this file does not know</h3>" +
+      "<p>It has never seen the application you are testing and does not ask about it. " +
+      "Every chain statement " +
+      "is about the relationship between two tests — <i>potential continuation</i>, " +
+      "<i>may become relevant</i>, <i>no additional declared hard prerequisite</i> — and " +
+      "never a claim that something is true of an application. A continuation always " +
+      "names what succeeding here does not supply, because being reached through one " +
+      "capability is not the same as being possible.</p>" +
       "<p>Not a scanner, an exploit framework, a reporting platform, an engagement " +
-      "tracker, or an automatic decision-maker. It holds no target, no engagement, no " +
-      "results and no findings, and it stores nothing in this browser. Every chain " +
-      "statement is about the relationship between two tests — never a claim about your " +
-      "target.</p>" +
+      "tracker, or a target-aware recommendation engine. It holds no target, no " +
+      "engagement, no results and no findings, and stores nothing in this browser. " +
+      "Deciding which of this applies today is yours, and that is where the knowledge " +
+      "is.</p>" +
+
+      "<h3>Offline by design</h3>" +
+      "<p>One self-contained file. It fetches no stylesheet, script, font or image and " +
+      "makes no network request of any kind. It is opened from disk on an engagement " +
+      "network, where a request to a third party would tell that party which target is " +
+      "being tested and when.</p>" +
+
       "<h3>Standards</h3>" +
       "<p>" + esc(D.standard.name) + " is the execution-navigation standard, pinned at " +
       "<code>" + esc(D.standard.commit.slice(0, 12)) + "</code> and retrieved " +
-      esc(D.standard.retrieved) + ". ASVS is a control and remediation mapping; CWE is a " +
-      "weakness classification. Identifiers are cross-referenced; no prose from any of " +
-      "them is reproduced here.</p>" +
-      "<h3>Offline by design</h3>" +
-      "<p>One self-contained file. It fetches no stylesheet, script, font or image, makes " +
-      "no network request of any kind, and is opened from disk on an engagement network " +
-      "where a request to a third party would tell that party which target is being " +
-      "tested and when.</p>" +
+      esc(D.standard.retrieved) + ". ASVS is referenced as a control and remediation " +
+      "mapping, CWE as a weakness classification. Identifiers, official test titles and " +
+      "group headings are cross-referenced; no prose from any of them is reproduced " +
+      "here.</p>" +
+      "<p>Harrier is not affiliated with, endorsed by, or sponsored by OWASP.</p>" +
       '<p class="muted">Version ' + esc(D.version) + " · " +
       '<a href="#/status">Catalogue status</a></p>';
   };
