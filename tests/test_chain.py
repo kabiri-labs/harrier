@@ -364,6 +364,33 @@ class ContinuationsAreOrderedByTier(unittest.TestCase):
         )
         self.assertEqual([e["tier"] for e in out], ["chain", "engagement"])
 
+    def test_a_hinted_fact_counts_toward_the_tier_even_when_a_hard_one_exists(self):
+        """`kind` and `tier` answer different questions. Whether a hard
+        prerequisite exists decides the first; the most specific fact the edge
+        travels through decides the second. A consumer that requires a session
+        and is motivated by a captured token travels through both, and reading
+        only the hard side would file it under the session -- hiding exactly the
+        relation the tier exists to surface."""
+        units = {
+            "HRR-A-01-P": {
+                "id": "HRR-A-01-P",
+                "topic": "HRR-A-01",
+                "yields": ["access.user", "artifact.token"],
+            },
+            "HRR-B-02-C": {
+                "id": "HRR-B-02-C",
+                "topic": "HRR-B-02",
+                "requires": {"all_of": ["access.user"]},
+                "motivated_by": ["artifact.token"],
+            },
+        }
+        index = chain_index(units, given=set(), tiers=TIERS)
+        edge = index["HRR-A-01-P"]["out"][0]
+        self.assertEqual(edge["via"], ["access.user"])
+        self.assertEqual(edge["hint"], ["artifact.token"])
+        self.assertEqual(edge["kind"], "requires")
+        self.assertEqual(edge["tier"], "chain")
+
     def test_the_real_catalogue_files_the_known_escalations_as_chain(self):
         """The five primitive and artifact escalations in the catalogue are the
         ones a tester means by "attack chain". If any of them stops being

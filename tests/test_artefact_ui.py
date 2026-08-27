@@ -42,6 +42,39 @@ class TheLocalGraphModel(unittest.TestCase):
     def run_js(self, body):
         return run_in_node(body, self.data)
 
+    def test_the_tier_totals_count_every_edge_not_the_bounded_preview(self):
+        """The count beside each heading is what makes the engagement list safe
+        to skip. Taken from the three-item preview it would read "(1)" where the
+        truth is ninety -- and a reader would believe it, which is worse than
+        showing no count at all."""
+        result = self.run_js("""
+            const out = {};
+            Object.keys(D.units).forEach(function (id) {
+              const g = H.localGraph(D, id, 3);
+              const real = {};
+              (D.chain[id].out || []).forEach(function (e) {
+                real[e.tier] = (real[e.tier] || 0) + 1;
+              });
+              const got = g.tierTotals || {};
+              if (JSON.stringify(real) !== JSON.stringify(got)) out[id] = [real, got];
+            });
+            return out;
+        """)
+        self.assertEqual(result, {}, "tierTotals disagrees with the derivation")
+
+    def test_the_totals_survive_the_preview_being_smaller_than_the_tier(self):
+        result = self.run_js("""
+            const g = H.localGraph(D, "HRR-IDN-01-POLICY", 3);
+            return {
+              shown: g.outgoing.shown.length,
+              engagement: g.tierTotals.engagement,
+              chain: g.tierTotals.chain
+            };
+        """)
+        self.assertEqual(result["shown"], 3)
+        self.assertEqual(result["chain"], 2)
+        self.assertEqual(result["engagement"], 90)
+
     def test_it_is_bounded_before_it_is_expanded(self):
         result = self.run_js("""
             const out = {};
