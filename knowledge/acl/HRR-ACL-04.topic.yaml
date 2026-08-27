@@ -7,6 +7,7 @@ surfaces:
   any_of: [privileged-function, admin-panel, impersonation, multi-tenant]
 
 order:
+  - HRR-ACL-04-MAP
   - HRR-ACL-04-DIFF
   - HRR-ACL-04-REPLAY
   - HRR-ACL-04-TOCTOU
