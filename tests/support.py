@@ -87,6 +87,32 @@ class Sandbox:
         for unit in self.root.glob(f"knowledge/*/{topic_id}-*.unit.yaml"):
             unit.unlink()
         self._prune_facts()
+        self._rebuild_index()
+
+    def _rebuild_index(self) -> None:
+        """Regenerate the derived index over whatever the fixture now holds.
+
+        `standards/wstg-index.yaml` names units, and removing units leaves it
+        pointing at ones that no longer exist -- which the validator rejects,
+        correctly, and as a second broken thing the test never asked for. Same
+        reason as `_prune_facts` above: a mutation test must break exactly one
+        rule, so the fixture repairs what it disturbed on its way past.
+
+        Regenerated rather than deleted. A missing index is its own finding, and
+        substituting one failure for another would leave the tests passing for
+        the wrong reason.
+        """
+        from harrier import Repository
+        from harrier.standard import INDEX_PATH, index_document
+
+        target = self.path(INDEX_PATH.as_posix())
+        if not target.is_file():
+            return
+        document = index_document(Repository.load(self.root))
+        target.write_text(
+            yaml.safe_dump(document, sort_keys=False, allow_unicode=True, width=100),
+            encoding="utf-8",
+        )
 
     def _prune_facts(self) -> None:
         """Drop facts nothing references any more.

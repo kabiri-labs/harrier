@@ -257,15 +257,24 @@ def _checklist(root: Path, args) -> int:
     else:
         selected = [built[wid] for wid in sorted(built)]
     if args.uncovered:
-        selected = [case for case in selected if not case.covered]
+        # Only cases that could have a topic and do not. One the domain map
+        # deliberately resolved to nothing is a decision somebody made and
+        # wrote down, and listing it here would present it as work outstanding.
+        selected = [case for case in selected if not case.covered and case.resolvable]
 
     units = {doc.data["id"]: doc.data for doc in repo.units}
     for case in selected:
         if not case.covered:
-            # Said plainly rather than shown as an empty list. No topic claims
-            # it, and a blank line reads as "nothing to do here".
+            # Said plainly rather than shown as an empty list. A blank line
+            # reads as "nothing to do here", and the two reasons a case has no
+            # topic are opposite: one is a gap, the other is a decision.
             print(f"{case.id}  {case.title}")
-            print("  no topic claims this test case")
+            if case.resolvable:
+                print("  no topic claims this test case")
+            else:
+                print("  resolved to no domain on purpose -- not a coverage gap")
+                if case.note:
+                    print(f"  {case.note}")
             continue
         depth = f"{case.authored} authored, {case.outline} outline"
         print(f"{case.id}  {case.title}  [{len(case.units)} unit(s): {depth}]")

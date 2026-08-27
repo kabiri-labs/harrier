@@ -54,7 +54,10 @@ SAFE_LOADER = _SafeLoader
 #: which test cases a topic claims and never which units cover a test case --
 #: derivable, but reachable only from inside the built file, which is not the
 #: same as available.
-__version__ = "0.8.0"
+#:
+#: 0.8.1 makes the index resolve. It was schema-checked and not reference-checked,
+#: which for a derived file is the difference between a document and a claim.
+__version__ = "0.8.1"
 
 __all__ = [
     "SAFE_LOADER",
