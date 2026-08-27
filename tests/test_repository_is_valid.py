@@ -1,5 +1,6 @@
 """The repository itself passes, and the counts it publishes are true."""
 
+import collections
 import unittest
 
 from harrier.chain import Chain
@@ -194,6 +195,24 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         for label, value in rows:
             with self.subTest(row=label):
                 self.assertIn(f"| {label} | {value} |", readme)
+
+    def test_the_edge_split_in_that_table_is_read_from_the_data(self):
+        """The total on its own oversells. Most of those 561 edges say a test
+        needs a session, and a reader who takes the headline for a count of
+        escalations is being misled by a true number -- so the split is
+        published beside it and asserted here."""
+        tiers = collections.Counter(
+            edge["tier"] for node in self.chain.index().values() for edge in node["out"]
+        )
+        readme = self.docs["README.md"]
+        for label, tier in (
+            ("— of them escalations between capabilities", "chain"),
+            ("— another technique for the same test", "topic"),
+            ("— a general prerequisite, not a step", "engagement"),
+        ):
+            with self.subTest(row=label):
+                self.assertIn(f"| {label} | {tiers[tier]} |", readme)
+        self.assertEqual(sum(tiers.values()), 561)
 
     def test_the_group_and_domain_counts_in_that_table_are_real(self):
         from harrier import Repository

@@ -118,6 +118,37 @@ leaves one to be earned by registering, and a root that assumed otherwise would
 present tests whose condition nothing has established. `access.user` has a
 producer like anything else, and a test that needs it says so.
 
+### Tiers
+
+Every fact also declares a `tier`, and it decides what an edge *through* that
+fact is called:
+
+| Tier | The edge is |
+|---|---|
+| `engagement` | A general precondition rather than a step. Holding a session, having enumerated the entrypoints. |
+| `topic` | A join inside one topic: another technique for the same test, not a step past it. |
+| `chain` | Currency — a capability, an artifact, a defeated control, an outcome, a finding that picks the next technique. The escalation a tester means by "attack chain". |
+
+The derivation cannot tell these apart from the join alone: "A yields what B
+requires" is the same sentence for all three. Without the tier they printed under
+one heading, and the arithmetic of that is unforgiving — `HRR-IDN-01-POLICY`
+yields `access.user`, which 90 tests require, and the two genuine escalations
+leaving that unit sorted somewhere among the ninety.
+
+An edge travelling through several facts takes the **most specific** tier any of
+them carries: a step needing both a held session and a captured token is reached
+by capturing the token. The other precedence would file it under the session and
+bury it again.
+
+A tier says what kind of thing a fact is, not how many topics consume it today.
+That distinction is deliberate: a label that shifted as the catalogue grew would
+be worse than none, because a reader would have learnt a heading that later means
+something else.
+
+`tier` is required. A fact that declared none would have to be defaulted into one
+of the three, and any default silently refills the heading the field exists to
+empty.
+
 ## 5. What the validator enforces
 
 - Every fact named by a unit exists in the vocabulary.
@@ -130,6 +161,7 @@ producer like anything else, and a test that needs it says so.
 - Every declared fact is referenced by at least one unit. Vocabulary must not
   outrun use.
 - No fact id is declared twice.
+- Every fact declares a `tier`, and it is one of the three.
 
 One rule is deliberately **not** enforced yet: that every non-`given` fact has at
 least one unit producing it. While the catalogue is partly charted, that rule
@@ -164,6 +196,13 @@ This is what the artefact renders around every unit, and the rules it follows.
 **A prerequisite describes possibility, never likelihood.** It is a condition of
 the test being performable at all. Anything that merely makes it more promising
 is `motivated_by`.
+
+**Continuations are grouped by tier, not listed flat.** The escalations come
+first under their own heading, then the alternative techniques for the same test,
+then the general prerequisites — the last with a count and without the per-edge
+detail, because ninety rows each saying "this test also needs a session" is what
+made the two rows above them impossible to find. Nothing is hidden: every
+continuation is still listed under one of the three headings.
 
 **Success here is rarely sufficient for what follows.** A continuation reached
 through one capability may declare several others. Those are shown as *still

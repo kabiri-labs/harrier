@@ -36,10 +36,35 @@
 # exempts both, since neither is earned by a test.
 #
 # Everything else has to be earned.
+#
+# `tier` says what kind of relation an edge through this fact is, so that three
+# different relations stop printing under one heading. Every fact declares one:
+#
+#   engagement   a general precondition rather than a step. Holding a session or
+#                having enumerated the entrypoints makes most of the catalogue
+#                reachable at once, which is true and tells a tester nothing
+#                about where to go next.
+#   topic        consumed only inside the topic that produces it. The join is
+#                real, but it links alternative techniques for one test rather
+#                than leading anywhere new.
+#   chain        the fact is currency: a capability, an artifact, a defeated
+#                control, an outcome, a finding that picks the next technique.
+#                An edge through it is the escalation a tester means by "attack
+#                chain", and every impact.* is one by construction.
+#
+# The tier says what kind of thing the fact is, not how many topics happen to
+# consume it today. A label that moved when the catalogue grew would be worse
+# than no label: the reader would have learnt a heading that later means
+# something else.
+#
+# The split is not cosmetic. A single unit, HRR-IDN-01-POLICY, produces 90
+# engagement-tier edges on its own -- and exactly two escalations. Printing all
+# ninety-two under one heading is what made those two unfindable.
 version: 1
 facts:
   - id: recon.target.reachable
     label: Target reachable
+    tier: engagement
     given: true
     description: >
       The target answers requests from the tester's position on the network.
@@ -47,12 +72,14 @@ facts:
 
   - id: recon.platform.identified
     label: Platform and version identified
+    tier: chain
     description: >
       The server, application platform and framework answering at the origin are
       known, with versions where they could be established.
 
   - id: recon.engine.identified
     label: Backend engine identified
+    tier: chain
     description: >
       The interpreter behind an injectable surface is known -- which relational
       engine, which template language, which document store -- so payload shape
@@ -60,18 +87,21 @@ facts:
 
   - id: recon.workflow.mapped
     label: Workflow steps and order recorded
+    tier: engagement
     description: >
       The steps of a business workflow, the request that drives each and the
       order the application presents them in have been recorded.
 
   - id: recon.delegation.mapped
     label: Delegated names recorded
+    tier: topic
     description: >
       The names the target delegates to third-party services, and which service
       each resolves to, have been recorded.
 
   - id: access.anon
     label: Unauthenticated caller
+    tier: engagement
     given: true
     description: >
       Requests can be made carrying no session. Available in every engagement,
@@ -80,6 +110,7 @@ facts:
 
   - id: access.user
     label: Ordinary account held
+    tier: engagement
     description: >
       A working account with no special role is held. Not a given: an engagement
       that hands over no credentials leaves it to be earned through registration,
@@ -87,6 +118,7 @@ facts:
 
   - id: access.peer
     label: Second account of the same role held
+    tier: chain
     description: >
       A second account holding the same role as the first. Separate from
       access.user because one account cannot demonstrate anything about the
@@ -94,6 +126,7 @@ facts:
 
   - id: surface.sql.injectable
     label: A parameter reaches a SQL statement
+    tier: topic
     description: >
       A parameter has been shown to change the behaviour of a SQL statement --
       the condition every extraction technique is built on, and the one thing
@@ -101,17 +134,20 @@ facts:
 
   - id: artifact.objectid.known
     label: An identifier naming another principal's object
+    tier: chain
     description: >
       An identifier is held that names an object belonging to someone other than
       the caller, which is what turns an access-control question into a request.
 
   - id: primitive.db.read
     label: Database read
+    tier: chain
     description: >
       Data the caller was never served can be read out of the database at will.
 
   - id: primitive.data.read.peer
     label: Another account's data readable
+    tier: chain
     description: >
       Records belonging to another account of the same role can be read. Narrower
       than a database read: it is the application handing them over, one object
@@ -119,18 +155,21 @@ facts:
 
   - id: primitive.workflow.skip
     label: Workflow completes out of order
+    tier: chain
     description: >
       A workflow can be completed with a step omitted, repeated or reordered,
       which is the primitive every business-logic impact is built from.
 
   - id: primitive.subdomain.claimable
     label: A delegated name can be claimed
+    tier: chain
     description: >
       A name the target still delegates points at a resource that no longer
       exists at the provider and that another account could register.
 
   - id: recon.platform.confirmed
     label: Platform identification corroborated
+    tier: chain
     description: >
       The product identification is supported by a signal the operator is
       unlikely to have edited, which is what a version-specific decision may
@@ -138,6 +177,7 @@ facts:
 
   - id: recon.names.mapped
     label: In-scope names and addresses recorded
+    tier: engagement
     description: >
       The names, certificate subjects and address ranges belonging to the
       target are written down. Everything the engagement may touch is inside
@@ -145,12 +185,14 @@ facts:
 
   - id: recon.hosts.enumerated
     label: Distinct applications behind the names identified
+    tier: topic
     description: >
       Which of the in-scope names serve applications distinct from one another
       is known, including hosts reachable only by naming them in the request.
 
   - id: recon.entrypoints.mapped
     label: Requests and parameters inventoried
+    tier: engagement
     description: >
       The requests the application issues and the parameters each carries are
       recorded. Every injection and access-control test reads this inventory
@@ -158,12 +200,14 @@ facts:
 
   - id: recon.tiers.mapped
     label: Tiers a request crosses recorded
+    tier: engagement
     description: >
       The sequence of intermediaries between the tester and the origin, and
       where the request is finally answered, are known.
 
   - id: recon.intermediary.identified
     label: Intermediaries identified by product
+    tier: chain
     description: >
       Each intermediary in front of the origin is identified as a product,
       which is what makes its request rewriting predictable rather than
@@ -171,12 +215,14 @@ facts:
 
   - id: recon.channels.mapped
     label: Clients and channels recorded
+    tier: engagement
     description: >
       Which clients speak to the application, and over which channels, is
       recorded. A channel nobody listed is a surface nobody tested.
 
   - id: recon.traffic.captured
     label: Traffic observable and modifiable
+    tier: chain
     description: >
       The tester can see and alter the traffic of at least one client. Most
       manual testing is impossible without it, which is why almost nothing
@@ -184,12 +230,14 @@ facts:
 
   - id: recon.api.mapped
     label: Machine interface inventoried
+    tier: engagement
     description: >
       The endpoints, operations and parameters of the machine interface are
       recorded, from specifications, client bundles and observed traffic.
 
   - id: recon.schema.known
     label: Schema types and fields recorded
+    tier: chain
     description: >
       The types, fields, arguments and mutations a schema exposes are known,
       whether introspection answered or the client's own documents supplied
@@ -197,18 +245,21 @@ facts:
 
   - id: recon.metafiles.read
     label: Published metafiles read
+    tier: chain
     description: >
       The paths and directives the target itself publishes -- robots,
       sitemaps, well-known documents -- have been read and recorded.
 
   - id: surface.param.hidden
     label: A parameter the client never sends is accepted
+    tier: topic
     description: >
       The application accepts a parameter its own interface never submits, so
       nothing in the interface constrains what may be put in it.
 
   - id: surface.origin.direct
     label: The origin answers without its intermediary
+    tier: topic
     description: >
       A request that does not pass through the intermediary in front of the
       origin is still answered, which puts every control that intermediary
@@ -216,6 +267,7 @@ facts:
 
   - id: surface.api.undocumented
     label: Endpoints beyond those the client calls
+    tier: topic
     description: >
       The interface answers endpoints its own client never calls, including
       superseded versions still routed, which are the ones nobody has reviewed
@@ -223,12 +275,14 @@ facts:
 
   - id: surface.graphql.introspectable
     label: Introspection answers
+    tier: topic
     description: >
       The endpoint answers an introspection query, which hands over the schema
       rather than requiring it to be reconstructed.
 
   - id: recon.paths.indexed
     label: Paths held by public indexes and archives
+    tier: engagement
     description: >
       Paths that search indexes, caches and archives hold for the target, and
       that the application does not link to, are recorded. Deliberately a recon
@@ -238,6 +292,7 @@ facts:
 
   - id: surface.path.traversable
     label: A parameter selects a file by path
+    tier: topic
     description: >
       A request value has been shown to select which file the server opens, and
       a traversal sequence in it changes the answer. The condition every read
@@ -245,12 +300,14 @@ facts:
 
   - id: recon.approot.disclosed
     label: The application's absolute path is known
+    tier: chain
     description: >
       The absolute filesystem path the application resolves from is known, which
       turns depth guessing into arithmetic.
 
   - id: control.pathfilter.identified
     label: The path filter's behaviour is known
+    tier: chain
     description: >
       How the application normalises and filters a supplied path is known --
       what it strips, how many times it decodes, whether it checks before or
@@ -259,6 +316,7 @@ facts:
 
   - id: primitive.fs.read
     label: Arbitrary file read
+    tier: chain
     description: >
       Files the application never meant to serve can be read at will. What that
       is worth depends entirely on what is on the disk, which is why the reach
@@ -266,6 +324,7 @@ facts:
 
   - id: primitive.exec.server
     label: Server-side code execution
+    tier: chain
     description: >
       Code of the tester's choosing runs on the server. Terminal for almost
       every chain that reaches it, and the point past which an engagement stops
@@ -273,57 +332,67 @@ facts:
 
   - id: surface.ldap.injectable
     label: A parameter reaches an LDAP filter
+    tier: topic
     description: >
       A request value has been shown to change how a directory query is
       parsed.
 
   - id: surface.xml.parsed
     label: A parameter is parsed as XML
+    tier: topic
     description: >
       Content the caller supplies is handed to an XML parser, which is what
       makes entity and structure attacks possible at all.
 
   - id: surface.ssi.injectable
     label: A parameter reaches a server-side include directive
+    tier: topic
     description: >
       A request value is interpreted by the server's include processor rather
       than being rendered as text.
 
   - id: surface.xpath.injectable
     label: A parameter reaches an XPath expression
+    tier: topic
     description: >
       A request value has been shown to change how a document query is parsed.
 
   - id: surface.mail.injectable
     label: A parameter reaches a mail header or command
+    tier: topic
     description: >
       A request value is placed into a message the server sends, where a
       separator changes the envelope rather than the body.
 
   - id: surface.code.injectable
     label: A parameter reaches a language evaluator
+    tier: topic
     description: >
       A request value is evaluated as source by the application's own runtime.
 
   - id: surface.oscmd.injectable
     label: A parameter reaches a command line
+    tier: topic
     description: >
       A request value is placed into a command the operating system runs.
 
   - id: surface.template.injectable
     label: A parameter reaches a server-side template expression
+    tier: topic
     description: >
       A request value is evaluated by a template engine rather than
       interpolated as text.
 
   - id: surface.format.injectable
     label: A parameter reaches a format string
+    tier: topic
     description: >
       A request value is used as the format argument rather than as one of the
       arguments it formats.
 
   - id: surface.ws.injectable
     label: A WebSocket message field reaches an interpreter
+    tier: topic
     description: >
       A field of a message the client sends changes how the server parses or
       executes something, over a transport most testing tooling does not
@@ -331,18 +400,21 @@ facts:
 
   - id: surface.graphql.injectable
     label: A resolver argument reaches an interpreter
+    tier: topic
     description: >
       An argument the schema accepts is carried into a query, a command or a
       fetch by the resolver behind it.
 
   - id: surface.upload.accepts
     label: The application accepts a submitted file
+    tier: chain
     description: >
       A file the caller supplies is stored by the application, which is the
       precondition for every question about what it does with it.
 
   - id: surface.upload.unrestricted
     label: A file of the caller's chosen type is stored
+    tier: topic
     description: >
       The type or content restriction on upload can be defeated, so what is
       stored is what the caller chose rather than what the application
@@ -350,60 +422,70 @@ facts:
 
   - id: surface.upload.pathcontrol
     label: The caller influences where the file is stored
+    tier: topic
     description: >
       The stored name or path is derived from what the caller supplied, so the
       file's location is partly the caller's decision.
 
   - id: surface.fetch.controlled
     label: The server fetches a location the caller chooses
+    tier: topic
     description: >
       A request value decides what the server retrieves, which is the
       condition every internal-network finding below is built on.
 
   - id: primitive.directory.read
     label: Directory entries readable
+    tier: chain
     description: >
       Entries the caller was never meant to see can be read out of the
       directory service.
 
   - id: primitive.doc.read
     label: Backing document readable
+    tier: chain
     description: >
       Nodes of the document behind a query can be read beyond those the
       application returns.
 
   - id: primitive.db.write
     label: Database write
+    tier: chain
     description: >
       Statements of the caller's choosing change stored data, which a read
       alone never permits.
 
   - id: primitive.mail.control
     label: Message envelope controlled
+    tier: chain
     description: >
       Recipients, headers or the body of a message the server sends can be
       chosen by the caller, which turns the application into the sender.
 
   - id: primitive.memory.read
     label: Process memory readable
+    tier: chain
     description: >
       Values from the process's own memory are returned, which frequently
       include the addresses and secrets nothing else exposes.
 
   - id: primitive.fetch.outbound
     label: Outbound request from the server
+    tier: chain
     description: >
       The server can be made to send a request to a destination the caller
       names, which is the channel every out-of-band technique reads.
 
   - id: primitive.fetch.internal
     label: Internal network location reached
+    tier: chain
     description: >
       A destination that is not reachable from the caller's own position
       answers through the server.
 
   - id: control.filter.identified
     label: The input filter's behaviour is known
+    tier: chain
     description: >
       What the filter in front of a parameter strips, rejects or normalises
       has been established. A negative result means something different on
@@ -412,18 +494,21 @@ facts:
 
   - id: recon.ws.mapped
     label: WebSocket messages recorded
+    tier: topic
     description: >
       The message types a client sends over the socket, and their fields, are
       recorded -- an inventory nothing else in the catalogue produces.
 
   - id: impact.availability.degraded
     label: Service degraded by the content of a request
+    tier: chain
     description: >
       Work forced by what a single request contains, rather than by how many
       were sent, is enough to degrade the service.
 
   - id: primitive.exec.client
     label: Code runs in a visitor's browser
+    tier: chain
     description: >
       Script of the tester's choosing executes in the browser of somebody who
       visits the application. Kept apart from server execution because the two
@@ -432,6 +517,7 @@ facts:
 
   - id: primitive.fetch.readable
     label: The fetched response body is returned
+    tier: chain
     description: >
       The body of a request the server made on the caller's behalf comes back
       to the caller. Separate from reading the filesystem: an internal HTTP
@@ -440,6 +526,7 @@ facts:
 
   - id: surface.upload.parsed
     label: Uploaded content reaches a parser
+    tier: topic
     description: >
       Content the caller supplies is parsed, converted or extracted by the
       server. The precondition for what a crafted document can do, and not yet
@@ -447,6 +534,7 @@ facts:
 
   - id: control.limit.absent
     label: A resource limit is not enforced
+    tier: chain
     description: >
       A stated or implied limit on a resource -- per request, per period, or
       in total -- is not enforced. Recorded as a control failing rather than
@@ -455,6 +543,7 @@ facts:
 
   - id: primitive.blind.oracle
     label: A reproducible conditional signal exists
+    tier: chain
     description: >
       A condition the tester controls produces an observable difference with
       no content returned. Enough to infer data one answer at a time, and not
@@ -462,6 +551,7 @@ facts:
 
   - id: recon.query.structure
     label: The constructed query is disclosed
+    tier: chain
     description: >
       The expression, filter or path the application builds is visible in an
       error, which turns writing a working payload into editing a known
@@ -469,6 +559,7 @@ facts:
 
   - id: surface.reflection.unencoded
     label: A submitted value returns unencoded
+    tier: topic
     description: >
       Characters a caller submits come back in the response without the
       encoding the position they land in requires. Which characters and which
@@ -476,6 +567,7 @@ facts:
 
   - id: surface.dom.flow
     label: A source reaches a sink in client script
+    tier: topic
     description: >
       Loaded script carries a value the caller can influence into a call that
       acts on it. Established by reading the script rather than by sending a
@@ -483,24 +575,28 @@ facts:
 
   - id: surface.redirect.controlled
     label: The page's destination is caller-supplied
+    tier: topic
     description: >
       Where the application navigates is decided by a value the caller
       supplies.
 
   - id: surface.css.injectable
     label: A value reaches a stylesheet
+    tier: topic
     description: >
       An injected declaration is parsed and applied rather than escaped, which
       is what makes a stylesheet an exfiltration channel.
 
   - id: surface.resource.controlled
     label: A resource location is caller-influenced
+    tier: topic
     description: >
       Which resource the loaded page fetches at runtime derives from input an
       attacker can influence.
 
   - id: surface.plugin.content
     label: Plugin-hosted content is still served
+    tier: topic
     description: >
       Content requiring a browser plugin is served and embedded somewhere.
       Recorded because the runtimes are retired, not because the finding is
@@ -508,59 +604,69 @@ facts:
 
   - id: surface.frameable
     label: The page renders inside a foreign frame
+    tier: topic
     description: >
       A state-changing page loads in a frame on an origin the tester controls
       rather than refusing to.
 
   - id: surface.postmessage.listener
     label: The page listens for cross-document messages
+    tier: topic
     description: >
       A message listener is registered, and what it does with what arrives is
       the question every unit under it asks.
 
   - id: surface.xssi.endpoint
     label: An endpoint returns authenticated data a script tag would parse
+    tier: topic
     description: >
       A response carrying one user's data is in a form another origin's script
       tag can load.
 
   - id: surface.newcontext.link
     label: The page opens documents in a new context
+    tier: topic
     description: >
       Links or script calls open a new browsing context, and where they point
       is influenceable.
 
   - id: surface.opener.retained
     label: The opened document keeps a reference back
+    tier: topic
     description: >
       A document opened by the page can still address the tab that opened it.
 
   - id: surface.desync.confirmed
     label: Two parsers disagree about where a request ends
+    tier: topic
     description: >
       An intermediary and an origin read the same framing differently, which
       is the condition every desync consequence is built on.
 
   - id: surface.host.controlled
     label: The application composes a caller-supplied host
+    tier: topic
     description: >
       A host the request supplied is used by the application when it builds an
       absolute location.
 
   - id: surface.duplicate.accepted
     label: A repeated name changes the answer
+    tier: topic
     description: >
       Supplying one parameter or header twice produces a different result from
       supplying it once.
 
   - id: surface.parameter.divergence
     label: Two components choose different occurrences of a repeated name
+    tier: topic
     description: >
       Where one name appears twice, the components handling the request do not
       agree on which occurrence is authoritative.
 
   - id: surface.path.divergence
     label: Two components normalise one path differently
+    tier: topic
     description: >
       An intermediary and an origin resolve the same path to different
       locations. Separate from the parameter fact because the consequences below
@@ -570,6 +676,7 @@ facts:
 
   - id: primitive.markup.inject
     label: Markup injected without script
+    tier: chain
     description: >
       Markup that changes the page's meaning can be introduced while script
       execution stays blocked. A separate result from execution, and
@@ -577,12 +684,14 @@ facts:
 
   - id: primitive.redirect.offsite
     label: A victim is navigated to a chosen destination
+    tier: chain
     description: >
       The application, or a document it opened, can send somebody to a
       location the tester chose.
 
   - id: primitive.data.read.victim
     label: Another user's data is read from a foreign context
+    tier: chain
     description: >
       Data belonging to a user of the application is obtained by a document
       the attacker controls -- through a stylesheet, a script tag, a
@@ -590,24 +699,28 @@ facts:
 
   - id: primitive.resource.load
     label: The page loads a chosen resource
+    tier: chain
     description: >
       A resource of the tester's choosing is fetched by the page. Whether its
       content then executes is a separate result.
 
   - id: primitive.action.victim
     label: A state change is driven as a victim
+    tier: chain
     description: >
       An action the victim is entitled to perform is performed from a context
       the attacker controls.
 
   - id: primitive.request.victim
     label: Another user's request is altered
+    tier: chain
     description: >
       A request the tester did not send is changed before the origin answers
       it, which is what separates a desync from a self-inflicted oddity.
 
   - id: primitive.content.poisoned
     label: Delivered content carries an attacker's value
+    tier: chain
     description: >
       Content the application serves or sends later carries a value the tester
       supplied -- a link in a message, a response under a cache key an
@@ -615,6 +728,7 @@ facts:
 
   - id: primitive.check.bypassed
     label: A guard is satisfied while the action receives something else
+    tier: chain
     description: >
       The component that authorises a request and the component that acts on
       it read different values, so the check passes on one thing and the work
@@ -622,18 +736,21 @@ facts:
 
   - id: control.cors.permissive
     label: The endpoint accepts an origin it should not
+    tier: chain
     description: >
       A reflected, null, or loosely matched origin is accepted by the sharing
       policy.
 
   - id: control.cors.credentialed
     label: Credentials are permitted from an accepted origin
+    tier: chain
     description: >
       The endpoint allows a credentialed request from an origin it accepts,
       which is what turns a permissive policy into a readable response.
 
   - id: control.message.origin.unchecked
     label: A cross-document message is acted on without checking its sender
+    tier: chain
     description: >
       A window message listener acts on what arrives without verifying the
       origin that sent it, or with a comparison a substring defeats. Kept apart
@@ -644,36 +761,42 @@ facts:
 
   - id: control.handshake.origin.unchecked
     label: A socket handshake accepts a foreign origin
+    tier: chain
     description: >
       A connection is accepted carrying an origin the application does not own.
       What the connection then carries is a different topic's question.
 
   - id: control.storage.sensitive
     label: Sensitive data persists on the client
+    tier: chain
     description: >
       Something is kept in client-side storage that would be damaging in the
       hands of somebody with later access to the device.
 
   - id: control.cache.permissive
     label: Personal responses may be stored
+    tier: chain
     description: >
       Responses carrying one user's data are returned with directives that let
       a browser or a shared cache keep them.
 
   - id: control.binding.absent
     label: A connection is not bound to the session that opened it
+    tier: chain
     description: >
       An accepted connection serves whoever holds it rather than the
       authenticated session that established it.
 
   - id: control.transport.plaintext
     label: An unencrypted channel is accepted
+    tier: chain
     description: >
       The service accepts an unencrypted connection where an encrypted one is
       available.
 
   - id: recon.session.identified
     label: The session identifier is known
+    tier: chain
     description: >
       Which value identifies an authenticated session, where it is carried and
       which component issues it. Read by nearly every unit in the domain,
@@ -681,6 +804,7 @@ facts:
 
   - id: artifact.session.captured
     label: Another principal's session identifier is held
+    tier: chain
     description: >
       An identifier belonging to somebody else is in hand, however it was
       obtained -- guessed at a practical rate, read out of a URL, taken from a
@@ -688,42 +812,49 @@ facts:
 
   - id: surface.session.inurl
     label: The identifier travels in a URL
+    tier: topic
     description: >
       The session identifier appears in a path or query string, where proxies,
       logs, history and referrers all retain it.
 
   - id: control.session.unbound
     label: The identifier is accepted from anyone
+    tier: chain
     description: >
       The issued value is honoured for whoever presents it rather than being
       tied to the subject, client or channel it was issued to.
 
   - id: control.session.predictable
     label: The identifier can be narrowed
+    tier: chain
     description: >
       The issued value carries too little unpredictable material for many
       observations to leave the next one unguessable.
 
   - id: control.session.fixable
     label: A caller-chosen identifier is accepted
+    tier: chain
     description: >
       The application adopts an identifier the caller supplied instead of
       issuing its own.
 
   - id: control.session.norotate
     label: The identifier survives authentication
+    tier: chain
     description: >
       A value that existed before sign-in is still valid after it, which is
       what turns a planted identifier into a session.
 
   - id: control.session.persists
     label: The identifier outlives what should end it
+    tier: chain
     description: >
       Signing out, or an explicit revocation, leaves the identifier acceptable
       to the server that issued it.
 
   - id: control.session.unbounded
     label: No enforced lifetime
+    tier: chain
     description: >
       Neither inactivity nor elapsed time ends the session where the issuer
       enforces it, whether because no limit exists or because the holder can
@@ -731,6 +862,7 @@ facts:
 
   - id: control.cookie.weak
     label: The carrier is weakly protected
+    tier: chain
     description: >
       A cookie carrying session state is missing a protection its role
       requires -- an attribute, a scope, or a lifetime beyond the browsing
@@ -738,30 +870,35 @@ facts:
 
   - id: control.csrf.absent
     label: A state change needs nothing the attacker cannot supply
+    tier: chain
     description: >
       A state-changing request succeeds without an anti-forgery value, or with
       one that was issued to a different session.
 
   - id: control.token.audience
     label: A token from elsewhere is accepted
+    tier: chain
     description: >
       A token minted for a different audience, or by a different issuer, is
       honoured.
 
   - id: surface.sessionvar.crossflow
     label: A session variable crosses flows
+    tier: topic
     description: >
       A value written into server-side session state by one flow is read as
       authoritative by another that never set it.
 
   - id: control.tls.weak
     label: A negotiated parameter is no longer sound
+    tier: chain
     description: >
       The listener agrees to a protocol version or cipher suite that is not
       considered sound.
 
   - id: control.tls.certificate.invalid
     label: The certificate does not establish identity
+    tier: chain
     description: >
       The presented certificate is not valid for the requested name, not
       within its validity period, or does not chain to a root the client
@@ -769,24 +906,28 @@ facts:
 
   - id: surface.appcrypto
     label: The application performs its own cryptography
+    tier: chain
     description: >
       Cryptography is done by the application rather than left to the
       transport, which is where the questions below it start.
 
   - id: control.crypto.unsound
     label: The scheme is not sound for its purpose
+    tier: chain
     description: >
       An algorithm, a mode, a source of randomness or an absent rotation makes
       the construction unsound for what it is protecting.
 
   - id: control.crypto.keyexposed
     label: Key material is exposed by ordinary events
+    tier: chain
     description: >
       Keys are held somewhere that a source-code disclosure or a backup
       restore would hand over.
 
   - id: surface.crypto.oracle
     label: The system answers questions about a ciphertext
+    tier: topic
     description: >
       Altering an opaque value produces responses that distinguish one kind of
       failure from another, which is what an attack against the construction
@@ -794,30 +935,35 @@ facts:
 
   - id: primitive.crypto.decrypt
     label: Ciphertext is recovered
+    tier: chain
     description: >
       Plaintext the application never returned is recovered from a value it
       issued.
 
   - id: primitive.crypto.forge
     label: Ciphertext is manufactured
+    tier: chain
     description: >
       A value the application accepts and decrypts to something the tester
       chose can be produced.
 
   - id: control.signature.unverified
     label: A signature is not verified as intended
+    tier: chain
     description: >
       An altered payload, or a token signed under another algorithm or key, is
       accepted as valid.
 
   - id: artifact.key.recovered
     label: A signing key is recovered
+    tier: chain
     description: >
       The key protecting issued tokens is in hand, which makes every property
       the signature was carrying the tester's to choose.
 
   - id: surface.token.structured
     label: The identifier is a structured signed token
+    tier: topic
     description: >
       The value carrying the session is a token with a readable payload and a
       signature over it, and the algorithm and key-locating mechanism the
@@ -826,6 +972,7 @@ facts:
 
   - id: surface.crypto.oracle.padding
     label: The distinguishable failure is a padding failure
+    tier: topic
     description: >
       The response separates a padding failure from a decryption that
       succeeded and then failed validation. Narrower than a differential
@@ -834,6 +981,7 @@ facts:
 
   - id: surface.session.thirdparty
     label: The identifier reaches a third party
+    tier: topic
     description: >
       A page carrying the identifier in its URL links or loads across an
       origin boundary, so somebody the application never authorised receives
@@ -841,6 +989,7 @@ facts:
 
   - id: recon.roles.mapped
     label: The roles and the accounts holding them are recorded
+    tier: engagement
     description: >
       Which roles the application distinguishes, and which of them the tester
       actually holds an account for -- including the ones nobody supplied,
@@ -850,6 +999,7 @@ facts:
 
   - id: access.principal.other
     label: A session belonging to somebody else is held
+    tier: chain
     description: >
       The tester is authenticated as a principal the engagement did not grant
       them -- through a vendor credential, a defeated authentication step, a
@@ -858,12 +1008,14 @@ facts:
 
   - id: access.role.elevated
     label: A session carrying more than the granted role is held
+    tier: chain
     description: >
       The session in hand acts with a role above the one the engagement
       granted.
 
   - id: control.credential.weak
     label: The enforced credential policy permits a guessable secret
+    tier: chain
     description: >
       What the application actually accepts leaves the secret guessable -- a
       weak minimum, a silent truncation, or a rule one surface enforces and
@@ -871,24 +1023,28 @@ facts:
 
   - id: control.persistent.weak
     label: The stay-signed-in secret is not trustworthy
+    tier: chain
     description: >
       The long-lived secret is predictable, outlives its stated lifetime, or
       survives the events that should end it.
 
   - id: control.recovery.guessable
     label: Knowledge-based recovery can be answered by an attacker
+    tier: chain
     description: >
       The questions ask for facts an attacker can find, or the comparison is
       lenient enough to shrink the space to something coverable.
 
   - id: control.reset.weak
     label: The recovery artefact is not sound
+    tier: chain
     description: >
       The token, code or link the recovery flow issues is predictable,
       outlives its stated lifetime, or is accepted more than once.
 
   - id: control.reauth.absent
     label: A sensitive change needs no fresh proof
+    tier: chain
     description: >
       An authenticated caller can change a credential or a recovery contact
       without proving again that they are the account holder, which is what
@@ -896,18 +1052,21 @@ facts:
 
   - id: control.channel.weaker
     label: A secondary channel authenticates on less
+    tier: chain
     description: >
       Some channel reaching the same account demands less evidence than the
       primary one does.
 
   - id: control.mfa.optional
     label: The second factor is not demanded where it matters
+    tier: chain
     description: >
       Accounts or sensitive actions exist that the second factor is not
       required for.
 
   - id: control.mfa.bypassable
     label: The second factor does not hold
+    tier: chain
     description: >
       The second step can be satisfied without possession of the factor -- by
       a caller-controlled value, by a space small enough to cover, or by a
@@ -915,6 +1074,7 @@ facts:
 
   - id: control.oauth.flow
     label: The authorization response is not bound to its request
+    tier: chain
     description: >
       Either the return location is matched loosely enough to deliver the
       response elsewhere, or nothing ties the response to a request this
@@ -922,42 +1082,49 @@ facts:
 
   - id: control.registration.unverified
     label: An account is usable before its contact is proved
+    tier: chain
     description: >
       Registration produces a working account without the caller demonstrating
       control of the address or number it names.
 
   - id: control.provisioning.unchecked
     label: A provisioning route demands no real evidence
+    tier: chain
     description: >
       An approval or verification step on the route that creates accounts is
       declared but not enforced.
 
   - id: control.account.enumerable
     label: Whether an account exists is observable
+    tier: chain
     description: >
       The application answers differently for an account that exists and one
       that does not, by content or by latency.
 
   - id: artifact.accountlist
     label: A usable list of real accounts is held
+    tier: chain
     description: >
       Enumeration has produced enough real account names to aim everything
       that needs one -- credential attacks, lockout, targeted recovery.
 
   - id: control.username.confusable
     label: Two distinct names can mean one account
+    tier: chain
     description: >
       The accepted name space allows values that a human, or the application's
       own lookup, cannot tell apart.
 
   - id: impact.account.denied
     label: A chosen user is locked out at will
+    tier: chain
     description: >
       A legitimate account can be denied access on demand, which turns the
       protection into the attack and is where this chain ends.
 
   - id: primitive.privileged.action
     label: A function outside the caller's role executes
+    tier: chain
     description: >
       An action the caller's role does not include is carried out for them,
       whether they hold no session, a lesser one, or reached it by another
@@ -965,6 +1132,7 @@ facts:
 
   - id: primitive.data.read.tenant
     label: Another tenant's data is readable
+    tier: chain
     description: >
       Records belonging to a different tenant or organisation cross that
       boundary. Separate from the same-tenant case because a different check,
@@ -972,12 +1140,14 @@ facts:
 
   - id: primitive.data.write.other
     label: Data the caller does not own is changed
+    tier: chain
     description: >
       State belonging to somebody else is modified or deleted, which the write
       path permits independently of what the read path allows.
 
   - id: primitive.data.read.bulk
     label: The object space is reachable at scale
+    tier: chain
     description: >
       A confirmed failure yields not one record but a meaningful part of the
       set, which is a different finding to report and a different one to
@@ -985,12 +1155,14 @@ facts:
 
   - id: control.method.override
     label: A method override is honoured
+    tier: chain
     description: >
       The server acts on a method other than the one the request line named,
       and other than the one an access-control check inspected.
 
   - id: control.lockout.enforced
     label: Repeated failures lock the account out
+    tier: chain
     description: >
       A counter exists, and reaching it stops attempts against that account. A
       precondition for the lockout being usable as an attack, and the opposite
@@ -998,6 +1170,7 @@ facts:
 
   - id: control.channel.bypass
     label: A weaker channel's session is honoured by the primary one
+    tier: chain
     description: >
       A session established where less evidence was demanded is accepted where
       more was. What makes a secondary channel a bypass rather than a separate
@@ -1005,6 +1178,7 @@ facts:
 
   - id: primitive.field.bound
     label: A field the interface never exposed is persisted
+    tier: chain
     description: >
       A value the form never submits is bound from the request and stored.
       What it decides is a separate question, and the one that decides whether
@@ -1012,60 +1186,70 @@ facts:
 
   - id: control.rule.clientonly
     label: A business rule is not enforced by the server
+    tier: chain
     description: >
       A rule the workflow states is decided where the caller can change the
       decision, so nothing enforces it once the interface is out of the way.
 
   - id: control.request.forgeable
     label: A hand-built request is acted on
+    tier: chain
     description: >
       The server acts on a request the legitimate client would never
       construct, in that form or at that point.
 
   - id: control.request.replayable
     label: A legitimate request is acted on twice
+    tier: chain
     description: >
       A request captured once is honoured again, which fails differently from
       accepting one that was never legitimate.
 
   - id: control.clientstate.trusted
     label: State returned by the client is trusted
+    tier: chain
     description: >
       A value the server issued and expected back unchanged is acted on when
       it comes back altered.
 
   - id: control.price.clientset
     label: What is charged comes from the client
+    tier: chain
     description: >
       A component of the amount charged is taken from a value the caller
       supplied rather than one the server holds.
 
   - id: control.misuse.undetected
     label: Sustained misuse changes nothing
+    tier: chain
     description: >
       Behaviour no legitimate user would produce, kept up long enough to be
       unambiguous, provokes no observable response at all.
 
   - id: control.error.verbose
     label: Errors describe the fault inside the application
+    tier: chain
     description: >
       An error returns text about what went wrong internally rather than about
       what the caller did wrong.
 
   - id: control.debug.enabled
     label: Diagnostic output is served in normal operation
+    tier: chain
     description: >
       Diagnostics are returned when nothing has failed, which is a setting
       left enabled rather than an error path.
 
   - id: control.content.internal
     label: Delivered content carries internal detail
+    tier: chain
     description: >
       Something the application serves carries host names, paths, identifiers
       or credentials that its interface never displays.
 
   - id: control.content.withdrawn
     label: Withdrawn content is still public
+    tier: chain
     description: >
       An indexed or archived copy exposes content the application has since
       withdrawn or never meant to publish, which no change to the application
@@ -1073,12 +1257,14 @@ facts:
 
   - id: control.platform.extra
     label: The platform serves more than the application
+    tier: chain
     description: >
       Sample content, management consoles or status endpoints answer callers
       who should not reach them.
 
   - id: control.config.nonproduction
     label: Development settings survive in production
+    tier: chain
     description: >
       Configuration meant for development is in force in the deployed
       environment, which fails differently from a setting that was never right
@@ -1086,12 +1272,14 @@ facts:
 
   - id: control.headers.permissive
     label: The declared browser protections are not in force
+    tier: chain
     description: >
       A security header permits more than its presence suggests, is absent
       from responses that need it, or is written in a form no browser honours.
 
   - id: control.plugin.policy.permissive
     label: A plugin cross-domain policy grants too much
+    tier: chain
     description: >
       A policy file the retired plugin runtimes read grants origins it should
       not. Kept apart from the modern sharing policy because nothing a browser
@@ -1099,63 +1287,74 @@ facts:
 
   - id: control.permissions.excessive
     label: File permissions exceed what the process needs
+    tier: chain
     description: >
       Ownership and mode on the deployed files give the serving process, or
       another account on the host, more than it requires.
 
   - id: control.storage.served
     label: Written files land where the server publishes them
+    tier: chain
     description: >
       Files the application writes are placed in a location that is served,
       which turns a storage decision into a disclosure.
 
   - id: control.objectstore.public
     label: The object store grants access of its own
+    tier: chain
     description: >
       The store hands objects to an anonymous or any-authenticated caller,
       which the application's own permissions never see.
 
   - id: control.objectstore.enumerable
     label: Object names can be guessed
+    tier: chain
     description: >
       Names in the store are predictable enough to reach objects nobody was
       given a link to.
 
   - id: surface.file.unlinked
     label: The server returns a file nothing references
+    tier: topic
     description: >
       A file no page links to is served and the application does not need to
       publish it. What is in it is the next question.
 
   - id: surface.admin.reachable
     label: An administrative interface answers from outside
+    tier: topic
     description: >
       A management interface responds to a caller who is not on the network
       the operator meant to restrict it to.
 
   - id: surface.method.extra
     label: Methods beyond the client's own are accepted
+    tier: topic
     description: >
       A resource accepts request methods its own client never issues.
 
   - id: surface.directory.listed
     label: Directory contents are served
+    tier: topic
     description: >
       The server lists what is in a directory that has no index document.
 
   - id: primitive.limit.exceeded
     label: A limited operation is applied more times than allowed
+    tier: chain
     description: >
       Overlapping requests carry an operation past the limit that governs it.
 
   - id: impact.value.obtained
     label: Something of value is obtained
+    tier: chain
     description: >
       The workflow delivers goods, money, entitlement or standing that the
       caller was not owed. Where a business-logic chain ends.
 
   - id: access.host
     label: Access to the host itself is available
+    tier: engagement
     granted: true
     description: >
       Shell or filesystem access to the machine serving the application.
@@ -1165,12 +1364,14 @@ facts:
 
   - id: artifact.request.captured
     label: A legitimate request has been captured
+    tier: chain
     description: >
       A request the real client issued is in hand, in the form it was sent.
       What replay is performed against, and what a forgery is written from.
 
   - id: surface.method.effective
     label: An unused method has an effect
+    tier: topic
     description: >
       A method the client never issues does something -- changes state, or
       returns content the ordinary method does not. Distinct from a method

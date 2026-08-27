@@ -36,7 +36,12 @@ SAFE_LOADER = _SafeLoader
 #: 0.3.0 -- the engagement board and every run file it wrote are gone. Minor
 #: rather than major because the project is pre-1.0 and this is exactly the
 #: period in which such a change is meant to be taken. See docs/PIVOT.md.
-__version__ = "0.4.0"
+#:
+#: 0.5.0 gives every fact a tier, so that the three different relations the
+#: derived graph has always contained stop printing under one heading. No edge
+#: was added or removed; what changed is that a reader can now tell an
+#: escalation from the prerequisite it used to sort beneath.
+__version__ = "0.5.0"
 
 __all__ = [
     "SAFE_LOADER",
