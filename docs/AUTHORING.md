@@ -25,8 +25,6 @@ id: HRR-INJ-01
 title: SQL injection
 domain: INJ
 axis: technique              # the primary axis; units are named from its vocabulary
-kind: test                   # test | recon | inquiry
-role: variant                # stage | variant -- required, see below
 surfaces:                    # attack-surface tags this topic attaches to
   any_of: [sql-backed-param]
 dimensions:
@@ -65,8 +63,9 @@ genuinely runs one way, it is a boundary, not a `see_also`.
 ```yaml
 id: HRR-INJ-01-UNION
 topic: HRR-INJ-01
-kind: test
+kind: test                   # test | recon | inquiry
 status: outline              # outline | authored
+role: variant                # stage | variant -- required; see below
 title: UNION-based extraction
 objective: >
   Determine whether a UNION arm can be appended to the query so that
@@ -97,7 +96,10 @@ requires:                    # what makes this possible; see CHAINING.md
   any_of: [access.anon, access.user]
 motivated_by: [recon.engine.identified]   # worth doing sooner, not a condition
 yields: [primitive.db.read]  # what a positive result establishes
-closes: []                   # what a negative one rules out; a subset of yields
+# closes:                    # what a negative one rules out; a subset of yields.
+#   - surface.sql.injectable # Omitted here rather than left empty: the schema
+#                            # rejects an empty list, so that absent and "rules
+#                            # nothing out" are one state instead of two.
 
 payloads: payloads/sqli/union.yaml
 tools: [burp-repeater, sqlmap]
