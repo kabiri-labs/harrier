@@ -157,7 +157,13 @@ def chain_index(
         for edge in onward.values():
             consumer = units[edge["unit"]]
             edge["kind"] = "requires" if edge["via"] else "motivated_by"
-            edge["tier"] = tier_of(edge["via"] or edge["hint"], tiers)
+            # Both, not whichever came first. `kind` is decided by whether a hard
+            # prerequisite exists; the tier is decided by the most specific fact
+            # the edge travels through, and a consumer that requires a session
+            # but is motivated by a captured token travels through both. Reading
+            # only `via` there would file it under the session and hide exactly
+            # the relation this field exists to surface.
+            edge["tier"] = tier_of(edge["via"] + edge["hint"], tiers)
             edge["also"] = still_required(consumer, established, given)
             if not edge["hint"]:
                 del edge["hint"]

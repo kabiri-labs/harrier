@@ -176,11 +176,21 @@
       };
     });
 
+    /* Counted over every edge, not over the bounded preview below. The count is
+       the whole reason the engagement heading is safe to skip past, and one
+       taken from a three-item slice would read "(1)" where the truth is ninety
+       -- worse than no count, because a reader would believe it. */
+    var tierTotals = {};
+    outgoing.forEach(function (link) {
+      tierTotals[link.tier] = (tierTotals[link.tier] || 0) + 1;
+    });
+
     return {
       unit: unitId,
       incoming: bound(incoming, cap),
       yields: bound(yields, cap),
       outgoing: bound(outgoing, cap),
+      tierTotals: tierTotals,
       terminal: edge.terminal || [],
       /* An honest empty answer is a result, not a gap. A test that establishes
          nothing chartable says so, and so does one whose every capability is
@@ -961,6 +971,16 @@
       "and not a route onward."
   };
 
+  /* Engagement-tier edges are named and linked, not expanded. Every one of them
+     says the same thing -- this test also needs what most of the catalogue needs
+     -- and spending an objective, an established-here list and a still-required
+     list on that is what buried the tiers above it. */
+  var continuationBrief = function (link) {
+    var unit = D.units[link.unit];
+    return '<div class="brief"><a href="' + href("unit", link.unit) + '">' +
+      esc(unit.title) + "</a> " + statusPill(unit) + "</div>";
+  };
+
   var continuationLink = function (link) {
     var unit = D.units[link.unit];
     var established = link.via.length ? link.via : link.hint;
@@ -995,13 +1015,19 @@
       var tier = TIER_ORDER.indexOf(link.tier) >= 0 ? link.tier : "chain";
       (buckets[tier] = buckets[tier] || []).push(link);
     });
+    var totals = model.tierTotals || {};
     return TIER_ORDER.filter(function (tier) { return buckets[tier]; }).map(function (tier) {
       var links = buckets[tier];
+      var total = totals[tier] || links.length;
+      var render = tier === "engagement" ? continuationBrief : continuationLink;
+      var more = total > links.length
+        ? '<p class="muted tiernote">' + (total - links.length) + " more not shown here.</p>"
+        : "";
       return '<div class="tier tier-' + tier + '">' +
         '<h3 class="tierhead">' + esc(TIER_HEADING[tier]) +
-        ' <span class="muted">(' + links.length + ')</span></h3>' +
+        ' <span class="muted">(' + total + ')</span></h3>' +
         (TIER_NOTE[tier] ? '<p class="muted tiernote">' + esc(TIER_NOTE[tier]) + "</p>" : "") +
-        links.map(continuationLink).join("") + "</div>";
+        links.map(render).join("") + more + "</div>";
     }).join("");
   };
 
