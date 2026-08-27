@@ -96,9 +96,10 @@ being reached through one capability is not the same as being possible.
 ## What it looks like
 
 A test case, decomposed into the tests inside it, in the order the topic
-declares:
+declares — and separated into the ones you perform in sequence and the ones you
+choose between, because those are opposite instructions:
 
-![A WSTG test case decomposed into its Test Units](docs/assets/decomposition.png)
+![A WSTG test case decomposed into its Test Units, split into stages and alternatives](docs/assets/decomposition.png)
 
 A Test Unit. The chain strip under the objective answers *where can this lead*
 before the procedure begins, rather than several screens after it:
