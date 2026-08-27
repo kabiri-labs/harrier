@@ -1,6 +1,7 @@
 id: HRR-INJ-07-PROBE
 topic: HRR-INJ-07
 status: outline
+role: stage
 title: "Evaluation probe"
 objective: >-
   Determine whether an arithmetic expression submitted as input is returned

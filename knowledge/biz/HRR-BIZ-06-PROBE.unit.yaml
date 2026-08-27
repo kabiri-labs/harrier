@@ -1,6 +1,7 @@
 id: HRR-BIZ-06-PROBE
 topic: HRR-BIZ-06
 status: authored
+role: stage
 kind: inquiry
 title: "Completion with a step skipped or repeated"
 objective: >-

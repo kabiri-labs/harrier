@@ -1,6 +1,7 @@
 id: HRR-PRT-01-DIFF
 topic: HRR-PRT-01
 status: outline
+role: variant
 title: "Differential confirmation of a poisoned socket"
 objective: >-
   Determine whether a prefix left on the connection is prepended to the next

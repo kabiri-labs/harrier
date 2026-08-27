@@ -1,6 +1,7 @@
 id: HRR-RCN-03-PROBE
 topic: HRR-RCN-03
 status: outline
+role: stage
 kind: recon
 title: "Parameters accepted but never sent by the client"
 objective: >-

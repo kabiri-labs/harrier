@@ -1,6 +1,7 @@
 id: HRR-CRY-03-MAP
 topic: HRR-CRY-03
 status: outline
+role: stage
 kind: recon
 title: "Application cryptography inventory"
 objective: >-

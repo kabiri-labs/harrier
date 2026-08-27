@@ -1,6 +1,7 @@
 id: HRR-ERR-01-ERROR
 topic: HRR-ERR-01
 status: outline
+role: variant
 title: "Internal detail in the text of an error"
 objective: >-
   Determine whether an induced error returns text describing the fault inside

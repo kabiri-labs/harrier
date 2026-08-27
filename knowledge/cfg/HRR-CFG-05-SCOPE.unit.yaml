@@ -1,6 +1,7 @@
 id: HRR-CFG-05-SCOPE
 topic: HRR-CFG-05
 status: outline
+role: stage
 title: "Consistency across the responses that need them"
 objective: >-
   Determine whether the headers are present on every response that needs them

@@ -1,6 +1,7 @@
 id: HRR-CLT-09-EXEC
 topic: HRR-CLT-09
 status: outline
+role: stage
 title: "Script sink reached by a message"
 objective: >-
   Determine whether message content reaches a sink that parses it as markup or

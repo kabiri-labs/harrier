@@ -1,6 +1,7 @@
 id: HRR-CFG-01-SERVING
 topic: HRR-CFG-01
 status: outline
+role: stage
 title: "What the platform serves besides the application"
 objective: >-
   Determine whether the platform serves components that are not the

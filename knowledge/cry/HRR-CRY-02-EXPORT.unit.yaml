@@ -1,6 +1,7 @@
 id: HRR-CRY-02-EXPORT
 topic: HRR-CRY-02
 status: outline
+role: stage
 title: "Bulk retrieval channel"
 objective: >-
   Determine whether a report or export containing personal data is retrievable

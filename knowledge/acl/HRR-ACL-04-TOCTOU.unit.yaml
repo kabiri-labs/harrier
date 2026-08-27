@@ -1,6 +1,7 @@
 id: HRR-ACL-04-TOCTOU
 topic: HRR-ACL-04
 status: outline
+role: variant
 title: "A privilege written in one step and honoured in a later one"
 objective: >-
   Determine whether a multi-step flow accepts a privilege in an early step

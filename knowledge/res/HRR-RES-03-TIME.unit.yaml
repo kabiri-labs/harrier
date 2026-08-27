@@ -1,6 +1,7 @@
 id: HRR-RES-03-TIME
 topic: HRR-RES-03
 status: outline
+role: variant
 title: "Timing-based reachability inference"
 objective: >-
   Determine whether connect and read timings distinguish a listening internal

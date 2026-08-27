@@ -1,6 +1,7 @@
 id: HRR-RCN-02-PROBE
 topic: HRR-RCN-02
 status: outline
+role: stage
 kind: recon
 title: "Which recorded names serve a distinct application"
 objective: >-

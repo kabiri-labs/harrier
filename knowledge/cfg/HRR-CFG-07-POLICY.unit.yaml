@@ -1,6 +1,7 @@
 id: HRR-CFG-07-POLICY
 topic: HRR-CFG-07
 status: outline
+role: stage
 title: "Ownership and mode of the deployed files"
 objective: >-
   Determine, where the engagement grants access to the host, whether the

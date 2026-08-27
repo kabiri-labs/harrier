@@ -1,6 +1,7 @@
 id: HRR-ACL-01-VERIFY
 topic: HRR-ACL-01
 status: outline
+role: stage
 kind: recon
 title: "Reconciliation of the documented model with the observed one"
 objective: >-

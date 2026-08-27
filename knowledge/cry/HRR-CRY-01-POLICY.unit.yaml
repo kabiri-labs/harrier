@@ -1,6 +1,7 @@
 id: HRR-CRY-01-POLICY
 topic: HRR-CRY-01
 status: outline
+role: stage
 title: "Offered protocol versions and suites"
 objective: >-
   Determine whether a listener negotiates a protocol version or cipher suite

@@ -1,6 +1,7 @@
 id: HRR-SES-05-MAP
 topic: HRR-SES-05
 status: outline
+role: stage
 kind: recon
 title: "State-changing request inventory"
 objective: >-

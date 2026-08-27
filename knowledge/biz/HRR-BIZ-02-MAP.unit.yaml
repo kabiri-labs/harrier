@@ -1,6 +1,7 @@
 id: HRR-BIZ-02-MAP
 topic: HRR-BIZ-02
 status: outline
+role: stage
 kind: recon
 title: "The requests the client is expected to be able to construct"
 objective: >-

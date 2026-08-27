@@ -1,6 +1,7 @@
 id: HRR-CFG-04-IMPACT
 topic: HRR-CFG-04
 status: outline
+role: stage
 title: "Whether an accepted method does anything"
 objective: >-
   Determine whether a method accepted but unused has an effect on the server

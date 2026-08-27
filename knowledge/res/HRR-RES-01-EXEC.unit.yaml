@@ -1,6 +1,7 @@
 id: HRR-RES-01-EXEC
 topic: HRR-RES-01
 status: authored
+role: stage
 title: "Inclusion and execution of the resolved path"
 objective: >-
   Determine whether the resolved path is included or executed rather than only

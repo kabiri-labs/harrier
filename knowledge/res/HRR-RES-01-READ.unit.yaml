@@ -1,6 +1,7 @@
 id: HRR-RES-01-READ
 topic: HRR-RES-01
 status: authored
+role: stage
 title: "Confirmed read outside the intended root"
 objective: >-
   Determine whether the content of a file the application never intended to serve

@@ -1,6 +1,7 @@
 id: HRR-INJ-09-IMPACT
 topic: HRR-INJ-09
 status: outline
+role: stage
 title: "Established reach of the format string"
 objective: >-
   Determine whether the consumed specifiers permit reading memory contents back

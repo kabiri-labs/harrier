@@ -1,6 +1,7 @@
 id: HRR-CFG-08-PROBE
 topic: HRR-CFG-08
 status: authored
+role: stage
 title: "A delegation pointing at a resource that can be claimed"
 objective: >-
   Determine whether any delegation resolves to a resource that no longer exists

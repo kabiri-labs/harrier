@@ -1,6 +1,7 @@
 id: HRR-INJ-01-PROBE
 topic: HRR-INJ-01
 status: outline
+role: stage
 title: "Injection point probe"
 objective: >-
   Determine whether a syntax-breaking character alters the query's result or

@@ -1,6 +1,7 @@
 id: HRR-SES-03-READ
 topic: HRR-SES-03
 status: outline
+role: stage
 title: "Confirmed access through the planted identifier"
 objective: >-
   Determine whether the planted identifier returns the authenticated user's

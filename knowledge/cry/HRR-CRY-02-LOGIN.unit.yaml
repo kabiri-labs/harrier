@@ -1,6 +1,7 @@
 id: HRR-CRY-02-LOGIN
 topic: HRR-CRY-02
 status: outline
+role: stage
 title: "Credential submission channel"
 objective: >-
   Determine whether a credential can be submitted over a channel that is not

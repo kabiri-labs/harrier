@@ -1,6 +1,7 @@
 id: HRR-CFG-06-PROBE
 topic: HRR-CFG-06
 status: outline
+role: stage
 title: "Whether a plugin policy file is served and what it grants"
 objective: >-
   Determine whether a cross-domain policy file is served and which origins it

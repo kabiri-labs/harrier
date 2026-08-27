@@ -1,6 +1,7 @@
 id: HRR-AUT-04-REPLAY
 topic: HRR-AUT-04
 status: outline
+role: variant
 title: "Reuse of a captured authentication artefact"
 objective: >-
   Determine whether an artefact captured from one authentication exchange

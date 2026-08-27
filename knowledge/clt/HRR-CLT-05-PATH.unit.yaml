@@ -1,6 +1,7 @@
 id: HRR-CLT-05-PATH
 topic: HRR-CLT-05
 status: outline
+role: stage
 title: "Path-supplied resource location"
 objective: >-
   Determine whether a resource location derived from a path segment is fetched

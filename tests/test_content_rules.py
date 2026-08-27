@@ -15,7 +15,7 @@ class KindDecidesWhetherAnOracleIsAllowed(SandboxCase):
     def test_a_test_unit_without_an_oracle_is_rejected(self):
         self.box.add_topic()
         unit = {
-            "id": "HRR-AUT-01-UNION", "topic": "HRR-AUT-01",
+            "id": "HRR-AUT-01-UNION", "topic": "HRR-AUT-01", "role": "variant",
             "title": "UNION-based extraction",
             "objective": "Determine whether a UNION arm can be appended to the query.",
             "done_when": "Column count resolved and one computed value extracted, or the reason recorded.",
@@ -35,6 +35,7 @@ class KindDecidesWhetherAnOracleIsAllowed(SandboxCase):
         self.box.add_unit(id="HRR-AUT-01-UNION")
         unit = {
             "id": "HRR-AUT-01-FPRINT", "topic": "HRR-AUT-01", "kind": "recon",
+            "role": "stage",
             "title": "Database engine fingerprint",
             "objective": "Establish which database engine answers the injectable parameter.",
             "done_when": "The engine and version are recorded, or the reason neither could be established.",
@@ -46,6 +47,7 @@ class KindDecidesWhetherAnOracleIsAllowed(SandboxCase):
         self.box.add_topic(axis="asset", order=["HRR-AUT-01-SEARCH"])
         unit = {
             "id": "HRR-AUT-01-SEARCH", "topic": "HRR-AUT-01", "kind": "inquiry",
+            "role": "stage",
             "title": "Search workflow assumptions",
             "objective": "Determine whether the search workflow trusts any value it did not compute.",
             "questions": [
@@ -113,6 +115,7 @@ class OutlineRelaxesDepthAndNothingElse(SandboxCase):
         self.box.add_topic(order=["HRR-AUT-01-UNION"])
         unit = {
             "id": "HRR-AUT-01-UNION", "topic": "HRR-AUT-01", "status": "outline",
+            "role": "variant",
             "title": "UNION-based extraction",
             "objective": "Determine whether a UNION arm can be appended so that computed values reach the response.",
         }
@@ -123,6 +126,7 @@ class OutlineRelaxesDepthAndNothingElse(SandboxCase):
         self.box.add_topic()
         unit = {
             "id": "HRR-AUT-01-UNION", "topic": "HRR-AUT-01", "status": "outline",
+            "role": "variant",
             "title": "UNION-based extraction",
             "objective": "Investigate the parameter for anything that looks like a problem here.",
         }

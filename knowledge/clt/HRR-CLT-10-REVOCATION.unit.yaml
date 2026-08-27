@@ -1,6 +1,7 @@
 id: HRR-CLT-10-REVOCATION
 topic: HRR-CLT-10
 status: outline
+role: stage
 title: "Clearance on sign-out"
 objective: >-
   Determine whether client-side storage holding session or personal data is

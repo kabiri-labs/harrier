@@ -1,6 +1,7 @@
 id: HRR-CFG-04-PROBE
 topic: HRR-CFG-04
 status: outline
+role: stage
 title: "Methods accepted beyond those the application uses"
 objective: >-
   Determine which request methods a resource accepts beyond the ones its own

@@ -1,6 +1,7 @@
 id: HRR-CRY-05-PROBE
 topic: HRR-CRY-05
 status: outline
+role: stage
 title: "Signature verification presence"
 objective: >-
   Determine whether a token with an altered payload and an unaltered signature

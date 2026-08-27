@@ -1,6 +1,7 @@
 id: HRR-INJ-07-OOB
 topic: HRR-INJ-07
 status: outline
+role: variant
 title: "Out-of-band confirmation"
 objective: >-
   Determine whether the evaluator can be made to initiate a network interaction

@@ -1,6 +1,7 @@
 id: HRR-CLT-02-HTMLURI
 topic: HRR-CLT-02
 status: outline
+role: stage
 title: "Navigation and URL sink"
 objective: >-
   Determine whether a source reaches an assignment to a location, href or src

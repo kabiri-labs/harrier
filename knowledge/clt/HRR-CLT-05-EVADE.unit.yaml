@@ -1,6 +1,7 @@
 id: HRR-CLT-05-EVADE
 topic: HRR-CLT-05
 status: outline
+role: stage
 kind: recon
 title: "Location allow-list evasion"
 objective: >-

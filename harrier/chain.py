@@ -63,6 +63,9 @@ class Node:
     title: str
     kind: str
     status: str
+    #: Whether the topic's other units are steps beside this one or alternatives
+    #: to it. Empty only for a unit assembled by a caller rather than loaded.
+    role: str = ""
     topic: str = ""
     all_of: List[str] = field(default_factory=list)
     any_of: List[str] = field(default_factory=list)
@@ -242,6 +245,7 @@ class Chain:
                 title=data["title"],
                 kind=data.get("kind", "test"),
                 status=data.get("status", "authored"),
+                role=data.get("role", ""),
                 topic=data.get("topic", ""),
                 all_of=list(requires.get("all_of") or []),
                 any_of=list(requires.get("any_of") or []),

@@ -1,6 +1,7 @@
 id: HRR-RCN-03-MAP
 topic: HRR-RCN-03
 status: outline
+role: stage
 kind: recon
 title: "The requests the application issues and what each carries"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-PRT-02-HEADER
 topic: HRR-PRT-02
 status: outline
+role: stage
 title: "Trusted request-supplied host"
 objective: >-
   Determine whether a Host or forwarding header the tester sets changes the

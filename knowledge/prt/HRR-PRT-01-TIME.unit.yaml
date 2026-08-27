@@ -1,6 +1,7 @@
 id: HRR-PRT-01-TIME
 topic: HRR-PRT-01
 status: outline
+role: variant
 title: "Timing-based desync detection"
 objective: >-
   Determine whether a request whose framing the two parsers read differently

@@ -1,6 +1,7 @@
 id: HRR-BIZ-01-MAP
 topic: HRR-BIZ-01
 status: outline
+role: stage
 kind: recon
 title: "The rules the workflow claims to enforce"
 objective: >-

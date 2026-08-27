@@ -1,6 +1,7 @@
 id: HRR-INJ-12-ERROR
 topic: HRR-INJ-12
 status: outline
+role: variant
 title: "Error-based inference"
 objective: >-
   Determine whether a malformed argument produces a resolver error carrying

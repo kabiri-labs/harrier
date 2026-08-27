@@ -1,6 +1,7 @@
 id: HRR-ERR-04-MAP
 topic: HRR-ERR-04
 status: outline
+role: stage
 kind: recon
 title: "What public indexes and archives hold about the target"
 objective: >-

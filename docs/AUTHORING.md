@@ -26,6 +26,7 @@ title: SQL injection
 domain: INJ
 axis: technique              # the primary axis; units are named from its vocabulary
 kind: test                   # test | recon | inquiry
+role: variant                # stage | variant -- required, see below
 surfaces:                    # attack-surface tags this topic attaches to
   any_of: [sql-backed-param]
 dimensions:

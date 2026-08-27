@@ -1,6 +1,7 @@
 id: HRR-PRT-05-TRANSPORT
 topic: HRR-PRT-05
 status: outline
+role: stage
 title: "Encrypted transport enforcement"
 objective: >-
   Determine whether an unencrypted socket connection is accepted where an

@@ -1,6 +1,7 @@
 id: HRR-ACL-07-MAP
 topic: HRR-ACL-07
 status: outline
+role: stage
 kind: recon
 title: "The schema's types and fields, and who may reach each"
 objective: >-

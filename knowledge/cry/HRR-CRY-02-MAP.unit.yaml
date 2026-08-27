@@ -1,6 +1,7 @@
 id: HRR-CRY-02-MAP
 topic: HRR-CRY-02
 status: outline
+role: stage
 kind: recon
 title: "Sensitive payload inventory"
 objective: >-

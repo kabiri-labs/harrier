@@ -1,6 +1,7 @@
 id: HRR-SES-10-BINDING
 topic: HRR-SES-10
 status: outline
+role: stage
 title: "Binding to the presenting client"
 objective: >-
   Determine whether the token is usable by any bearer or is tied to the client

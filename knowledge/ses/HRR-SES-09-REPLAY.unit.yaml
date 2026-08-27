@@ -1,6 +1,7 @@
 id: HRR-SES-09-REPLAY
 topic: HRR-SES-09
 status: outline
+role: variant
 title: "Acceptance from a different client"
 objective: >-
   Determine whether a captured identifier is accepted when presented by a

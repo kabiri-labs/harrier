@@ -1,6 +1,7 @@
 id: HRR-INJ-08-VERIFY
 topic: HRR-INJ-08
 status: outline
+role: stage
 title: "In-band output confirmation"
 objective: >-
   Determine whether output of a command the tester chose appears in the

@@ -1,6 +1,7 @@
 id: HRR-SES-08-MAP
 topic: HRR-SES-08
 status: outline
+role: stage
 kind: recon
 title: "Server-side session variable inventory"
 objective: >-

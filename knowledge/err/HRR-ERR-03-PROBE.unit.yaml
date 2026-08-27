@@ -1,6 +1,7 @@
 id: HRR-ERR-03-PROBE
 topic: HRR-ERR-03
 status: outline
+role: stage
 title: "Internal detail inside content the application meant to serve"
 objective: >-
   Determine whether delivered content carries internal detail the interface

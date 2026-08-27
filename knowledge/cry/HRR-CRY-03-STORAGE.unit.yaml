@@ -1,6 +1,7 @@
 id: HRR-CRY-03-STORAGE
 topic: HRR-CRY-03
 status: outline
+role: stage
 title: "Key material at rest"
 objective: >-
   Determine whether key material is held somewhere that survives a source-code

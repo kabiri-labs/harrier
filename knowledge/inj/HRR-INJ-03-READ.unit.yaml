@@ -1,6 +1,7 @@
 id: HRR-INJ-03-READ
 topic: HRR-INJ-03
 status: outline
+role: stage
 title: "Local file disclosure"
 objective: >-
   Determine whether a resolved entity returns the contents of a file on the

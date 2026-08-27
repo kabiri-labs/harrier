@@ -1,6 +1,7 @@
 id: HRR-CLT-01-HTMLURI
 topic: HRR-CLT-01
 status: outline
+role: stage
 title: "URL-bearing attribute context"
 objective: >-
   Determine whether a value landing in an href, src or formaction attribute can

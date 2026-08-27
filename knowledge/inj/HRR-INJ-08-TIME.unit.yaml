@@ -1,6 +1,7 @@
 id: HRR-INJ-08-TIME
 topic: HRR-INJ-08
 status: outline
+role: variant
 title: "Time-based inference"
 objective: >-
   Determine whether a sleep of a chosen duration is reproducibly observable in

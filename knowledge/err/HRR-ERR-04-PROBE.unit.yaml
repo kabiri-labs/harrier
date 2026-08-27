@@ -1,6 +1,7 @@
 id: HRR-ERR-04-PROBE
 topic: HRR-ERR-04
 status: outline
+role: stage
 title: "Content exposed publicly that the application no longer serves"
 objective: >-
   Determine whether any indexed or archived copy exposes content the

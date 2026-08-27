@@ -1,6 +1,7 @@
 id: HRR-INJ-11-ERROR
 topic: HRR-INJ-11
 status: outline
+role: variant
 title: "Error-based inference"
 objective: >-
   Determine whether a malformed field produces a server error carrying

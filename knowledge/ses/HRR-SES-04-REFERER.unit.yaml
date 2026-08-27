@@ -1,6 +1,7 @@
 id: HRR-SES-04-REFERER
 topic: HRR-SES-04
 status: outline
+role: stage
 title: "Identifier leaving in a referrer"
 objective: >-
   Determine whether a page holding the identifier in its URL links to a third

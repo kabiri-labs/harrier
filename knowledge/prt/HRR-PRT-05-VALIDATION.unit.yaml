@@ -1,6 +1,7 @@
 id: HRR-PRT-05-VALIDATION
 topic: HRR-PRT-05
 status: outline
+role: stage
 title: "Origin checking at the handshake"
 objective: >-
   Determine whether a handshake carrying an origin the application does not own

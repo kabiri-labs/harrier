@@ -1,6 +1,7 @@
 id: HRR-CRY-04-ERROR
 topic: HRR-CRY-04
 status: outline
+role: variant
 title: "Error-distinguished padding failure"
 objective: >-
   Determine whether a padding failure produces a response distinguishable from

@@ -1,6 +1,7 @@
 id: HRR-BIZ-03-PROBE
 topic: HRR-BIZ-03
 status: outline
+role: stage
 kind: inquiry
 title: "Acceptance of returned state that was altered"
 objective: >-

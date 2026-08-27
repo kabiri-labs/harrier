@@ -423,3 +423,74 @@ class ContinuationsAreOrderedByTier(unittest.TestCase):
                 travelled = edge["via"] or edge.get("hint") or []
                 if set(travelled) <= {"access.user"} and travelled:
                     self.assertEqual(edge["tier"], "engagement", (uid, edge["unit"]))
+
+
+class EveryUnitSaysHowItStandsToItsSiblings(SandboxCase):
+    """"Perform all of these" and "pick one of these" are opposite instructions.
+
+    A topic listed its units flat, so the two were rendered identically and the
+    list had to be opened unit by unit to be read. `role` records which, and is
+    required rather than derived: deriving it from the identifier's slug would
+    tie the reading of a unit to a naming convention and leave no way to record
+    that one is an exception to the pattern its slug implies.
+    """
+
+    def test_a_unit_without_a_role_is_rejected(self):
+        def drop(unit):
+            unit.pop("role", None)
+            return unit
+
+        self.box.edit("knowledge/inj/HRR-INJ-01-UNION.unit.yaml", drop)
+        self.assertRejected("role")
+
+    def test_a_role_outside_the_two_is_rejected(self):
+        self.box.edit(
+            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            lambda u: u.update(role="sometimes") or u,
+        )
+        self.assertRejected("role")
+
+
+class TheRolesReadTheWayTheCatalogueIsWritten(unittest.TestCase):
+    """Spot checks against topics whose shape is not in dispute, so a drift in
+    the assignment fails here rather than being noticed by a reader."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chain = Chain.load(REPO_ROOT)
+
+    def role(self, uid):
+        return self.chain.nodes[uid].role
+
+    def test_a_probe_and_a_fingerprint_are_stages(self):
+        for uid in ("HRR-INJ-01-PROBE", "HRR-INJ-01-FPRINT", "HRR-INJ-01-EVADE"):
+            self.assertEqual(self.role(uid), "stage", uid)
+
+    def test_the_seven_sql_techniques_are_alternatives(self):
+        for slug in ("ERROR", "BOOL", "TIME", "UNION", "OOB", "STACK", "SECOND"):
+            uid = f"HRR-INJ-01-{slug}"
+            self.assertEqual(self.role(uid), "variant", uid)
+
+    def test_every_unit_declares_one_of_the_two(self):
+        for uid, node in self.chain.nodes.items():
+            self.assertIn(node.role, ("stage", "variant"), uid)
+
+    #: Topics that decompose into alternatives with no stage to enter by. A
+    #: tester opening one is asked to choose a route before anything has
+    #: established the surface is there. Listed rather than tolerated silently:
+    #: the assertion below fails on a fourteenth as much as on a first, so the
+    #: gap is recorded where it will be noticed rather than in a document nobody
+    #: re-reads.
+    STAGELESS = ["HRR-ACL-04"]
+
+    def test_only_the_known_topics_lack_a_stage_to_enter_by(self):
+        """`HRR-ACL-04` splits privilege escalation into three techniques and
+        offers nothing that maps the roles first. That is a hole in the
+        decomposition rather than a miscategorised unit -- the three really are
+        alternatives -- so it is pinned here and fails the moment another topic
+        joins it."""
+        by_topic = {}
+        for node in self.chain.nodes.values():
+            by_topic.setdefault(node.topic, []).append(node.role)
+        stageless = sorted(t for t, roles in by_topic.items() if "stage" not in roles)
+        self.assertEqual(stageless, self.STAGELESS)

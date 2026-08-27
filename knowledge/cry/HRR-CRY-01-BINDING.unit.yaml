@@ -1,6 +1,7 @@
 id: HRR-CRY-01-BINDING
 topic: HRR-CRY-01
 status: outline
+role: stage
 title: "Certificate to name binding"
 objective: >-
   Determine whether the presented certificate is valid for the name the client

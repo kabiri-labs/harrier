@@ -1,6 +1,7 @@
 id: HRR-CFG-07-STORAGE
 topic: HRR-CFG-07
 status: outline
+role: stage
 title: "Whether written files land where they are served"
 objective: >-
   Determine whether files the application writes are placed in a location the

@@ -1,6 +1,7 @@
 id: HRR-CLT-01-JSCODE
 topic: HRR-CLT-01
 status: outline
+role: stage
 title: "Executable script context"
 objective: >-
   Determine whether a value is placed directly into executable script rather

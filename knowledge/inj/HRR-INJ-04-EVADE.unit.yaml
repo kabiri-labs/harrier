@@ -1,6 +1,7 @@
 id: HRR-INJ-04-EVADE
 topic: HRR-INJ-04
 status: outline
+role: stage
 kind: recon
 title: "Directive syntax evasion"
 objective: >-

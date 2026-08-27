@@ -1,6 +1,7 @@
 id: HRR-INJ-06-EVADE
 topic: HRR-INJ-06
 status: outline
+role: stage
 kind: recon
 title: "Encoding and normalisation evasion"
 objective: >-

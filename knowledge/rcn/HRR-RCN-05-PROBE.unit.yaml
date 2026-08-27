@@ -1,6 +1,7 @@
 id: HRR-RCN-05-PROBE
 topic: HRR-RCN-05
 status: outline
+role: stage
 kind: recon
 title: "Which channels can be interposed"
 objective: >-

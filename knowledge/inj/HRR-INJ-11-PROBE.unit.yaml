@@ -1,6 +1,7 @@
 id: HRR-INJ-11-PROBE
 topic: HRR-INJ-11
 status: outline
+role: stage
 title: "Field metacharacter probe"
 objective: >-
   Determine whether a syntax-breaking character in a message field changes the

@@ -1,6 +1,7 @@
 id: HRR-INJ-08-EVADE
 topic: HRR-INJ-08
 status: outline
+role: stage
 kind: recon
 title: "Separator and quoting evasion"
 objective: >-

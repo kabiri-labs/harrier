@@ -1,6 +1,7 @@
 id: HRR-CRY-03-ROTATION
 topic: HRR-CRY-03
 status: outline
+role: stage
 title: "Key lifecycle"
 objective: >-
   Determine whether keys can be rotated and retired, and whether material

@@ -1,6 +1,7 @@
 id: HRR-AUT-03-RATE
 topic: HRR-AUT-03
 status: outline
+role: stage
 title: "Throttling of repeated authentication attempts"
 objective: >-
   Determine whether repeated failed authentication attempts against one

@@ -1,6 +1,7 @@
 id: HRR-BIZ-08-PROBE
 topic: HRR-BIZ-08
 status: outline
+role: stage
 kind: inquiry
 title: "Whether a client-supplied value reaches the charge"
 objective: >-

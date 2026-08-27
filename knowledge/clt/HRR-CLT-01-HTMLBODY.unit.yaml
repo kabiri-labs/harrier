@@ -1,6 +1,7 @@
 id: HRR-CLT-01-HTMLBODY
 topic: HRR-CLT-01
 status: outline
+role: stage
 title: "Element content context"
 objective: >-
   Determine whether a value landing between tags can introduce a new element

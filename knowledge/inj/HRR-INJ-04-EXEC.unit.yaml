@@ -1,6 +1,7 @@
 id: HRR-INJ-04-EXEC
 topic: HRR-INJ-04
 status: outline
+role: stage
 title: "Command execution through a directive"
 objective: >-
   Determine whether an interpreted directive executes a command, which many

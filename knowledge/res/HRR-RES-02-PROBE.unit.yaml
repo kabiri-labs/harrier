@@ -1,6 +1,7 @@
 id: HRR-RES-02-PROBE
 topic: HRR-RES-02
 status: outline
+role: stage
 kind: recon
 title: "Upload acceptance baseline"
 objective: >-

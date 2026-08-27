@@ -1,6 +1,7 @@
 id: HRR-BIZ-04-RACE
 topic: HRR-BIZ-04
 status: outline
+role: variant
 title: "The same operation applied more than once concurrently"
 objective: >-
   Determine whether an operation subject to a limit is applied more times than

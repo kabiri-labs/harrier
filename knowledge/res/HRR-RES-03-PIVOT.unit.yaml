@@ -1,6 +1,7 @@
 id: HRR-RES-03-PIVOT
 topic: HRR-RES-03
 status: outline
+role: stage
 title: "Non-public destination reach"
 objective: >-
   Determine whether the fetch reaches a destination that is not publicly

@@ -1,6 +1,7 @@
 id: HRR-INJ-01-SECOND
 topic: HRR-INJ-01
 status: outline
+role: variant
 title: "Second-order injection"
 objective: >-
   Determine whether a payload stored by one request is interpreted as SQL when

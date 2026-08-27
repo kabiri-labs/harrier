@@ -1,6 +1,7 @@
 id: HRR-CRY-02-RESET
 topic: HRR-CRY-02
 status: outline
+role: stage
 title: "Recovery channel"
 objective: >-
   Determine whether a recovery token or new credential travels over an

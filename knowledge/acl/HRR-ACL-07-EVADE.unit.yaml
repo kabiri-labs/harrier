@@ -1,6 +1,7 @@
 id: HRR-ACL-07-EVADE
 topic: HRR-ACL-07
 status: outline
+role: stage
 title: "A field reached by a route the top-level check does not inspect"
 objective: >-
   Determine whether a field the same query was refused at the top level is

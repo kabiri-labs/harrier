@@ -1,6 +1,7 @@
 id: HRR-CFG-02-PROBE
 topic: HRR-CFG-02
 status: outline
+role: stage
 title: "A file served that the application does not link"
 objective: >-
   Determine whether the server returns a file that no page references and that

@@ -1,6 +1,7 @@
 id: HRR-BIZ-02-PROBE
 topic: HRR-BIZ-02
 status: outline
+role: stage
 kind: inquiry
 title: "Acceptance of a request the client never issues"
 objective: >-

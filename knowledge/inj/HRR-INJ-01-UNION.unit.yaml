@@ -1,6 +1,7 @@
 id: HRR-INJ-01-UNION
 topic: HRR-INJ-01
 status: authored
+role: variant
 title: "UNION-based extraction"
 objective: >-
   Determine whether a UNION arm can be appended so that attacker-chosen,

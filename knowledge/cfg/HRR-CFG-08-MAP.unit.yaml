@@ -1,6 +1,7 @@
 id: HRR-CFG-08-MAP
 topic: HRR-CFG-08
 status: outline
+role: stage
 kind: recon
 title: "The delegated names and what each points at"
 objective: >-

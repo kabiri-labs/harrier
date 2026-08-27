@@ -1,6 +1,7 @@
 id: HRR-AUT-08-PROBE
 topic: HRR-AUT-08
 status: outline
+role: stage
 title: "Whether a secondary channel enforces weaker requirements"
 objective: >-
   Determine whether any secondary channel authenticates the same account on

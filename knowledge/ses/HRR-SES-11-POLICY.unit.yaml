@@ -1,6 +1,7 @@
 id: HRR-SES-11-POLICY
 topic: HRR-SES-11
 status: outline
+role: stage
 kind: recon
 title: "Declared concurrency rule"
 objective: >-

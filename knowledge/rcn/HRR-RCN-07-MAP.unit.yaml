@@ -1,6 +1,7 @@
 id: HRR-RCN-07-MAP
 topic: HRR-RCN-07
 status: outline
+role: stage
 kind: recon
 title: "The schema as types, fields and operations"
 objective: >-

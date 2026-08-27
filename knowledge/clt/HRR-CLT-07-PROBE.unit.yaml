@@ -1,6 +1,7 @@
 id: HRR-CLT-07-PROBE
 topic: HRR-CLT-07
 status: outline
+role: stage
 title: "Controllable plugin parameter probe"
 objective: >-
   Determine whether embedded plugin content consumes a parameter the tester

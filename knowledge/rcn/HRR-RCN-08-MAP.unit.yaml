@@ -1,6 +1,7 @@
 id: HRR-RCN-08-MAP
 topic: HRR-RCN-08
 status: outline
+role: stage
 kind: recon
 title: "What the metafiles declare"
 objective: >-

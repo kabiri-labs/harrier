@@ -1,6 +1,7 @@
 id: HRR-INJ-11-MAP
 topic: HRR-INJ-11
 status: outline
+role: stage
 kind: recon
 title: "Message schema enumeration"
 objective: >-

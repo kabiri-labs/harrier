@@ -1,6 +1,7 @@
 id: HRR-ACL-02-PEER
 topic: HRR-ACL-02
 status: authored
+role: stage
 title: "An object belonging to another account of the same role"
 objective: >-
   Determine whether an object owned by a different account of the same role is

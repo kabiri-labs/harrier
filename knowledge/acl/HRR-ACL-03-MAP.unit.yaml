@@ -1,6 +1,7 @@
 id: HRR-ACL-03-MAP
 topic: HRR-ACL-03
 status: outline
+role: stage
 kind: recon
 title: "The privileged functions and how each is addressed"
 objective: >-

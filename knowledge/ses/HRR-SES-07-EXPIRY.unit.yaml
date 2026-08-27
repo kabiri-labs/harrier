@@ -1,6 +1,7 @@
 id: HRR-SES-07-EXPIRY
 topic: HRR-SES-07
 status: outline
+role: stage
 title: "Absolute lifetime"
 objective: >-
   Determine whether a session is ended after a fixed period regardless of how

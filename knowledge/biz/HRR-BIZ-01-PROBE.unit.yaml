@@ -1,6 +1,7 @@
 id: HRR-BIZ-01-PROBE
 topic: HRR-BIZ-01
 status: outline
+role: stage
 kind: inquiry
 title: "Enforcement of a recorded rule with the client bypassed"
 objective: >-

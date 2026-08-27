@@ -1,6 +1,7 @@
 id: HRR-INJ-10-EVADE
 topic: HRR-INJ-10
 status: outline
+role: stage
 kind: recon
 title: "Delimiter and sandbox evasion"
 objective: >-

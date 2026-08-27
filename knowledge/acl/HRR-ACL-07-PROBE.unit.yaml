@@ -1,6 +1,7 @@
 id: HRR-ACL-07-PROBE
 topic: HRR-ACL-07
 status: outline
+role: stage
 title: "A field resolving for a role that should not read it"
 objective: >-
   Determine whether a field outside the caller's role resolves to a value

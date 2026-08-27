@@ -1,6 +1,7 @@
 id: HRR-CLT-02-JSCODE
 topic: HRR-CLT-02
 status: outline
+role: stage
 title: "Script-evaluating sink"
 objective: >-
   Determine whether a source reaches an evaluation sink such as eval, Function,

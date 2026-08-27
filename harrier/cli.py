@@ -24,6 +24,13 @@ EXIT_USAGE = 2
 #: part of the engagement heading on purpose: "prerequisite of 92 tests" is the
 #: fact that makes the list below it safe to skip, and without it the same rows
 #: read as ninety-two missed opportunities.
+#: What a unit's role means where a tester reads it. Two opposite instructions
+#: that a flat list of siblings gave no way to tell apart.
+ROLE_LINE = {
+    "stage": "role: a stage -- performed alongside the other stages of this topic",
+    "variant": "role: one alternative -- chosen against the others on the evidence",
+}
+
 CONTINUATION_HEADINGS = {
     "chain": "potential continuations",
     "topic": "alternative techniques for this test ({n})",
@@ -117,6 +124,8 @@ def _chain(root, args) -> int:
         label = lambda fid: chain.facts.get(fid, {}).get("label", fid)
 
         print(f"{node.id}  {node.title}")
+        if node.role:
+            print(f"  {ROLE_LINE[node.role]}")
         for heading, ids in (
             ("prerequisite (all of)", node.all_of),
             ("prerequisite (any of)", node.any_of),

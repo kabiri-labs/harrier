@@ -1,6 +1,7 @@
 id: HRR-ERR-01-MAP
 topic: HRR-ERR-01
 status: outline
+role: stage
 kind: recon
 title: "How each class of input is made to fail"
 objective: >-

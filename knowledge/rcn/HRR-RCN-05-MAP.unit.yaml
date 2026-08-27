@@ -1,6 +1,7 @@
 id: HRR-RCN-05-MAP
 topic: HRR-RCN-05
 status: outline
+role: stage
 kind: recon
 title: "The clients and channels carrying the application's traffic"
 objective: >-
