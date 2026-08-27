@@ -175,7 +175,16 @@ rather than left to be remembered.
 harrier chain                          summary, and how far the chart reaches
 harrier chain HRR-INJ-01-UNION         one test: what it needs, establishes, and may lead to
 harrier chain --fact primitive.db.read one capability: who establishes it, who declares a use
+harrier checklist                      one line per test case of the standard
+harrier checklist WSTG-INPV-05         one test case, and the units that cover it
+harrier checklist --uncovered          the test cases no topic claims
+harrier index                          regenerate standards/wstg-index.yaml
 ```
+
+`harrier chain <unit>` names the test cases that lead to the unit, because the
+identifier on a tester's scope sheet is the standard's and not Harrier's. That
+relation lives on the topic rather than the unit, so a reader of this output
+previously had no route back to the line item that sent them there.
 
 The command line reads **the same derivation the artefact does** — one
 implementation in `chain.py`, two consumers — so the two cannot drift into

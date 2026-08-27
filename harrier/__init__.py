@@ -49,7 +49,12 @@ SAFE_LOADER = _SafeLoader
 #: 0.7.0 gives HRR-ACL-04 the stage it never had. The topic offered three
 #: escalation routes and nothing that established what any of them attacks, so
 #: a tester was asked to choose before there was anything to choose between.
-__version__ = "0.7.0"
+#:
+#: 0.8.0 links the standard in both directions. The catalogue could always say
+#: which test cases a topic claims and never which units cover a test case --
+#: derivable, but reachable only from inside the built file, which is not the
+#: same as available.
+__version__ = "0.8.0"
 
 __all__ = [
     "SAFE_LOADER",
@@ -69,6 +74,7 @@ SCHEMA_DIR = Path(__file__).resolve().parent / "schema"
 STANDARD_SCHEMAS = {
     "wstg": "standard",
     "wstg-map": "wstg-map",
+    "wstg-index": "wstg-index",
     "asvs": "asvs",
     "cwe": "cwe",
 }
