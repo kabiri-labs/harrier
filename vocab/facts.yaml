@@ -57,9 +57,9 @@
 # than no label: the reader would have learnt a heading that later means
 # something else.
 #
-# The split is not cosmetic. A single unit, HRR-IDN-01-POLICY, produces 90
-# engagement-tier edges on its own -- and exactly two escalations. Printing all
-# ninety-two under one heading is what made those two unfindable.
+# The split is not cosmetic. A single unit, HRR-IDN-01-POLICY, produces ninety-odd
+# engagement-tier edges on its own -- and exactly two escalations. Printing them
+# all under one heading is what made those two unfindable.
 version: 1
 facts:
   - id: recon.target.reachable
@@ -1005,6 +1005,16 @@ facts:
       them -- through a vendor credential, a defeated authentication step, a
       weaker channel, or a recovery artefact accepted against the wrong
       account.
+
+  - id: recon.privilege.carrier
+    label: How a request's privilege is decided is recorded
+    tier: chain
+    description: >
+      What the application reads to decide what a caller may do: a claim inside
+      the session, a field the request carries, a lookup performed per request,
+      or a decision taken once in an earlier step and trusted afterwards. It is
+      a finding rather than an enumeration -- which answer holds decides which
+      escalation route is worth attempting, and rules the others out.
 
   - id: access.role.elevated
     label: A session carrying more than the granted role is held

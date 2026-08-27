@@ -212,7 +212,11 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         ):
             with self.subTest(row=label):
                 self.assertIn(f"| {label} | {tiers[tier]} |", readme)
-        self.assertEqual(sum(tiers.values()), 561)
+        # Against the derivation rather than a literal: the three tiers have to
+        # partition every edge, and a number written here would go stale on the
+        # first content change -- the failure this class exists to prevent.
+        total = sum(len(node["out"]) for node in self.chain.index().values())
+        self.assertEqual(sum(tiers.values()), total)
 
     def test_the_group_and_domain_counts_in_that_table_are_real(self):
         from harrier import Repository

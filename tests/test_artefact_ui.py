@@ -17,6 +17,7 @@ Two runners, both optional and both local:
 """
 
 import re
+import collections
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -72,8 +73,14 @@ class TheLocalGraphModel(unittest.TestCase):
             };
         """)
         self.assertEqual(result["shown"], 3)
-        self.assertEqual(result["chain"], 2)
-        self.assertEqual(result["engagement"], 90)
+        # Derived, not written down: the point is that the totals exceed the
+        # preview, and a literal here would go stale the first time a unit is
+        # added -- which is the failure these counts exist to prevent.
+        edges = self.data["chain"]["HRR-IDN-01-POLICY"]["out"]
+        expected = collections.Counter(e["tier"] for e in edges)
+        self.assertEqual(result["chain"], expected["chain"])
+        self.assertEqual(result["engagement"], expected["engagement"])
+        self.assertGreater(result["engagement"], result["shown"])
 
     def test_it_is_bounded_before_it_is_expanded(self):
         result = self.run_js("""

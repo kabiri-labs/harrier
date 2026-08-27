@@ -7,14 +7,14 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.6.0 is an early public alpha.** The WSTG decomposition is broad —
-> every resolvable identifier is claimed, and 366 Test Units exist. The depth
+> **Harrier 0.7.0 is an early public alpha.** The WSTG decomposition is broad —
+> every resolvable identifier is claimed, and 367 Test Units exist. The depth
 > behind them is not: 10 units are written to full procedural depth, and the far
 > half of the attack chain is barely charted. [What that means in
 > numbers](#what-exists-today-and-what-does-not) is below, not buried at the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.6.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.7.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -182,23 +182,23 @@ stale in this file without the suite failing.
 | WSTG identifiers pinned | 109, across 12 testing groups |
 | Claimed by a Harrier topic | 108 of 108 resolvable |
 | Topics | 99, across 13 domains |
-| Test Units | 366 |
+| Test Units | 367 |
 | Written to full procedural depth | **10** |
-| Outline only | 356 |
+| Outline only | 357 |
 
 | Chain | |
 |---|---|
-| Capabilities | 177 |
-| Derived unit-to-unit edges | 561 |
-| — of them escalations between capabilities | 207 |
+| Capabilities | 178 |
+| Derived unit-to-unit edges | 566 |
+| — of them escalations between capabilities | 210 |
 | — another technique for the same test | 124 |
-| — a general prerequisite, not a step | 230 |
-| Tests with a potential continuation | 138 |
+| — a general prerequisite, not a step | 232 |
+| Tests with a potential continuation | 139 |
 | Tests that establish an impact | 7 |
 | Tests that stop short | 182 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 78 of 177 |
-| Capabilities with a charted route to an impact | 12 of 174 |
+| Capabilities used by no test, impacts excluded | 78 of 178 |
+| Capabilities with a charted route to an impact | 12 of 175 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.

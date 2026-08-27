@@ -45,7 +45,11 @@ SAFE_LOADER = _SafeLoader
 #: 0.6.0 gives every unit a role. A topic listed its units flat, so "perform all
 #: of these" and "pick one of these" -- opposite instructions -- were rendered
 #: identically, and the list had to be opened unit by unit to be read.
-__version__ = "0.6.0"
+#:
+#: 0.7.0 gives HRR-ACL-04 the stage it never had. The topic offered three
+#: escalation routes and nothing that established what any of them attacks, so
+#: a tester was asked to choose before there was anything to choose between.
+__version__ = "0.7.0"
 
 __all__ = [
     "SAFE_LOADER",

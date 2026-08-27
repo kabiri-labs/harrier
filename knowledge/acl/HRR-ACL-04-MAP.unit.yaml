@@ -1,0 +1,15 @@
+id: HRR-ACL-04-MAP
+topic: HRR-ACL-04
+status: outline
+role: stage
+kind: recon
+title: "Where each request's privilege is decided"
+objective: >-
+  Record what the application reads to decide the privilege of a request --
+  a claim in the session, a field the caller sends, a lookup performed per
+  request, or a decision taken once in an earlier step -- since every route
+  below attacks that carrier rather than the privileged function itself.
+
+requires:
+  all_of: [recon.roles.mapped, access.user]
+yields: [recon.privilege.carrier]

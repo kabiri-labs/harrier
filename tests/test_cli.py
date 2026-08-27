@@ -149,7 +149,8 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         every held session produces."""
         out = self.chain("HRR-IDN-01-POLICY")
         self.assertIn("potential continuations:", out)
-        self.assertIn("generic prerequisite of 90 test(s) -- not an escalation:", out)
+        self.assertIn("generic prerequisite of", out)
+        self.assertIn("-- not an escalation:", out)
         self.assertLess(
             out.index("potential continuations:"),
             out.index("generic prerequisite of"),
@@ -180,8 +181,12 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         from harrier.chain import Chain
 
         out = self.chain()
-        reach = Chain.load(REPO_ROOT).reach()
-        self.assertEqual(sum(reach.values()), 366)
+        chain = Chain.load(REPO_ROOT)
+        reach = chain.reach()
+        # Against the catalogue rather than a literal. What this asserts is that
+        # the four counts partition it exactly -- a written-down total only
+        # asserts that nobody has added a unit since.
+        self.assertEqual(sum(reach.values()), len(chain.nodes))
         for label, value in (
             ("with a continuation", reach["continuation"]),
             ("establishing an impact", reach["impact"]),

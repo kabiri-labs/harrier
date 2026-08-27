@@ -8,5 +8,5 @@ objective: >-
   privilege still carries that privilege after the grant was withdrawn.
 
 requires:
-  all_of: [recon.roles.mapped, access.user]
+  all_of: [recon.roles.mapped, recon.privilege.carrier, access.user]
 yields: [access.role.elevated]

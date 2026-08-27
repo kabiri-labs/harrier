@@ -8,5 +8,5 @@ objective: >-
   that no later step re-verifies before acting on it.
 
 requires:
-  all_of: [recon.roles.mapped, access.user]
+  all_of: [recon.roles.mapped, recon.privilege.carrier, access.user]
 yields: [access.role.elevated]

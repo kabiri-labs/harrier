@@ -475,22 +475,14 @@ class TheRolesReadTheWayTheCatalogueIsWritten(unittest.TestCase):
         for uid, node in self.chain.nodes.items():
             self.assertIn(node.role, ("stage", "variant"), uid)
 
-    #: Topics that decompose into alternatives with no stage to enter by. A
-    #: tester opening one is asked to choose a route before anything has
-    #: established the surface is there. Listed rather than tolerated silently:
-    #: the assertion below fails on a fourteenth as much as on a first, so the
-    #: gap is recorded where it will be noticed rather than in a document nobody
-    #: re-reads.
-    STAGELESS = ["HRR-ACL-04"]
-
-    def test_only_the_known_topics_lack_a_stage_to_enter_by(self):
-        """`HRR-ACL-04` splits privilege escalation into three techniques and
-        offers nothing that maps the roles first. That is a hole in the
-        decomposition rather than a miscategorised unit -- the three really are
-        alternatives -- so it is pinned here and fails the moment another topic
-        joins it."""
+    def test_no_topic_asks_for_a_choice_before_offering_a_way_in(self):
+        """A topic of nothing but alternatives has no entry: the tester is asked
+        to pick a route before anything has established there is a surface to
+        pick one for. `HRR-ACL-04` was the last of them and now opens with the
+        stage that records where privilege is decided, which is the thing all
+        three of its routes attack."""
         by_topic = {}
         for node in self.chain.nodes.values():
             by_topic.setdefault(node.topic, []).append(node.role)
         stageless = sorted(t for t, roles in by_topic.items() if "stage" not in roles)
-        self.assertEqual(stageless, self.STAGELESS)
+        self.assertEqual(stageless, [])
