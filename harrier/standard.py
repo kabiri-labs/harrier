@@ -43,6 +43,14 @@ class Case:
     units: List[str] = field(default_factory=list)
     authored: int = 0
     outline: int = 0
+    #: Whether the domain map resolved this case to a domain at all. A case it
+    #: deliberately did not -- rule 0 in `wstg-map.yaml` -- is not a gap in
+    #: coverage, and reporting it as one turns a decision somebody made and
+    #: wrote down into a task nobody can close.
+    resolvable: bool = True
+    #: Why, when it is not. Carried from the map so the reason travels with the
+    #: row rather than living one file away.
+    note: str = ""
 
     @property
     def covered(self) -> bool:
@@ -65,6 +73,17 @@ def _units_of(topic: Dict[str, Any], units: Dict[str, Any]) -> List[str]:
     return declared + rest
 
 
+def _own_refs(unit: Dict[str, Any]) -> List[str]:
+    """The test cases a unit names for itself, if it names any.
+
+    A unit's own `refs.wstg` wins over its topic's, which is what `build.py`
+    already does for the artefact. The index has to agree with it: two
+    derivations of the same relation that disagree are worse than one, because
+    a reader has no way to tell which they are looking at.
+    """
+    return list((unit.get("refs") or {}).get("wstg") or [])
+
+
 def cases(repo: Repository) -> Dict[str, Case]:
     """Every pinned test case, with the topics and units that cover it."""
     units = {doc.data["id"]: doc.data for doc in repo.units}
@@ -73,6 +92,12 @@ def cases(repo: Repository) -> Dict[str, Case]:
     out: Dict[str, Case] = {}
     for entry in repo.standards["wstg"].data["wstg"]:
         out[entry["id"]] = Case(id=entry["id"], title=entry["title"])
+
+    for entry in repo.standards["wstg-map"].data["map"]:
+        case = out.get(entry["id"])
+        if case is not None and not entry.get("domains"):
+            case.resolvable = False
+            case.note = entry.get("note", "")
 
     for tid in sorted(topics):
         topic = topics[tid]
@@ -86,8 +111,20 @@ def cases(repo: Repository) -> Dict[str, Case]:
                 continue
             case.topics.append(tid)
             for uid in _units_of(topic, units):
+                own = _own_refs(units[uid])
+                if own and wid not in own:
+                    # The unit names its own cases and this is not one of them.
+                    continue
                 if uid not in case.units:
                     case.units.append(uid)
+
+    # A unit may name a case its topic does not claim. Filing it only through
+    # the topic would drop it from the one case it explicitly asks for.
+    for uid in sorted(units):
+        for wid in _own_refs(units[uid]):
+            case = out.get(wid)
+            if case is not None and uid not in case.units:
+                case.units.append(uid)
 
     for case in out.values():
         for uid in case.units:
@@ -116,6 +153,7 @@ def index_document(repo: Repository) -> Dict[str, Any]:
                 "units": case.units,
                 "authored": case.authored,
                 "outline": case.outline,
+                "resolvable": case.resolvable,
             }
             for case in (built[wid] for wid in sorted(built))
         ],

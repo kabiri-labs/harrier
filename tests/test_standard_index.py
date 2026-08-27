@@ -33,9 +33,21 @@ class TheIndexIsDerivedFromTheCatalogue(unittest.TestCase):
         pinned = {e["id"] for e in self.repo.standards["wstg"].data["wstg"]}
         self.assertEqual(set(self.cases), pinned)
 
-    def test_a_test_case_no_topic_claims_says_so_rather_than_being_absent(self):
-        uncovered = [c.id for c in self.cases.values() if not c.covered]
-        self.assertEqual(uncovered, ["WSTG-INPV-14"])
+    def test_a_case_the_map_resolved_to_nothing_is_not_a_coverage_gap(self):
+        """`WSTG-INPV-14` maps to no domain on purpose -- "incubated" describes
+        second-order delivery, which this model carries as a dimension rather
+        than a topic. The validator forbids a topic claiming it. Reporting it
+        beside a genuine gap would turn a decision somebody made and wrote down
+        into a task nobody can close."""
+        deliberate = [c.id for c in self.cases.values() if not c.resolvable]
+        self.assertEqual(deliberate, ["WSTG-INPV-14"])
+        case = self.cases["WSTG-INPV-14"]
+        self.assertFalse(case.covered)
+        self.assertIn("second-order delivery", case.note)
+
+    def test_no_resolvable_case_is_left_without_a_topic(self):
+        gaps = [c.id for c in self.cases.values() if c.resolvable and not c.covered]
+        self.assertEqual(gaps, [])
 
     def test_a_case_claimed_by_several_topics_keeps_all_of_them(self):
         """Five test cases are spread across more than one topic. An index that
@@ -148,10 +160,18 @@ class TheChecklistAnswersTheTestersQuestion(unittest.TestCase):
         self.assertIn("HRR-INJ-01-UNION", out)
         self.assertIn("10 unit(s)", out)
 
-    def test_an_uncovered_case_says_so_rather_than_printing_an_empty_list(self):
-        out = self.run_cli("checklist", "--uncovered")
-        self.assertIn("WSTG-INPV-14", out)
-        self.assertIn("no topic claims this test case", out)
+    def test_the_uncovered_view_holds_only_real_gaps(self):
+        """It held one entry, and that entry was a decision rather than a gap.
+        Nothing is outstanding today, so the honest answer is nothing."""
+        self.assertEqual(self.run_cli("checklist", "--uncovered").strip(), "")
+
+    def test_a_deliberately_unresolved_case_explains_itself_when_asked_for(self):
+        """Still reachable by name, and it says which of the two it is rather
+        than leaving a reader to assume the worse one."""
+        out = self.run_cli("checklist", "WSTG-INPV-14")
+        self.assertIn("resolved to no domain on purpose", out)
+        self.assertIn("second-order delivery", out)
+        self.assertNotIn("no topic claims this test case", out)
 
     def test_an_unknown_case_is_an_error_rather_than_an_empty_result(self):
         done = subprocess.run(
@@ -166,3 +186,73 @@ class TheChecklistAnswersTheTestersQuestion(unittest.TestCase):
         had no route back to the line item that sent them there."""
         out = self.run_cli("chain", "HRR-INJ-01-BOOL")
         self.assertIn("covers: WSTG-INPV-05", out)
+
+
+class AUnitsOwnReferenceWinsOverItsTopics(unittest.TestCase):
+    """`build.py` files a unit under its own `refs.wstg` where it has one, and
+    under its topic's otherwise. The index has to agree: two derivations of one
+    relation that disagree are worse than one, because a reader cannot tell
+    which of them they are looking at."""
+
+    def index_of(self, root):
+        return {c.id: c for c in cases(Repository.load(root)).values()}
+
+    def test_no_unit_in_the_catalogue_overrides_today(self):
+        """Recorded so the case below is understood as latent rather than live."""
+        repo = Repository.load(REPO_ROOT)
+        overriding = [
+            d.data["id"] for d in repo.units if (d.data.get("refs") or {}).get("wstg")
+        ]
+        self.assertEqual(overriding, [])
+
+    def test_a_unit_naming_its_own_case_is_filed_there_and_not_by_its_topic(self):
+        box = Sandbox()
+        self.addCleanup(box.close)
+        box.edit(
+            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            lambda unit: unit.update(refs={"wstg": ["WSTG-INPV-06"]}) or unit,
+        )
+        built = self.index_of(box.root)
+        self.assertIn("HRR-INJ-01-UNION", built["WSTG-INPV-06"].units)
+        self.assertNotIn("HRR-INJ-01-UNION", built["WSTG-INPV-05"].units)
+        # and its siblings, which name nothing, stay where their topic puts them
+        self.assertIn("HRR-INJ-01-BOOL", built["WSTG-INPV-05"].units)
+
+
+class TheIndexResolvesLikeEveryOtherReference(unittest.TestCase):
+    """The file earns its place by being reviewable, and one nobody resolves is
+    not reviewable -- it is a second copy of the catalogue free to disagree with
+    the first while passing every check. The schema constrains the shape of an
+    identifier, which a renamed topic satisfies perfectly on its way to pointing
+    at nothing."""
+
+    def setUp(self):
+        self.box = Sandbox()
+        self.addCleanup(self.box.close)
+
+    def mutate(self, change):
+        target = self.box.path(INDEX_PATH.as_posix())
+        document = yaml.safe_load(target.read_text(encoding="utf-8"))
+        change(document)
+        target.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+        return validate(self.box.root)
+
+    def test_a_unit_identifier_that_resolves_to_nothing_is_rejected(self):
+        problems = self.mutate(
+            lambda d: d["cases"][0].update(units=["HRR-INJ-99-NOSUCH"], authored=0, outline=1)
+        )
+        self.assertIn("does not exist", messages(problems))
+
+    def test_a_topic_identifier_that_resolves_to_nothing_is_rejected(self):
+        problems = self.mutate(lambda d: d["cases"][0].update(topics=["HRR-ZZZ-01"]))
+        self.assertIn("does not exist", messages(problems))
+
+    def test_a_pinned_case_with_no_row_is_rejected(self):
+        """A row that vanished with its coverage would leave the file shorter
+        and still looking complete."""
+        problems = self.mutate(lambda d: d.update(cases=d["cases"][1:]))
+        self.assertIn("has no row in the index", messages(problems))
+
+    def test_depth_counts_that_disagree_with_the_units_are_rejected(self):
+        problems = self.mutate(lambda d: d["cases"][0].update(authored=99))
+        self.assertIn("by depth but lists", messages(problems))

@@ -13,6 +13,7 @@ cases:
   - HRR-RCN-06-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-APIT-02
   title: API Broken Object Level Authorization
   topics:
@@ -25,6 +26,7 @@ cases:
   - HRR-ACL-02-IMPACT
   authored: 1
   outline: 4
+  resolvable: true
 - id: WSTG-APIT-99
   title: Testing GraphQL
   topics:
@@ -48,6 +50,7 @@ cases:
   - HRR-RCN-07-MAP
   authored: 0
   outline: 13
+  resolvable: true
 - id: WSTG-ATHN-01
   title: Testing for Credentials Transported over an Encrypted Channel
   topics:
@@ -61,6 +64,7 @@ cases:
   - HRR-CRY-02-EXPORT
   authored: 0
   outline: 6
+  resolvable: true
 - id: WSTG-ATHN-02
   title: Testing for Default Credentials
   topics:
@@ -71,6 +75,7 @@ cases:
   - HRR-AUT-02-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ATHN-03
   title: Testing for Weak Lock Out Mechanism
   topics:
@@ -82,6 +87,7 @@ cases:
   - HRR-AUT-03-IMPACT
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-ATHN-04
   title: Testing for Bypassing Authentication Schema
   topics:
@@ -92,6 +98,7 @@ cases:
   - HRR-AUT-04-REPLAY
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ATHN-05
   title: Testing for Vulnerable Remember Password
   topics:
@@ -102,6 +109,7 @@ cases:
   - HRR-AUT-05-REVOCATION
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ATHN-06
   title: Testing for Browser Cache Weakness
   topics:
@@ -114,6 +122,7 @@ cases:
   - HRR-CLT-10-REVOCATION
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-ATHN-07
   title: Testing for Weak Password Policy
   topics:
@@ -124,6 +133,7 @@ cases:
   - HRR-AUT-01-SIZE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ATHN-08
   title: Testing for Weak Security Question Answer
   topics:
@@ -134,6 +144,7 @@ cases:
   - HRR-AUT-06-RATE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ATHN-09
   title: Testing for Weak Password Change or Reset Functionalities
   topics:
@@ -146,6 +157,7 @@ cases:
   - HRR-AUT-07-VALIDATION
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-ATHN-10
   title: Testing for Weaker Authentication in Alternative Channel
   topics:
@@ -156,6 +168,7 @@ cases:
   - HRR-AUT-08-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ATHN-11
   title: Testing Multi-Factor Authentication (MFA)
   topics:
@@ -167,6 +180,7 @@ cases:
   - HRR-AUT-09-BINDING
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-ATHZ-01
   title: Testing Directory Traversal File Include
   topics:
@@ -179,6 +193,7 @@ cases:
   - HRR-RES-01-EVADE
   authored: 5
   outline: 0
+  resolvable: true
 - id: WSTG-ATHZ-02
   title: Testing for Bypassing Authorization Schema
   topics:
@@ -189,6 +204,7 @@ cases:
   - HRR-ACL-03-LOWPRIV
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ATHZ-03
   title: Testing for Privilege Escalation
   topics:
@@ -200,6 +216,7 @@ cases:
   - HRR-ACL-04-TOCTOU
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-ATHZ-04
   title: Testing for Insecure Direct Object References
   topics:
@@ -212,6 +229,7 @@ cases:
   - HRR-ACL-02-IMPACT
   authored: 1
   outline: 4
+  resolvable: true
 - id: WSTG-ATHZ-05
   title: Testing for OAuth Weaknesses
   topics:
@@ -223,6 +241,7 @@ cases:
   - HRR-AUT-10-REVOCATION
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-BUSL-01
   title: Test Business Logic Data Validation
   topics:
@@ -233,6 +252,7 @@ cases:
   - HRR-BIZ-01-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-BUSL-02
   title: Test Ability to Forge Requests
   topics:
@@ -243,6 +263,7 @@ cases:
   - HRR-BIZ-02-REPLAY
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-BUSL-03
   title: Test Integrity Checks
   topics:
@@ -253,6 +274,7 @@ cases:
   - HRR-BIZ-03-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-BUSL-04
   title: Test for Process Timing
   topics:
@@ -263,6 +285,7 @@ cases:
   - HRR-BIZ-04-TOCTOU
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-BUSL-05
   title: Test Number of Times a Function Can Be Used Limits
   topics:
@@ -274,6 +297,7 @@ cases:
   - HRR-BIZ-05-SCOPE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-BUSL-06
   title: Testing for the Circumvention of Work Flows
   topics:
@@ -284,6 +308,7 @@ cases:
   - HRR-BIZ-06-IMPACT
   authored: 1
   outline: 2
+  resolvable: true
 - id: WSTG-BUSL-07
   title: Test Defenses Against Application Misuse
   topics:
@@ -293,6 +318,7 @@ cases:
   - HRR-BIZ-07-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-BUSL-08
   title: Test Upload of Unexpected File Types
   topics:
@@ -308,6 +334,7 @@ cases:
   - HRR-RES-02-QUOTA
   authored: 0
   outline: 8
+  resolvable: true
 - id: WSTG-BUSL-09
   title: Test Upload of Malicious Files
   topics:
@@ -323,6 +350,7 @@ cases:
   - HRR-RES-02-QUOTA
   authored: 0
   outline: 8
+  resolvable: true
 - id: WSTG-BUSL-10
   title: Test Payment Functionality
   topics:
@@ -333,6 +361,7 @@ cases:
   - HRR-BIZ-08-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CLNT-01
   title: Testing for DOM Based Cross Site Scripting
   topics:
@@ -347,6 +376,7 @@ cases:
   - HRR-CLT-02-EVADE
   authored: 0
   outline: 7
+  resolvable: true
 - id: WSTG-CLNT-02
   title: Testing for JavaScript Execution
   topics:
@@ -361,6 +391,7 @@ cases:
   - HRR-CLT-02-EVADE
   authored: 0
   outline: 7
+  resolvable: true
 - id: WSTG-CLNT-03
   title: Testing for HTML Injection
   topics:
@@ -378,6 +409,7 @@ cases:
   - HRR-CLT-01-EVADE
   authored: 0
   outline: 10
+  resolvable: true
 - id: WSTG-CLNT-04
   title: Testing for Client-Side URL Redirect
   topics:
@@ -390,6 +422,7 @@ cases:
   - HRR-CLT-03-EVADE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-CLNT-05
   title: Testing for CSS Injection
   topics:
@@ -401,6 +434,7 @@ cases:
   - HRR-CLT-04-EVADE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-CLNT-06
   title: Testing for Client-Side Resource Manipulation
   topics:
@@ -413,6 +447,7 @@ cases:
   - HRR-CLT-05-EVADE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-CLNT-07
   title: Test Cross Origin Resource Sharing
   topics:
@@ -424,6 +459,7 @@ cases:
   - HRR-CLT-06-READ
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-CLNT-08
   title: Testing for Cross Site Flashing
   topics:
@@ -433,6 +469,7 @@ cases:
   - HRR-CLT-07-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-CLNT-09
   title: Testing for Clickjacking
   topics:
@@ -444,6 +481,7 @@ cases:
   - HRR-CLT-08-EVADE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-CLNT-10
   title: Testing WebSockets
   topics:
@@ -461,6 +499,7 @@ cases:
   - HRR-PRT-05-TRANSPORT
   authored: 0
   outline: 9
+  resolvable: true
 - id: WSTG-CLNT-11
   title: Test Web Messaging
   topics:
@@ -473,6 +512,7 @@ cases:
   - HRR-CLT-09-EXEC
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-CLNT-12
   title: Test Browser Storage
   topics:
@@ -485,6 +525,7 @@ cases:
   - HRR-CLT-10-REVOCATION
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-CLNT-13
   title: Testing for Cross Site Script Inclusion
   topics:
@@ -496,6 +537,7 @@ cases:
   - HRR-CLT-11-READ
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-CLNT-14
   title: Testing for Reverse Tabnabbing
   topics:
@@ -506,6 +548,7 @@ cases:
   - HRR-CLT-12-WRITE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-01
   title: Test Network Infrastructure Configuration
   topics:
@@ -516,6 +559,7 @@ cases:
   - HRR-CFG-01-POLICY
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-02
   title: Test Application Platform Configuration
   topics:
@@ -526,6 +570,7 @@ cases:
   - HRR-CFG-01-POLICY
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-03
   title: Test File Extensions Handling for Sensitive Information
   topics:
@@ -536,6 +581,7 @@ cases:
   - HRR-CFG-02-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-04
   title: Review Old Backup and Unreferenced Files for Sensitive Information
   topics:
@@ -546,6 +592,7 @@ cases:
   - HRR-CFG-02-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-05
   title: Enumerate Infrastructure and Application Admin Interfaces
   topics:
@@ -555,6 +602,7 @@ cases:
   - HRR-CFG-03-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-CONF-06
   title: Test HTTP Methods
   topics:
@@ -564,6 +612,7 @@ cases:
   - HRR-CFG-04-IMPACT
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-CONF-07
   title: Test HTTP Strict Transport Security
   topics:
@@ -574,6 +623,7 @@ cases:
   - HRR-CFG-05-VALIDATION
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-08
   title: Test RIA Cross Domain Policy
   topics:
@@ -582,6 +632,7 @@ cases:
   - HRR-CFG-06-PROBE
   authored: 0
   outline: 1
+  resolvable: true
 - id: WSTG-CONF-09
   title: Test File Permission
   topics:
@@ -592,6 +643,7 @@ cases:
   - HRR-CFG-07-STORAGE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-10
   title: Test for Subdomain Takeover
   topics:
@@ -601,6 +653,7 @@ cases:
   - HRR-CFG-08-PROBE
   authored: 1
   outline: 1
+  resolvable: true
 - id: WSTG-CONF-11
   title: Test Cloud Storage
   topics:
@@ -611,6 +664,7 @@ cases:
   - HRR-CFG-09-SERVING
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-12
   title: Testing for Content Security Policy
   topics:
@@ -621,6 +675,7 @@ cases:
   - HRR-CFG-05-VALIDATION
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CONF-13
   title: Test Path Confusion
   topics:
@@ -633,6 +688,7 @@ cases:
   - HRR-PRT-04-EVADE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-CONF-14
   title: Test Other HTTP Security Header Misconfigurations
   topics:
@@ -643,6 +699,7 @@ cases:
   - HRR-CFG-05-VALIDATION
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-CRYP-01
   title: Testing for Weak Transport Layer Security
   topics:
@@ -656,6 +713,7 @@ cases:
   - HRR-CRY-01-TRANSPORT
   authored: 0
   outline: 6
+  resolvable: true
 - id: WSTG-CRYP-02
   title: Testing for Padding Oracle
   topics:
@@ -668,6 +726,7 @@ cases:
   - HRR-CRY-04-WRITE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-CRYP-03
   title: Testing for Sensitive Information Sent Via Unencrypted Channels
   topics:
@@ -681,6 +740,7 @@ cases:
   - HRR-CRY-02-EXPORT
   authored: 0
   outline: 6
+  resolvable: true
 - id: WSTG-CRYP-04
   title: Testing for Weak Cryptographic Primitives
   topics:
@@ -693,6 +753,7 @@ cases:
   - HRR-CRY-03-STORAGE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-ERRH-01
   title: Testing for Improper Error Handling
   topics:
@@ -703,6 +764,7 @@ cases:
   - HRR-ERR-01-DIFF
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-ERRH-02
   title: Testing for Stack Traces
   topics:
@@ -712,6 +774,7 @@ cases:
   - HRR-ERR-02-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-IDNT-01
   title: Test Role Definitions
   topics:
@@ -721,6 +784,7 @@ cases:
   - HRR-ACL-01-VERIFY
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-IDNT-02
   title: Test User Registration Process
   topics:
@@ -731,6 +795,7 @@ cases:
   - HRR-IDN-01-RATE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-IDNT-03
   title: Test Account Provisioning Process
   topics:
@@ -741,6 +806,7 @@ cases:
   - HRR-IDN-02-REVOCATION
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-IDNT-04
   title: Testing for Account Enumeration and Guessable User Account
   topics:
@@ -751,6 +817,7 @@ cases:
   - HRR-IDN-03-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-IDNT-05
   title: Testing for Weak or Unenforced Username Policy
   topics:
@@ -760,6 +827,7 @@ cases:
   - HRR-IDN-04-VALIDATION
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-INFO-01
   title: Conduct Search Engine Discovery and Reconnaissance for Information Leakage
   topics:
@@ -772,6 +840,7 @@ cases:
   - HRR-RCN-08-PROBE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-INFO-02
   title: Fingerprint Web Server
   topics:
@@ -781,6 +850,7 @@ cases:
   - HRR-RCN-01-VERIFY
   authored: 1
   outline: 1
+  resolvable: true
 - id: WSTG-INFO-03
   title: Review Webserver Metafiles for Information Leakage
   topics:
@@ -793,6 +863,7 @@ cases:
   - HRR-RCN-08-PROBE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-INFO-04
   title: Enumerate Applications on Webserver
   topics:
@@ -802,6 +873,7 @@ cases:
   - HRR-RCN-02-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-INFO-05
   title: Review Webpage Content for Information Leakage
   topics:
@@ -811,6 +883,7 @@ cases:
   - HRR-ERR-03-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-INFO-06
   title: Identify Application Entry Points
   topics:
@@ -820,6 +893,7 @@ cases:
   - HRR-RCN-03-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-INFO-07
   title: Map Execution Paths Through Application
   topics:
@@ -830,6 +904,7 @@ cases:
   - HRR-RCN-04-PROBE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-INFO-08
   title: Fingerprint Web Application Framework
   topics:
@@ -839,6 +914,7 @@ cases:
   - HRR-RCN-01-VERIFY
   authored: 1
   outline: 1
+  resolvable: true
 - id: WSTG-INFO-09
   title: Fingerprint Web Application
   topics:
@@ -848,6 +924,7 @@ cases:
   - HRR-RCN-01-VERIFY
   authored: 1
   outline: 1
+  resolvable: true
 - id: WSTG-INFO-10
   title: Map Application Architecture
   topics:
@@ -858,6 +935,7 @@ cases:
   - HRR-RCN-04-PROBE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-INPV-01
   title: Testing for Reflected Cross Site Scripting
   topics:
@@ -875,6 +953,7 @@ cases:
   - HRR-CLT-01-EVADE
   authored: 0
   outline: 10
+  resolvable: true
 - id: WSTG-INPV-02
   title: Testing for Stored Cross Site Scripting
   topics:
@@ -892,6 +971,7 @@ cases:
   - HRR-CLT-01-EVADE
   authored: 0
   outline: 10
+  resolvable: true
 - id: WSTG-INPV-03
   title: Testing for HTTP Verb Tampering
   topics:
@@ -901,6 +981,7 @@ cases:
   - HRR-ACL-05-EVADE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-INPV-04
   title: Testing for HTTP Parameter pollution
   topics:
@@ -912,6 +993,7 @@ cases:
   - HRR-PRT-03-HEADER
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-INPV-05
   title: Testing for SQL Injection
   topics:
@@ -929,6 +1011,7 @@ cases:
   - HRR-INJ-01-EVADE
   authored: 1
   outline: 9
+  resolvable: true
 - id: WSTG-INPV-06
   title: Testing for LDAP Injection
   topics:
@@ -940,6 +1023,7 @@ cases:
   - HRR-INJ-02-EVADE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-INPV-07
   title: Testing for XML Injection
   topics:
@@ -953,6 +1037,7 @@ cases:
   - HRR-INJ-03-EVADE
   authored: 0
   outline: 6
+  resolvable: true
 - id: WSTG-INPV-08
   title: Testing for SSI Injection
   topics:
@@ -964,6 +1049,7 @@ cases:
   - HRR-INJ-04-EVADE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-INPV-09
   title: Testing for XPath Injection
   topics:
@@ -975,6 +1061,7 @@ cases:
   - HRR-INJ-05-EVADE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-INPV-10
   title: Testing for IMAP SMTP Injection
   topics:
@@ -985,6 +1072,7 @@ cases:
   - HRR-INJ-06-EVADE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-INPV-11
   title: Testing for Code Injection
   topics:
@@ -997,6 +1085,7 @@ cases:
   - HRR-INJ-07-EVADE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-INPV-12
   title: Testing for Command Injection
   topics:
@@ -1009,6 +1098,7 @@ cases:
   - HRR-INJ-08-EVADE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-INPV-13
   title: Testing for Format String Injection
   topics:
@@ -1019,12 +1109,14 @@ cases:
   - HRR-INJ-09-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-INPV-14
   title: Testing for Incubated Vulnerabilities
   topics: []
   units: []
   authored: 0
   outline: 0
+  resolvable: false
 - id: WSTG-INPV-15
   title: Testing for HTTP Splitting Smuggling
   topics:
@@ -1037,6 +1129,7 @@ cases:
   - HRR-PRT-01-EVADE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-INPV-16
   title: Testing for HTTP Incoming Requests
   topics:
@@ -1046,6 +1139,7 @@ cases:
   - HRR-RCN-05-PROBE
   authored: 0
   outline: 2
+  resolvable: true
 - id: WSTG-INPV-17
   title: Testing for Host Header Injection
   topics:
@@ -1057,6 +1151,7 @@ cases:
   - HRR-PRT-02-EVADE
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-INPV-18
   title: Testing for Server-Side Template Injection
   topics:
@@ -1071,6 +1166,7 @@ cases:
   - HRR-INJ-10-EVADE
   authored: 0
   outline: 7
+  resolvable: true
 - id: WSTG-INPV-19
   title: Testing for Server-Side Request Forgery
   topics:
@@ -1084,6 +1180,7 @@ cases:
   - HRR-RES-03-EVADE
   authored: 0
   outline: 6
+  resolvable: true
 - id: WSTG-INPV-20
   title: Testing for Mass Assignment
   topics:
@@ -1094,6 +1191,7 @@ cases:
   - HRR-ACL-06-IMPACT
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-01
   title: Testing for Session Management Schema
   topics:
@@ -1104,6 +1202,7 @@ cases:
   - HRR-SES-01-BINDING
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-02
   title: Testing for Cookies Attributes
   topics:
@@ -1114,6 +1213,7 @@ cases:
   - HRR-SES-02-EXPIRY
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-03
   title: Testing for Session Fixation
   topics:
@@ -1124,6 +1224,7 @@ cases:
   - HRR-SES-03-READ
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-04
   title: Testing for Exposed Session Variables
   topics:
@@ -1135,6 +1236,7 @@ cases:
   - HRR-SES-04-READ
   authored: 0
   outline: 4
+  resolvable: true
 - id: WSTG-SESS-05
   title: Testing for Cross Site Request Forgery
   topics:
@@ -1147,6 +1249,7 @@ cases:
   - HRR-SES-05-EVADE
   authored: 0
   outline: 5
+  resolvable: true
 - id: WSTG-SESS-06
   title: Testing for Logout Functionality
   topics:
@@ -1157,6 +1260,7 @@ cases:
   - HRR-SES-06-SCOPE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-07
   title: Testing Session Timeout
   topics:
@@ -1167,6 +1271,7 @@ cases:
   - HRR-SES-07-VALIDATION
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-08
   title: Testing for Session Puzzling
   topics:
@@ -1177,6 +1282,7 @@ cases:
   - HRR-SES-08-WRITE
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-09
   title: Testing for Session Hijacking
   topics:
@@ -1187,6 +1293,7 @@ cases:
   - HRR-SES-09-READ
   authored: 0
   outline: 3
+  resolvable: true
 - id: WSTG-SESS-10
   title: Testing JSON Web Tokens
   topics:
@@ -1204,6 +1311,7 @@ cases:
   - HRR-SES-10-REVOCATION
   authored: 0
   outline: 9
+  resolvable: true
 - id: WSTG-SESS-11
   title: Testing for Concurrent Sessions
   topics:
@@ -1214,3 +1322,4 @@ cases:
   - HRR-SES-11-REVOCATION
   authored: 0
   outline: 3
+  resolvable: true

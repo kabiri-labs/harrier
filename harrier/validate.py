@@ -701,6 +701,59 @@ def check_chain(repo: Repository, problems: Problems) -> None:
         )
 
 
+def check_standard_index(repo: Repository, problems: Problems) -> None:
+    """Pass 8 -- the generated index resolves, like every other reference.
+
+    The index earns its place by being reviewable, and a file nobody resolves is
+    not reviewable -- it is a second copy of the catalogue that can disagree with
+    the first while still passing every check. The schema constrains the *shape*
+    of an identifier, which a renamed topic satisfies perfectly on its way to
+    pointing at nothing.
+
+    Staleness itself is not reported here. `harrier index --check` answers that,
+    and it answers it exactly: a byte comparison against a fresh derivation. What
+    this pass refuses is the narrower and worse case -- an index naming something
+    the catalogue does not contain, which is the state a rename leaves behind and
+    the one a reader is least likely to suspect.
+    """
+    index = repo.standards.get("wstg-index")
+    if index is None:
+        return
+
+    path = "standards/wstg-index.yaml"
+    pinned = {e["id"] for e in repo.standards["wstg"].data["wstg"]} if repo.standards.get("wstg") else set()
+    topics = {doc.data["id"] for doc in repo.topics}
+    units = {doc.data["id"] for doc in repo.units}
+
+    seen = set()
+    for case in index.data.get("cases") or []:
+        wid = case["id"]
+        if wid in seen:
+            problems.add(path, f"{wid} appears twice")
+        seen.add(wid)
+        if pinned and wid not in pinned:
+            problems.add(path, f"{wid} is not in the pinned standard")
+        for tid in case.get("topics") or []:
+            if tid not in topics:
+                problems.add(path, f"{wid} names topic {tid}, which does not exist")
+        for uid in case.get("units") or []:
+            if uid not in units:
+                problems.add(path, f"{wid} names unit {uid}, which does not exist")
+        counted = (case.get("authored") or 0) + (case.get("outline") or 0)
+        if counted != len(case.get("units") or []):
+            problems.add(
+                path,
+                f"{wid} counts {counted} unit(s) by depth but lists "
+                f"{len(case.get('units') or [])}",
+            )
+
+    # Every pinned identifier gets a row. A row that vanished when coverage was
+    # lost would leave the file shorter and still looking complete, which is the
+    # one way this document could mislead rather than simply be wrong.
+    for wid in sorted(pinned - seen):
+        problems.add(path, f"{wid} is pinned but has no row in the index")
+
+
 PASSES = (
     check_schemas,
     check_vocabularies,
@@ -709,6 +762,7 @@ PASSES = (
     check_payloads,
     check_toolbox,
     check_chain,
+    check_standard_index,
 )
 
 

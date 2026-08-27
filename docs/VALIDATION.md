@@ -16,14 +16,14 @@ CI runs exactly those first two commands, in that order, with nothing extra.
 
 Exit status is the contract: `0` valid, `1` rejected, `2` bad invocation.
 
-## Seven passes
+## Eight passes
 
 Every pass collects problems rather than stopping at the first. A contributor
 fixing a batch wants the whole list, and a first-failure validator quietly
 trains people to fix one thing and re-run — which is how the second and third
 problems in a file go unnoticed. Every message names the file that caused it.
 
-**1 — Schema conformance.** Nine schemas under `harrier/schema/`, selected by
+**1 — Schema conformance.** Ten schemas under `harrier/schema/`, selected by
 where the file sits. A document in the wrong directory is itself a finding.
 
 **2 — Vocabularies.** Duplicate domain codes, duplicate axis names, surface tags
@@ -92,6 +92,20 @@ unit must yield something, or it can be reached from nowhere and leads nowhere;
 a fact no unit references at all is rejected, because vocabulary must not outrun
 use; and two entries for one fact id are rejected, since a graph node whose
 meaning is uncertain is worse than one that is missing. See [`CHAINING.md`](CHAINING.md).
+
+**8 — The generated index resolves.** `standards/wstg-index.yaml` is derived and
+committed, and a derived file nobody resolves is a second copy of the catalogue
+free to disagree with the first while passing every other check. A topic or unit
+identifier that does not exist is rejected, so is a case the pinned standard does
+not carry, so is a pinned case with no row at all — a row that vanished with its
+coverage would leave the file shorter and still looking complete — and so are
+depth counts that disagree with the units beside them. The schema constrains the
+*shape* of an identifier, which a renamed topic satisfies perfectly on its way to
+pointing at nothing.
+
+Staleness is a separate question and has its own answer: `harrier index --check`
+compares the committed bytes against a fresh derivation, and the suite asserts
+the same thing.
 
 ## What the suite adds
 

@@ -149,6 +149,24 @@ Every pinned test case gets a row, including the one no topic claims. A row that
 disappeared when coverage was lost would hide the change worth seeing: the file
 would simply be shorter and still look complete.
 
+A case the domain map deliberately resolved to no domain -- rule 0 in
+`wstg-map.yaml` -- carries `resolvable: false` and keeps its row. It is not a
+coverage gap, and a view that cannot tell the two apart turns a decision
+somebody made and wrote down into a task nobody can close. `WSTG-INPV-14` is the
+one: "incubated" describes second-order delivery, which this model carries as a
+dimension on the INJ and CLT topics rather than as a topic of its own.
+
+A unit's own `refs.wstg` wins over its topic's, which is what the artefact
+already did. Two derivations of one relation that disagree are worse than one,
+because a reader cannot tell which of them they are looking at.
+
+The validator resolves the file like every other reference: a topic or unit
+identifier that does not exist is rejected, and so is a pinned case with no row.
+The schema constrains the *shape* of an identifier, which a renamed topic
+satisfies perfectly on its way to pointing at nothing. Staleness is a separate
+question with a separate answer -- `harrier index --check` compares the bytes
+against a fresh derivation.
+
 The relation is many-to-many in both directions, and the file represents it as
 such. Thirteen topics claim more than one test case; five test cases are spread
 across more than one topic. `WSTG-APIT-99` is claimed by four, in four domains,
