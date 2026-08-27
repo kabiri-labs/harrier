@@ -725,33 +725,54 @@ def check_standard_index(repo: Repository, problems: Problems) -> None:
     topics = {doc.data["id"] for doc in repo.topics}
     units = {doc.data["id"] for doc in repo.units}
 
+    # A row the schema already rejected is skipped rather than read. Pass 1 has
+    # recorded what is wrong with it, and reaching into it here would raise
+    # instead of adding a problem -- which loses every finding collected so far
+    # and hands a reader a traceback in place of the error that was already
+    # waiting for them. Reporting it twice would be the milder version of the
+    # same mistake.
+    rows = index.data.get("cases")
     seen = set()
-    for case in index.data.get("cases") or []:
-        wid = case["id"]
+    unreadable = not isinstance(rows, list)
+    for case in rows if isinstance(rows, list) else []:
+        if not isinstance(case, dict):
+            unreadable = True
+            continue
+        wid = case.get("id")
+        if not isinstance(wid, str):
+            unreadable = True
+            continue
         if wid in seen:
             problems.add(path, f"{wid} appears twice")
         seen.add(wid)
         if pinned and wid not in pinned:
             problems.add(path, f"{wid} is not in the pinned standard")
-        for tid in case.get("topics") or []:
+        named_topics = case.get("topics")
+        named_units = case.get("units")
+        for tid in named_topics if isinstance(named_topics, list) else []:
             if tid not in topics:
                 problems.add(path, f"{wid} names topic {tid}, which does not exist")
-        for uid in case.get("units") or []:
+        for uid in named_units if isinstance(named_units, list) else []:
             if uid not in units:
                 problems.add(path, f"{wid} names unit {uid}, which does not exist")
-        counted = (case.get("authored") or 0) + (case.get("outline") or 0)
-        if counted != len(case.get("units") or []):
-            problems.add(
-                path,
-                f"{wid} counts {counted} unit(s) by depth but lists "
-                f"{len(case.get('units') or [])}",
-            )
+        depths = [case.get("authored"), case.get("outline")]
+        if isinstance(named_units, list) and all(isinstance(n, int) for n in depths):
+            counted = sum(depths)
+            if counted != len(named_units):
+                problems.add(
+                    path,
+                    f"{wid} counts {counted} unit(s) by depth but lists "
+                    f"{len(named_units)}",
+                )
 
     # Every pinned identifier gets a row. A row that vanished when coverage was
     # lost would leave the file shorter and still looking complete, which is the
-    # one way this document could mislead rather than simply be wrong.
-    for wid in sorted(pinned - seen):
-        problems.add(path, f"{wid} is pinned but has no row in the index")
+    # one way this document could mislead rather than simply be wrong. Skipped
+    # where the file's shape is already in question: a malformed `cases` would
+    # otherwise report all 109 identifiers as missing and bury the real fault.
+    if not unreadable:
+        for wid in sorted(pinned - seen):
+            problems.add(path, f"{wid} is pinned but has no row in the index")
 
 
 PASSES = (
