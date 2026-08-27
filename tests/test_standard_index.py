@@ -253,6 +253,45 @@ class TheIndexResolvesLikeEveryOtherReference(unittest.TestCase):
         problems = self.mutate(lambda d: d.update(cases=d["cases"][1:]))
         self.assertIn("has no row in the index", messages(problems))
 
+    def test_a_row_the_schema_rejects_does_not_crash_the_run(self):
+        """Pass 1 has already recorded what is wrong with such a row. Reading it
+        here would raise instead of adding a problem, which loses every finding
+        collected so far and hands a reader a traceback in place of the error
+        that was already waiting for them."""
+        for label, change in (
+            ("no id", lambda d: d["cases"][0].pop("id")),
+            ("a string where a row belongs", lambda d: d.update(cases=["not-a-row"])),
+            ("cases is not a list", lambda d: d.update(cases="nope")),
+            ("units is not a list", lambda d: d["cases"][0].update(units="HRR-INJ-01-PROBE")),
+            ("a depth count that is text", lambda d: d["cases"][0].update(authored="two")),
+        ):
+            with self.subTest(shape=label):
+                box = Sandbox()
+                self.addCleanup(box.close)
+                target = box.path(INDEX_PATH.as_posix())
+                document = yaml.safe_load(target.read_text(encoding="utf-8"))
+                change(document)
+                target.write_text(
+                    yaml.safe_dump(document, sort_keys=False), encoding="utf-8"
+                )
+                problems = validate(box.root)   # must return, not raise
+                self.assertTrue(problems)
+                self.assertIn("schema (wstg-index)", messages(problems))
+
+    def test_an_unreadable_row_does_not_bury_the_fault_that_caused_it(self):
+        """Those rows name identifiers nobody could read, so reporting each
+        pinned case as missing would be a hundred lines hiding the one line that
+        matters."""
+        box = Sandbox()
+        self.addCleanup(box.close)
+        target = box.path(INDEX_PATH.as_posix())
+        document = yaml.safe_load(target.read_text(encoding="utf-8"))
+        document["cases"] = ["not-a-row"]
+        target.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+        problems = validate(box.root)
+        self.assertNotIn("has no row in the index", messages(problems))
+        self.assertLess(len(problems), 5)
+
     def test_depth_counts_that_disagree_with_the_units_are_rejected(self):
         problems = self.mutate(lambda d: d["cases"][0].update(authored=99))
         self.assertIn("by depth but lists", messages(problems))
