@@ -4,10 +4,14 @@ These are the rules a reviewer would have to apply by reading, which is exactly
 why they are applied mechanically instead.
 """
 
+import json
+import re
 import unittest
 
+import yaml
+
 from harrier.validate import validate
-from tests.support import messages
+from tests.support import REPO_ROOT, messages
 from tests.test_identifiers_and_axes import SandboxCase
 
 
@@ -199,3 +203,40 @@ class ReferencesMustResolve(SandboxCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TheAuthoringExamplesAreValidDocuments(unittest.TestCase):
+    """The examples in AUTHORING.md are what a contributor copies.
+
+    An example that does not validate teaches a mistake and costs its reader a
+    rejected pull request to discover. This existed: the topic example carried a
+    `kind` line, which is a unit field, and the topic schema refuses unknown
+    keys -- so the file anyone built from it had never been valid.
+    """
+
+    SCHEMA_DIR = REPO_ROOT / "harrier" / "schema"
+
+    def blocks(self):
+        text = (REPO_ROOT / "docs" / "AUTHORING.md").read_text(encoding="utf-8")
+        return re.findall(r"```yaml\n(.*?)```", text, re.S)
+
+    def validator(self, name):
+        from jsonschema import Draft202012Validator
+        from referencing import Registry, Resource
+
+        registry = Registry().with_resources([
+            (path.name, Resource.from_contents(json.loads(path.read_text("utf-8"))))
+            for path in self.SCHEMA_DIR.glob("*.schema.json")
+        ])
+        schema = json.loads((self.SCHEMA_DIR / f"{name}.schema.json").read_text("utf-8"))
+        return Draft202012Validator(schema, registry=registry)
+
+    def test_the_topic_example_validates(self):
+        data = yaml.safe_load(self.blocks()[0])
+        errors = [e.message for e in self.validator("topic").iter_errors(data)]
+        self.assertEqual(errors, [])
+
+    def test_the_unit_example_validates(self):
+        data = yaml.safe_load(self.blocks()[1])
+        errors = [e.message for e in self.validator("unit").iter_errors(data)]
+        self.assertEqual(errors, [])

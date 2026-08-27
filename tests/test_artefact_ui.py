@@ -913,6 +913,30 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertIn("no test declares a use for it", text.lower())
         self.assertIn("does not rule out", text.lower())
 
+    def test_both_routes_to_a_topic_separate_its_stages_from_its_alternatives(self):
+        """The topic page and the test case page are two routes to the same
+        list, and the standard-first one -- through the test case -- is the one
+        the documentation calls primary. A split that reached only the other
+        route would be a split most readers never see."""
+        for fragment in ("#/topic/HRR-INJ-01", "#/case/WSTG-INPV-05"):
+            with self.subTest(route=fragment):
+                body = self.text(fragment)
+                self.assertIn("Stages", body)
+                self.assertIn("Alternatives", body)
+                self.assertIn("Choose among these on the evidence", body)
+                self.assertIn("Perform each of these", body)
+
+    def test_a_topic_that_returns_to_its_stages_keeps_its_declared_order(self):
+        """EVADE reads a negative result from one of the techniques, so the
+        topic lists it after them. Collecting the stages together would move it
+        ahead of the tests it depends on."""
+        body = self.text("#/topic/HRR-INJ-01")
+        probe = body.index("Injection point probe")
+        union = body.index("UNION-based extraction")
+        evade = body.index("Filter and encoding evasion")
+        self.assertLess(probe, union)
+        self.assertLess(union, evade)
+
     def test_the_general_view_is_a_counted_directed_matrix(self):
         page = self.open("#/chains")
         self.assertEqual(page.locator("table.matrix").count(), 1)
@@ -1141,22 +1165,23 @@ class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
     """The listing is the first thing a tester reads, and it used to answer
     "perform all of these" and "choose one of these" with the same shape.
 
-    These run against `unitsByRole`, the function the page files units with, so
-    a block quietly dropped from the listing fails here.
+    These run against `unitRuns`, the function both the topic page and the test
+    case page file units with, so a block quietly dropped from either fails here.
     """
 
     @classmethod
     def setUpClass(cls):
         cls.data = catalogue(REPO_ROOT)
 
-    def test_the_blocks_together_hold_every_unit_the_topic_lists(self):
-        """A unit in no block would vanish from the only page that lists it --
-        a worse failure than the flat list this replaces."""
+    def test_the_runs_together_hold_every_unit_the_topic_lists(self):
+        """A unit in no run would vanish from the pages that list it -- a worse
+        failure than the flat list this replaces."""
         lost = run_in_node("""
             const out = {};
             Object.keys(D.topics).forEach(function (tid) {
-              const split = H.unitsByRole(D, D.topics[tid]);
-              const seen = split.stage.length + split.variant.length + split.unroled.length;
+              const runs = H.unitRuns(D, D.topics[tid]);
+              let seen = 0;
+              runs.forEach(function (r) { seen += r.units.length; });
               const ids = D.topics[tid].units || [];
               if (seen !== ids.length) out[tid] = [seen, ids.length];
             });
@@ -1164,12 +1189,43 @@ class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
         """, self.data)
         self.assertEqual(lost, {})
 
+    def test_the_declared_order_is_preserved_exactly(self):
+        """The order carries meaning that collecting the roles destroys, and
+        HRR-INJ-01 is the case: EVADE reads a negative result from one of the
+        techniques, so it is listed after them and must stay there."""
+        mismatched = run_in_node("""
+            const out = {};
+            Object.keys(D.topics).forEach(function (tid) {
+              const flat = [];
+              H.unitRuns(D, D.topics[tid]).forEach(function (r) {
+                r.units.forEach(function (u) { flat.push(u); });
+              });
+              const ids = (D.topics[tid].units || []).filter(function (u) {
+                return !!D.units[u];
+              });
+              if (flat.join(",") !== ids.join(",")) out[tid] = [flat, ids];
+            });
+            return out;
+        """, self.data)
+        self.assertEqual(mismatched, {})
+
+    def test_a_topic_that_returns_to_its_stages_gets_three_runs(self):
+        result = run_in_node("""
+            return H.unitRuns(D, D.topics["HRR-INJ-01"]).map(function (r) {
+              return {role: r.role, units: r.units};
+            });
+        """, self.data)
+        self.assertEqual([r["role"] for r in result], ["stage", "variant", "stage"])
+        self.assertEqual(result[0]["units"], ["HRR-INJ-01-PROBE", "HRR-INJ-01-FPRINT"])
+        self.assertEqual(len(result[1]["units"]), 7)
+        self.assertEqual(result[2]["units"], ["HRR-INJ-01-EVADE"])
+
     def test_nothing_in_the_catalogue_falls_through_to_unclassified(self):
         strays = run_in_node("""
             const out = [];
             Object.keys(D.topics).forEach(function (tid) {
-              H.unitsByRole(D, D.topics[tid]).unroled.forEach(function (uid) {
-                out.push(uid);
+              H.unitRuns(D, D.topics[tid]).forEach(function (r) {
+                if (r.role === "unroled") out.push(r.units);
               });
             });
             return out;
@@ -1177,27 +1233,16 @@ class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
         self.assertEqual(strays, [])
 
     def test_a_unit_declaring_no_role_is_shown_rather_than_dropped(self):
-        """The schema forbids it, so this can only happen to a file assembled by
-        something other than this repository -- and dropping it silently would
-        be the one outcome worse than showing it uncategorised."""
+        """The schema forbids it, so this can only reach the page from a file
+        assembled by something other than this repository -- and dropping it
+        silently would be the one outcome worse than showing it uncategorised."""
         result = run_in_node("""
             const D2 = JSON.parse(JSON.stringify(D));
             const tid = "HRR-INJ-01";
             const uid = D2.topics[tid].units[0];
             delete D2.units[uid].role;
-            const split = H.unitsByRole(D2, D2.topics[tid]);
-            return {unroled: split.unroled, stage: split.stage.length};
+            return H.unitRuns(D2, D2.topics[tid]).map(function (r) {
+              return {role: r.role, n: r.units.length};
+            });
         """, self.data)
-        self.assertEqual(result["unroled"], ["HRR-INJ-01-PROBE"])
-        self.assertEqual(result["stage"], 2)
-
-    def test_a_topic_of_techniques_splits_into_both_blocks(self):
-        result = run_in_node("""
-            return H.unitsByRole(D, D.topics["HRR-INJ-01"]);
-        """, self.data)
-        self.assertEqual(
-            result["stage"],
-            ["HRR-INJ-01-PROBE", "HRR-INJ-01-FPRINT", "HRR-INJ-01-EVADE"],
-        )
-        self.assertEqual(len(result["variant"]), 7)
-        self.assertEqual(result["unroled"], [])
+        self.assertEqual(result[0], {"role": "unroled", "n": 1})

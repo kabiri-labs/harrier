@@ -502,20 +502,31 @@
     };
   };
 
-  /* Pure, and exported, so the split can be checked without rendering it. A
-     unit belonging to no block would vanish from the only page that lists it --
-     worse than the flat list this replaces -- so anything the two blocks do not
-     claim lands in `unroled` and is still shown. */
-  var unitsByRole = function (D, topic) {
-    var ids = (topic && topic.units) || [];
-    var out = { stage: [], variant: [], unroled: [] };
-    ids.forEach(function (uid) {
+  /* The topic's own order, cut where the role changes. Pure and exported, so
+     what the page files a unit as can be checked without rendering it.
+
+     Contiguous runs rather than two collected blocks, because the declared
+     order carries meaning that collecting destroys: HRR-INJ-01 lists EVADE
+     last, after the seven techniques, and its objective is to determine whether
+     a *negative result from another technique* was caused by a filter. Gathering
+     every stage together moves it third, ahead of the tests it reads. No topic
+     alternates more than twice, so the cost of honouring the order is at most
+     three headings.
+
+     A unit whose role the page cannot file runs as "unroled" and is still
+     shown: one missing from the only page that lists it is a worse failure than
+     the flat list this replaces. */
+  var unitRuns = function (D, topic) {
+    var runs = [];
+    ((topic && topic.units) || []).forEach(function (uid) {
       var unit = get(D.units, uid);
       if (!unit) return;
-      if (unit.role === "stage" || unit.role === "variant") out[unit.role].push(uid);
-      else out.unroled.push(uid);
+      var role = unit.role === "stage" || unit.role === "variant" ? unit.role : "unroled";
+      var last = runs[runs.length - 1];
+      if (last && last.role === role) last.units.push(uid);
+      else runs.push({ role: role, units: [uid] });
     });
-    return out;
+    return runs;
   };
 
   var Harrier = {
@@ -524,7 +535,7 @@
     familyOverview: familyOverview, pathsToImpact: pathsToImpact,
     stillRequired: stillRequired,
     searchAll: searchAll, wrap: wrap, layout: layout, LIMIT: LIMIT,
-    unitsByRole: unitsByRole
+    unitRuns: unitRuns
   };
   if (typeof module !== "undefined" && module.exports) module.exports = Harrier;
   if (typeof globalThis !== "undefined") globalThis.Harrier = Harrier;
@@ -711,17 +722,11 @@
     body += claiming.map(function (tid) {
       var topic = get(D.topics, tid);
       if (!topic) return "";
-      var units = (topic.units || []).map(function (uid) {
-        var unit = get(D.units, uid);
-        if (!unit) return "";
-        var axis = axisOf(unit);
-        return '<a class="card" href="' + href("unit", uid) + '"><h4>' + esc(unit.title) +
-          " " + statusPill(unit) + "</h4>" +
-          '<p class="muted">' + esc(unit.objective) + "</p>" +
-          '<div class="meta">' + idChip(uid) +
-          (axis && axis.axis ? " · " + esc(axis.axis) + ": " + esc(axis.slug) : "") +
-          "</div></a>";
-      }).join("");
+      // The same split the topic page uses. This is the documented primary
+      // route -- standard, group, test case, units -- so leaving it flat here
+      // would mean the distinction existed only on the page a reader reaches
+      // second.
+      var units = unitRoles(topic);
       var boundaries = (topic.boundaries || []).map(function (b) {
         return "<li><b>" + esc(b.subject) + ".</b> " + esc(b.note) +
           (b.home && own(D.topics, b.home)
@@ -815,19 +820,22 @@
      nowhere. "Perform all three, in order" and "pick one on the evidence" are
      opposite instructions, and a reader given ten rows with no marking has to
      open each one to find out. The order inside each block is the topic's own. */
-  var ROLE_BLOCKS = [
-    {
-      role: "stage",
+  var ROLE_BLOCKS = {
+    stage: {
       heading: "Stages",
       note: "Perform each of these. The order is the one the topic sets."
     },
-    {
-      role: "variant",
+    variant: {
       heading: "Alternatives",
       note: "Choose among these on the evidence in front of you. They are routes " +
         "to the same finding, not steps toward it."
+    },
+    unroled: {
+      heading: "Unclassified",
+      note: "These declare no role. That is a gap in the catalogue, not a third " +
+        "kind of unit."
     }
-  ];
+  };
 
   var unitCard = function (uid) {
     var unit = get(D.units, uid);
@@ -838,18 +846,18 @@
   };
 
   var unitRoles = function (topic) {
-    var split = unitsByRole(D, topic);
-    var blocks = ROLE_BLOCKS.map(function (block) {
-      var mine = split[block.role];
-      if (!mine.length) return "";
-      return "<h3>" + esc(block.heading) + " · " + mine.length + "</h3>" +
-        '<p class="muted">' + esc(block.note) + "</p>" +
-        mine.map(unitCard).join("");
+    var explained = {};
+    return unitRuns(D, topic).map(function (run) {
+      var block = ROLE_BLOCKS[run.role];
+      // The instruction is spelled out the first time each role appears and not
+      // repeated: a topic that returns to its stages is continuing, not
+      // starting something the reader has not been told about.
+      var note = explained[run.role] ? "" : block.note;
+      explained[run.role] = true;
+      return "<h3>" + esc(block.heading) + " · " + run.units.length + "</h3>" +
+        (note ? '<p class="muted">' + esc(note) + "</p>" : "") +
+        run.units.map(unitCard).join("");
     }).join("");
-    if (!split.unroled.length) return blocks;
-    return blocks + "<h3>Unclassified · " + split.unroled.length + "</h3>" +
-      '<p class="muted">These declare no role. That is a gap in the catalogue, ' +
-      "not a third kind of unit.</p>" + split.unroled.map(unitCard).join("");
   };
 
   /* ------------------------- the test detail ---------------------------- */
