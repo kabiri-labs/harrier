@@ -1,6 +1,7 @@
 id: HRR-PRT-05-BINDING
 topic: HRR-PRT-05
 status: outline
+role: stage
 title: "Connection to session binding"
 objective: >-
   Determine whether an accepted connection is bound to the authenticated

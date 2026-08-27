@@ -1,6 +1,7 @@
 id: HRR-RES-02-SERVING
 topic: HRR-RES-02
 status: outline
+role: stage
 title: "Stored object retrieval"
 objective: >-
   Determine whether the stored object is served with a content type and

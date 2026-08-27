@@ -100,6 +100,36 @@ or secretly about someone else's application.
 
 Everything else is `kind: test` and carries an oracle.
 
+### `role`: a step beside the others, or one of them
+
+`kind` says what a unit is. `role` says how it stands to the rest of its topic,
+and every unit declares one:
+
+**`role: stage`** — performed alongside the topic's other stages. Probing that
+the condition exists, fingerprinting the engine, defeating the filter that masks
+a result: you do each of them, in the order the topic sets.
+
+**`role: variant`** — one of the alternatives the topic's primary axis
+enumerates. Boolean inference, UNION extraction and time-based inference are
+three routes to one finding, and a tester picks among them on the evidence in
+front of them rather than working through all seven.
+
+Which one a unit gets follows from what its axis says about its own slugs.
+`technique` is the axis that describes alternatives: "chosen from observed
+evidence rather than all executed". Every other axis describes a list to work
+through — `property` says each of its properties is "separately recordable",
+`principal` says a clean result for one caller "says nothing about the others".
+So the techniques of a topic are its variants and the rest of it is stages.
+
+The distinction was therefore always derivable and nowhere in what a reader was
+shown. Ten units under one heading, with "perform all of these" and "pick one of
+these" indistinguishable, is a list that has to be opened ten times to be read
+once.
+
+It is required rather than derived at render time. Deriving it would tie the
+reading of a unit to the slug someone happened to give it, and leave no way to
+record that a particular unit is an exception to the pattern its slug implies.
+
 ## 6. Durable and volatile content are separated
 
 Security content rots in roughly eighteen months, and three hundred stale cards

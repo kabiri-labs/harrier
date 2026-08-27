@@ -1,6 +1,7 @@
 id: HRR-RES-03-DIFF
 topic: HRR-RES-03
 status: outline
+role: variant
 title: "Blind response differential"
 objective: >-
   Determine whether responses to reachable and unreachable destinations differ

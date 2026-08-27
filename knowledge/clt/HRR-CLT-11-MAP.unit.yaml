@@ -1,6 +1,7 @@
 id: HRR-CLT-11-MAP
 topic: HRR-CLT-11
 status: outline
+role: stage
 kind: recon
 title: "Script-includable endpoint inventory"
 objective: >-

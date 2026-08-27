@@ -1,6 +1,7 @@
 id: HRR-SES-09-BRUTE
 topic: HRR-SES-09
 status: outline
+role: variant
 title: "Enumeration of the identifier space"
 objective: >-
   Determine whether valid identifiers can be found at a practical rate, which

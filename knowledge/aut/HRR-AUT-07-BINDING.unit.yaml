@@ -1,6 +1,7 @@
 id: HRR-AUT-07-BINDING
 topic: HRR-AUT-07
 status: outline
+role: stage
 title: "Binding of the reset artefact to one account"
 objective: >-
   Determine whether a reset artefact issued for one account is refused when it

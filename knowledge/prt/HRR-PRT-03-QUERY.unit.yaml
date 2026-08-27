@@ -1,6 +1,7 @@
 id: HRR-PRT-03-QUERY
 topic: HRR-PRT-03
 status: outline
+role: stage
 title: "Query string duplication"
 objective: >-
   Determine whether the component that authorises a request and the component

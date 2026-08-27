@@ -1,6 +1,7 @@
 id: HRR-ERR-03-MAP
 topic: HRR-ERR-03
 status: outline
+role: stage
 kind: recon
 title: "The artefacts the application delivers"
 objective: >-

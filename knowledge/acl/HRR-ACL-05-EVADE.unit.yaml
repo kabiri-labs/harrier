@@ -1,6 +1,7 @@
 id: HRR-ACL-05-EVADE
 topic: HRR-ACL-05
 status: outline
+role: stage
 title: "A method override the server honours"
 objective: >-
   Determine whether an override header or parameter makes the server act on a

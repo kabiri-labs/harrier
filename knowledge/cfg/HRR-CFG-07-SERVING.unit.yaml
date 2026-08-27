@@ -1,6 +1,7 @@
 id: HRR-CFG-07-SERVING
 topic: HRR-CFG-07
 status: outline
+role: stage
 title: "Directory contents served where no index exists"
 objective: >-
   Determine whether the server lists the contents of a directory that has no

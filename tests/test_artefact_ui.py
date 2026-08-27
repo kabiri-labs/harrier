@@ -1134,3 +1134,70 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.open("#/chains")
         self.open("#/unit/HRR-RES-01-READ")
         self.assertEqual(self.driver.console_errors, [])
+
+
+@unittest.skipUnless(node_available(), "node is not installed")
+class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
+    """The listing is the first thing a tester reads, and it used to answer
+    "perform all of these" and "choose one of these" with the same shape.
+
+    These run against `unitsByRole`, the function the page files units with, so
+    a block quietly dropped from the listing fails here.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+
+    def test_the_blocks_together_hold_every_unit_the_topic_lists(self):
+        """A unit in no block would vanish from the only page that lists it --
+        a worse failure than the flat list this replaces."""
+        lost = run_in_node("""
+            const out = {};
+            Object.keys(D.topics).forEach(function (tid) {
+              const split = H.unitsByRole(D, D.topics[tid]);
+              const seen = split.stage.length + split.variant.length + split.unroled.length;
+              const ids = D.topics[tid].units || [];
+              if (seen !== ids.length) out[tid] = [seen, ids.length];
+            });
+            return out;
+        """, self.data)
+        self.assertEqual(lost, {})
+
+    def test_nothing_in_the_catalogue_falls_through_to_unclassified(self):
+        strays = run_in_node("""
+            const out = [];
+            Object.keys(D.topics).forEach(function (tid) {
+              H.unitsByRole(D, D.topics[tid]).unroled.forEach(function (uid) {
+                out.push(uid);
+              });
+            });
+            return out;
+        """, self.data)
+        self.assertEqual(strays, [])
+
+    def test_a_unit_declaring_no_role_is_shown_rather_than_dropped(self):
+        """The schema forbids it, so this can only happen to a file assembled by
+        something other than this repository -- and dropping it silently would
+        be the one outcome worse than showing it uncategorised."""
+        result = run_in_node("""
+            const D2 = JSON.parse(JSON.stringify(D));
+            const tid = "HRR-INJ-01";
+            const uid = D2.topics[tid].units[0];
+            delete D2.units[uid].role;
+            const split = H.unitsByRole(D2, D2.topics[tid]);
+            return {unroled: split.unroled, stage: split.stage.length};
+        """, self.data)
+        self.assertEqual(result["unroled"], ["HRR-INJ-01-PROBE"])
+        self.assertEqual(result["stage"], 2)
+
+    def test_a_topic_of_techniques_splits_into_both_blocks(self):
+        result = run_in_node("""
+            return H.unitsByRole(D, D.topics["HRR-INJ-01"]);
+        """, self.data)
+        self.assertEqual(
+            result["stage"],
+            ["HRR-INJ-01-PROBE", "HRR-INJ-01-FPRINT", "HRR-INJ-01-EVADE"],
+        )
+        self.assertEqual(len(result["variant"]), 7)
+        self.assertEqual(result["unroled"], [])

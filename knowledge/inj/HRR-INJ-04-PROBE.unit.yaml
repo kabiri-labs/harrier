@@ -1,6 +1,7 @@
 id: HRR-INJ-04-PROBE
 topic: HRR-INJ-04
 status: outline
+role: stage
 title: "Directive interpretation probe"
 objective: >-
   Determine whether a server-side include directive is interpreted rather than

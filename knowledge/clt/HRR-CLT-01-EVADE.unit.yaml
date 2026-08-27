@@ -1,6 +1,7 @@
 id: HRR-CLT-01-EVADE
 topic: HRR-CLT-01
 status: outline
+role: stage
 kind: recon
 title: "Filter, encoder and policy evasion"
 objective: >-

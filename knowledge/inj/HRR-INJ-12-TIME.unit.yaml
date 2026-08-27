@@ -1,6 +1,7 @@
 id: HRR-INJ-12-TIME
 topic: HRR-INJ-12
 status: outline
+role: variant
 title: "Time-based inference"
 objective: >-
   Determine whether a conditional delay injected into a resolver argument is

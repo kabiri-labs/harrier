@@ -1,6 +1,7 @@
 id: HRR-CRY-01-MAP
 topic: HRR-CRY-01
 status: outline
+role: stage
 kind: recon
 title: "TLS listener inventory"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-CRY-04-READ
 topic: HRR-CRY-04
 status: outline
+role: stage
 title: "Confirmed plaintext recovery"
 objective: >-
   Determine whether the oracle recovers plaintext the application never

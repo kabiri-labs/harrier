@@ -1,6 +1,7 @@
 id: HRR-CRY-05-REPLAY
 topic: HRR-CRY-05
 status: outline
+role: variant
 title: "Key and algorithm confusion"
 objective: >-
   Determine whether a token signed under an algorithm or key other than the one

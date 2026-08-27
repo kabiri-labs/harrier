@@ -1,6 +1,7 @@
 id: HRR-ACL-02-TENANT
 topic: HRR-ACL-02
 status: outline
+role: stage
 title: "An object belonging to another tenant"
 objective: >-
   Determine whether an object belonging to a different tenant or organisation

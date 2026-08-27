@@ -1,6 +1,7 @@
 id: HRR-CRY-05-PIVOT
 topic: HRR-CRY-05
 status: outline
+role: stage
 title: "Verifier-initiated key retrieval"
 objective: >-
   Determine whether a key-locating header causes the verifier to fetch material

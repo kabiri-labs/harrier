@@ -1,6 +1,7 @@
 id: HRR-CRY-02-CHANGE
 topic: HRR-CRY-02
 status: outline
+role: stage
 title: "Credential and contact change channel"
 objective: >-
   Determine whether a credential or contact detail submitted for change travels

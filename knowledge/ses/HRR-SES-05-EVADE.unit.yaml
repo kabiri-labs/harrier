@@ -1,6 +1,7 @@
 id: HRR-SES-05-EVADE
 topic: HRR-SES-05
 status: outline
+role: stage
 kind: recon
 title: "Anti-forgery and same-site evasion"
 objective: >-

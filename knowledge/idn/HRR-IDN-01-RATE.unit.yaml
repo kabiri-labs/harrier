@@ -1,6 +1,7 @@
 id: HRR-IDN-01-RATE
 topic: HRR-IDN-01
 status: outline
+role: stage
 title: "Throttling of account creation"
 objective: >-
   Determine whether one caller can create accounts faster than a human would,

@@ -1,6 +1,7 @@
 id: HRR-CLT-02-MAP
 topic: HRR-CLT-02
 status: outline
+role: stage
 kind: recon
 title: "Source and sink inventory"
 objective: >-

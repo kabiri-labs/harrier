@@ -1,6 +1,7 @@
 id: HRR-INJ-01-FPRINT
 topic: HRR-INJ-01
 status: outline
+role: stage
 kind: recon
 title: "Database engine fingerprint"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-IDN-03-DIFF
 topic: HRR-IDN-03
 status: outline
+role: variant
 title: "A content differential between an existing and a non-existing account"
 objective: >-
   Determine whether the response body, status or redirect differs according to

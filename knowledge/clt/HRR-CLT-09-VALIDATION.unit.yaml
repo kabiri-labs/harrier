@@ -1,6 +1,7 @@
 id: HRR-CLT-09-VALIDATION
 topic: HRR-CLT-09
 status: outline
+role: stage
 title: "Sender origin checking"
 objective: >-
   Determine whether a listener acts on a message whose origin it never checked,

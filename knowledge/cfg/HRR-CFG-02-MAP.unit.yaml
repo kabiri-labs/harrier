@@ -1,6 +1,7 @@
 id: HRR-CFG-02-MAP
 topic: HRR-CFG-02
 status: outline
+role: stage
 kind: recon
 title: "The naming the application's own files suggest"
 objective: >-

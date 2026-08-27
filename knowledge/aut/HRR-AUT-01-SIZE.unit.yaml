@@ -1,6 +1,7 @@
 id: HRR-AUT-01-SIZE
 topic: HRR-AUT-01
 status: outline
+role: stage
 title: "Handling of an over-long credential"
 objective: >-
   Determine whether a credential longer than the accepted maximum is rejected

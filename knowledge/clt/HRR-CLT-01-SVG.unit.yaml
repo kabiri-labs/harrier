@@ -1,6 +1,7 @@
 id: HRR-CLT-01-SVG
 topic: HRR-CLT-01
 status: outline
+role: stage
 title: "Inline SVG context"
 objective: >-
   Determine whether a value landing inside inline SVG is parsed under XML rules

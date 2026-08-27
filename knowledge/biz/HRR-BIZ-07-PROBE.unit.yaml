@@ -1,6 +1,7 @@
 id: HRR-BIZ-07-PROBE
 topic: HRR-BIZ-07
 status: outline
+role: stage
 kind: inquiry
 title: "Whether sustained misuse changes the application's behaviour"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-AUT-07-ENTROPY
 topic: HRR-AUT-07
 status: outline
+role: stage
 title: "Predictability of the reset artefact"
 objective: >-
   Determine whether the token, code or link issued by the recovery flow is

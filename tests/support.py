@@ -148,6 +148,10 @@ class Sandbox:
         unit = {
             "id": f"{self.BASE_TOPIC_ID}-UNION",
             "topic": self.BASE_TOPIC_ID,
+            # UNION is a technique: one of the routes a tester picks between,
+            # rather than a step every run performs. Overridable, because a
+            # fixture that needs a stage says so.
+            "role": "variant",
             "title": "UNION-based extraction",
             "objective": (
                 "Determine whether a UNION arm can be appended to the query so that "

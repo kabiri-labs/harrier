@@ -1,6 +1,7 @@
 id: HRR-RCN-04-PROBE
 topic: HRR-RCN-04
 status: outline
+role: stage
 kind: recon
 title: "Whether the origin answers without the intermediary"
 objective: >-

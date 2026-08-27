@@ -1,6 +1,7 @@
 id: HRR-AUT-08-MAP
 topic: HRR-AUT-08
 status: outline
+role: stage
 kind: recon
 title: "Inventory of channels that authenticate the same account"
 objective: >-

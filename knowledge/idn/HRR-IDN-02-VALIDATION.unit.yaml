@@ -1,6 +1,7 @@
 id: HRR-IDN-02-VALIDATION
 topic: HRR-IDN-02
 status: outline
+role: stage
 title: "Evidence required to provision an account"
 objective: >-
   Determine what evidence a provisioning route demands, since an approval step

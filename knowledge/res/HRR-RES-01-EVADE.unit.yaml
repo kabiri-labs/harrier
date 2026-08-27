@@ -1,6 +1,7 @@
 id: HRR-RES-01-EVADE
 topic: HRR-RES-01
 status: authored
+role: stage
 kind: recon
 title: "Normalisation and encoding evasion"
 objective: >-

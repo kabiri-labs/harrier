@@ -41,7 +41,11 @@ SAFE_LOADER = _SafeLoader
 #: derived graph has always contained stop printing under one heading. No edge
 #: was added or removed; what changed is that a reader can now tell an
 #: escalation from the prerequisite it used to sort beneath.
-__version__ = "0.5.0"
+#:
+#: 0.6.0 gives every unit a role. A topic listed its units flat, so "perform all
+#: of these" and "pick one of these" -- opposite instructions -- were rendered
+#: identically, and the list had to be opened unit by unit to be read.
+__version__ = "0.6.0"
 
 __all__ = [
     "SAFE_LOADER",

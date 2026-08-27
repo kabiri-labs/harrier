@@ -1,6 +1,7 @@
 id: HRR-SES-01-ENTROPY
 topic: HRR-SES-01
 status: outline
+role: stage
 title: "Issued value unpredictability"
 objective: >-
   Determine whether the issued value carries enough unpredictable material that

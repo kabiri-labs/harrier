@@ -1,6 +1,7 @@
 id: HRR-INJ-07-EVADE
 topic: HRR-INJ-07
 status: outline
+role: stage
 kind: recon
 title: "Expression and encoding evasion"
 objective: >-

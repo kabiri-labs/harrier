@@ -1,6 +1,7 @@
 id: HRR-INJ-11-EVADE
 topic: HRR-INJ-11
 status: outline
+role: stage
 kind: recon
 title: "Frame and encoding evasion"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-CRY-04-WRITE
 topic: HRR-CRY-04
 status: outline
+role: stage
 title: "Confirmed ciphertext forgery"
 objective: >-
   Determine whether the oracle produces a ciphertext the application decrypts

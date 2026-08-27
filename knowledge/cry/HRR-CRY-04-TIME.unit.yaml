@@ -1,6 +1,7 @@
 id: HRR-CRY-04-TIME
 topic: HRR-CRY-04
 status: outline
+role: variant
 title: "Timing-distinguished padding failure"
 objective: >-
   Determine whether response latency separates a padding failure from a later

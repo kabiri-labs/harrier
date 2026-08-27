@@ -1,6 +1,7 @@
 id: HRR-CFG-03-MAP
 topic: HRR-CFG-03
 status: outline
+role: stage
 kind: recon
 title: "The administrative interfaces the platform provides"
 objective: >-

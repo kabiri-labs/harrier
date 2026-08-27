@@ -1,6 +1,7 @@
 id: HRR-PRT-01-WRITE
 topic: HRR-PRT-01
 status: outline
+role: stage
 title: "Effect on another party's request"
 objective: >-
   Determine whether the desync alters a request the tester did not send, rather

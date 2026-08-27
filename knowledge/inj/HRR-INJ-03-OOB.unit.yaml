@@ -1,6 +1,7 @@
 id: HRR-INJ-03-OOB
 topic: HRR-INJ-03
 status: outline
+role: variant
 title: "Blind entity resolution"
 objective: >-
   Determine whether external entity resolution is enabled at all, when no

@@ -1,6 +1,7 @@
 id: HRR-RCN-01-FPRINT
 topic: HRR-RCN-01
 status: authored
+role: stage
 kind: recon
 title: "The product and version answering at the origin"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-AUT-09-VALIDATION
 topic: HRR-AUT-09
 status: outline
+role: stage
 title: "What the second-factor check accepts as satisfaction"
 objective: >-
   Determine whether the second-factor step can be satisfied by a value or a

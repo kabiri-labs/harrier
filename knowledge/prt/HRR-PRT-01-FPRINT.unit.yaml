@@ -1,6 +1,7 @@
 id: HRR-PRT-01-FPRINT
 topic: HRR-PRT-01
 status: outline
+role: stage
 kind: recon
 title: "Front-end and origin parser pair"
 objective: >-

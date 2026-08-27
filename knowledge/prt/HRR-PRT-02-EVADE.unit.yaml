@@ -1,6 +1,7 @@
 id: HRR-PRT-02-EVADE
 topic: HRR-PRT-02
 status: outline
+role: stage
 kind: recon
 title: "Front-end normalisation evasion"
 objective: >-

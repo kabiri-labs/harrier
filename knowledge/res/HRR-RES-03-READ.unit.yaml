@@ -1,6 +1,7 @@
 id: HRR-RES-03-READ
 topic: HRR-RES-03
 status: outline
+role: stage
 title: "Fetched response readback"
 objective: >-
   Determine whether the body of the server-issued response is returned to the

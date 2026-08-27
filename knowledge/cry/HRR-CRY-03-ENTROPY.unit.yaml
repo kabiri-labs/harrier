@@ -1,6 +1,7 @@
 id: HRR-CRY-03-ENTROPY
 topic: HRR-CRY-03
 status: outline
+role: stage
 title: "Key and nonce generation"
 objective: >-
   Determine whether key, salt and nonce material comes from a source suitable

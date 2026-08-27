@@ -1,6 +1,7 @@
 id: HRR-SES-01-MAP
 topic: HRR-SES-01
 status: outline
+role: stage
 kind: recon
 title: "Session artefact inventory"
 objective: >-

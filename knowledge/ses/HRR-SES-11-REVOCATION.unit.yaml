@@ -1,6 +1,7 @@
 id: HRR-SES-11-REVOCATION
 topic: HRR-SES-11
 status: outline
+role: stage
 title: "Displacement of an older session"
 objective: >-
   Determine whether establishing a session ends an existing one where the

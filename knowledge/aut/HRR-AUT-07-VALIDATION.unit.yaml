@@ -1,6 +1,7 @@
 id: HRR-AUT-07-VALIDATION
 topic: HRR-AUT-07
 status: outline
+role: stage
 title: "Evidence required to change a credential in an authenticated session"
 objective: >-
   Determine what evidence an authenticated caller must supply to change a

@@ -1,6 +1,7 @@
 id: HRR-INJ-12-OOB
 topic: HRR-INJ-12
 status: outline
+role: variant
 title: "Out-of-band confirmation"
 objective: >-
   Determine whether a resolver can be made to initiate a network interaction

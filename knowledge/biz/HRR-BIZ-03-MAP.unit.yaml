@@ -1,6 +1,7 @@
 id: HRR-BIZ-03-MAP
 topic: HRR-BIZ-03
 status: outline
+role: stage
 kind: recon
 title: "The state that travels through the client"
 objective: >-

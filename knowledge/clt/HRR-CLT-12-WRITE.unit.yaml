@@ -1,6 +1,7 @@
 id: HRR-CLT-12-WRITE
 topic: HRR-CLT-12
 status: outline
+role: stage
 title: "Opener navigation from the opened document"
 objective: >-
   Determine whether the opened document can navigate the original tab to a

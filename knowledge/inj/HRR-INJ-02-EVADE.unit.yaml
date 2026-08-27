@@ -1,6 +1,7 @@
 id: HRR-INJ-02-EVADE
 topic: HRR-INJ-02
 status: outline
+role: stage
 kind: recon
 title: "Filter and encoding evasion"
 objective: >-

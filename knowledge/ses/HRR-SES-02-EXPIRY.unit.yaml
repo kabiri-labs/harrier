@@ -1,6 +1,7 @@
 id: HRR-SES-02-EXPIRY
 topic: HRR-SES-02
 status: outline
+role: stage
 title: "Persistence beyond the browsing session"
 objective: >-
   Determine whether the cookie is written to disk with a future expiry where a

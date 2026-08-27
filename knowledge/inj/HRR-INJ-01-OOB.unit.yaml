@@ -1,6 +1,7 @@
 id: HRR-INJ-01-OOB
 topic: HRR-INJ-01
 status: outline
+role: variant
 title: "Out-of-band extraction"
 objective: >-
   Determine whether the database can be made to initiate a network interaction

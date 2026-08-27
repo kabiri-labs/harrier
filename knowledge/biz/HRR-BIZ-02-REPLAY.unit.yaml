@@ -1,6 +1,7 @@
 id: HRR-BIZ-02-REPLAY
 topic: HRR-BIZ-02
 status: outline
+role: variant
 kind: inquiry
 title: "Acceptance of a captured request a second time"
 objective: >-

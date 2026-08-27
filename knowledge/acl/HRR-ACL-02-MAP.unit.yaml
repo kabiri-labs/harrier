@@ -1,6 +1,7 @@
 id: HRR-ACL-02-MAP
 topic: HRR-ACL-02
 status: outline
+role: stage
 kind: recon
 title: "The object identifiers and where they appear"
 objective: >-

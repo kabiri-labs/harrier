@@ -1,6 +1,7 @@
 id: HRR-CRY-01-TRANSPORT
 topic: HRR-CRY-01
 status: outline
+role: stage
 title: "Plaintext acceptance"
 objective: >-
   Determine whether the listener serves the application over an unencrypted

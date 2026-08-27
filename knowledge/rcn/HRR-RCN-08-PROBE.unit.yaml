@@ -1,6 +1,7 @@
 id: HRR-RCN-08-PROBE
 topic: HRR-RCN-08
 status: outline
+role: stage
 kind: recon
 title: "Paths present in public indexes but not linked"
 objective: >-

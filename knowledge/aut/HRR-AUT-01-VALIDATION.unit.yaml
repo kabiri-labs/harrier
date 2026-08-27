@@ -1,6 +1,7 @@
 id: HRR-AUT-01-VALIDATION
 topic: HRR-AUT-01
 status: outline
+role: stage
 title: "Consistency of enforcement across credential-setting surfaces"
 objective: >-
   Determine whether every surface that sets a credential applies the same

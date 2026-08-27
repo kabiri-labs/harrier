@@ -1,6 +1,7 @@
 id: HRR-RES-03-EVADE
 topic: HRR-RES-03
 status: outline
+role: stage
 kind: recon
 title: "Destination filter evasion"
 objective: >-

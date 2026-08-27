@@ -1,6 +1,7 @@
 id: HRR-SES-01-BINDING
 topic: HRR-SES-01
 status: outline
+role: stage
 title: "Binding to the authenticated subject"
 objective: >-
   Determine whether the issued value is tied to the subject that authenticated

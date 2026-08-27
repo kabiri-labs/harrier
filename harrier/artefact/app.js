@@ -502,12 +502,29 @@
     };
   };
 
+  /* Pure, and exported, so the split can be checked without rendering it. A
+     unit belonging to no block would vanish from the only page that lists it --
+     worse than the flat list this replaces -- so anything the two blocks do not
+     claim lands in `unroled` and is still shown. */
+  var unitsByRole = function (D, topic) {
+    var ids = (topic && topic.units) || [];
+    var out = { stage: [], variant: [], unroled: [] };
+    ids.forEach(function (uid) {
+      var unit = get(D.units, uid);
+      if (!unit) return;
+      if (unit.role === "stage" || unit.role === "variant") out[unit.role].push(uid);
+      else out.unroled.push(uid);
+    });
+    return out;
+  };
+
   var Harrier = {
     own: own, esc: esc, md: md, bound: bound, familyOf: familyOf,
     localGraph: localGraph, negativeReading: negativeReading,
     familyOverview: familyOverview, pathsToImpact: pathsToImpact,
     stillRequired: stillRequired,
-    searchAll: searchAll, wrap: wrap, layout: layout, LIMIT: LIMIT
+    searchAll: searchAll, wrap: wrap, layout: layout, LIMIT: LIMIT,
+    unitsByRole: unitsByRole
   };
   if (typeof module !== "undefined" && module.exports) module.exports = Harrier;
   if (typeof globalThis !== "undefined") globalThis.Harrier = Harrier;
@@ -791,14 +808,48 @@
                 : ' <span class="muted">not written</span>') + "</p></div>";
           }).join("")
         : "") +
-      "<h3>Tests · " + (topic.units || []).length + "</h3>" +
-      (topic.units || []).map(function (uid) {
-        var unit = get(D.units, uid);
-        if (!unit) return "";
-        return '<a class="card" href="' + href("unit", uid) + '"><h4>' + esc(unit.title) +
-          " " + statusPill(unit) + '</h4><p class="muted">' + esc(unit.objective) +
-          '</p><div class="meta">' + idChip(uid) + "</div></a>";
-      }).join("");
+      unitRoles(topic);
+  };
+
+  /* A topic holds two kinds of unit and the flat list said which was which
+     nowhere. "Perform all three, in order" and "pick one on the evidence" are
+     opposite instructions, and a reader given ten rows with no marking has to
+     open each one to find out. The order inside each block is the topic's own. */
+  var ROLE_BLOCKS = [
+    {
+      role: "stage",
+      heading: "Stages",
+      note: "Perform each of these. The order is the one the topic sets."
+    },
+    {
+      role: "variant",
+      heading: "Alternatives",
+      note: "Choose among these on the evidence in front of you. They are routes " +
+        "to the same finding, not steps toward it."
+    }
+  ];
+
+  var unitCard = function (uid) {
+    var unit = get(D.units, uid);
+    if (!unit) return "";
+    return '<a class="card" href="' + href("unit", uid) + '"><h4>' + esc(unit.title) +
+      " " + statusPill(unit) + '</h4><p class="muted">' + esc(unit.objective) +
+      '</p><div class="meta">' + idChip(uid) + "</div></a>";
+  };
+
+  var unitRoles = function (topic) {
+    var split = unitsByRole(D, topic);
+    var blocks = ROLE_BLOCKS.map(function (block) {
+      var mine = split[block.role];
+      if (!mine.length) return "";
+      return "<h3>" + esc(block.heading) + " · " + mine.length + "</h3>" +
+        '<p class="muted">' + esc(block.note) + "</p>" +
+        mine.map(unitCard).join("");
+    }).join("");
+    if (!split.unroled.length) return blocks;
+    return blocks + "<h3>Unclassified · " + split.unroled.length + "</h3>" +
+      '<p class="muted">These declare no role. That is a gap in the catalogue, ' +
+      "not a third kind of unit.</p>" + split.unroled.map(unitCard).join("");
   };
 
   /* ------------------------- the test detail ---------------------------- */

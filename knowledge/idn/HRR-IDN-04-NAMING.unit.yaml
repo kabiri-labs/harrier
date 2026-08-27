@@ -1,6 +1,7 @@
 id: HRR-IDN-04-NAMING
 topic: HRR-IDN-04
 status: outline
+role: stage
 title: "The identifier space the application accepts"
 objective: >-
   Determine which characters, lengths and forms are accepted in a username,

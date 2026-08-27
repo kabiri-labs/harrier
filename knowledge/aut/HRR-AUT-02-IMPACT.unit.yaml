@@ -1,6 +1,7 @@
 id: HRR-AUT-02-IMPACT
 topic: HRR-AUT-02
 status: outline
+role: stage
 title: "Reach of an accepted vendor credential"
 objective: >-
   Determine what an accepted vendor credential can actually reach, since such

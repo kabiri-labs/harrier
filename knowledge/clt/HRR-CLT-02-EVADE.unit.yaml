@@ -1,6 +1,7 @@
 id: HRR-CLT-02-EVADE
 topic: HRR-CLT-02
 status: outline
+role: stage
 kind: recon
 title: "Sanitiser and policy evasion"
 objective: >-

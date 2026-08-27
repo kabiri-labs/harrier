@@ -1,6 +1,7 @@
 id: HRR-PRT-02-MAP
 topic: HRR-PRT-02
 status: outline
+role: stage
 kind: recon
 title: "Host-derived value inventory"
 objective: >-

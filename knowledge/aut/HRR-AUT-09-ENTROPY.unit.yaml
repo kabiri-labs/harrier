@@ -1,6 +1,7 @@
 id: HRR-AUT-09-ENTROPY
 topic: HRR-AUT-09
 status: outline
+role: stage
 title: "Guessability of the one-time value"
 objective: >-
   Determine whether the one-time value's length and alphabet leave a space

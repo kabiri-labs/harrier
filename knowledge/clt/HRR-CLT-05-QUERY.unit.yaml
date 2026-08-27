@@ -1,6 +1,7 @@
 id: HRR-CLT-05-QUERY
 topic: HRR-CLT-05
 status: outline
+role: stage
 title: "Query-supplied resource location"
 objective: >-
   Determine whether a resource location supplied in the query string is fetched

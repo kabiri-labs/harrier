@@ -1,6 +1,7 @@
 id: HRR-INJ-01-STACK
 topic: HRR-INJ-01
 status: outline
+role: variant
 title: "Stacked statement execution"
 objective: >-
   Determine whether a second statement, separated from the first, is executed

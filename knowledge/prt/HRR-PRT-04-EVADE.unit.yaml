@@ -1,6 +1,7 @@
 id: HRR-PRT-04-EVADE
 topic: HRR-PRT-04
 status: outline
+role: stage
 kind: recon
 title: "Encoding and traversal variant evasion"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-PRT-05-POLICY
 topic: HRR-PRT-05
 status: outline
+role: stage
 kind: recon
 title: "Declared handshake requirements"
 objective: >-

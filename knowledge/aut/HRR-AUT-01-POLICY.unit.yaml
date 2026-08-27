@@ -1,6 +1,7 @@
 id: HRR-AUT-01-POLICY
 topic: HRR-AUT-01
 status: outline
+role: stage
 title: "The weakest accepted credential"
 objective: >-
   Determine the weakest credential the application actually accepts, which is

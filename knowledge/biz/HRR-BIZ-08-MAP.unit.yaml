@@ -1,6 +1,7 @@
 id: HRR-BIZ-08-MAP
 topic: HRR-BIZ-08
 status: outline
+role: stage
 kind: recon
 title: "Where price, quantity and currency are decided"
 objective: >-

@@ -1,6 +1,7 @@
 id: HRR-SES-04-PATH
 topic: HRR-SES-04
 status: outline
+role: stage
 title: "Identifier carried in the path"
 objective: >-
   Determine whether the session identifier appears in a path segment, which

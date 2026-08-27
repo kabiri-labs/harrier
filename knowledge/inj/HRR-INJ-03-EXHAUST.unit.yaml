@@ -1,6 +1,7 @@
 id: HRR-INJ-03-EXHAUST
 topic: HRR-INJ-03
 status: outline
+role: stage
 title: "Entity expansion exhaustion"
 objective: >-
   Determine whether nested or recursive entity declarations are expanded

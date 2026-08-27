@@ -1,6 +1,7 @@
 id: HRR-AUT-02-MAP
 topic: HRR-AUT-02
 status: outline
+role: stage
 kind: recon
 title: "Inventory of components that ship with vendor accounts"
 objective: >-

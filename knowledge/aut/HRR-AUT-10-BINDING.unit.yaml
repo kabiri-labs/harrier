@@ -1,6 +1,7 @@
 id: HRR-AUT-10-BINDING
 topic: HRR-AUT-10
 status: outline
+role: stage
 title: "Binding of the authorization response to the request that started it"
 objective: >-
   Determine whether an authorization response is refused when it does not

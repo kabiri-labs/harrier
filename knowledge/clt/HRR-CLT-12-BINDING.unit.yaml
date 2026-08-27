@@ -1,6 +1,7 @@
 id: HRR-CLT-12-BINDING
 topic: HRR-CLT-12
 status: outline
+role: stage
 title: "Opener reference severance"
 objective: >-
   Determine whether the opened document retains a reference to the opener

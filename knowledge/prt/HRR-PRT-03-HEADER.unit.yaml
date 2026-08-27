@@ -1,6 +1,7 @@
 id: HRR-PRT-03-HEADER
 topic: HRR-PRT-03
 status: outline
+role: stage
 title: "Header duplication"
 objective: >-
   Determine whether the intermediary and the origin disagree about which

@@ -1,6 +1,7 @@
 id: HRR-SES-02-FLAGS
 topic: HRR-SES-02
 status: outline
+role: stage
 title: "Declared cookie protections"
 objective: >-
   Determine, for each cookie carrying session state, whether Secure, HttpOnly

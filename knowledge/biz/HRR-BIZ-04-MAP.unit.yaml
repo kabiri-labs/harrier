@@ -1,6 +1,7 @@
 id: HRR-BIZ-04-MAP
 topic: HRR-BIZ-04
 status: outline
+role: stage
 kind: recon
 title: "The operations whose outcome depends on state read earlier"
 objective: >-

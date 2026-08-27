@@ -1,6 +1,7 @@
 id: HRR-INJ-10-PROBE
 topic: HRR-INJ-10
 status: outline
+role: stage
 title: "Expression evaluation probe"
 objective: >-
   Determine whether a template expression submitted as input is returned

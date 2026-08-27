@@ -1,6 +1,7 @@
 id: HRR-INJ-08-PROBE
 topic: HRR-INJ-08
 status: outline
+role: stage
 title: "Separator survival probe"
 objective: >-
   Determine whether a command separator or substitution submitted in the

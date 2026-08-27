@@ -1,6 +1,7 @@
 id: HRR-IDN-01-VALIDATION
 topic: HRR-IDN-01
 status: outline
+role: stage
 title: "Enforcement of contact-ownership verification"
 objective: >-
   Determine whether an account is usable before the caller has proved control

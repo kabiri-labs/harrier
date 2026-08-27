@@ -1,6 +1,7 @@
 id: HRR-RCN-01-VERIFY
 topic: HRR-RCN-01
 status: outline
+role: stage
 kind: recon
 title: "Corroboration from a signal the operator does not edit"
 objective: >-

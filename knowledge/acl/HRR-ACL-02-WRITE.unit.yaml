@@ -1,6 +1,7 @@
 id: HRR-ACL-02-WRITE
 topic: HRR-ACL-02
 status: outline
+role: stage
 title: "Modification of an object the caller does not own"
 objective: >-
   Determine whether the caller can change state on an object it does not own,

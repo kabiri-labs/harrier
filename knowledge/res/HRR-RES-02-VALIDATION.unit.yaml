@@ -1,6 +1,7 @@
 id: HRR-RES-02-VALIDATION
 topic: HRR-RES-02
 status: outline
+role: stage
 title: "Type and content validation"
 objective: >-
   Determine whether the endpoint accepts a file whose declared type, extension
