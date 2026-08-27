@@ -134,10 +134,26 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
             self.assertNotIn(phrase, text, f"target-state wording: {phrase}")
 
     def test_a_continuation_names_the_capability_it_travels_through(self):
+        # Every continuation this probe has is another technique for the same
+        # test, so it is filed under that heading rather than as an escalation.
+        # What the edge travels through is named either way -- that is the part
+        # a reader acts on.
         out = self.chain("HRR-INJ-01-PROBE")
-        self.assertIn("potential continuations:", out)
+        self.assertIn("alternative techniques for this test", out)
         self.assertIn("requires what this establishes:", out)
         self.assertIn("UNION-based extraction", out)
+
+    def test_an_escalation_is_headed_as_a_continuation_rather_than_a_prerequisite(self):
+        """The two edges that leave this unit for another topic are the whole
+        reason the tiers exist: before them, they sorted below ninety rows that
+        every held session produces."""
+        out = self.chain("HRR-IDN-01-POLICY")
+        self.assertIn("potential continuations:", out)
+        self.assertIn("generic prerequisite of 90 test(s) -- not an escalation:", out)
+        self.assertLess(
+            out.index("potential continuations:"),
+            out.index("generic prerequisite of"),
+        )
 
     def test_a_continuation_states_what_success_here_does_not_supply(self):
         out = self.chain("HRR-ACL-02-MAP")

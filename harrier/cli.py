@@ -9,16 +9,26 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from . import HarrierError, __version__, find_root
 from .build import build
-from .chain import Chain
+from .chain import TIER_ORDER, Chain
 from .validate import coverage, validate
 
 EXIT_OK = 0
 EXIT_FAILED = 1
 EXIT_USAGE = 2
+
+#: What each tier of continuation is called where a tester reads it. The count is
+#: part of the engagement heading on purpose: "prerequisite of 92 tests" is the
+#: fact that makes the list below it safe to skip, and without it the same rows
+#: read as ninety-two missed opportunities.
+CONTINUATION_HEADINGS = {
+    "chain": "potential continuations",
+    "topic": "alternative techniques for this test ({n})",
+    "engagement": "generic prerequisite of {n} test(s) -- not an escalation",
+}
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -125,12 +135,28 @@ def _chain(root, args) -> int:
         for fid in edge["yields"]:
             print(f"  success establishes: {label(fid)}  [{fid}]")
 
-        if edge["out"]:
-            print("  potential continuations:")
-            for link in edge["out"]:
+        # One heading per tier rather than one list. The three relations were
+        # always distinct in the data; printing them together was what made the
+        # escalations unfindable among the prerequisites.
+        by_tier: Dict[str, list] = {}
+        for link in edge["out"]:
+            by_tier.setdefault(link["tier"], []).append(link)
+        for tier in TIER_ORDER:
+            links = by_tier.get(tier)
+            if not links:
+                continue
+            print(f"  {CONTINUATION_HEADINGS[tier].format(n=len(links))}:")
+            for link in links:
                 other = chain.nodes[link["unit"]]
                 via = link["via"] or link.get("hint") or []
                 how = "requires" if link["kind"] == "requires" else "motivated by"
+                # Engagement-tier edges are listed but not expanded. Every one of
+                # them says the same thing -- this test needs a session, and so
+                # do ninety others -- and spending three lines each on that is
+                # what buried the tiers above it.
+                if tier == "engagement":
+                    print(f"    {other.id}  {other.title}")
+                    continue
                 print(f"    {other.id}  {other.title}")
                 print(f"      {how} what this establishes: {', '.join(label(f) for f in via)}")
                 also = link["also"]

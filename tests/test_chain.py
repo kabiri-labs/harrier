@@ -9,11 +9,18 @@ satisfied at all.
 
 import unittest
 
-from harrier.chain import Chain, family_of, still_required
+from harrier.chain import Chain, chain_index, family_of, still_required, tier_of
 from harrier.validate import validate
 from tests.support import REPO_ROOT, Sandbox, messages
 
 REAL_FACT = "surface.sql.injectable"
+
+#: A vocabulary small enough to reason about, covering one fact of each tier.
+TIERS = {
+    "access.user": "engagement",
+    "surface.x": "topic",
+    "artifact.token": "chain",
+}
 
 
 class SandboxCase(unittest.TestCase):
@@ -270,3 +277,122 @@ class TheChartsReachIsMeasuredRatherThanAssumed(unittest.TestCase):
                 self.assertTrue(edge["terminal"], uid)
                 stops += 1
         self.assertGreater(stops, 0, "no chain in the catalogue stops any more")
+
+
+class EveryFactDeclaresWhatKindOfEdgeItMakes(SandboxCase):
+    """Three different relations were printed under one heading before `tier`.
+
+    Holding a session, having another technique for the same test, and holding a
+    captured token are all "A yields what B requires", and the derivation cannot
+    tell them apart from the join alone. The fact says which it is. A fact that
+    declares no tier is rejected rather than defaulted, because a default would
+    silently refill the heading this field exists to empty.
+    """
+
+    def test_a_fact_without_a_tier_is_rejected(self):
+        def drop(vocab):
+            for fact in vocab["facts"]:
+                fact.pop("tier", None)
+            return vocab
+
+        self.box.edit("vocab/facts.yaml", drop)
+        self.assertRejected("tier")
+
+    def test_a_tier_outside_the_three_is_rejected(self):
+        def invent(vocab):
+            vocab["facts"][0]["tier"] = "sometimes"
+            return vocab
+
+        self.box.edit("vocab/facts.yaml", invent)
+        self.assertRejected("tier")
+
+
+class TheTierOfAnEdgeIsTheMostSpecificItTravelsThrough(unittest.TestCase):
+    """An edge reached by two facts is filed under the narrower of them.
+
+    A step that needs both a held session and a captured token is reached by
+    capturing the token. Filing it under the session would bury it among the
+    ninety-odd other things a session opens, which is the exact failure the tier
+    exists to prevent -- so the precedence runs chain, then topic, then
+    engagement, and never the other way.
+    """
+
+    def test_chain_wins_over_engagement(self):
+        self.assertEqual(
+            tier_of(["access.user", "artifact.token"], TIERS), "chain"
+        )
+
+    def test_topic_wins_over_engagement(self):
+        self.assertEqual(tier_of(["access.user", "surface.x"], TIERS), "topic")
+
+    def test_an_edge_through_only_generic_facts_stays_engagement(self):
+        self.assertEqual(tier_of(["access.user"], TIERS), "engagement")
+
+    def test_an_unknown_fact_stays_visible_rather_than_being_hidden(self):
+        """Failing open is the deliberate direction. Showing a prerequisite among
+        the escalations costs a reader one line; hiding an escalation costs them
+        the edge they opened the page for."""
+        self.assertEqual(tier_of(["nothing.declared"], TIERS), "chain")
+
+
+class ContinuationsAreOrderedByTier(unittest.TestCase):
+    """The escalation must not sort below the prerequisites, whatever else is true
+    of it -- that ordering was what made it unfindable."""
+
+    def test_a_chain_edge_precedes_an_engagement_edge_from_the_same_unit(self):
+        units = {
+            "HRR-A-01-P": {
+                "id": "HRR-A-01-P",
+                "topic": "HRR-A-01",
+                "yields": ["access.user", "artifact.token"],
+            },
+            "HRR-A-01-GENERIC": {
+                "id": "HRR-A-01-GENERIC",
+                "topic": "HRR-A-01",
+                "requires": {"all_of": ["access.user"]},
+            },
+            "HRR-B-02-ESCALATION": {
+                "id": "HRR-B-02-ESCALATION",
+                "topic": "HRR-B-02",
+                "requires": {"all_of": ["artifact.token"]},
+            },
+        }
+        index = chain_index(units, given=set(), tiers=TIERS)
+        out = index["HRR-A-01-P"]["out"]
+        self.assertEqual(
+            [e["unit"] for e in out], ["HRR-B-02-ESCALATION", "HRR-A-01-GENERIC"]
+        )
+        self.assertEqual([e["tier"] for e in out], ["chain", "engagement"])
+
+    def test_the_real_catalogue_files_the_known_escalations_as_chain(self):
+        """The five primitive and artifact escalations in the catalogue are the
+        ones a tester means by "attack chain". If any of them stops being
+        chain-tier, the tier assignment has drifted."""
+        chain = Chain.load(REPO_ROOT)
+        index = chain.index()
+        known = {
+            ("HRR-INJ-03-READ", "HRR-RES-01-EXEC"),
+            ("HRR-INJ-04-READ", "HRR-RES-01-EXEC"),
+            ("HRR-INJ-10-READ", "HRR-RES-01-EXEC"),
+            ("HRR-SES-04-READ", "HRR-SES-09-READ"),
+            ("HRR-SES-04-READ", "HRR-SES-09-REPLAY"),
+        }
+        seen = {
+            (uid, edge["unit"]): edge["tier"]
+            for uid, node in index.items()
+            for edge in node["out"]
+        }
+        for pair in known:
+            self.assertEqual(seen.get(pair), "chain", pair)
+
+    def test_no_edge_through_a_held_session_alone_is_called_an_escalation(self):
+        """`access.user` on its own opens most of the catalogue. An edge that
+        travels only through it is a prerequisite however far apart the two units
+        are, and calling it a continuation is what produced ninety-two of them
+        from a single unit."""
+        chain = Chain.load(REPO_ROOT)
+        for uid, node in chain.index().items():
+            for edge in node["out"]:
+                travelled = edge["via"] or edge.get("hint") or []
+                if set(travelled) <= {"access.user"} and travelled:
+                    self.assertEqual(edge["tier"], "engagement", (uid, edge["unit"]))

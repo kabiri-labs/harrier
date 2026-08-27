@@ -156,6 +156,7 @@
       return {
         unit: link.unit,
         kind: link.kind,
+        tier: link.tier || "chain",
         via: link.via || [],
         hint: link.hint || [],
         also: { all_of: also.all_of || [], any_of: also.any_of || [] },
@@ -944,30 +945,63 @@
     }).join("");
   };
 
+  /* The three relations this list has always held, named. An edge through a
+     held session and an edge through a captured token were printed identically
+     before, which made the second unfindable among ninety of the first. */
+  var TIER_ORDER = ["chain", "topic", "engagement"];
+  var TIER_HEADING = {
+    chain: "Escalates to",
+    topic: "Another technique for this test",
+    engagement: "This is a general prerequisite of"
+  };
+  var TIER_NOTE = {
+    chain: "",
+    topic: "Same topic: an alternative route to the same finding, not a step past it.",
+    engagement: "Reached by holding what most of the catalogue starts from. True, " +
+      "and not a route onward."
+  };
+
+  var continuationLink = function (link) {
+    var unit = D.units[link.unit];
+    var established = link.via.length ? link.via : link.hint;
+    var still = link.also.all_of.map(function (f) { return capTag(f, "req"); }).join("") +
+      (link.also.any_of.length
+        ? '<span class="muted"> any one of </span>' +
+          link.also.any_of.map(function (f) { return capTag(f, "req"); }).join("")
+        : "");
+    return '<div class="stack"><span class="k">' +
+      (link.kind === "requires" ? "Requires what this establishes" : "Becomes worth doing sooner") +
+      '</span><h4><a href="' + href("unit", link.unit) + '">' + esc(unit.title) + "</a> " +
+      statusPill(unit) + "</h4>" +
+      '<p class="muted">' + esc(unit.objective) + "</p>" +
+      '<div class="also"><b>Established here:</b> ' +
+      established.map(function (f) { return capTag(f, "cap"); }).join("") + "</div>" +
+      '<div class="also">' + (still
+        ? "<b>Still required:</b> " + still +
+          ' <span class="muted">— Harrier has no view of a target and does not claim these hold.</span>'
+        : "<b>No additional declared hard prerequisite.</b> What a unit declares " +
+          "is what the catalogue knows, which may be less than the whole of it — " +
+          "and Harrier has no view of a target either way.") +
+      "</div></div>";
+  };
+
   var continuationDetail = function (model) {
     if (!model.outgoing.shown.length) return "";
-    return model.outgoing.shown.map(function (link) {
-      var unit = D.units[link.unit];
-      var established = link.via.length ? link.via : link.hint;
-      var still = link.also.all_of.map(function (f) { return capTag(f, "req"); }).join("") +
-        (link.also.any_of.length
-          ? '<span class="muted"> any one of </span>' +
-            link.also.any_of.map(function (f) { return capTag(f, "req"); }).join("")
-          : "");
-      return '<div class="stack"><span class="k">' +
-        (link.kind === "requires" ? "Potential continuation" : "Becomes worth doing sooner") +
-        '</span><h4><a href="' + href("unit", link.unit) + '">' + esc(unit.title) + "</a> " +
-        statusPill(unit) + "</h4>" +
-        '<p class="muted">' + esc(unit.objective) + "</p>" +
-        '<div class="also"><b>Established here:</b> ' +
-        established.map(function (f) { return capTag(f, "cap"); }).join("") + "</div>" +
-        '<div class="also">' + (still
-          ? "<b>Still required:</b> " + still +
-            ' <span class="muted">— Harrier has no view of a target and does not claim these hold.</span>'
-          : "<b>No additional declared hard prerequisite.</b> What a unit declares " +
-            "is what the catalogue knows, which may be less than the whole of it — " +
-            "and Harrier has no view of a target either way.") +
-        "</div></div>";
+    /* An unrecognised tier is shown rather than dropped: bucketing by a value
+       no heading claims would silently lose the edge, and losing an escalation
+       is the one outcome this grouping exists to prevent. */
+    var buckets = {};
+    model.outgoing.shown.forEach(function (link) {
+      var tier = TIER_ORDER.indexOf(link.tier) >= 0 ? link.tier : "chain";
+      (buckets[tier] = buckets[tier] || []).push(link);
+    });
+    return TIER_ORDER.filter(function (tier) { return buckets[tier]; }).map(function (tier) {
+      var links = buckets[tier];
+      return '<div class="tier tier-' + tier + '">' +
+        '<h3 class="tierhead">' + esc(TIER_HEADING[tier]) +
+        ' <span class="muted">(' + links.length + ')</span></h3>' +
+        (TIER_NOTE[tier] ? '<p class="muted tiernote">' + esc(TIER_NOTE[tier]) + "</p>" : "") +
+        links.map(continuationLink).join("") + "</div>";
     }).join("");
   };
 

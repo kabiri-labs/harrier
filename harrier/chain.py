@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, Iterable, List, Set
 
 from . import Repository
 
@@ -29,6 +29,30 @@ from . import Repository
 def family_of(fact: str) -> str:
     """The family a fact belongs to. It is the first segment of its identifier."""
     return fact.split(".", 1)[0]
+
+
+#: Tiers, most specific first. An edge travelling through several facts takes the
+#: most specific one any of them carries: a step that needs both a held session
+#: and a captured token is reached by capturing the token, and filing it under
+#: the session would hide it among the hundreds of other things a session opens.
+TIER_ORDER = ("chain", "topic", "engagement")
+
+
+def tier_of(facts: Iterable[str], tiers: Dict[str, str]) -> str:
+    """The tier an edge through `facts` belongs to.
+
+    A fact the caller knows nothing about counts as `chain`, which is the tier
+    that stays visible. The schema makes `tier` required, so a gap here means a
+    caller assembled the vocabulary itself rather than that data is missing --
+    and of the two ways to be wrong, showing a generic prerequisite among the
+    escalations costs a reader one line, while hiding a real escalation costs
+    them the edge they came for.
+    """
+    seen = {tiers.get(fact, "chain") for fact in facts}
+    for tier in TIER_ORDER:
+        if tier in seen:
+            return tier
+    return "chain"
 
 
 @dataclass
@@ -80,13 +104,20 @@ def still_required(
     return out
 
 
-def chain_index(units: Dict[str, Any], given: Set[str]) -> Dict[str, Dict[str, Any]]:
+def chain_index(
+    units: Dict[str, Any], given: Set[str], tiers: Dict[str, str] | None = None
+) -> Dict[str, Dict[str, Any]]:
     """Per unit: what it needs, what success establishes, and what may follow.
 
     One implementation, read by both consumers. The edges are never unit-to-unit
     in the data: each one carries the capability it travels through, because the
     reason an edge exists is the only part of it a reader can act on.
+
+    Each edge also carries the `tier` of the relation it represents, so the three
+    different things this list has always held can be told apart by a reader
+    instead of being printed under one heading.
     """
+    tiers = tiers or {}
     hard: Dict[str, List[str]] = {}
     hinted: Dict[str, List[str]] = {}
     for uid in sorted(units):
@@ -126,19 +157,27 @@ def chain_index(units: Dict[str, Any], given: Set[str]) -> Dict[str, Dict[str, A
         for edge in onward.values():
             consumer = units[edge["unit"]]
             edge["kind"] = "requires" if edge["via"] else "motivated_by"
+            edge["tier"] = tier_of(edge["via"] or edge["hint"], tiers)
             edge["also"] = still_required(consumer, established, given)
             if not edge["hint"]:
                 del edge["hint"]
 
-        # Hard continuations first, then the ones in the same topic, then by
-        # identifier. Deliberately *not* ranked by how little each still needs:
-        # that reads as helpful and is not, because it sorts every continuation
-        # with unmet conditions below the initial three and hides exactly the
-        # honesty this view exists for.
+        # Escalations first, then same-topic alternatives, then the generic
+        # prerequisites -- and within a tier, hard continuations before hinted
+        # ones and same-topic before the rest. Tier leads because it is the
+        # question a reader is actually asking: of the ninety-odd things a held
+        # session unlocks, the two that are escalations must not sort below the
+        # ninety that are not.
+        #
+        # Deliberately *not* ranked by how little each still needs: that reads as
+        # helpful and is not, because it sorts every continuation with unmet
+        # conditions below the initial three and hides exactly the honesty this
+        # view exists for.
         topic = unit.get("topic")
         outgoing = sorted(
             onward.values(),
             key=lambda e: (
+                TIER_ORDER.index(e["tier"]),
                 0 if e["kind"] == "requires" else 1,
                 0 if units[e["unit"]].get("topic") == topic else 1,
                 e["unit"],
@@ -217,9 +256,13 @@ class Chain:
         """The facts an engagement supplies rather than a test earning them."""
         return {fid for fid, fact in self.facts.items() if fact.get("given")}
 
+    def tiers(self) -> Dict[str, str]:
+        """Each fact's tier, keyed by identifier."""
+        return {fid: fact["tier"] for fid, fact in self.facts.items() if "tier" in fact}
+
     def index(self) -> Dict[str, Dict[str, Any]]:
         """The derivation, over this checkout's units."""
-        return chain_index(self.units, self.given())
+        return chain_index(self.units, self.given(), self.tiers())
 
     def charted(self) -> int:
         """How many units carry chain declarations at all."""

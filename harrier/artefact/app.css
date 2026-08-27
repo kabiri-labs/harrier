@@ -167,6 +167,17 @@ button.pick.on { color: var(--ink); border-color: var(--accent); }
 .also { font-size: .82rem; color: var(--dim); margin-top: .3rem; }
 .also .tag { font-size: .74rem; }
 
+/* Continuations, grouped by what kind of relation the edge is. The escalations
+   carry the accent; the two lower tiers are deliberately quieter, because their
+   job on this page is to be identifiable and then skipped. */
+.tier { margin: 1.1rem 0; }
+.tier + .tier { border-top: 1px solid var(--line); padding-top: .9rem; }
+.tierhead { font-size: .95rem; margin: 0 0 .2rem; }
+.tier-chain > .tierhead { color: var(--accent); }
+.tier-topic > .tierhead, .tier-engagement > .tierhead { color: var(--dim); font-weight: 600; }
+.tiernote { font-size: .82rem; margin: 0 0 .5rem; }
+.tier-engagement .stack { border-left-color: var(--line); }
+
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .5rem; }
 @media (max-width: 700px) { #q { width: 100%; order: 3; } nav { order: 2; } }
 

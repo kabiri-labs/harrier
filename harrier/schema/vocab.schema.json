@@ -55,10 +55,11 @@
       "type": "array", "minItems": 1,
       "items": {
         "type": "object", "additionalProperties": false,
-        "required": ["id", "label", "description"],
+        "required": ["id", "label", "tier", "description"],
         "properties": {
           "id": {"$ref": "#/$defs/fact_id"},
           "label": {"type": "string", "minLength": 3},
+          "tier": {"enum": ["engagement", "topic", "chain"]},
           "given": {"const": true},
           "granted": {"const": true},
           "description": {"type": "string", "minLength": 20}
