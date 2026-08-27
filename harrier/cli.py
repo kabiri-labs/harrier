@@ -11,9 +11,12 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from . import HarrierError, __version__, find_root
+import yaml
+
+from . import HarrierError, Repository, __version__, find_root
 from .build import build
 from .chain import TIER_ORDER, Chain
+from .standard import INDEX_PATH, cases, index_document
 from .validate import coverage, validate
 
 EXIT_OK = 0
@@ -77,6 +80,27 @@ def _build_parser() -> argparse.ArgumentParser:
         "--fact", metavar="FACT-ID",
         help="show which tests establish one capability and which declare a use for it",
     )
+
+    checklist = sub.add_parser(
+        "checklist",
+        help="one line per test case of the standard, with the units that cover it",
+    )
+    checklist.add_argument(
+        "case", nargs="?", metavar="WSTG-ID",
+        help="a test case identifier; omit for every one of them",
+    )
+    checklist.add_argument(
+        "--uncovered", action="store_true",
+        help="only the test cases no topic claims",
+    )
+
+    written = sub.add_parser(
+        "index", help=f"regenerate {INDEX_PATH.as_posix()} from the catalogue"
+    )
+    written.add_argument(
+        "--check", action="store_true",
+        help="exit non-zero if the committed file is not what the catalogue derives",
+    )
     return parser
 
 
@@ -124,6 +148,15 @@ def _chain(root, args) -> int:
         label = lambda fid: chain.facts.get(fid, {}).get("label", fid)
 
         print(f"{node.id}  {node.title}")
+        # The identifier on the tester's scope sheet, not Harrier's. It lives on
+        # the topic rather than the unit, so a reader of this output previously
+        # had no way back to the line item that sent them here.
+        covering = sorted(
+            case.id for case in cases(Repository.load(root)).values()
+            if node.id in case.units
+        )
+        if covering:
+            print(f"  covers: {', '.join(covering)}")
         if node.role:
             print(f"  {ROLE_LINE[node.role]}")
         for heading, ids in (
@@ -204,6 +237,79 @@ def _chain(root, args) -> int:
     return EXIT_OK
 
 
+def _checklist(root: Path, args) -> int:
+    """One line per test case: what a tester pastes into an engagement tracker.
+
+    The scope sheet in front of them carries the standard's identifiers, not
+    Harrier's, so this is the direction the catalogue is read in during an
+    engagement -- and until now the only place that answered it was inside the
+    built HTML file.
+    """
+    repo = Repository.load(root)
+    built = cases(repo)
+
+    if args.case:
+        case = built.get(args.case)
+        if case is None:
+            print(f"harrier: no such test case: {args.case}", file=sys.stderr)
+            return EXIT_FAILED
+        selected = [case]
+    else:
+        selected = [built[wid] for wid in sorted(built)]
+    if args.uncovered:
+        selected = [case for case in selected if not case.covered]
+
+    units = {doc.data["id"]: doc.data for doc in repo.units}
+    for case in selected:
+        if not case.covered:
+            # Said plainly rather than shown as an empty list. No topic claims
+            # it, and a blank line reads as "nothing to do here".
+            print(f"{case.id}  {case.title}")
+            print("  no topic claims this test case")
+            continue
+        depth = f"{case.authored} authored, {case.outline} outline"
+        print(f"{case.id}  {case.title}  [{len(case.units)} unit(s): {depth}]")
+        print(f"  topics: {', '.join(case.topics)}")
+        if args.case:
+            for uid in case.units:
+                unit = units[uid]
+                depth = unit.get("status", "authored")
+                print(f"  [ ] {uid}  {unit['title']}  ({depth})")
+    return EXIT_OK
+
+
+def _index(root: Path, args) -> int:
+    """Write the derived index, or check the committed one still matches.
+
+    Generated and committed rather than generated on demand: a relation that
+    lives only in a build output cannot be reviewed in a diff, and coverage
+    moving is exactly the kind of change that should be visible there.
+    """
+    repo = Repository.load(root)
+    document = index_document(repo)
+    rendered = yaml.safe_dump(document, sort_keys=False, allow_unicode=True, width=100)
+    target = root / INDEX_PATH
+
+    if args.check:
+        current = target.read_text(encoding="utf-8") if target.is_file() else ""
+        if current == rendered:
+            print(f"harrier: {INDEX_PATH.as_posix()} is current")
+            return EXIT_OK
+        print(
+            f"harrier: {INDEX_PATH.as_posix()} is stale -- run `harrier index`",
+            file=sys.stderr,
+        )
+        return EXIT_FAILED
+
+    target.write_text(rendered, encoding="utf-8")
+    covered = sum(1 for case in document["cases"] if case["topics"])
+    print(
+        f"harrier: wrote {INDEX_PATH.as_posix()} "
+        f"({covered} of {len(document['cases'])} test cases covered)"
+    )
+    return EXIT_OK
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
@@ -236,6 +342,10 @@ def main(argv: Optional[List[str]] = None) -> int:
             for key, value in coverage(root).items():
                 print(f"{key:16} {value}")
             return EXIT_OK
+        if args.command == "checklist":
+            return _checklist(root, args)
+        if args.command == "index":
+            return _index(root, args)
     except BrokenPipeError:
         # Piping into head or less closes the stream early. That is the reader's
         # decision, not an error, and a traceback here would be the first thing
