@@ -69,7 +69,13 @@ SAFE_LOADER = _SafeLoader
 #: carries what it takes to run the test and recognise a wrong answer; what it
 #: takes to claim either of the tiers above it is now checked rather than
 #: trusted.
-__version__ = "0.10.0"
+#:
+#: 0.11.0 sketches the seventeen topics an engagement opens with. Reconnaissance
+#: and configuration were the thinnest part of the catalogue and the first part
+#: anybody reads, which is the worst combination: 38 units across RCN, CFG, ERR
+#: and PRT now carry the procedure, the reading of a result and the thing that
+#: most often imitates one.
+__version__ = "0.11.0"
 
 __all__ = [
     "SAFE_LOADER",

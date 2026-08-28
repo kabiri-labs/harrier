@@ -1,6 +1,6 @@
 id: HRR-CFG-06-PROBE
 topic: HRR-CFG-06
-status: outline
+status: sketched
 role: stage
 title: "Whether a plugin policy file is served and what it grants"
 objective: >-
@@ -12,3 +12,23 @@ requires:
   all_of: [recon.names.mapped]
 yields: [control.plugin.policy.permissive]
 closes: [control.plugin.policy.permissive]
+
+oracle:
+  positive: "A cross-domain policy file is served, and it grants origins or headers wider than the target's own: a wildcard domain, a wildcard header set, or a socket policy opening arbitrary ports."
+  negative: "Every policy location was requested on every recorded name and none is served."
+
+sequence:
+  - "Request each policy location on every recorded name, including the ones that serve only static content."
+  - "Where one is served, read what it grants: which domains, which headers, which ports, and whether the grant is bounded at all."
+  - "Record whether anything on the target still consumes these policies, since a grant nothing reads is a stale file rather than a live control."
+
+first_false_positive: >-
+  A policy file that grants everything and is read by nothing, on a target that
+  ships no plugin content at all. It is worth recording as a stale file and
+  reporting it as an open cross-origin grant overstates what any caller can
+  actually do with it.
+
+done_when: >-
+  Every policy location has been requested on every recorded name, and each
+  served file is recorded with the domains, headers and ports it grants, and
+  with whether anything here still reads it.

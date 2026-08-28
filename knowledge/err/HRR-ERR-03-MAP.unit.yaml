@@ -1,6 +1,6 @@
 id: HRR-ERR-03-MAP
 topic: HRR-ERR-03
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "The artefacts the application delivers"
@@ -11,3 +11,18 @@ objective: >-
 
 requires:
   all_of: [recon.entrypoints.mapped]
+
+sequence:
+  - "From the entry point inventory, list everything the application serves that is not a page: scripts, stylesheets, source maps, documents, generated exports, images produced from user data."
+  - "Fetch each one and record its type, its size and where it came from, rather than opening it here."
+  - "Note which of them the application generates rather than ships, since a generated artefact carries whatever was in memory when it was written."
+
+first_false_positive: >-
+  A third-party asset served from the application's own path. It is content the
+  application delivers and not content the application wrote, so it is recorded
+  with its origin: reading a vendor bundle for the target's internals wastes the
+  pass.
+
+done_when: >-
+  Every non-page artefact the application serves is recorded with its type, its
+  size and whether the application ships it or generates it.

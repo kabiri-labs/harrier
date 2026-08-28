@@ -1,6 +1,6 @@
 id: HRR-CFG-09-POLICY
 topic: HRR-CFG-09
-status: outline
+status: sketched
 role: stage
 title: "What the store's own access policy grants"
 objective: >-
@@ -11,3 +11,24 @@ requires:
   all_of: [recon.names.mapped]
 yields: [control.objectstore.public]
 closes: [control.objectstore.public]
+
+oracle:
+  positive: "The store grants an anonymous caller, or any authenticated caller of the provider, more than the application's own permissions allow: listing the container, reading objects, or writing to it."
+  negative: "Every operation was attempted without provider credentials and each is refused by the store itself."
+
+sequence:
+  - "Identify the store and container the application uses, from the addresses its own delivery resolves to."
+  - "Ask the store to list the container without provider credentials, and record what it answers."
+  - "Read one object the application already publishes, again without credentials, to establish that reads are anonymous rather than that listing is."
+  - "Where the engagement grants a token, record what its scope and expiry actually permit rather than what it was issued for."
+
+first_false_positive: >-
+  A request that succeeded because the tooling signed it with credentials found
+  in the environment. The store answered an authenticated caller, so every
+  request here is made explicitly unsigned and the absence of a signature is
+  checked, not assumed.
+
+done_when: >-
+  Listing and reading have each been attempted against the container without
+  credentials, and each is recorded as granted or refused by the store, with any
+  granted token's scope and expiry written down.

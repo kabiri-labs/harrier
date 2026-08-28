@@ -1,6 +1,6 @@
 id: HRR-RCN-08-PROBE
 topic: HRR-RCN-08
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "Paths present in public indexes but not linked"
@@ -11,3 +11,18 @@ objective: >-
 requires:
   all_of: [recon.names.mapped]
 yields: [recon.paths.indexed]
+
+sequence:
+  - "Query the public indexes, caches and archives for the recorded names, and collect the paths each holds."
+  - "Subtract the paths the application links and the ones its own metafiles declare: what remains is what is public without being published."
+  - "Request each remaining path once and record what the target answers now, alongside the date the index holds for it."
+
+first_false_positive: >-
+  An indexed path that resolves to the application's catch-all page. The index
+  entry proves the URL was once crawled, not that the path exists today, so a
+  path counts as present only when the answer differs from the one an
+  unmatched path produces.
+
+done_when: >-
+  Every path the indexes hold is recorded as still served, no longer served, or
+  answering as an unmatched path, each with the index's own date beside it.

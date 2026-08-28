@@ -1,6 +1,6 @@
 id: HRR-CFG-09-NAMING
 topic: HRR-CFG-09
-status: outline
+status: sketched
 role: stage
 title: "Whether object names can be enumerated"
 objective: >-
@@ -11,3 +11,24 @@ requires:
   all_of: [recon.names.mapped]
 yields: [control.objectstore.enumerable]
 closes: [control.objectstore.enumerable]
+
+oracle:
+  positive: "An object the tester was never given a link to is retrievable by deriving its name -- from a sequence, a timestamp, an account identifier, or the original filename."
+  negative: "Object names carry enough that is unguessable that derived candidates return nothing the store will serve."
+
+sequence:
+  - "Collect the object names the application does hand out, across more than one account and more than one upload where the engagement allows."
+  - "Read what varies between them: a counter, a time, an account identifier, an original filename, or a value nothing outside the store could predict."
+  - "Derive candidates from the varying part alone, and request a small set of them without provider credentials."
+  - "Record a retrieved object by its name and the derivation, and read no further into its content than confirming it belongs to somebody else."
+
+first_false_positive: >-
+  A derived name that succeeds because it is the tester's own object under a
+  path that merely looks predictable. A retrieval counts when the object belongs
+  to an account the tester does not hold, which is why the names come from more
+  than one account before anything is derived.
+
+done_when: >-
+  The naming scheme is written down from names the application handed out, a
+  derived candidate set has been requested, and each result is recorded as
+  retrieved with its derivation or as unguessable.

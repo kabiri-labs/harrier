@@ -1,6 +1,6 @@
 id: HRR-CFG-07-SERVING
 topic: HRR-CFG-07
-status: outline
+status: sketched
 role: stage
 title: "Directory contents served where no index exists"
 objective: >-
@@ -11,3 +11,24 @@ requires:
   all_of: [recon.entrypoints.mapped]
 yields: [surface.directory.listed]
 closes: [surface.directory.listed]
+
+oracle:
+  positive: "A request for a directory with no index document returns a listing of what the directory holds."
+  negative: "Every directory without an index answers with a refusal or an absent response, and none returns its contents."
+
+sequence:
+  - "Collect the directory prefixes the entry point inventory already contains, and add the ones the deployment's own naming implies."
+  - "Request each prefix with its trailing separator, and record what comes back against the baseline for a path that does not exist."
+  - "Where a listing is returned, record what it names rather than only that it listed, since the names are what the next request uses."
+  - "Repeat against the origin where the target is fronted: a listing suppressed at the edge is still a listing."
+
+first_false_positive: >-
+  The application's own index or catch-all page returned for a directory
+  request. It is a successful response with links on it and it is not a
+  filesystem listing, which is why the answer is judged against the baseline and
+  on whether the entries are files on disk.
+
+done_when: >-
+  Every directory prefix collected has been requested with its trailing
+  separator, from the edge and from the origin where one is reachable, with each
+  answer recorded as a listing, a refusal, or absent.

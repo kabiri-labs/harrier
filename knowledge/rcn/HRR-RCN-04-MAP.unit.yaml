@@ -1,6 +1,6 @@
 id: HRR-RCN-04-MAP
 topic: HRR-RCN-04
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "The tiers a request passes through"
@@ -12,3 +12,19 @@ objective: >-
 requires:
   all_of: [recon.target.reachable]
 yields: [recon.tiers.mapped]
+
+sequence:
+  - "Request a resource and read what the response says about the hops it crossed: the headers an intermediary adds about itself, the ones naming a cache decision, and the ordering they arrive in."
+  - "Send a request the origin would answer differently from anything in front of it -- an unmapped path, a malformed version, a method the application does not use -- and record which layer answered."
+  - "Repeat from a second position on the network where the engagement grants one, since a tier that is invisible from outside is often visible from beside it."
+
+first_false_positive: >-
+  A single intermediary that adds several headers of its own and reads as
+  several tiers. Counting hops by header count overstates the chain, so a tier
+  is recorded when something answers differently, not when something adds a
+  name.
+
+done_when: >-
+  The sequence of tiers a request crosses is written down in order, each one
+  named by the response that revealed it, and the layer that finally answers is
+  identified.

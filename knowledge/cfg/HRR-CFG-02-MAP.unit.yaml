@@ -1,6 +1,6 @@
 id: HRR-CFG-02-MAP
 topic: HRR-CFG-02
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "The naming the application's own files suggest"
@@ -11,3 +11,18 @@ objective: >-
 
 requires:
   all_of: [recon.entrypoints.mapped]
+
+sequence:
+  - "From the entry point inventory, collect the naming the application's own files already show: the extensions in use, the directory shapes, the version or build markers in asset names, and the editor or deployment habits those imply."
+  - "Derive the candidates that naming makes likely -- the same names with a backup or editor suffix, the same directories with an archive or deployment name, the source of a bundle that ships a map."
+  - "Record a baseline for what this server returns for a path that does not exist, since every later guess is judged against it."
+
+first_false_positive: >-
+  A naming pattern read off third-party assets rather than the application's
+  own. A vendor bundle's conventions describe the vendor, and guessing from them
+  produces a candidate list about somebody else's build.
+
+done_when: >-
+  The naming conventions the served files reveal are written down, the candidate
+  list they imply is derived from them, and the server's answer for a
+  non-existent path is recorded as the baseline.

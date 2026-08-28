@@ -1,6 +1,6 @@
 id: HRR-CFG-03-MAP
 topic: HRR-CFG-03
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "The administrative interfaces the platform provides"
@@ -11,3 +11,18 @@ objective: >-
 
 requires:
   all_of: [recon.platform.identified]
+
+sequence:
+  - "From the identified platform and its components, list the administrative interfaces each ships and the paths each uses by default."
+  - "Add the names the target's own conventions suggest: an administrative prefix on the recorded names, and the paths its client-side code refers to but never navigates to."
+  - "Record each candidate with the component it belongs to, so a hit later names a product rather than a path."
+
+first_false_positive: >-
+  A path from a generic wordlist that no component here ships. It produces
+  requests nobody can act on and noise in the log, which is why the candidates
+  come from what the platform was identified as rather than from a list.
+
+done_when: >-
+  Every component the identified platform runs has its administrative interfaces
+  and their paths written down, each attributed to the component that provides
+  it.
