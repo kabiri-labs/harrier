@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.12.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Harrier 0.13.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
 > behind them is not: 10 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.12.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.13.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -107,11 +107,15 @@ before the procedure begins, rather than several screens after it:
 
 ![A Test Unit page showing its objective and chain strip](docs/assets/test-unit.png)
 
-The Attack Chains view. A row is a capability a test requires, a column is one
-its success establishes, and the number is how many tests span the two — a map
-of what the catalogue declares, not a route anyone should follow:
+The Attack Chains view. Every capability in the file, in a column for the kind
+of thing it is, shaded by how far the chart reaches from it — green where a
+charted route arrives at an outcome, grey where it runs out. Each cell opens on
+the tests that establish it and the tests that declare it a prerequisite, which
+is the one way into the catalogue that does not start at the standard. The
+columns are ordered by where the catalogue's own edges run, and the fourteen
+that run the other way are named on the page:
 
-![The capability-family transition matrix](docs/assets/attack-chains.png)
+![The chain map: every capability in a column for its family, shaded by how far the chart reaches from it](docs/assets/attack-chains.png)
 
 ## Try it
 

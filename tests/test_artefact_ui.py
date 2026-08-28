@@ -971,7 +971,11 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertLess(union, evade)
 
     def test_the_general_view_is_a_counted_directed_matrix(self):
-        page = self.open("#/chains")
+        # On the catalogue page since 0.13.0: a count of tests per pair of
+        # families is a statement about the catalogue, which the matrix said
+        # about itself in its own second sentence while sitting under a page
+        # named for routes.
+        page = self.open("#/status")
         self.assertEqual(page.locator("table.matrix").count(), 1)
         self.assertEqual(page.locator(".gnode").count(), 0, "the hairball is back")
         text = self.driver.text()
@@ -987,14 +991,13 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         """Every impact is unconsumed by construction, so folding impacts into
         the stops-short count inflates it by the set listed directly above and
         describes arriving as failing to arrive."""
-        page = self.open("#/chains")
-        text = self.driver.text()
-        self.assertShows(text, "Where chains are meant to end")
-        self.assertShows(text, "impacts, which are excluded here")
+        self.assertShows(self.text("#/chains"), "Where chains are meant to end")
+        text = self.text("#/status")
+        self.assertShows(text, "impacts excluded")
         dead = len(self.data["deadEnds"])
         impacts = len(self.data["impacts"])
-        self.assertShows(text, str(dead) + " of " + str(len(self.data["facts"])))
-        self.assertNotIn(str(dead + impacts) + " of ", text)
+        self.assertShows(text, str(dead))
+        self.assertNotIn(str(dead + impacts) + " ", text)
 
     def test_the_status_page_partitions_every_test_by_where_its_chain_goes(self):
         text = self.text("#/status")
@@ -1006,13 +1009,23 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         for value in reach.values():
             self.assertShows(text, str(value))
 
-    def test_the_general_view_claims_no_ordering_the_families_do_not_have(self):
-        text = self.text("#/chains").lower()
-        self.assertNotIn("a chain runs left to right", text)
-        self.assertIn("not the stages of an attack", text)
+    def test_neither_general_view_claims_an_ordering_it_has_not_earned(self):
+        """Both say it, because both could be read as a progression: the matrix
+        by having axes, and the map by having columns."""
+        matrix = self.text("#/status").lower()
+        self.assertNotIn("a chain runs left to right", matrix)
+        self.assertIn("not the stages of an attack", matrix)
+
+        chart = self.text("#/chains").lower()
+        self.assertIn("not by any claim about how an attack proceeds", chart)
+        # The column order is a measurement, so the picture prints the edges
+        # that run against it rather than leaving them out of the picture.
+        back = run_in_node("return H.chainBackEdges(D);", self.data)
+        self.assertIn(str(sum(e["units"] for e in back)) + " run against this order",
+                      chart)
 
     def test_a_matrix_cell_drills_down_to_the_tests_it_counted(self):
-        page = self.open("#/chains")
+        page = self.open("#/status")
         cell = page.locator("table.matrix td.cell:not(.zero) a").first
         counted = int(cell.inner_text())
         before = self.driver.heading()
@@ -1117,6 +1130,55 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         labels = [t.strip().lower() for t in page.locator("main .k").all_inner_texts()]
         self.assertIn("where to start", labels)
         self.assertNotIn("where the input lands", labels)
+
+    def test_the_chains_page_shows_the_map_and_not_the_matrix(self):
+        """The page is named for routes. The family matrix counts tests per pair
+        of families, which is a statement about the catalogue, and it said so in
+        its own second sentence while sitting here."""
+        page = self.open("#/chains")
+        self.assertEqual(page.locator(".mcol").count(), 7)
+        self.assertEqual(page.locator(".mcell").count(), len(self.data["facts"]))
+        self.assertEqual(page.locator("table.matrix").count(), 0)
+
+    def test_the_matrix_is_on_the_catalogue_page_and_names_both_axes(self):
+        """A legend under a table is read after the table has been misread."""
+        page = self.open("#/status")
+        self.assertEqual(page.locator("table.matrix").count(), 1)
+        text = self.driver.text()
+        self.assertShows(text, "requires")
+        self.assertShows(text, "establishes")
+        self.assertShows(text, "Catalogue status and model")
+        # Every cell states its own sentence rather than leaving the reader to
+        # reconstruct it from the axis it forgot which way round was which.
+        titled = page.locator("table.matrix td.cell[title]").count()
+        self.assertEqual(titled, page.locator("table.matrix td.cell").count())
+
+    def test_the_map_filter_narrows_the_picture_and_gives_it_back(self):
+        page = self.open("#/chains")
+        every = page.locator(".mcell").count()
+        page.fill("#mapfilter", "session")
+        self.driver.wait_for_render(
+            lambda: page.locator(".mcell:not(.off)").count() < every
+        )
+        narrowed = page.locator(".mcell:not(.off)").count()
+        self.assertGreater(narrowed, 0)
+        self.assertIn(f"{narrowed} of {every}", page.inner_text("#mapcount"))
+        page.fill("#mapfilter", "")
+        self.driver.wait_for_render(
+            lambda: page.locator(".mcell:not(.off)").count() == every
+        )
+
+    def test_a_cell_of_the_map_opens_the_capability_it_stands_for(self):
+        """The map is the way in: every cell is a link to the page that answers
+        what this capability opens and what establishes it."""
+        page = self.open("#/chains")
+        first = page.locator(".mcell").first
+        fact = first.get_attribute("href").split("/")[-1]
+        first.click()
+        self.driver.wait_for_view("Attack chains")
+        self.assertIn("capability", self.driver.hash())
+        self.assertShows(self.driver.text(), "Required by")
+        self.assertIn(fact.split("%2E")[0][:6].lower(), self.driver.text().lower())
 
     def test_the_status_page_reports_each_tier_separately(self):
         text = self.text("#/status")
@@ -1231,7 +1293,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                      "ruled out for", "is possible now")
         for fragment in ("", "#/wstg", "#/case/WSTG-INPV-05",
                          "#/unit/HRR-INJ-01-UNION", "#/unit/HRR-RES-01-READ",
-                         "#/chains", "#/capability/access.user"):
+                         "#/chains", "#/status", "#/capability/access.user"):
             text = self.text(fragment).lower()
             for phrase in forbidden:
                 self.assertNotIn(phrase, text, f"{fragment}: {phrase}")
@@ -1286,6 +1348,79 @@ class DepthIsThreeTiersRatherThanTwo(unittest.TestCase):
         self.assertEqual(tiers["authored"], data["counts"]["units_authored"])
         self.assertEqual(tiers["sketched"], data["counts"]["units_sketched"])
         self.assertEqual(sum(tiers.values()), data["counts"]["units"])
+
+
+class TheChainMapIsTheWholeCatalogueAtOnce(unittest.TestCase):
+    """Seven columns of cells rather than a node-link drawing.
+
+    185 capabilities and six hundred edges rendered as a graph is the hairball
+    `PIVOT.md` rejected once already. What a reader wants from a picture of the
+    model is what kind of thing each capability is and how far the chart reaches
+    from it, and columns carry both without drawing a line that would have to be
+    believed.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+        cls.map = run_in_node("return H.chainMap(D);", cls.data)
+
+    def test_every_capability_appears_exactly_once(self):
+        """A picture that quietly drops part of the catalogue is worse than no
+        picture: it is read as the whole thing."""
+        seen = [cell["fact"] for col in self.map for cell in col["cells"]]
+        self.assertEqual(sorted(seen), sorted(self.data["facts"]))
+        self.assertEqual(len(seen), len(set(seen)))
+
+    def test_the_order_covers_every_family_the_catalogue_declares(self):
+        order = run_in_node("return H.CHAIN_ORDER;", self.data)
+        self.assertEqual(sorted(order),
+                         sorted(f["name"] for f in self.data["families"]))
+        self.assertEqual([col["name"] for col in self.map], order)
+
+    def test_the_four_states_partition_the_capabilities(self):
+        total = sum(sum(col["tally"].values()) for col in self.map)
+        self.assertEqual(total, len(self.data["facts"]))
+
+    def test_the_shading_agrees_with_the_figures_published_beside_it(self):
+        """The picture and the numbers on the status page come from one source.
+        Two ways of counting the same thing is one of them being wrong."""
+        tally = {k: sum(col["tally"][k] for col in self.map)
+                 for k in ("impact", "routed", "short", "unused")}
+        self.assertEqual(tally["unused"], len(self.data["deadEnds"]))
+        self.assertEqual(tally["impact"], len(self.data["impacts"]))
+        routed = run_in_node("""
+            let n = 0;
+            Object.keys(D.facts).forEach(function (f) {
+              if (H.familyOf(f) === "impact") return;
+              if (H.pathsToImpact(D, f, {maxPaths: 5, maxDepth: 6}).length) n++;
+            });
+            return n;
+        """, self.data)
+        self.assertEqual(tally["routed"], routed)
+
+    def test_the_columns_report_the_gap_rather_than_hiding_it(self):
+        """The reason the picture is worth having: control is where the chart
+        runs out, and a reader should be able to see that without reading a
+        paragraph about it."""
+        control = [c for c in self.map if c["name"] == "control"][0]
+        primitive = [c for c in self.map if c["name"] == "primitive"][0]
+        self.assertGreater(control["tally"]["unused"], control["tally"]["routed"])
+        self.assertGreater(primitive["tally"]["routed"], primitive["tally"]["unused"])
+
+    def test_the_edges_running_against_the_order_are_reported(self):
+        """The order is a measurement, and a measurement whose exceptions are
+        invisible is an assertion."""
+        order = run_in_node("return H.CHAIN_ORDER;", self.data)
+        back = run_in_node("return H.chainBackEdges(D);", self.data)
+        for edge in back:
+            self.assertGreater(order.index(edge["from"]), order.index(edge["to"]))
+        reported = {(e["from"], e["to"]) for e in back}
+        for edge in self.data["familyEdges"]:
+            if edge["from"] == edge["to"]:
+                continue
+            if order.index(edge["from"]) > order.index(edge["to"]):
+                self.assertIn((edge["from"], edge["to"]), reported)
 
 
 class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):

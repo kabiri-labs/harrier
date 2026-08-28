@@ -99,6 +99,27 @@ Harrier adds two things at a granularity the standard does not reach:
   artefact's: a tool one step away that still computed what was *possible now*
   would carry the rejected model in a place nothing on the page could correct.
 
+## 5b. Reconsidered in 0.13.0, and where the line is
+
+The chain map lets a reader open any capability and see the tests that declare
+it a prerequisite. That is close enough to `Chain.reachable_with` — removed
+above — to need saying why it is not the same thing, because the next change
+that has not read this will either rebuild the board or refuse a navigation
+link out of caution.
+
+What made the board dishonest was three things together: a **set** of facts the
+tester ticked, **persisted**, and presented as a **claim** about a target —
+"available now", "unlocked". The map has none of them. It carries one
+capability at a time, stores nothing, ranks nothing, and the page it opens
+states a fact about the catalogue: *these tests declare it a condition of being
+possible at all*. Whether any of it applies to a target is the reader's, and the
+wording says so on every screen.
+
+The line, stated so it can be checked: a view here may answer "what does the
+catalogue say follows from X". It may not accumulate several X, remember them,
+order the answer by what the tool thinks matters, or describe any of it as
+reachable, available or unlocked. The first is a query. The rest is the board.
+
 ## 6. Non-goals
 
 Deliberately outside this product, not merely unbuilt: target or engagement

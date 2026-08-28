@@ -197,6 +197,67 @@ table.matrix td.w1 { background: #1a2129; }
 table.matrix td.w2 { background: #1e2a35; }
 table.matrix td.w3 { background: #223442; }
 table.matrix td.w4 { background: #27404f; }
+/* Both axes name themselves in the table. The legend under it was read after
+   the table had already been misread, which is a legend arriving too late. */
+table.matrix th.axis {
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--faint); font-weight: 500; text-align: center; border: 0;
+}
+table.matrix th.corner {
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--faint); text-align: left; border: 0;
+}
+table.matrix th.rowhead { text-align: left; }
+
+/* The chain map: the catalogue as columns of cells rather than as a drawing.
+   185 capabilities and six hundred edges rendered as a node-link graph is the
+   hairball the pivot already rejected once, and a smaller hairball is still a
+   hairball. Columns carry what a reader wants -- what kind of thing each
+   capability is, and how far the chart reaches from it -- without drawing a
+   single line that would have to be believed. */
+.chainmap { display: flex; gap: .5rem; align-items: flex-start; min-width: 100%; }
+/* Narrow enough that all seven columns fit without the last one --
+   the outcomes, which is the column a reader is looking for -- being the one
+   that falls off the edge. */
+.mcol { flex: 1 1 0; min-width: 7rem; }
+.mhead {
+  position: sticky; top: 0; background: var(--bg); padding: .2rem 0 .35rem;
+  border-bottom: 1px solid var(--line); margin-bottom: .35rem;
+}
+.mhead a { font-size: .8rem; font-weight: 500; }
+.mtally { margin-top: .15rem; }
+.mtally .t {
+  display: inline-block; font-size: .64rem; font-family: var(--mono);
+  padding: 0 .3rem; margin-right: .15rem; border-radius: 2px;
+}
+.mcell {
+  display: block; font-size: .72rem; line-height: 1.25;
+  padding: .28rem .4rem; margin-bottom: .2rem; border-radius: 2px;
+  border-left: 3px solid transparent; color: var(--ink); text-decoration: none;
+}
+.mcell:hover { text-decoration: none; outline: 1px solid var(--accent); }
+.mcell.off { display: none; }
+
+/* One colour per state, and the four states partition the whole set: a reader
+   who counts the shades has counted every capability in the file. */
+.mcell.routed, .mtally .t.routed { background: #17302a; border-left-color: var(--good); }
+.mcell.impact, .mtally .t.impact { background: #33241a; border-left-color: var(--warn); }
+.mcell.short,  .mtally .t.short  { background: #22262c; border-left-color: var(--dim); }
+.mcell.unused, .mtally .t.unused { background: #1a1c20; border-left-color: var(--faint); color: var(--dim); }
+
+.mfilter { display: flex; gap: .6rem; align-items: center; margin: .6rem 0 .8rem; }
+.mfilter input {
+  flex: 0 1 16rem; background: var(--raise); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 3px; padding: .3rem .5rem;
+  font: inherit; font-size: .85rem;
+}
+.mlegend { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .7rem; }
+.mkey { font-size: .74rem; color: var(--dim); display: flex; align-items: center; gap: .35rem; }
+.mswatch { width: .8rem; height: .8rem; border-radius: 2px; border-left: 3px solid transparent; }
+.mswatch.routed { background: #17302a; border-left-color: var(--good); }
+.mswatch.impact { background: #33241a; border-left-color: var(--warn); }
+.mswatch.short { background: #22262c; border-left-color: var(--dim); }
+.mswatch.unused { background: #1a1c20; border-left-color: var(--faint); }
 
 /* The chain strip: where this test sits and where it can lead, directly under
    the objective. Three labelled lines, no diagram -- the diagram is below with

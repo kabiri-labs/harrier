@@ -317,6 +317,31 @@ something plausible. A sketched unit carries the sequence, the oracle and the
 first false positive, and says that the record-keeping and the safety limit are
 not written; a reader can perform it and can see what it is not telling them.
 
+### The chain map
+
+The whole model as one picture: every capability in the file, in a column for
+the family that says what kind of thing it is, shaded by how far the chart
+reaches from it. Four states that partition the set — an outcome, a charted
+route to one, used by a test but going nowhere charted, used by nothing.
+
+Columns of cells rather than a node-link drawing, for the reason recorded in
+`PIVOT.md`: 185 capabilities and six hundred edges rendered at once is a
+hairball, and a smaller hairball is still a hairball. Columns carry the two
+things a reader wants from a picture of the model without drawing a line that
+would have to be believed.
+
+The column order is measured rather than asserted. Of the cross-family
+relationships the catalogue holds, fourteen run against it, and the page prints
+which: an order whose exceptions are invisible is a claim rather than a
+measurement. The same order runs the family matrix on the catalogue page, where
+it puts nearly every number above the diagonal.
+
+Each cell is a link to its capability, which is where a route is actually
+followed — what establishes this, what declares it a prerequisite, and the
+shortest charted routes onward. That link is the map's whole purpose: the rest
+of the artefact is navigated from the standard down, and this is the only way in
+that starts from something a test established.
+
 ### The local chain
 
 Every Test Unit carries a graph derived from the four chain fields — never a
