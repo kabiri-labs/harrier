@@ -13,12 +13,12 @@ requires:
 yields: [control.headers.permissive]
 
 oracle:
-  positive: "A declared policy is one a browser will not honour as written: a misspelled or unsupported directive, a policy superseded by a second copy of the same header, a nonce declared in the header that no inline block carries, or a directive whose form the browser rejects."
+  positive: "A declared policy is one a browser will not honour as written: a misspelled or unsupported directive, a nonce declared in the header that no inline block carries, a directive whose form the browser rejects, or a second declaration of the same header that does not do what its author expected of it."
   negative: "Every declared directive is spelled as its specification requires, appears once, and is one the browsers in scope enforce."
 
 sequence:
   - "Check each directive name and value against the specification the header belongs to, rather than against what it appears to say."
-  - "Look for the same header declared twice on one response, and for a policy declared in both a header and the document, since the browser's precedence rule decides which one is real."
+  - "Where a header is declared more than once, or in both a header and the document, read the duplicates by the combination rule that header defines rather than assuming one wins: content policies are each enforced in full, so a second one can only narrow what the first allowed and never widen it, and a header added to relax an existing policy does nothing of the sort."
   - "Where the policy relies on a nonce or a hash, confirm the served document actually carries it on every block the policy covers."
   - "Load the page in a browser in scope and read what it reports about the policy it applied."
 
@@ -28,6 +28,7 @@ first_false_positive: >-
   the browser's own report decide it, not familiarity.
 
 done_when: >-
-  Every declared directive is recorded as honoured, as unsupported by the
-  browsers in scope, or as superseded, with the specification or the browser
-  report that decided each.
+  Every declared directive is recorded as honoured or as unsupported by the
+  browsers in scope, every duplicated header is recorded with what the
+  combination of its declarations actually permits, and each carries the
+  specification or the browser report that decided it.

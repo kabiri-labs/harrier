@@ -14,8 +14,8 @@ yields: [control.plugin.policy.permissive]
 closes: [control.plugin.policy.permissive]
 
 oracle:
-  positive: "A cross-domain policy file is served, and it grants origins or headers wider than the target's own: a wildcard domain, a wildcard header set, or a socket policy opening arbitrary ports."
-  negative: "Every policy location was requested on every recorded name and none is served."
+  positive: "A cross-domain policy file is served and grants wider than the target's own origins: a wildcard domain, a wildcard header set, or a socket policy opening arbitrary ports. The grant is the result whether or not anything here still reads it -- what this unit establishes is the state of the control, not a route somebody can take today."
+  negative: "Every policy location was requested on every recorded name, and none is served or none grants beyond the target's own origins."
 
 sequence:
   - "Request each policy location on every recorded name, including the ones that serve only static content."
@@ -23,12 +23,14 @@ sequence:
   - "Record whether anything on the target still consumes these policies, since a grant nothing reads is a stale file rather than a live control."
 
 first_false_positive: >-
-  A policy file that grants everything and is read by nothing, on a target that
-  ships no plugin content at all. It is worth recording as a stale file and
-  reporting it as an open cross-origin grant overstates what any caller can
-  actually do with it.
+  Reading the grant as something a caller can use. The plugins that honoured
+  these files are retired, so on a target shipping no plugin content the finding
+  is a permissive policy nobody withdrew -- which is what the record says --
+  rather than an open cross-origin route, which is what a reader will assume
+  unless the report says which of the two it is.
 
 done_when: >-
   Every policy location has been requested on every recorded name, and each
   served file is recorded with the domains, headers and ports it grants, and
-  with whether anything here still reads it.
+  with whether anything here still reads it -- the two written down separately,
+  because a permissive policy and a usable one are different reports.
