@@ -12,6 +12,22 @@ requires:
 motivated_by: [recon.paths.indexed]
 yields: [surface.file.unlinked]
 
+hypotheses:
+  - "An editor or a deployment left a copy beside the file it copied, and the server serves whatever is in the directory."
+  - "A directory named for backups or deployment is often browsable, and often not."
+  - "A version control directory left in the served tree exposes the tree it tracks rather than only itself."
+  - "A friendly error page returns a success status for anything, which makes status alone useless here."
+
+triage:
+  - "Names already served, with an editor, backup or archive suffix appended: bak, old, orig, save, swp, and the trailing tilde."
+  - "Directories named for backup, old, deployment or artefacts."
+  - "Version control and dependency metadata directories inside the served tree: git, svn, hg, and the dotfiles beside them such as env."
+  - "A response whose length differs from the baseline for a non-existent path."
+
+sink: >-
+  The server's static file handler, which maps a request path onto a file in the
+  served directory without the application deciding anything about it.
+
 oracle:
   positive: "The server returns a file no page references and the application does not need to publish -- a backup or editor copy, an archive of the deployment, a configuration file, or a version control directory."
   negative: "Every candidate derived from the observed naming was requested and each answers as the baseline for a non-existent path does."

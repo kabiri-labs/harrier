@@ -13,6 +13,16 @@ requires:
 motivated_by: [recon.platform.identified, recon.intermediary.identified]
 yields: [control.pathfilter.identified]
 
+hypotheses:
+  - "A filter that blocks the plain sequence often misses the encoded one, because it was written against the shape rather than the meaning."
+  - "One decode pass beats a double encoding, and the number of passes is a property of the stack rather than of the filter."
+  - "The filter and the resolver are different components, and a form that survives the first may still be understood by the second."
+
+triage:
+  - "Which layer refused: the filter's own response shape, or the application's."
+  - "Encoding depth, mixed separators, and sequences that reconstruct after a single collapse."
+  - "Whether a negative result came from agreement between the components or from a filter rejecting the form on sight."
+
 enter_when:
   - "The probe came back negative and the parameter still looks like a path."
   - "A response was refused rather than not-found, which is a filter speaking."

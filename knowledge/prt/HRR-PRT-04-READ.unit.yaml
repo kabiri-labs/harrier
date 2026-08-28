@@ -11,6 +11,20 @@ requires:
   all_of: [surface.path.divergence]
 yields: [primitive.check.bypassed]
 
+hypotheses:
+  - "The intermediary's rules are the only thing keeping the resource unreachable, and the origin will serve it to anyone who asks it directly."
+  - "A single-page application answers any unmatched path with its own shell, which returns successfully and proves nothing."
+  - "What the rules protect is visible from the refusals already observed, so the target list does not need guessing."
+
+triage:
+  - "Paths the intermediary was already observed to refuse."
+  - "A marker that only the restricted resource itself carries."
+  - "The difference between the allowed baseline body and the crafted response, rather than the status."
+
+sink: >-
+  The origin's own resource handler, reached with a path the layer in front
+  matched as something else entirely.
+
 oracle:
   positive: "The divergent form returns a resource the intermediary's own rules were meant to keep unreachable, with the content that resource holds rather than an error page."
   negative: "Every resource the intermediary restricts was requested through the divergent form and each remains refused or empty."

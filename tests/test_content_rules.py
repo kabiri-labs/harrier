@@ -143,6 +143,74 @@ class OutlineRelaxesDepthAndNothingElse(SandboxCase):
         self.assertRejected("objective is not falsifiable")
 
 
+class OrientationIsSeparateFromProcedure(SandboxCase):
+    """`triage`, `hypotheses` and `sink` answer where to start and why this may
+    work, which is what a unit could never say before.
+
+    Allowed at every tier on purpose: none of the three depends on procedural
+    depth, and a `triage` line is the cheapest thing that turns an outline from
+    a title into a lead.
+    """
+
+    def test_an_outline_may_carry_all_three(self):
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(
+            status="outline",
+            hypotheses=[
+                "The parameter reaches the query without the value being bound separately.",
+                "The error the database raises is returned to the caller rather than logged.",
+            ],
+            triage=["Parameters named id, sort, order, filter or q."],
+            sink="The query the application composes from the parameter before the driver sees it.",
+        )
+        self.assertAccepted()
+
+    def test_a_lone_hypothesis_is_rejected(self):
+        """One hypothesis is the objective restated. The field earns its place
+        by letting a reader rule them out one at a time."""
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(hypotheses=["The parameter reaches the query unbound."])
+        self.assertRejected("at hypotheses: ")
+
+    def test_a_sink_on_a_recon_unit_is_rejected(self):
+        """A recon unit establishes a fact and sends nothing to be interpreted.
+        Forbidden rather than unused, for the reason the oracle is: an optional
+        field with nothing to say gets filled with 'not applicable'."""
+        self.box.add_topic(order=["HRR-AUT-01-FPRINT", "HRR-AUT-01-UNION"])
+        self.box.add_unit(id="HRR-AUT-01-UNION")
+        self.box.add_unit(
+            id="HRR-AUT-01-FPRINT", kind="recon", status="outline",
+            sink="The query the application composes from the parameter it was given.",
+        )
+        self.assertRejected("HRR-AUT-01-FPRINT.unit.yaml: schema (unit)")
+
+    def test_a_triage_line_that_is_an_instruction_to_look_around_is_rejected(self):
+        """`triage` is where to start. 'Review the parameters' is the thing it
+        exists to replace."""
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(triage=["Review the parameters for anything interesting."])
+        self.assertRejected("triage entry is not a place to start looking")
+
+    def test_a_hypothesis_may_say_that_nobody_reviewed_something(self):
+        """The asymmetry is deliberate. A hypothesis is a claim about the
+        target, not an instruction, so the verb list that governs an objective
+        would reject the plainest true thing the field has to say."""
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(hypotheses=[
+            "The non-standard ports are the ones nobody reviews, because the review looked elsewhere.",
+            "A default the installer set was never revisited, because nothing failed when it stayed.",
+        ])
+        self.assertAccepted()
+
+    def test_a_placeholder_is_rejected_in_either_field(self):
+        for field in ("triage", "hypotheses"):
+            with self.subTest(field=field):
+                self.box.add_topic(order=["HRR-AUT-01-UNION"])
+                value = ["n/a", "n/a"] if field == "hypotheses" else ["n/a"]
+                self.box.add_unit(**{field: value})
+                self.assertRejected(f"{field} entry is a placeholder")
+
+
 class DepthRunsInThreeTiers(SandboxCase):
     """outline, sketched, authored -- each a strict superset of the one before.
 

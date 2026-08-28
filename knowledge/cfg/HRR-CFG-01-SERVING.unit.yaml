@@ -13,6 +13,23 @@ requires:
 yields: [control.platform.extra]
 closes: [control.platform.extra]
 
+hypotheses:
+  - "A platform ships components beside the application, and deploying the application deployed them too."
+  - "Status and metrics endpoints are meant for an internal caller and are restricted by network position rather than by authentication."
+  - "Sample content shipped with a platform is left in place because removing it is nobody's task."
+  - "An authentication challenge is exposure of the surface even when it withholds the content."
+
+triage:
+  - "The status, metrics and diagnostics paths the identified platform uses by default -- server-status, actuator, metrics, healthz."
+  - "Management console paths belonging to the platform rather than to the application."
+  - "Sample and default content at the paths the platform ships it under."
+  - "A response that challenges rather than refuses, since the challenge names the product."
+
+sink: >-
+  The platform's own request routing, which maps a path to a component that was
+  installed rather than written -- and which the application's own authorization
+  never sees.
+
 oracle:
   positive: "A component that is not the application answers a caller who should not reach it: a status or metrics endpoint, a management console, a diagnostics page, or sample content the platform ships."
   negative: "Every such path was requested from the position the caller actually holds, and each is refused or absent."

@@ -11,6 +11,20 @@ requires:
   all_of: [surface.path.divergence]
 yields: [primitive.content.poisoned]
 
+hypotheses:
+  - "The cache builds its key from the path as it saw it, and the origin answered a different path."
+  - "A stored entry is returned to whoever asks next, which is what makes this the one test here with a victim."
+  - "A repeat request from the same client may be answered locally, so the tester's own second request proves nothing about the shared cache."
+
+triage:
+  - "The cache's own indicators on a repeated ordinary request, which say what it stored and under what."
+  - "Whether an entry can be cleared at all here, established before one is created."
+  - "A resource nobody else requests, as the only acceptable target."
+
+sink: >-
+  The cache key the intermediary computes from the path it read, which a later
+  ordinary request for a different path will match.
+
 oracle:
   positive: "A response stored under the divergent form is returned to a later ordinary request for the resource it shadows."
   negative: "Every divergent form was stored under its own key, and an ordinary request for the shadowed resource returns the response it always returned."

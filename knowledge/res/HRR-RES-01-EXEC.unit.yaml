@@ -12,6 +12,21 @@ requires:
 motivated_by: [recon.platform.identified]
 yields: [primitive.exec.server]
 
+hypotheses:
+  - "The application includes rather than reads, so the resolved file is executed by the interpreter instead of returned."
+  - "A wrapper the platform supports turns a read into a source disclosure, or a write into an execution."
+  - "Anywhere the tester can place content that the application will later include is an execution route, including its own logs."
+
+triage:
+  - "Parameters that select a page, a template or a module rather than a document."
+  - "Platform wrappers and stream handlers the identified runtime supports, such as a filter wrapper that returns a source file encoded rather than executed."
+  - "Any location the tester can write to that the application also reads: logs, uploads, session storage."
+  - "An extension appended by the application to whatever the caller supplied."
+
+sink: >-
+  The interpreter that includes the resolved path, which executes what it opens
+  instead of returning it.
+
 enter_when:
   - "A read has been confirmed and the sink might interpret rather than return."
 

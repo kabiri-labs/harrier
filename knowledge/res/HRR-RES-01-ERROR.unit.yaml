@@ -11,6 +11,20 @@ requires:
   all_of: [recon.entrypoints.mapped]
 yields: [recon.approot.disclosed]
 
+hypotheses:
+  - "The platform's own error names the path it failed to open, which is the resolved path rather than the submitted one."
+  - "Where the resolved path is disclosed, the depth stops being a guess."
+  - "A friendly error page replaces the platform's error and discloses nothing, which is a configuration difference rather than an absence of the flaw."
+
+triage:
+  - "Errors that quote a path rather than a message."
+  - "The difference between the submitted value and the path the error names, which is the application's own root."
+  - "Whether the verbose error appears for some inputs and not others."
+
+sink: >-
+  The platform's file resolver, whose failure message names the path it was
+  given after the application finished building it.
+
 enter_when:
   - "Before spending requests on depth: the disclosed root turns guessing into arithmetic."
 

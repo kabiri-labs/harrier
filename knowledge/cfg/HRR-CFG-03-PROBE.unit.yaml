@@ -12,6 +12,20 @@ requires:
 yields: [surface.admin.reachable]
 closes: [surface.admin.reachable]
 
+hypotheses:
+  - "The interface is restricted by network position rather than by authentication, and the tester's position may already be inside it."
+  - "An authentication realm names the product even when the content is withheld."
+  - "An interface blocked at the edge is often open behind it, because the block was added to the edge and not to the component."
+
+triage:
+  - "An authentication challenge whose realm names a product."
+  - "A redirect to a sign-in page that is not the application's own."
+  - "The same path answered from the origin, or from an alternate port, where the front refuses it."
+
+sink: >-
+  The component's own request routing, which binds its console to a path
+  independently of whatever the application in front of it decides.
+
 oracle:
   positive: "An administrative interface answers a caller outside the network the operator meant to restrict it to -- serving its own page, or challenging with a realm that names the product."
   negative: "Every candidate interface was requested from outside and each is absent or refused without naming itself."

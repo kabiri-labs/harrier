@@ -71,6 +71,14 @@ objective: >
   Determine whether a UNION arm can be appended to the query so that
   attacker-chosen, SQL-computed values appear in the response body.
 
+hypotheses:                  # optional at every tier -- why this may work
+  - "Normalisation happens after the root and the parameter are joined."
+  - "The link is hidden rather than the file protected."
+triage:                      # optional at every tier -- where to start looking
+  - "Parameters named file, path, page, tpl, view, download."
+sink: >                      # forbidden on recon and inquiry
+  The path the application hands to the platform's file resolver.
+
 oracle:                      # required on kind: test; forbidden on recon and inquiry
   positive: "A value the database computed, not one the request contained, appears in the response."
   negative: "Every arity and every reflected position exhausted with no computed value returned."
@@ -147,6 +155,34 @@ is usually enough.
 marked at a tier below the one it has grown into is rejected: a stale status
 makes the depth figures lie, and those figures are the number this project asks
 to be judged on.
+
+### Orientation: `triage`, `hypotheses`, `sink`
+
+Three fields that describe the **target** rather than the test. Every other
+field answers what the test is for, how to run it, or how to read the answer;
+these answer *where to start* and *why this may work at all*.
+
+- **`triage`** — what in the target makes this test worth reaching for sooner:
+  parameter naming, endpoint shapes, a signal in a response. Write the literal
+  token a tester will see and type — `tpl`, not "a template parameter". The
+  artefact searches this field, and a name written out as prose is a name
+  nobody can search for.
+- **`hypotheses`** — the mechanisms that, if they hold, are why this succeeds.
+  Two or more: one is the objective restated, and the value of the field is
+  that a reader can rule them out one at a time.
+- **`sink`** — where an input the tester controls comes to rest, and what
+  interprets it there. Forbidden on `recon` and `inquiry`, which send nothing.
+  Omit it on a `test` unit that reads rather than submits; six do.
+
+All three are allowed at **every** tier, including `outline`. None depends on
+procedural depth, and a `triage` line is the cheapest thing that turns an
+outline from a title into a lead.
+
+`triage` meets the same vague-language gate as `objective`, because it is an
+instruction and "review the parameters" is the thing it exists to replace.
+`hypotheses` does not: a hypothesis is a claim about the target, and "the
+non-standard ports are the ones nobody reviews" is exactly what the field is
+for.
 
 ## 3. Content rules
 

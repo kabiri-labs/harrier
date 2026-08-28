@@ -75,7 +75,14 @@ SAFE_LOADER = _SafeLoader
 #: anybody reads, which is the worst combination: 38 units across RCN, CFG, ERR
 #: and PRT now carry the procedure, the reading of a result and the thing that
 #: most often imitates one.
-__version__ = "0.11.0"
+#:
+#: 0.12.0 gives a unit somewhere to say where to start. Every field it had
+#: described the test -- what it is for, how to run it, how to read the answer
+#: -- and none described the target: the parameter naming and the endpoint
+#: shapes that make one test worth reaching for before another. That sentence
+#: is also the only way into the catalogue that does not begin at the standard,
+#: so it is searched.
+__version__ = "0.12.0"
 
 __all__ = [
     "SAFE_LOADER",

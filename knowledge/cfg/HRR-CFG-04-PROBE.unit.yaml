@@ -12,6 +12,21 @@ requires:
 yields: [surface.method.extra]
 closes: [surface.method.extra]
 
+hypotheses:
+  - "A server accepts the methods its framework registered, not the ones the application uses."
+  - "A front layer refuses a method the application behind it would still honour, so a refusal names a layer rather than the application."
+  - "Where a method is refused outright, an override header or parameter reaches the same handler by a route the filter does not inspect."
+
+triage:
+  - "What a resource advertises as allowed, beside what its own client actually issues."
+  - "Override headers and parameters the framework honours: X-HTTP-Method-Override, and a method parameter on the query or the body."
+  - "A resource whose read and write paths are the same URL."
+  - "The same request sent to the origin where the target is fronted."
+
+sink: >-
+  The framework's method dispatch, which chooses a handler from the verb before
+  the application's own code decides anything about the request.
+
 oracle:
   positive: "A resource accepts a method its own client never issues, answering it as a request rather than refusing it."
   negative: "Every resource tested answers each unused method with a refusal, and the set it advertises matches the set its client issues."

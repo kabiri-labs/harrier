@@ -12,6 +12,20 @@ requires:
 yields: [control.storage.served]
 closes: [control.storage.served]
 
+hypotheses:
+  - "Files the application accepts are written where it is convenient to write them, which is often inside the tree the server publishes."
+  - "The application delivers an uploaded file through its own path, and the storage location is a different question from the delivery one."
+  - "A direct retrieval that still carries the application's session proves the delivery path and nothing about the storage."
+
+triage:
+  - "How the application hands an uploaded file back, and what that path reveals about where it was written."
+  - "Whether the naming of the stored file preserves anything the uploader chose."
+  - "The same location requested without the session the application issued."
+
+sink: >-
+  The storage path the application writes to, which the server may also publish
+  -- making the write a decision about delivery that nobody made deliberately.
+
 oracle:
   positive: "A file the application accepted is retrievable from a location the server publishes, at a path a caller can reach without going through the application."
   negative: "Every accepted file was searched for under the paths the server publishes and none is retrievable outside the application's own delivery."

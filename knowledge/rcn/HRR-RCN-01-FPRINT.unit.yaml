@@ -13,6 +13,18 @@ requires:
   all_of: [recon.target.reachable]
 yields: [recon.platform.identified]
 
+hypotheses:
+  - "The product announces itself in a header it sets by default, and nobody changed the default."
+  - "Where the banner was changed, the parsing was not: how a product answers a malformed request is a property of its code rather than of its configuration."
+  - "The error pages the product authors -- not the ones the application authors -- carry its wording, its ordering and its status choices."
+  - "A caching or filtering layer in front answers first, and identifies itself rather than the origin."
+
+triage:
+  - "A header naming a server, a framework or a runtime, and the ordering of the header set as a whole."
+  - "The wording and layout of a response the application did not author: an unmatched path, an unsupported method, a malformed version."
+  - "The naming of the session cookie, and any cookie the platform sets without the application asking."
+  - "A redirect the platform issues rather than the application: its status choice and whether the location is absolute."
+
 enter_when:
   - "Before any test whose payload or expectation depends on the platform."
 

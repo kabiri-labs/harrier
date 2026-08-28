@@ -57,7 +57,15 @@ checked.
 - `objective` is falsifiable and `done_when` is countable — both are pattern
   checks against the language that makes them neither
 - an oracle reading `n/a` is rejected; a rule with a socially acceptable escape
-  hatch stops being a rule
+  hatch stops being a rule. The same applies to a `triage` or `hypotheses` entry
+- a `triage` entry written as an instruction to look around rather than a place
+  to start is rejected, by the gate that governs `objective`. `hypotheses` is
+  deliberately exempt from that gate: it states a claim about the target rather
+  than an instruction, and the verb list would reject the plainest true thing
+  the field has to say
+- `sink` on a `recon` or `inquiry` unit is rejected by the schema, for the
+  reason `oracle` is: a unit that sends nothing to be interpreted has no sink,
+  and an optional field with nothing to say gets filled with "not applicable"
 - a unit still marked with a depth tier below the one it has grown into is
   rejected: the check raises the document's own status by one tier and asks the
   schema whether it would still validate, so the two definitions of a tier

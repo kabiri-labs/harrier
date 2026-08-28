@@ -12,6 +12,16 @@ requires:
 yields: [control.content.withdrawn]
 closes: [control.content.withdrawn]
 
+hypotheses:
+  - "Something was withdrawn because it should not have been public, and withdrawal does not reach the holders."
+  - "A credential exposed once is often still accepted, because rotating one is work and deleting a page is not."
+  - "A system never meant to be public is indexed anyway, because nothing told the crawler otherwise."
+
+triage:
+  - "Copies whose URL the target no longer serves at all."
+  - "Values shaped like credentials, keys or internal endpoints inside a held copy."
+  - "Pages from a system whose naming suggests it was never the public interface."
+
 oracle:
   positive: "A copy held publicly carries content the application does not serve now and would not have chosen to publish -- a credential, an internal endpoint, a document withdrawn from the site, or a page from a system that was never meant to be public."
   negative: "Every held copy was read, and each holds only content the application still publishes."

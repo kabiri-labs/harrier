@@ -389,6 +389,24 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
             if PLACEHOLDER.match(str(text)):
                 problems.add(doc.rel, f"oracle.{field} is a placeholder, not an oracle")
 
+        # triage is an instruction -- where to look first -- so it meets the
+        # same gate the objective does: "review the parameters" is not a
+        # starting point. hypotheses meets only the placeholder rule, because a
+        # hypothesis is a statement about the target rather than an instruction,
+        # and "nobody reviewed the non-standard ports" is exactly the kind of
+        # claim the field is for. Applying the verb list to both rejected that
+        # sentence, which is the gate being wrong rather than the sentence.
+        for entry in doc.data.get("triage") or []:
+            if VAGUE_OBJECTIVE.search(str(entry)):
+                problems.add(
+                    doc.rel,
+                    f"triage entry is not a place to start looking: {entry!r}",
+                )
+        for field in ("triage", "hypotheses"):
+            for entry in doc.data.get(field) or []:
+                if PLACEHOLDER.match(str(entry)):
+                    problems.add(doc.rel, f"{field} entry is a placeholder")
+
         # Depth is asked of the schema rather than restated here: a unit is
         # stale exactly when it would still validate one tier up. Restating the
         # contract in Python would give two definitions of "sketched" that
