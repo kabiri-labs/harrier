@@ -1718,8 +1718,9 @@
       '<div class="notice">Version ' + esc(D.version) + " is an early public alpha. " +
       "The decomposition is broad — " + units + " tests across " +
       Object.keys(D.topics).length + " topics — and the depth behind it is not: " +
-      authored + " are written to full procedural depth, and the far half of the chain " +
-      'is barely charted. <a href="#/status">Catalogue status</a> has the figures.</div>' +
+      authored + " are written to full procedural depth, and what a defeated control " +
+      'permits is largely unwritten. <a href="#/status">Catalogue status</a> has the ' +
+      "figures.</div>" +
 
       "<h3>How to use it</h3>" +
       "<ol><li>Choose the standard, then the testing group you are working in.</li>" +

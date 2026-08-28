@@ -153,7 +153,12 @@ more units were written on top of it.
 | | | | | | | |
 |---|---|---|---|---|---|---|
 | `INJ` 12 | `CLT` 12 | `SES` 11 | `AUT` 10 | `BIZ` 9 | `CFG` 9 | `ACL` 7 |
-| `RCN` 8 | `PRT` 5 | `CRY` 5 | `ERR` 4 | `IDN` 4 | `RES` 3 | `SUP` 0 |
+| `RCN` 8 | `OUT` 7 | `PRT` 5 | `CRY` 5 | `ERR` 4 | `IDN` 4 | `RES` 3 |
+| `SUP` 0 | | | | | | |
+
+`OUT` is where a confirmed capability arrives. Its topics claim no WSTG test
+case, because the standard enumerates what to test rather than what a result is
+worth, and they appear under Harrier Extensions for that reason.
 
 `SUP` carries no topics because no WSTG test covers vulnerable components or
 supply chain, and phase 2's input is the WSTG map. It is phase 7's first entry,
@@ -197,7 +202,7 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart the far half of the chain** | The largest known gap, and the one that most limits the product. 53 of 185 capabilities are established by a test and used by none — 1 of 32 `primitive.*` and 39 of 59 `control.*` — so 110 of 374 tests stop short. Phase 5 ran recon → surface → primitive and stopped; primitive → impact is barely written. Until it is, most local graphs honestly end at the test that established a capability. |
+| **Chart what a defeated control permits** | The largest remaining gap. 53 of 185 capabilities are established by a test and used by none, and 39 of 59 of them are `control.*`; `primitive.*` is down to 1 of 32 since the outcome layer landed. A control is the state of a defence rather than a result, so the step that turns one into something — what a weak cookie, a permissive cache or an absent binding actually lets somebody do — has to be written before an edge can honestly be drawn from it. Until it is, 110 of 374 tests still end at the capability they established. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Harrier improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
