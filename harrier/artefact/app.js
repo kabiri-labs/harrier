@@ -252,6 +252,73 @@
     };
   };
 
+  /* The seven families, ordered by where this catalogue's own edges actually
+     run rather than by any claim about how an attack proceeds.
+
+     Derived, not asserted: of the 368 cross-family edges the catalogue holds,
+     14 run against this order and every one of them is reported on the page.
+     That is what makes the columns honest -- they are a measurement with its
+     own exceptions printed, not a kill chain. `PIVOT.md` rejected a view that
+     told a tester what came next; a column here says what a capability *is*
+     and where the chart happens to lead from it. */
+  var CHAIN_ORDER = ["recon", "access", "surface", "artifact", "control",
+                     "primitive", "impact"];
+
+  /* Where the chart reaches, per capability. Four states that partition the
+     whole set, so the picture cannot quietly leave anything out:
+
+       impact   where a chain is meant to end
+       routed   a charted route from here reaches one
+       short    a test uses it, and nothing charted goes on to an outcome
+       unused   nothing declares a use for it at all
+
+     `unused` is read from the same set the status page publishes rather than
+     recomputed, so the picture and the figure beside it cannot disagree. The
+     walk is the same one the README's route figure comes from, for the same
+     reason. */
+  var chainMap = function (D) {
+    var dead = {};
+    (D.deadEnds || []).forEach(function (f) { dead[f] = true; });
+    var byName = {};
+    (D.families || []).forEach(function (fam) { byName[fam.name] = fam; });
+
+    return CHAIN_ORDER.filter(function (name) { return own(byName, name); })
+      .map(function (name) {
+        var fam = byName[name];
+        var cells = (fam.facts || []).map(function (fact) {
+          var state = "short";
+          if (familyOf(fact) === "impact") state = "impact";
+          else if (dead[fact]) state = "unused";
+          else if (pathsToImpact(D, fact, { maxPaths: 1, maxDepth: 6 }).length) state = "routed";
+          return {
+            fact: fact,
+            state: state,
+            establishedBy: (get(D.producers, fact) || []).length,
+            requiredBy: (get(D.requiredBy, fact) || []).length
+          };
+        });
+        var tally = { impact: 0, routed: 0, short: 0, unused: 0 };
+        cells.forEach(function (c) { tally[c.state] += 1; });
+        return {
+          name: name, label: fam.label, note: fam.note,
+          cells: cells, tally: tally
+        };
+      });
+  };
+
+  /* The edges that run against the column order, which the map prints rather
+     than hides. A picture whose exceptions are invisible is a picture making a
+     claim it has not earned. */
+  var chainBackEdges = function (D) {
+    var pos = {};
+    CHAIN_ORDER.forEach(function (name, i) { pos[name] = i; });
+    return (D.familyEdges || []).filter(function (e) {
+      return e.from !== e.to && pos[e.from] > pos[e.to];
+    }).map(function (e) {
+      return { from: e.from, to: e.to, units: e.units };
+    }).sort(function (a, b) { return b.units - a.units; });
+  };
+
   /* What a unit still declares that a set of established capabilities does not
      cover. The same rule the build applies to a single edge, applied here to a
      whole partial route, so a step in the middle of a path states its own
@@ -556,7 +623,8 @@
     familyOverview: familyOverview, pathsToImpact: pathsToImpact,
     stillRequired: stillRequired,
     searchAll: searchAll, wrap: wrap, layout: layout, LIMIT: LIMIT,
-    unitRuns: unitRuns, depthOf: depthOf, depthLabel: depthLabel
+    unitRuns: unitRuns, depthOf: depthOf, depthLabel: depthLabel,
+    chainMap: chainMap, chainBackEdges: chainBackEdges, CHAIN_ORDER: CHAIN_ORDER
   };
   if (typeof module !== "undefined" && module.exports) module.exports = Harrier;
   if (typeof globalThis !== "undefined") globalThis.Harrier = Harrier;
@@ -670,7 +738,7 @@
       '<p class="muted">One execution standard is supported. ASVS is a control and ' +
       "remediation mapping and CWE is a weakness classification; neither is an " +
       "execution methodology, and neither appears here as one.</p>" +
-      '<p class="muted"><a href="#/status">Catalogue status</a> · ' +
+      '<p class="muted"><a href="#/status">Catalogue status and model</a> · ' +
       '<a href="#/chains">Attack chains</a> · <a href="#/about">About</a></p>';
   };
 
@@ -1391,50 +1459,93 @@
      The families are an ontology, not the stages of an attack, so nothing here
      claims a chain runs left to right. What runs somewhere is a route, and a
      route is chosen rather than drawn over the whole catalogue at once. */
-  var viewChains = function () {
-    var model = familyOverview(D);
-    var names = model.nodes.map(function (n) { return n.name; });
-    var byName = {};
-    model.nodes.forEach(function (n) { byName[n.name] = n; });
-    var count = {};
-    model.edges.forEach(function (e) { count[e.from + ">" + e.to] = e.units; });
-    var busiest = model.edges.reduce(function (m, e) { return Math.max(m, e.units); }, 0);
+  var MAP_STATE = {
+    impact: "where a chain is meant to end",
+    routed: "a charted route from here reaches an outcome",
+    short: "a test uses it, and nothing charted goes on to an outcome",
+    unused: "nothing declares a use for it at all"
+  };
 
-    var header = "<tr><th></th>" + names.map(function (n) {
-      return '<th class="rot"><a href="' + href("chains/family", n) + '">' +
-        esc(byName[n].label) + "</a></th>";
-    }).join("") + "</tr>";
+  /* The catalogue at the scale a person can look at, as a picture.
 
-    var rows = names.map(function (from) {
-      return "<tr><th><a href=\"" + href("chains/family", from) + '">' +
-        esc(byName[from].label) + "</a></th>" +
-        names.map(function (to) {
-          var n = count[from + ">" + to] || 0;
-          if (!n) return '<td class="cell zero">·</td>';
-          // Shaded by share of the busiest transition, so the shape of the
-          // model is legible before a single number is read.
-          var weight = Math.min(4, 1 + Math.floor((n / busiest) * 4));
-          return '<td class="cell w' + weight + '"><a href="' +
-            href("chains/span", from) + "/" + encodeURIComponent(to) + '">' + n + "</a></td>";
-        }).join("") + "</tr>";
+     Columns rather than a node-link drawing on purpose: 185 capabilities and
+     six hundred edges rendered at once is the hairball PIVOT.md already
+     rejected once, and a smaller hairball is still a hairball. Columns of
+     cells carry the same two things a reader wants -- what kind of thing each
+     capability is, and how far the chart reaches from it -- and carry them
+     without drawing a single line that would have to be believed. */
+  var viewChainMap = function () {
+    var columns = chainMap(D);
+    var totals = { impact: 0, routed: 0, short: 0, unused: 0 };
+    columns.forEach(function (col) {
+      Object.keys(totals).forEach(function (k) { totals[k] += col.tally[k]; });
+    });
+    var facts = Object.keys(D.facts).length;
+
+    var tally = function (col) {
+      return ["routed", "short", "unused", "impact"].filter(function (k) {
+        return col.tally[k];
+      }).map(function (k) {
+        return '<span class="t ' + k + '" title="' + col.tally[k] + " " +
+          esc(MAP_STATE[k]) + '">' + col.tally[k] + "</span>";
+      }).join("");
+    };
+
+    var grid = columns.map(function (col) {
+      return '<div class="mcol"><div class="mhead"><a href="' +
+        href("chains/family", col.name) + '">' + esc(col.label) + "</a>" +
+        '<div class="mtally">' + tally(col) + "</div></div>" +
+        col.cells.map(function (cell) {
+          return '<a class="mcell ' + cell.state + '" href="' +
+            href("capability", cell.fact) + '" title="' + esc(cell.fact) + " — " +
+            esc(MAP_STATE[cell.state]) + " · " + cell.establishedBy +
+            " establish · " + cell.requiredBy + ' consume">' +
+            esc(factLabel(cell.fact)) + "</a>";
+        }).join("") + "</div>";
     }).join("");
 
+    var back = chainBackEdges(D);
+    var backNote = back.length
+      ? "Of the cross-family relationships the catalogue holds, " +
+        back.reduce(function (t, e) { return t + e.units; }, 0) +
+        " run against this order — " +
+        back.map(function (e) {
+          return e.units + " from " + esc(e.from) + " back to " + esc(e.to);
+        }).join(", ") +
+        ". They are printed rather than hidden: an order whose exceptions are " +
+        "invisible is a claim rather than a measurement."
+      : "";
+
+    return "<h3>The chart, at the scale of the whole catalogue</h3>" +
+      '<p class="lede">Every capability in the file, in the family that says what ' +
+      "kind of thing it is, shaded by how far the chart reaches from it. Each one " +
+      "opens on the tests that establish it and the tests that declare it a " +
+      "condition — which is where a route is followed.</p>" +
+      '<p class="muted">The columns are ordered by where this catalogue\'s own ' +
+      "edges run, not by any claim about how an attack proceeds. " + backNote + "</p>" +
+      /* The key is above the picture. Below it, a reader meets the colours
+         first and the meaning after two thousand pixels of scrolling, by which
+         point they have already decided what the shades meant. */
+      '<div class="mlegend">' +
+      ["routed", "short", "unused", "impact"].map(function (k) {
+        return '<span class="mkey"><span class="mswatch ' + k + '"></span>' +
+          totals[k] + " " + esc(MAP_STATE[k]) + "</span>";
+      }).join("") +
+      "</div>" +
+      '<div class="mfilter"><input id="mapfilter" type="search" ' +
+      'placeholder="Filter capabilities" aria-label="Filter capabilities">' +
+      '<span id="mapcount" class="muted">' + facts + " capabilities</span></div>" +
+      '<div class="scroller"><div class="chainmap">' + grid + "</div></div>";
+  };
+
+  var viewChains = function () {
     return crumbs([{ text: "Attack Chains" }]) +
       "<h2>Attack chains</h2>" +
-      '<p class="lede">Seven families of capability, and how many tests require one ' +
-      "in the row and establish one in the column. The families classify what a " +
-      "capability <em>is</em>; they are not the stages of an attack, and a route " +
-      "through them is something you choose rather than something this table draws." +
-      "</p>" +
-      '<div class="scroller"><table class="matrix">' + header + rows + "</table></div>" +
-      '<p class="legend">Row: a capability the test declares as a prerequisite. ' +
-      "Column: a capability its success establishes. Follow a number to the tests " +
-      "that span the two. <b>·</b> means no test does.</p>" +
-      "<h3>Drill in</h3>" +
-      '<div class="rows">' + model.nodes.map(function (n) {
-        return rowLink(href("chains/family", n.name), n.label, n.note,
-          n.facts + " capabilities");
-      }).join("") + "</div>" +
+      '<p class="lede">A route is a sequence of tests, each establishing something ' +
+      "the next one declares it needs. Nothing here is a statement about a target: " +
+      "the file has never seen one, and which of these applies today is yours to " +
+      "decide.</p>" +
+      viewChainMap() +
       "<h3>Where chains are meant to end</h3>" +
       '<p class="muted">Nothing in the catalogue requires an impact: it is where a ' +
       "chain stops on purpose, and the validator enforces that. Open one to see the " +
@@ -1443,20 +1554,9 @@
         return rowLink(href("capability", f), factLabel(f), f,
           (get(D.producers, f) || []).length + " tests establish it");
       }).join("") + "</div>" +
-      "<h3>Where the chart stops short</h3>" +
-      /* Counted with the impacts excluded. Every impact is unconsumed by
-         construction, so folding them in would inflate this number by the set
-         listed directly above and would describe reaching an outcome as failing
-         to reach one. */
-      '<p class="muted">A different thing from the list above. ' +
-      (D.deadEnds || []).length + " of " + Object.keys(D.facts).length +
-      " capabilities are established by a test and used by none — not impacts, " +
-      "which are excluded here, but places a chain runs out rather than arrives. " +
-      (D.reach ? D.reach.short + " of " + Object.keys(D.units).length +
-        " tests end at one, against " + D.reach.impact + " that establish an impact and " +
-        D.reach.continuation + " with a continuation. " : "") +
-      "That is the current reach of the chart, not a claim that nothing follows — " +
-      'see <a href="#/status">catalogue status</a>.</p>';
+      '<p class="muted">How many tests span each pair of families, and how much of ' +
+      'the catalogue exists at what depth, are on <a href="#/status">catalogue ' +
+      "status and model</a>.</p>";
   };
 
   /* One cell of the matrix: the tests that span two families, each with the
@@ -1475,8 +1575,10 @@
         (unit.yields || []).some(function (f) { return familyOf(f) === to; });
     });
 
+    /* A cell of the matrix, so the trail leads back to where the matrix is
+       rather than to the page it used to be on. */
     return crumbs([
-      { text: "Attack Chains", href: "#/chains" },
+      { text: "Catalogue status and model", href: "#/status" },
       { text: families[from].label + " → " + families[to].label }
     ]) +
       "<h2>" + esc(families[from].label) + " → " + esc(families[to].label) + "</h2>" +
@@ -1685,6 +1787,86 @@
     }).join("");
   };
 
+  /* The whole model, at the only scale that reads, and a statement about the
+     catalogue rather than about any target -- which is why it sits here and not
+     under a page named for routes.
+
+     This was an arc diagram and the arcs were the problem: undirected, all one
+     weight, the counts computed and never drawn, and a dozen curves crossing
+     each other. A matrix says the same thing without a single ambiguity.
+
+     What it did not say was which axis was which. The legend below carried it,
+     and a legend below a table is read after the table has already been
+     misread, so both axes now name themselves in the table and every cell
+     spells out the sentence it stands for. */
+  var familyMatrix = function () {
+    var model = familyOverview(D);
+    var present = {};
+    model.nodes.forEach(function (n) { present[n.name] = true; });
+    // Ordered like the map rather than like the vocabulary file. Two views of
+    // the same seven families in two different orders is two things to learn,
+    // and in this order the matrix says something extra for free: almost every
+    // number sits above the diagonal, which is the model running one way.
+    var names = CHAIN_ORDER.filter(function (n) { return present[n]; })
+      .concat(model.nodes.map(function (n) { return n.name; })
+        .filter(function (n) { return CHAIN_ORDER.indexOf(n) < 0; }));
+    var byName = {};
+    model.nodes.forEach(function (n) { byName[n.name] = n; });
+    var count = {};
+    model.edges.forEach(function (e) { count[e.from + ">" + e.to] = e.units; });
+    var busiest = model.edges.reduce(function (m, e) { return Math.max(m, e.units); }, 0);
+
+    var axis = '<tr><td class="corner"></td>' +
+      '<th class="axis" colspan="' + names.length + '">establishes →</th></tr>';
+    var header = '<tr><th class="corner">requires ↓</th>' + names.map(function (n) {
+      return '<th class="rot"><a href="' + href("chains/family", n) + '">' +
+        esc(byName[n].label) + "</a></th>";
+    }).join("") + "</tr>";
+
+    var rows = names.map(function (from) {
+      return '<tr><th class="rowhead"><a href="' + href("chains/family", from) + '">' +
+        esc(byName[from].label) + "</a></th>" +
+        names.map(function (to) {
+          var n = count[from + ">" + to] || 0;
+          var says = n + " test" + (n === 1 ? "" : "s") + " require " +
+            byName[from].label.toLowerCase() + " and establish " +
+            byName[to].label.toLowerCase();
+          if (!n) {
+            return '<td class="cell zero" title="' + esc("No test requires " +
+              byName[from].label.toLowerCase() + " and establishes " +
+              byName[to].label.toLowerCase()) + '">·</td>';
+          }
+          // Shaded by share of the busiest transition, so the shape of the
+          // model is legible before a single number is read.
+          var weight = Math.min(4, 1 + Math.floor((n / busiest) * 4));
+          return '<td class="cell w' + weight + '" title="' + esc(says) + '"><a href="' +
+            href("chains/span", from) + "/" + encodeURIComponent(to) + '">' + n + "</a></td>";
+        }).join("") + "</tr>";
+    }).join("");
+
+    return "<h3>How the model connects</h3>" +
+      '<p class="lede">Seven families of capability, and how many tests require one ' +
+      "in the row and establish one in the column. The families classify what a " +
+      "capability <em>is</em>; they are not the stages of an attack, and a route " +
+      "through them is something you choose rather than something this table draws." +
+      "</p>" +
+      '<div class="scroller"><table class="matrix">' + axis + header + rows + "</table></div>" +
+      '<p class="legend">Follow a number to the tests that span the two. ' +
+      "<b>·</b> means no test does. Each cell says its own sentence when pointed at. " +
+      "The families are in the order the chain map uses, which is why nearly every " +
+      "number sits above the diagonal: that is the model running one way, measured " +
+      "rather than asserted.</p>" +
+      "<h4>Drill in</h4>" +
+      // In the order the table above uses. A list of the same seven families
+      // in a different order on the same page is a reader wondering which of
+      // the two orders means something.
+      '<div class="rows">' + names.map(function (name) {
+        var n = byName[name];
+        return rowLink(href("chains/family", n.name), n.label, n.note,
+          n.facts + " capabilities");
+      }).join("") + "</div>";
+  };
+
   var viewStatus = function () {
     var c = D.counts;
     var reach = D.reach || {continuation: 0, impact: 0, short: 0, uncharted: 0};
@@ -1694,10 +1876,13 @@
       var d = D.topics[tid].domain;
       domains[d] = (domains[d] || 0) + 1;
     });
-    return crumbs([{ text: "About", href: "#/about" }, { text: "Catalogue status" }]) +
-      "<h2>Catalogue status</h2>" +
-      '<p class="lede">How much of the catalogue exists, and at what depth. This is a ' +
-      "statement about Harrier, not about anybody's coverage of a target.</p>" +
+    return crumbs([{ text: "About", href: "#/about" },
+                   { text: "Catalogue status and model" }]) +
+      "<h2>Catalogue status and model</h2>" +
+      '<p class="lede">How much of the catalogue exists, at what depth, how far the ' +
+      "chain runs from it, and how the seven families of capability connect. Every " +
+      "figure is a statement about Harrier, not about anybody's coverage of a " +
+      "target.</p>" +
       "<table>" +
       "<tr><th>WSTG test cases pinned</th><td>" + c.wstg_pinned + "</td></tr>" +
       "<tr><th>Claimed by a topic</th><td>" + c.wstg_covered + " of " + c.wstg_coverable + " resolvable</td></tr>" +
@@ -1735,10 +1920,15 @@
       "<tr><th>Capabilities no test uses</th><td>" + (D.deadEnds || []).length +
       ' <span class="muted">— impacts excluded</span></td></tr>' +
       "</table>" +
-      '<p class="muted">Phase 5 charted reconnaissance through to primitives and stopped ' +
-      "there; primitive to impact is largely unwritten. That is why most chains end at " +
-      "the test that established a capability, and it is a gap in the chart rather than " +
-      "a claim that nothing follows.</p>";
+      /* Written from the figures beside it rather than from a phase that has
+         since been done: primitive to impact is charted now, and a page still
+         saying otherwise would be describing the version before last. */
+      '<p class="muted">Reconnaissance through to a primitive is charted, and so is ' +
+      "primitive to an outcome. What a defeated control permits is not: that is " +
+      "where most of the unused capabilities are, and it is a gap in the chart " +
+      'rather than a claim that nothing follows. The <a href="#/chains">chain ' +
+      "map</a> shows where it thins out.</p>" +
+      familyMatrix();
   };
 
   var viewAbout = function () {
@@ -1769,7 +1959,7 @@
       Object.keys(D.topics).length + " topics — and the depth behind it is not: " +
       authored + " are written to full procedural depth, " + sketched + " are sketched, " +
       "and what a defeated control permits is largely unwritten. " +
-      '<a href="#/status">Catalogue status</a> has the figures.</div>' +
+      '<a href="#/status">Catalogue status and model</a> has the figures.</div>' +
 
       "<h3>How to use it</h3>" +
       "<ol><li>Choose the standard, then the testing group you are working in.</li>" +
@@ -1822,7 +2012,7 @@
       "here.</p>" +
       "<p>Harrier is not affiliated with, endorsed by, or sponsored by OWASP.</p>" +
       '<p class="muted">Version ' + esc(D.version) + " · " +
-      '<a href="#/status">Catalogue status</a></p>';
+      '<a href="#/status">Catalogue status and model</a></p>';
   };
 
   var notFound = function (kind, id) {
@@ -1892,6 +2082,29 @@
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
     if (follow(e.target)) e.preventDefault();
+  });
+
+  /* Delegated rather than attached after each draw: the page is re-rendered
+     wholesale on every hash change, and a listener bound to an element that no
+     longer exists is a filter that silently stops filtering. */
+  document.addEventListener("input", function (e) {
+    if (!e.target || e.target.id !== "mapfilter") return;
+    var term = String(e.target.value || "").trim().toLowerCase();
+    var cells = document.querySelectorAll(".chainmap .mcell");
+    var shown = 0;
+    Array.prototype.forEach.call(cells, function (cell) {
+      var hit = !term ||
+        cell.textContent.toLowerCase().indexOf(term) >= 0 ||
+        String(cell.getAttribute("title") || "").toLowerCase().indexOf(term) >= 0;
+      cell.classList.toggle("off", !hit);
+      if (hit) shown += 1;
+    });
+    var count = document.getElementById("mapcount");
+    if (count) {
+      count.textContent = term
+        ? shown + " of " + cells.length + " capabilities"
+        : cells.length + " capabilities";
+    }
   });
 
   var box = document.getElementById("q");

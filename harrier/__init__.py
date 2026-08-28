@@ -82,7 +82,15 @@ SAFE_LOADER = _SafeLoader
 #: shapes that make one test worth reaching for before another. That sentence
 #: is also the only way into the catalogue that does not begin at the standard,
 #: so it is searched.
-__version__ = "0.12.0"
+#:
+#: 0.13.0 makes the page named for attack chains be about them. It opened on a
+#: matrix that said in its own second sentence that it drew no route, which is
+#: a page taking its name back; that matrix counts tests per pair of families
+#: and belongs with the other figures about the catalogue. What replaces it is
+#: the model as a picture -- every capability in a column for what kind of
+#: thing it is, shaded by how far the chart reaches from it, each one a way
+#: into the routes that run through it.
+__version__ = "0.13.0"
 
 __all__ = [
     "SAFE_LOADER",
