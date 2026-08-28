@@ -1694,6 +1694,11 @@
       "<tr><th>Written to full depth</th><td>" + c.units_authored + "</td></tr>" +
       "<tr><th>Sketched</th><td>" + c.units_sketched +
       ' <span class="muted">— the procedure and what refutes it, without the record-keeping</span></td></tr>' +
+      // Reported rather than left as the remainder. It is the tier most of the
+      // catalogue sits at, and naming the other two while leaving the largest
+      // to be worked out is the half-honest figure this table exists to avoid.
+      "<tr><th>Outline only</th><td>" + (c.units - c.units_authored - c.units_sketched) +
+      ' <span class="muted">— an identifier, an objective and a place in the chain</span></td></tr>' +
       "<tr><th>Placed in the chain</th><td>" + c.units_charted + "</td></tr>" +
       "<tr><th>Capabilities</th><td>" + Object.keys(D.facts).length + "</td></tr>" +
       "</table>" +

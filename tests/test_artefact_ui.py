@@ -1078,6 +1078,11 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         depths = [u.get("status", "authored") for u in self.data["units"].values()]
         self.assertShows(text, f"Written to full depth {depths.count('authored')}")
         self.assertShows(text, f"Sketched {depths.count('sketched')}")
+        self.assertShows(text, f"Outline only {depths.count('outline')}")
+        # The three tiers are the catalogue: a row that stopped agreeing with
+        # the total would be a depth figure quietly counting something else.
+        self.assertEqual(sum(depths.count(t) for t in ("authored", "sketched", "outline")),
+                         len(self.data["units"]))
 
     def test_the_about_page_says_what_the_file_does_not_know(self):
         text = self.text("#/about")
