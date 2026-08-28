@@ -3,6 +3,7 @@
 import collections
 import unittest
 
+from harrier import Repository
 from harrier.chain import Chain
 from harrier.validate import coverage, validate
 from tests.support import REPO_ROOT, messages
@@ -179,7 +180,11 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
             ("WSTG identifiers pinned", f"{self.counts['wstg_pinned']}, across 12 testing groups"),
             ("Claimed by a Harrier topic",
              f"{self.counts['wstg_covered']} of {self.counts['wstg_coverable']} resolvable"),
-            ("Topics", f"{self.counts['topics']}, across 13 domains"),
+            # Derived, not written down: the sibling test below reads the same
+            # figure from the catalogue, and a literal here goes stale the first
+            # time a domain is added while that one keeps passing.
+            ("Topics", f"{self.counts['topics']}, across "
+                       f"{len({d.data['domain'] for d in Repository.load(REPO_ROOT).topics})} domains"),
             ("Test Units", str(self.counts["units"])),
             ("Written to full procedural depth", f"**{self.counts['units_authored']}**"),
             ("Outline only", str(self.counts["units"] - self.counts["units_authored"])),

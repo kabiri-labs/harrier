@@ -10,4 +10,4 @@ objective: >-
 
 requires:
   all_of: [primitive.workflow.skip]
-yields: [impact.value.obtained]
+yields: [impact.entitlement.gained]

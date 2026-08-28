@@ -1355,12 +1355,15 @@ facts:
     description: >
       Overlapping requests carry an operation past the limit that governs it.
 
-  - id: impact.value.obtained
-    label: Something of value is obtained
+  - id: impact.entitlement.gained
+    label: Goods, service or standing the caller was not owed
     tier: chain
     description: >
-      The workflow delivers goods, money, entitlement or standing that the
-      caller was not owed. Where a business-logic chain ends.
+      The application delivers something the caller had no claim to -- an item,
+      a service, a permission, a position in a queue. Distinct from money
+      changing hands, which is impact.money.lost: a reader deciding what to
+      report needs the two apart, because one is a loss on a ledger and the
+      other is a rule that did not hold.
 
   - id: access.host
     label: Access to the host itself is available
@@ -1387,3 +1390,67 @@ facts:
       returns content the ordinary method does not. Distinct from a method
       merely being answered, and distinct again from it defeating an
       authorization check.
+
+  # The outcomes a confirmed capability reaches. Written together, because the
+  # set has to partition what the catalogue's primitives actually obtain: a
+  # capability whose outcome is not here is one the chain still cannot finish,
+  # and an outcome nothing reaches is a claim about a catalogue that does not
+  # exist. Every one of them is terminal -- requiring an impact is rejected.
+
+  - id: impact.data.disclosed
+    label: Data the caller should not hold is read
+    tier: chain
+    description: >
+      Records, documents, memory or ciphertext the application never meant this
+      caller to see are recovered. What the disclosure is worth is decided by
+      what the data is, which is why the unit that establishes this asks rather
+      than assumes.
+
+  - id: impact.code.executed
+    label: Code of the attacker's choosing runs on the server
+    tier: chain
+    description: >
+      The application executes something the attacker supplied, in the context
+      the application itself runs as. What it reaches from there -- the account,
+      the filesystem, the network behind it -- is the question the outcome asks.
+
+  - id: impact.network.reached
+    label: A network position behind the perimeter is reachable
+    tier: chain
+    description: >
+      Requests issued by the application arrive somewhere the tester could not
+      address directly. The value is in what answers from there, not in the
+      request having left.
+
+  - id: impact.integrity.lost
+    label: Records the application later trusts are changed
+    tier: chain
+    description: >
+      State the caller had no right to alter is altered, and the application
+      goes on to read it back as though it were its own. A write nothing ever
+      reads is not this.
+
+  - id: impact.identity.forged
+    label: The application or its senders can be impersonated
+    tier: chain
+    description: >
+      A signature, a message envelope or a name the application's users trust
+      can be produced by somebody else. The outcome is what that trust is
+      spent on rather than the forgery itself.
+
+  - id: impact.visitor.compromised
+    label: Another user's session or browser is acted through
+    tier: chain
+    description: >
+      Something reaches a person who was not the attacker: their browser runs
+      supplied code, their request carries a change they did not make, or the
+      content served to them is chosen by somebody else. Kept apart from
+      disclosure because the party harmed is a third one.
+
+  - id: impact.money.lost
+    label: Money or billable value moves incorrectly
+    tier: chain
+    description: >
+      A transaction settles at a figure the business did not set, or an amount
+      owed is not collected. Separate from entitlement because it is a loss on
+      a ledger, and a report says so differently.

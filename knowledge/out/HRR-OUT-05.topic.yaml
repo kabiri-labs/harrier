@@ -1,0 +1,11 @@
+id: HRR-OUT-05
+title: "Impersonation of the application"
+domain: OUT
+kind: inquiry
+
+# Signature forgery, envelope control and a claimable delegated name are three
+# routes to one outcome -- being taken for the application by the people who
+# rely on it.
+
+order:
+  - HRR-OUT-05-IMPACT

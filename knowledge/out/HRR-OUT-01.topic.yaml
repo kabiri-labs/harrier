@@ -1,0 +1,12 @@
+id: HRR-OUT-01
+title: "Data disclosure"
+domain: OUT
+kind: inquiry
+
+# Reached from nine different capabilities because reading is the outcome most
+# routes arrive at: a query, a file, a document store, process memory,
+# another tenant's rows, another user's browser context, a fetched body, a
+# recovered ciphertext.
+
+order:
+  - HRR-OUT-01-IMPACT

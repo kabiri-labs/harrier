@@ -10,4 +10,4 @@ objective: >-
 
 requires:
   all_of: [control.clientstate.trusted]
-yields: [impact.value.obtained]
+yields: [impact.entitlement.gained]

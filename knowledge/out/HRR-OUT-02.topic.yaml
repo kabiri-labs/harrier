@@ -1,0 +1,10 @@
+id: HRR-OUT-02
+title: "Server-side code execution"
+domain: OUT
+kind: inquiry
+
+# One capability, five topics: command injection, template evaluation,
+# deserialisation, expression evaluation and file inclusion all arrive here.
+
+order:
+  - HRR-OUT-02-IMPACT

@@ -61,3 +61,9 @@ domains:
   - code: ERR
     name: Errors & information disclosure
     scope: Stack traces, verbose errors, debug endpoints, metadata leakage.
+  - code: OUT
+    name: Outcomes
+    scope: >-
+      What a confirmed capability is worth to the business. Not a place to test:
+      an outcome topic is reached from wherever a capability was established,
+      and its units ask what that capability actually obtained here.

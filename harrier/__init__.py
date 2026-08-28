@@ -57,7 +57,12 @@ SAFE_LOADER = _SafeLoader
 #:
 #: 0.8.1 makes the index resolve. It was schema-checked and not reference-checked,
 #: which for a derived file is the difference between a document and a claim.
-__version__ = "0.8.1"
+#:
+#: 0.9.0 gives the chain somewhere to arrive. Twenty-five capabilities were
+#: established by a test and declared as a use by nothing, so most chains ended
+#: at the capability that reached them; the outcome layer is what they end at
+#: now, and it asks what the capability obtained rather than asserting it.
+__version__ = "0.9.0"
 
 __all__ = [
     "SAFE_LOADER",
