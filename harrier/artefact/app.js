@@ -1535,7 +1535,13 @@
       '<div class="mfilter"><input id="mapfilter" type="search" ' +
       'placeholder="Filter capabilities" aria-label="Filter capabilities">' +
       '<span id="mapcount" class="muted">' + facts + " capabilities</span></div>" +
-      '<div class="scroller"><div class="chainmap">' + grid + "</div></div>";
+      /* Not inside a scroller. `overflow-x: auto` computes overflow-y to auto
+         as well, which makes the wrapper the nearest scrollport and leaves the
+         column headings sticky to a box that never scrolls -- so they slid away
+         at every width. The columns shrink instead: the map only overflowed
+         below about 900px, which is a narrow screen where wrapped text reads
+         better than a sideways scrollbar anyway. */
+      '<div class="chainmap">' + grid + "</div>";
   };
 
   var viewChains = function () {
@@ -2057,9 +2063,23 @@
     return { nav: "standards", html: viewStandards() };
   };
 
+  /* How far down the site header reaches, published to the stylesheet so a
+     sticky heading inside the page can stop underneath it rather than behind
+     it. Measured because the header wraps at narrow widths and is a different
+     height in each regime. */
+  var siteHeader = document.querySelector("header");
+  var measureHeader = function () {
+    if (!siteHeader) return;
+    document.documentElement.style.setProperty(
+      "--stick", Math.round(siteHeader.getBoundingClientRect().height) + "px"
+    );
+  };
+  window.addEventListener("resize", measureHeader);
+
   var draw = function () {
     var page = route();
     main.innerHTML = page.html;
+    measureHeader();
     Array.prototype.forEach.call(document.querySelectorAll("nav a"), function (a) {
       a.classList.toggle("on", a.dataset.nav === page.nav);
     });
