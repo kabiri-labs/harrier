@@ -3,10 +3,17 @@ title: "Data disclosure"
 domain: OUT
 kind: inquiry
 
-# Reached from nine different capabilities because reading is the outcome most
-# routes arrive at: a query, a file, a document store, process memory,
-# another tenant's rows, another user's browser context, a fetched body, a
-# recovered ciphertext.
+# Reached from eleven capabilities because reading is the outcome most routes
+# arrive at: a query, a file, a document store, process memory, another
+# tenant's rows, a peer account's rows, another user's browser context, a
+# fetched body, a recovered ciphertext.
+#
+# An arbitrary file read and a peer record read are here on their own merits
+# rather than only through what they might become. Each already had a consumer
+# -- one leading to execution, the other to bulk scale -- so the graph was
+# connected, but both routes are contingent on a further positive result. A
+# tester who confirms the read and cannot escalate it has a disclosure to
+# report, and had nowhere in the catalogue that said so.
 
 order:
   - HRR-OUT-01-IMPACT

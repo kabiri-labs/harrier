@@ -21,4 +21,6 @@ requires:
     - primitive.data.read.victim
     - primitive.fetch.readable
     - primitive.crypto.decrypt
+    - primitive.fs.read
+    - primitive.data.read.peer
 yields: [impact.data.disclosed]

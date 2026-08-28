@@ -37,9 +37,9 @@ The edge means: *if A succeeds, B may become relevant.* It does not mean B is
 now possible. B may need three other things as well, and one of them may be
 something no test can supply.
 
-**Why not name the next test directly.** The derivation currently yields 641
+**Why not name the next test directly.** The derivation currently yields 646
 unit-to-unit edges across 374 units, and that is with the far half of the chain
-barely charted. Written down they would be 641 hand-maintained links, each
+barely charted. Written down they would be 646 hand-maintained links, each
 needing to be inserted into the `next` list of every unit that could precede it
 — so the cost of adding a unit grows with the size of the catalogue, and the
 edges nobody updated look exactly like edges that were checked and found not to

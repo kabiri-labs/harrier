@@ -223,6 +223,20 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         total = sum(len(node["out"]) for node in self.chain.index().values())
         self.assertEqual(sum(tiers.values()), total)
 
+    def test_the_per_domain_topic_table_is_read_from_the_data(self):
+        """It went stale on the first domain added and nothing caught it: the
+        totals beside it were asserted, the breakdown that has to sum to them
+        was not. Every domain carrying a topic gets a cell, and the cells add
+        up to the published total."""
+        counts = collections.Counter(
+            doc.data["domain"] for doc in Repository.load(REPO_ROOT).topics
+        )
+        roadmap = self.docs["docs/ROADMAP.md"]
+        for code, n in counts.items():
+            with self.subTest(domain=code):
+                self.assertIn(f"`{code}` {n} ", roadmap + " ")
+        self.assertEqual(sum(counts.values()), self.counts["topics"])
+
     def test_the_group_and_domain_counts_in_that_table_are_real(self):
         from harrier import Repository
 

@@ -9,8 +9,8 @@ Units**, and derives the attack-chain continuations each success may open.
 
 > **Harrier 0.9.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
-> behind them is not: 10 units are written to full procedural depth, and the far
-> half of the attack chain is barely charted. [What that means in
+> behind them is not: 10 units are written to full procedural depth, and what a
+> defeated control permits is largely unwritten. [What that means in
 > numbers](#what-exists-today-and-what-does-not) is below, not buried at the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
@@ -194,8 +194,8 @@ stale in this file without the suite failing.
 | Chain | |
 |---|---|
 | Capabilities | 185 |
-| Derived unit-to-unit edges | 641 |
-| — of them escalations between capabilities | 285 |
+| Derived unit-to-unit edges | 646 |
+| — of them escalations between capabilities | 290 |
 | — another technique for the same test | 124 |
 | — a general prerequisite, not a step | 232 |
 | Tests with a potential continuation | 211 |
