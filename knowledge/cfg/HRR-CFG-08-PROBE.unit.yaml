@@ -12,6 +12,20 @@ requires:
 yields: [primitive.subdomain.claimable]
 closes: [primitive.subdomain.claimable]
 
+hypotheses:
+  - "The service was cancelled and the delegation was not, which is the ordinary way this arises."
+  - "A provider serves the same page for an unclaimed name and for one belonging to another customer, so the page does not decide it."
+  - "Some names are reserved by the provider and cannot be claimed by anybody, which is a delegation with no exposure behind it."
+
+triage:
+  - "A provider response matching that provider's documented unclaimed-resource page."
+  - "The provider's own naming rules for whether the specific name is registrable."
+  - "A delegation whose provider the target has no current relationship with."
+
+sink: >-
+  The provider's host routing, which binds an incoming name to whichever account
+  registered it -- and answers for a name no account holds.
+
 enter_when:
   - "The delegated names and the provider each points at have been recorded."
 

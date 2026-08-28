@@ -12,6 +12,20 @@ requires:
 yields: [surface.directory.listed]
 closes: [surface.directory.listed]
 
+hypotheses:
+  - "A directory without an index document is listed rather than refused, because listing is the server's default and nobody changed it."
+  - "The application's own catch-all page answers a directory request with a success status and no listing, which looks the same until the entries are read."
+  - "A listing suppressed at the edge is still a listing at the origin."
+
+triage:
+  - "Directory prefixes already present in the entry point inventory."
+  - "Paths that the deployment's naming implies exist between the ones that are linked."
+  - "A response containing entries that are files on disk rather than links the application authored."
+
+sink: >-
+  The server's directory index handler, which answers for a path with no
+  document behind it and lists what the filesystem holds there.
+
 oracle:
   positive: "A request for a directory with no index document returns a listing of what the directory holds."
   negative: "Every directory without an index answers with a refusal or an absent response, and none returns its contents."

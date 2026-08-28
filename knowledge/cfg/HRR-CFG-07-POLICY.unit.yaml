@@ -13,6 +13,17 @@ requires:
 yields: [control.permissions.excessive]
 closes: [control.permissions.excessive]
 
+hypotheses:
+  - "The serving account can write where it only ever reads, because a deployment step needed write once and nobody narrowed it afterwards."
+  - "A directory's mode decides more than the file's: a writable directory allows replacement of a file whose own mode looks correct."
+  - "Accounts with no part in serving the application can read its configuration, because the mode was set for a group rather than for a purpose."
+
+triage:
+  - "Which account the serving process actually runs as, rather than which one the documentation says."
+  - "Paths the application never writes to that the serving account can write."
+  - "Directories rather than files, since replacement does not need the file to be writable."
+  - "Configuration files readable beyond the account that serves them."
+
 oracle:
   positive: "A file or directory the application deploys is writable by the account that serves it, or readable by an account on the host that has no part in serving it."
   negative: "Every deployed path was listed with its owner and mode, and each grants the serving account read where it needs read and write only where the application must write."

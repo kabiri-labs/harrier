@@ -14,6 +14,18 @@ requires:
 motivated_by: [recon.traffic.captured]
 yields: [recon.entrypoints.mapped]
 
+hypotheses:
+  - "The client sends parameters the interface never shows, because the interface is one caller of the API and not its specification."
+  - "Values travel in more places than the query and the body: headers the framework binds, path segments, cookie fields, parts of an upload."
+  - "The application's own bundles, source maps and schema documents name endpoints the interface never navigates to."
+  - "The same backend serves more than one client, and each client reaches a different part of it."
+
+triage:
+  - "Endpoints named in client-side code that no interaction reaches."
+  - "A schema or specification document the API publishes about itself: openapi.json, swagger-ui, a graphql endpoint, a wp-json route."
+  - "Responses whose fields have no matching request parameter, which usually means the write path accepts more than the read path shows."
+  - "Requests that answer without a session, since who can reach an entry point decides which tests apply to it."
+
 sequence:
   - "Drive the application through its own interface with a proxy recording, covering each role the engagement grants."
   - "Read the client's own code for requests the interface does not exercise: bundles, source maps, service workers and the schema documents an API publishes about itself."

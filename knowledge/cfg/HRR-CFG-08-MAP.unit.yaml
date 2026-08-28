@@ -13,6 +13,16 @@ requires:
   all_of: [recon.target.reachable]
 yields: [recon.delegation.mapped]
 
+hypotheses:
+  - "A delegation outlives the resource it points at, because removing the record is a separate task from cancelling the service."
+  - "A name pointing at a service the target itself operates looks like a third party in the answer and is not delegated at all."
+  - "Mail and name-service delegations are delegations too, and are reviewed less often than the web ones."
+
+triage:
+  - "Recorded names whose answer points somewhere other than the target's own addresses."
+  - "The provider each delegation names, and the resource name it asks that provider for."
+  - "Mail and name-service records, not only the ones serving pages."
+
 sequence:
   - "Resolve every recorded name and keep the ones whose answer points at a third-party service rather than at the target's own addresses."
   - "For each, record the provider it names and the resource name the delegation asks that provider for."

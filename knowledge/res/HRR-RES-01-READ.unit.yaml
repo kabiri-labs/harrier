@@ -12,6 +12,20 @@ requires:
 motivated_by: [recon.approot.disclosed, control.pathfilter.identified]
 yields: [primitive.fs.read]
 
+hypotheses:
+  - "A resolver clamps at the filesystem root, so overshooting the depth costs nothing and resolving it exactly is unnecessary."
+  - "A file the operating system always has is a reliable target; a file the application has is a guess."
+  - "The body is what is being read, so a successful status with a page in it is not a file."
+
+triage:
+  - "The operating system already identified, which decides the target rather than habit."
+  - "A fingerprint the target file carries that no error page reproduces."
+  - "A response the browser downloads rather than renders, whose body may not have been read at all."
+
+sink: >-
+  The file the resolver opens and the application returns in the response body,
+  chosen by a path the caller wrote.
+
 enter_when:
   - "The probe established that the parameter resolves a path."
 

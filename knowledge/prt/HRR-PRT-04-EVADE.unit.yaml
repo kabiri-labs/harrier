@@ -12,6 +12,16 @@ requires:
   all_of: [recon.tiers.mapped]
 yields: [control.filter.identified]
 
+hypotheses:
+  - "A refusal has two opposite readings: the layers agreeing on what the path means, or the front layer rejecting a form the origin would have read differently."
+  - "Each layer's filter rejects a set of forms, and the set is what a later attempt has to survive."
+  - "A filter that rejects on sight never resolves the path, so its refusal says nothing about what the origin would have done."
+
+triage:
+  - "A refused form, varied one property at a time rather than replaced wholesale."
+  - "Which layer's refusal shape each response matches."
+  - "Encoding depth, which separator is encoded, and whether the payload rides in a path parameter."
+
 sequence:
   - "Take a form that was refused, and vary one property of it at a time: the encoding depth, which separator is encoded, whether a dot segment is spelled with an extra character, whether a path parameter carries the payload."
   - "For each variant, record which layer refused it, using the fingerprint of each layer's own refusal rather than the status alone."

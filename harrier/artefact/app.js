@@ -362,9 +362,14 @@
       return { title: D.wstg[id], sub: id, href: "#/case/" + encodeURIComponent(id) };
     }));
 
+    /* Searched over the orientation fields as well as the title: a tester who
+       has just seen a parameter named `tpl` has no way in from the standard,
+       and that -- from evidence in front of you to the test that reads it --
+       is the one route into the catalogue nothing else answers. */
     push("Tests", Object.keys(D.units || {}).filter(function (id) {
       var u = D.units[id];
-      return has(id) || has(u.title) || has(u.objective);
+      return has(id) || has(u.title) || has(u.objective) || has(u.sink) ||
+        (u.triage || []).some(has);
     }).sort().map(function (id) {
       return {
         title: D.units[id].title, sub: id,
@@ -1236,6 +1241,13 @@
             '">' + esc(topic.title || unit.topic) + "</a>.</p>"
           : ""));
     }
+
+    /* Orientation before procedure: what this assumes, where to start looking,
+       and where a controlled input comes to rest. A reader who cannot answer
+       the second one has nothing to point the sequence at. */
+    if (unit.hypotheses) block("What this assumes", list(unit.hypotheses, "ul"));
+    if (unit.triage) block("Where to start", list(unit.triage, "ul"));
+    if (unit.sink) block("Where the input lands", "<p>" + esc(unit.sink) + "</p>");
 
     if (unit.enter_when) block("Enter when", list(unit.enter_when, "ul"));
     if (unit.preconditions) block("Preconditions", list(unit.preconditions, "ul"));

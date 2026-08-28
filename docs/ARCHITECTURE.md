@@ -299,6 +299,7 @@ material never has to be filed somewhere it does not belong.
 
 The most important page in the product, and ordered by what a person needs in
 the order they need it: title, what it is for, why it is a separate test at all,
+what it assumes and where to start looking, where a controlled input lands,
 what has to be in place, what settles it, how to perform it, what will fool you,
 what counts as finished, where to stop, then payloads, tools, depth, mitigation,
 mappings, and the local chain. The objective, the oracle, the first false

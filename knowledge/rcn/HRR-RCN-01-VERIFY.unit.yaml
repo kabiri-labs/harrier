@@ -13,6 +13,16 @@ requires:
   all_of: [recon.platform.identified]
 yields: [recon.platform.confirmed]
 
+hypotheses:
+  - "A banner is edited far more often than a parsing quirk, so agreement between two kinds of signal is worth more than repetition of one kind."
+  - "An intermediary that rewrites the banner rewrites its own error pages too, so two signals from one layer corroborate that layer and not the origin."
+  - "The application's own stack and the platform serving it are different products, and a signal may name either."
+
+triage:
+  - "Any signal produced by code rather than by configuration: parse behaviour, ordering, rounding, default limits."
+  - "Whether the first signal came from a header, which is editable, or from a response body the platform generates."
+  - "Cookie naming that a platform applies without the application asking for it."
+
 sequence:
   - "Take the identification already made, and write down which signal produced it."
   - "Find a second signal the operator has no reason to have edited: the wording and ordering of a header set on an error the application did not author, the shape of a redirect, the name of a session cookie, the parse of a deliberately malformed request."

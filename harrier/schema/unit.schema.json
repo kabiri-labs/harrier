@@ -24,6 +24,18 @@
       }
     },
     "questions": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 15}},
+    "hypotheses": {
+      "description": "The mechanisms that, if they hold, are why this test succeeds. Plural on purpose: one hypothesis is the objective restated, and the value of the field is that a reader can rule them out one at a time.",
+      "type": "array", "minItems": 2, "items": {"type": "string", "minLength": 20}
+    },
+    "triage": {
+      "description": "What in the target makes this test worth reaching for sooner -- parameter naming, endpoint shapes, signals in a response. Observational, where motivated_by is a catalogue fact: no fact captures 'parameters named file, path, page or tpl', and that is the sentence a tester actually starts from.",
+      "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 12}
+    },
+    "sink": {
+      "description": "Where an input the tester controls comes to rest, and what interprets it there. A proposition rather than the tag `surfaces` carries: the tag says a parameter reaches a query, this says which query and what parses it.",
+      "type": "string", "minLength": 25
+    },
     "done_when": {"type": "string", "minLength": 25},
     "sequence": {"type": "array", "minItems": 2, "maxItems": 6, "items": {"type": "string", "minLength": 10}},
     "first_false_positive": {"type": "string", "minLength": 20},
@@ -93,6 +105,11 @@
       "description": "An inquiry at full depth names the answer that most often looks right and is not, in place of the oracle it cannot carry.",
       "if": {"allOf": [{"$ref": "#/$defs/is_authored"}, {"$ref": "#/$defs/is_inquiry"}]},
       "then": {"required": ["enter_when", "preconditions", "evidence", "first_false_positive"]}
+    },
+    {
+      "description": "A sink is where an input the tester controls is interpreted, so only a unit that sends one has one. Forbidden rather than merely unused on the other two kinds, for the same reason the oracle is: an optional field with nothing to say gets filled with \"not applicable\" and stops meaning anything.",
+      "if": {"anyOf": [{"$ref": "#/$defs/is_recon"}, {"$ref": "#/$defs/is_inquiry"}]},
+      "then": {"not": {"required": ["sink"]}}
     },
     {
       "description": "Forbidding the oracle on a recon unit is the point: while it was merely optional, units wrote 'not applicable' into it and the field stopped meaning anything.",

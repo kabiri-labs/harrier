@@ -13,6 +13,16 @@ requires:
 yields: [surface.origin.direct]
 closes: [surface.origin.direct]
 
+hypotheses:
+  - "The origin was reachable before the intermediary was put in front of it, and the address it answered on did not change."
+  - "A certificate served by an address, or a name that resolves past the front, points at the origin more reliably than any header does."
+  - "Another node of the same intermediary answers identically to the first, which looks exactly like reaching the origin."
+
+triage:
+  - "Addresses recorded during name mapping that the application does not resolve to today."
+  - "Certificates served by addresses in scope that name the application."
+  - "The intermediary's own markers in a response, whose absence is what distinguishes the origin from another node of the same product."
+
 sequence:
   - "Find candidate origin addresses from what the engagement already grants: names that resolve past the intermediary, addresses recorded during name mapping, and the certificates those addresses serve."
   - "Request the application from each candidate directly, naming the application's host in the request so the origin routes it as it would normally."

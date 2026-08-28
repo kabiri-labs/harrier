@@ -12,6 +12,20 @@ requires:
 yields: [control.objectstore.enumerable]
 closes: [control.objectstore.enumerable]
 
+hypotheses:
+  - "Object names are built from something the application already knows: a counter, a time, an account identifier, the original filename."
+  - "A store that refuses listing may still serve any object whose name is asked for correctly."
+  - "A name that reveals the uploader reveals more than the object does."
+
+triage:
+  - "Object names the application hands out, collected across more than one account."
+  - "The part of the name that varies between them, and whether anything in it is unguessable."
+  - "Names preserving the original filename, which makes the guess a dictionary rather than a search."
+
+sink: >-
+  The store's object key lookup, which resolves a name to an object without
+  asking who is asking or what the application would have decided.
+
 oracle:
   positive: "An object the tester was never given a link to is retrievable by deriving its name -- from a sequence, a timestamp, an account identifier, or the original filename."
   negative: "Object names carry enough that is unguessable that derived candidates return nothing the store will serve."

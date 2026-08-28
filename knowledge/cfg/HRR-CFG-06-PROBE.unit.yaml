@@ -13,6 +13,20 @@ requires:
 yields: [control.plugin.policy.permissive]
 closes: [control.plugin.policy.permissive]
 
+hypotheses:
+  - "A policy file outlives the plugin that read it, because withdrawing a file is nobody's task once the plugin is gone."
+  - "A grant written when the file mattered was written broadly, since narrowing it required knowing who needed it."
+  - "A permissive policy and a usable one are different findings, and a target shipping no plugin content has only the first."
+
+triage:
+  - "The policy locations -- crossdomain.xml, clientaccesspolicy.xml, and the socket policy port -- requested on every recorded name including the ones serving only static content."
+  - "A wildcard domain, a wildcard header set, or a socket policy naming arbitrary ports."
+  - "Whether anything the target ships still reads these files at all."
+
+sink: >-
+  A plugin runtime that would read the policy and grant on it -- retired from
+  current browsers, which is exactly what separates the grant from a route.
+
 oracle:
   positive: "A cross-domain policy file is served and grants wider than the target's own origins: a wildcard domain, a wildcard header set, or a socket policy opening arbitrary ports. The grant is the result whether or not anything here still reads it -- what this unit establishes is the state of the control, not a route somebody can take today."
   negative: "Every policy location was requested on every recorded name, and none is served or none grants beyond the target's own origins."

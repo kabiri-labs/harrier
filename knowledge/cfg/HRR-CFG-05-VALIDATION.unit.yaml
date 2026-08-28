@@ -12,6 +12,22 @@ requires:
   all_of: [recon.entrypoints.mapped]
 yields: [control.headers.permissive]
 
+hypotheses:
+  - "A directive that is misspelled is ignored silently, and the policy still looks present."
+  - "A nonce in the header protects nothing unless every inline block the policy covers carries it."
+  - "Adding a second declaration to widen a policy narrows it instead, because each declaration is enforced in full."
+  - "A policy in the document and a policy in the header both apply, rather than one replacing the other."
+
+triage:
+  - "Directive names and values checked against the specification rather than against what they appear to say."
+  - "The same header declared more than once on one response."
+  - "A nonce or hash in the policy, checked against the blocks the served document actually carries."
+  - "What the browser itself reports about the policy it applied."
+
+sink: >-
+  The browser's own policy parser, which is the only reader whose interpretation
+  counts -- and which silently drops what it does not understand.
+
 oracle:
   positive: "A declared policy is one a browser will not honour as written: a misspelled or unsupported directive, a nonce declared in the header that no inline block carries, a directive whose form the browser rejects, or a second declaration of the same header that does not do what its author expected of it."
   negative: "Every declared directive is spelled as its specification requires, appears once, and is one the browsers in scope enforce."

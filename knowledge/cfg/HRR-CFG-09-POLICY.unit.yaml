@@ -12,6 +12,22 @@ requires:
 yields: [control.objectstore.public]
 closes: [control.objectstore.public]
 
+hypotheses:
+  - "The store has its own access policy, and the application's permissions never see it."
+  - "Reading, listing and writing are granted separately, so refusing one says nothing about the others."
+  - "Content the application publishes anyway is public by design, and finding it public proves nothing."
+  - "Tooling signs requests from credentials in the environment without being asked, which turns an anonymous test into an authenticated one."
+
+triage:
+  - "The store and container the application's own delivery resolves to."
+  - "A listing request made explicitly without credentials."
+  - "A write under a name of the tester's own, since write is set separately from read."
+  - "Any token the engagement grants, read for its scope and its expiry rather than for its stated purpose."
+
+sink: >-
+  The store's own policy evaluation, which decides on the caller and the object
+  before the application that owns the data is involved at all.
+
 oracle:
   positive: "The store grants an anonymous caller, or any authenticated caller of the provider, more than the application's own permissions allow: listing the container, reading objects, or writing to it."
   negative: "Every operation was attempted without provider credentials and each is refused by the store itself."

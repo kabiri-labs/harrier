@@ -692,6 +692,26 @@ class SearchRetrievesEverythingTheFileCarries(unittest.TestCase):
         self.assertIn("Tests", found)
         self.assertIn("Payloads", found)
 
+    def test_a_parameter_name_finds_the_test_that_starts_from_it(self):
+        """The one route into the catalogue that does not begin at the standard:
+        a tester who has just seen a parameter named `tpl` cannot get here from
+        WSTG, and `triage` is where that name is written down."""
+        hits = run_in_node("""
+            return H.searchAll(D, "tpl").filter(function (g) { return g.kind === "Tests"; })
+              .map(function (g) { return g.items.map(function (i) { return i.sub; }); })[0] || [];
+        """, self.data)
+        self.assertIn("HRR-RES-01-PROBE", hits)
+        # Not reachable from the title or the objective, which is the point.
+        unit = self.data["units"]["HRR-RES-01-PROBE"]
+        self.assertNotIn("tpl", (unit["title"] + unit["objective"]).lower())
+
+    def test_a_sink_is_searchable_as_prose(self):
+        hits = run_in_node("""
+            return H.searchAll(D, "file resolver").filter(function (g) { return g.kind === "Tests"; })
+              .map(function (g) { return g.items.length; })[0] || 0;
+        """, self.data)
+        self.assertGreater(hits, 0)
+
     def test_a_capability_is_retrievable_by_its_label(self):
         self.assertIn("Capabilities", dict(self.kinds("session identifier")))
 
@@ -1077,6 +1097,26 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         outline = self.text("#/unit/" + uid)
         self.assertShows(outline, "this test is an outline")
         self.assertNotIn("this test is sketched", outline.lower())
+
+    def test_the_orientation_fields_are_rendered_before_the_procedure(self):
+        """Where to start comes before how to run it. A reader who cannot answer
+        the first has nothing to point the sequence at."""
+        page = self.open("#/unit/HRR-RES-01-PROBE")
+        text = self.driver.text()
+        for section in ("What this assumes", "Where to start", "Where the input lands"):
+            self.assertShows(text, section)
+        labels = [t.strip().lower() for t in page.locator("main .k").all_inner_texts()]
+        self.assertLess(labels.index("where to start"), labels.index("sequence"),
+                        "orientation is printed below the procedure it orients")
+        self.assertLess(labels.index("what this assumes"), labels.index("oracle"))
+
+    def test_a_recon_unit_shows_no_sink(self):
+        """The schema forbids the field there; this is the page agreeing, so a
+        section cannot appear from a stale build."""
+        page = self.open("#/unit/HRR-RCN-02-MAP")
+        labels = [t.strip().lower() for t in page.locator("main .k").all_inner_texts()]
+        self.assertIn("where to start", labels)
+        self.assertNotIn("where the input lands", labels)
 
     def test_the_status_page_reports_each_tier_separately(self):
         text = self.text("#/status")

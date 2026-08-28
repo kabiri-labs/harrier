@@ -13,6 +13,16 @@ requires:
   all_of: [recon.target.reachable]
 yields: [recon.names.mapped]
 
+hypotheses:
+  - "One address commonly fronts several names, and the operator did not intend all of them to be found together."
+  - "A certificate lists the names its operator meant to serve from one place, which is a statement about grouping and not about ownership."
+  - "A wildcard or catch-all record answers for names that were never configured, so resolution alone proves nothing exists."
+
+triage:
+  - "The subject alternative names on every certificate served by an address already in scope."
+  - "Names that resolve into an address range the engagement granted, and names that resolve outside it."
+  - "A record that answers for a name the target cannot plausibly have, which marks the catch-all before any guessing starts."
+
 sequence:
   - "Start from the names the engagement already grants, and expand only from what those resolve to."
   - "Read the subject alternative names off each certificate served and hold them as candidates: a shared certificate lists the tenants beside the target as readily as the target."

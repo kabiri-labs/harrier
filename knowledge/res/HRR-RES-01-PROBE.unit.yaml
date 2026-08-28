@@ -12,6 +12,21 @@ requires:
   any_of: [access.anon, access.user]
 yields: [surface.path.traversable]
 
+hypotheses:
+  - "The application builds a filesystem path by joining its own root to something the caller sent."
+  - "The link is hidden rather than the file protected, so the parameter is trusted because nobody was expected to change it."
+  - "Normalisation happens after the join rather than before, which is what makes a relative sequence arithmetic rather than text."
+
+triage:
+  - "Parameters named for what they carry: file, path, page, tpl, template, view, doc, download, lang."
+  - "Endpoints that render or return a local asset: previews, exports, viewers, report generators."
+  - "An error naming a filesystem base path, an include path, or a directory the caller never mentioned."
+  - "A deployment mixing operating systems, where the filter was written for one of them."
+
+sink: >-
+  The path the application hands to the platform's file resolver, built by
+  joining a root it chose to a value the caller supplied.
+
 enter_when:
   - "A parameter carries a filename, a path, an extension, or a value that appears in the response as a document."
   - "The inventory recorded a parameter named for a file: file, path, page, template, doc, view, lang, download."

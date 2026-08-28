@@ -12,6 +12,20 @@ requires:
   all_of: [surface.method.extra]
 yields: [surface.method.effective]
 
+hypotheses:
+  - "A server can accept a method, answer politely, and act on nothing."
+  - "A method registered by the framework often reaches a handler the application never meant to expose."
+  - "Where the method echoes rather than writes, what comes back is whatever the request carried, including headers the caller did not set."
+
+triage:
+  - "A method whose handler would change state: one that creates, replaces or removes."
+  - "A method that reflects the request back rather than acting on it."
+  - "A resource the tester created, which is the only safe target for this."
+
+sink: >-
+  The handler the framework bound to that verb, which is code the application
+  routes to without the interface ever issuing the request.
+
 oracle:
   positive: "A method the application does not use has an effect: it changes what a later request returns, is reflected back to the caller, or creates something retrievable."
   negative: "Every accepted method was exercised against a resource the tester owns and none changed what a later request returns or reflected anything back."

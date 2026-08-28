@@ -12,6 +12,18 @@ requires:
   all_of: [recon.names.mapped]
 yields: [recon.hosts.enumerated]
 
+hypotheses:
+  - "Distinct applications behind one address differ in what they set rather than in what they serve: the cookie names, the security headers, the technologies those name."
+  - "Non-standard ports carry the interfaces nobody meant to publish, because the standard ones are the ones that get reviewed."
+  - "A reverse proxy routes path prefixes to different backends, so one name can front several applications."
+  - "A catch-all answers every unconfigured name with one application, which makes a large list look like a large surface."
+
+triage:
+  - "A title, a cookie name or a security header that differs from the one the main name serves."
+  - "Ports beyond the standard pair that the engagement grants, and whether a name answers on them at all."
+  - "Path prefixes that redirect somewhere else, or answer with a technology the main application does not use."
+  - "A response identical to the one an impossible name produces, which is the catch-all rather than an application."
+
 sequence:
   - "Request the root of each recorded name, and each address at the ports the engagement allows, following redirects and keeping where they land."
   - "Record the identifiers that distinguish one application from another: the title, the cookie names it sets, its security headers and the technologies they name."

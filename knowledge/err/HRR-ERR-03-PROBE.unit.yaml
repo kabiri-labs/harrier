@@ -13,6 +13,18 @@ requires:
   any_of: [access.anon, access.user]
 yields: [control.content.internal]
 
+hypotheses:
+  - "What a build strips from the page it leaves in the map beside it."
+  - "State the server rendered into the document carries fields the interface never displays."
+  - "A configuration object placed on the page for the client to read is readable by everybody the page reaches."
+  - "An error response is written by whoever was debugging last, and says more than the interface ever chose to."
+
+triage:
+  - "A source map reference at the foot of a bundle."
+  - "Embedded state and configuration blocks in the served document."
+  - "Comments in code the build did not strip, particularly ones naming hosts or ticket identifiers."
+  - "The application's own error and empty-state responses, triggered rather than waited for."
+
 oracle:
   positive: "A delivered artefact carries detail the interface never displays -- an internal host name, a filesystem path, an identifier belonging to another account, a credential, or a comment naming an unreleased feature."
   negative: "Every delivered artefact was read, and each carries only what the interface itself shows."

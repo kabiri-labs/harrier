@@ -13,6 +13,16 @@ requires:
 yields: [surface.param.hidden]
 closes: [surface.param.hidden]
 
+hypotheses:
+  - "The server binds a whole object from the request while the interface only ever fills part of it."
+  - "A parameter that the interface stopped sending is often still read, because removing the field from the client is easier than removing it from the handler."
+  - "Framework conventions name parameters predictably, so what an object returns is a good guess at what its handler accepts."
+
+triage:
+  - "Field names the API returns but never accepts in the request the interface makes."
+  - "Parameters the platform's own framework reads by convention rather than by the application declaring them."
+  - "Arguments named in the API's published documentation that the client never sends."
+
 sequence:
   - "Start from the parameter names the inventory already holds and from the names the platform's own conventions supply -- the fields of an object the API returns, the arguments its documentation names, the settings its framework reads."
   - "Submit each candidate to an entry point that already accepts a related parameter, one at a time, with a value the response would have to echo or act on."

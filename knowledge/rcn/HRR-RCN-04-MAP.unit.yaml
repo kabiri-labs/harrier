@@ -13,6 +13,17 @@ requires:
   all_of: [recon.target.reachable]
 yields: [recon.tiers.mapped]
 
+hypotheses:
+  - "More than one component answers, and each was configured by different people at different times."
+  - "A control observed at one tier says nothing about the next, which is why the count of tiers matters before any of them is tested."
+  - "The tier that answers an ordinary request is often not the tier that answers an unusual one."
+
+triage:
+  - "Headers an intermediary adds about itself, and the order they arrive in."
+  - "Headers naming a cache decision, an age, or a hop count."
+  - "A response to an unmapped path or an unsupported method, which is usually authored by a different layer from the one serving the application."
+  - "A difference between the answer from outside and the answer from any second position the engagement grants."
+
 sequence:
   - "Request a resource and read what the response says about the hops it crossed: the headers an intermediary adds about itself, the ones naming a cache decision, and the ordering they arrive in."
   - "Send a request the origin would answer differently from anything in front of it -- an unmapped path, a malformed version, a method the application does not use -- and record which layer answered."

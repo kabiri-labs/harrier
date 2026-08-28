@@ -12,6 +12,16 @@ requires:
   all_of: [recon.names.mapped]
 yields: [recon.paths.indexed]
 
+hypotheses:
+  - "What was public once stays retrievable after the target withdraws it, because the holder is not the target."
+  - "The organisation's name is indexed on properties the organisation does not operate."
+  - "A copy carries a date, and the date is what makes it evidence rather than a rumour."
+
+triage:
+  - "Results under the granted names, held by indexes, caches and archives."
+  - "Results under the organisation's naming on code hosting, package registries and document stores."
+  - "The date each holder gives for its copy, and whether the holder still serves the content or only the reference."
+
 sequence:
   - "Query each public index, cache and archive for the recorded names, and collect what each holds for the target."
   - "Record for every copy the URL it was taken from, the date the holder gives it, and whether the holder still serves the content or only the reference."

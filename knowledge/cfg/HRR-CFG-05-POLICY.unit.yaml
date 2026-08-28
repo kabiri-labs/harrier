@@ -11,6 +11,17 @@ requires:
   all_of: [recon.entrypoints.mapped]
 yields: [control.headers.permissive]
 
+hypotheses:
+  - "A policy is added to satisfy a checklist that asks whether the header is present, not what it permits."
+  - "A directive broad enough to host anything permits anything hosted there, including content the target does not control."
+  - "A report-only declaration appears in every header dump and enforces nothing."
+
+triage:
+  - "Directives naming a source broad enough to include content the target does not control."
+  - "Inline and evaluation permissions inside a script policy."
+  - "A transport policy whose lifetime is zero or nominal."
+  - "A policy declared only in report-only form."
+
 oracle:
   positive: "A declared policy permits what its presence suggests it prevents: a script policy allowing inline execution or a source broad enough to host anything, a transport policy whose lifetime is zero or nominal, a framing rule absent from the policy that declares one."
   negative: "Every declared policy was read directive by directive and each permits only what it names."

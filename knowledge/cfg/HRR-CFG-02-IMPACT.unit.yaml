@@ -11,6 +11,16 @@ requires:
   all_of: [surface.file.unlinked]
 yields: [control.content.internal]
 
+hypotheses:
+  - "A copy of a file the application compiles or interprets carries the source rather than the output."
+  - "Configuration is where credentials are, which is why a configuration copy is the one that matters."
+  - "A value shaped like a credential may already be rotated, and the two are different findings."
+
+triage:
+  - "Files whose name shadows one the application serves as an executed page."
+  - "Content carrying assignment shapes: a key and a value, a connection string, a private key header."
+  - "Names that resolve inside a network the caller is not on."
+
 oracle:
   positive: "A file the server returns carries content the operator would not have chosen to publish: source the application otherwise compiles away, a credential or key, an internal host name, or data belonging to the application's users."
   negative: "Every unlinked file found was read and each carries only content the application already publishes elsewhere."

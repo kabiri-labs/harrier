@@ -12,6 +12,16 @@ objective: >-
 requires:
   all_of: [recon.platform.identified]
 
+hypotheses:
+  - "An administrative interface nobody looked for is not an interface nobody deployed."
+  - "A component ships its console at a path its documentation names, and the deployment kept the default."
+  - "A path guessed from a generic list produces requests nobody can act on; a path taken from the identified product names something real."
+
+triage:
+  - "The console paths belonging to each component the identified platform runs."
+  - "An administrative prefix on any of the recorded names: admin, manage, console, internal, portal."
+  - "Paths named in client-side code that the interface never navigates to."
+
 sequence:
   - "From the identified platform and its components, list the administrative interfaces each ships and the paths each uses by default."
   - "Add the names the target's own conventions suggest: an administrative prefix on the recorded names, and the paths its client-side code refers to but never navigates to."
