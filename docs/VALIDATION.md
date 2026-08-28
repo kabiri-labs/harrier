@@ -59,7 +59,9 @@ checked.
 - an oracle reading `n/a` is rejected; a rule with a socially acceptable escape
   hatch stops being a rule. The same applies to a `triage` or `hypotheses` entry
 - a `triage` entry written as an instruction to look around rather than a place
-  to start is rejected, by the gate that governs `objective`. `hypotheses` is
+  to start is rejected. Matched at the head of the entry rather than anywhere in
+  it: the field carries the literal token a tester will type, and a target can
+  have a parameter named `review` or an endpoint at `/explore`. `hypotheses` is
   deliberately exempt from that gate: it states a claim about the target rather
   than an instruction, and the verb list would reject the plainest true thing
   the field has to say

@@ -35,6 +35,17 @@ VAGUE_DONE = re.compile(
     re.IGNORECASE,
 )
 
+#: An instruction to look around, in the position an instruction takes: at the
+#: head of the entry. `triage` records the tokens a tester will see and type,
+#: and a target really can have a parameter named `review` or an endpoint at
+#: `/explore` -- matching those anywhere in the line would reject exactly what
+#: the field exists to make searchable. What it still catches is the entry that
+#: replaces a starting point with a suggestion to go and find one.
+VAGUE_TRIAGE = re.compile(
+    r"^\s*(investigate|review|explore|look (?:at|into)|assess|examine)\b",
+    re.IGNORECASE,
+)
+
 #: An oracle that declines to state one. Forbidding the escape hatch is the
 #: point: a rule with an accepted way out stops being a rule.
 PLACEHOLDER = re.compile(r"^\s*(n/?a|not applicable|none|tbd|todo|-+)\s*\.?\s*$", re.IGNORECASE)
@@ -389,15 +400,18 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
             if PLACEHOLDER.match(str(text)):
                 problems.add(doc.rel, f"oracle.{field} is a placeholder, not an oracle")
 
-        # triage is an instruction -- where to look first -- so it meets the
-        # same gate the objective does: "review the parameters" is not a
-        # starting point. hypotheses meets only the placeholder rule, because a
-        # hypothesis is a statement about the target rather than an instruction,
-        # and "nobody reviewed the non-standard ports" is exactly the kind of
-        # claim the field is for. Applying the verb list to both rejected that
-        # sentence, which is the gate being wrong rather than the sentence.
+        # triage is an instruction -- where to look first -- so an entry that
+        # only suggests looking is rejected. Matched at the head of the line
+        # rather than anywhere in it: the field's whole job is to carry the
+        # literal token a tester will type, and a parameter named `review` is a
+        # starting point rather than a failure to name one.
+        #
+        # hypotheses meets only the placeholder rule. A hypothesis is a claim
+        # about the target rather than an instruction, and the verb list
+        # rejected "the non-standard ports are the ones nobody reviews", which
+        # is the plainest true thing the field has to say.
         for entry in doc.data.get("triage") or []:
-            if VAGUE_OBJECTIVE.search(str(entry)):
+            if VAGUE_TRIAGE.match(str(entry)):
                 problems.add(
                     doc.rel,
                     f"triage entry is not a place to start looking: {entry!r}",
