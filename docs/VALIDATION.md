@@ -58,8 +58,10 @@ checked.
   checks against the language that makes them neither
 - an oracle reading `n/a` is rejected; a rule with a socially acceptable escape
   hatch stops being a rule
-- a unit still marked `outline` while carrying everything an authored unit needs
-  is rejected, because a stale status makes the coverage figures lie
+- a unit still marked with a depth tier below the one it has grown into is
+  rejected: the check raises the document's own status by one tier and asks the
+  schema whether it would still validate, so the two definitions of a tier
+  cannot drift apart. A stale status makes the depth figures lie
 - every unit is reached by its topic's `order`, when one is declared
 - every `see_also` is returned by the topic it names. A one-way link is a
   boundary written in the wrong field

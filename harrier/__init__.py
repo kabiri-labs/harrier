@@ -62,7 +62,14 @@ SAFE_LOADER = _SafeLoader
 #: established by a test and declared as a use by nothing, so most chains ended
 #: at the capability that reached them; the outcome layer is what they end at
 #: now, and it asks what the capability obtained rather than asserting it.
-__version__ = "0.9.0"
+#:
+#: 0.10.0 puts a tier between an outline and a unit written in full. The two it
+#: had are five minutes apart and two hours apart, so nothing sat between them
+#: and the depth figure read as further from the truth than it is. A sketch
+#: carries what it takes to run the test and recognise a wrong answer; what it
+#: takes to claim either of the tiers above it is now checked rather than
+#: trusted.
+__version__ = "0.10.0"
 
 __all__ = [
     "SAFE_LOADER",

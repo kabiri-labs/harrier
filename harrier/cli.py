@@ -276,7 +276,7 @@ def _checklist(root: Path, args) -> int:
                 if case.note:
                     print(f"  {case.note}")
             continue
-        depth = f"{case.authored} authored, {case.outline} outline"
+        depth = f"{case.authored} authored, {case.sketched} sketched, {case.outline} outline"
         print(f"{case.id}  {case.title}  [{len(case.units)} unit(s): {depth}]")
         print(f"  topics: {', '.join(case.topics)}")
         if args.case:

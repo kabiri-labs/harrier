@@ -94,6 +94,9 @@ a.row:hover { border-color: var(--accent); text-decoration: none; }
   text-transform: uppercase; letter-spacing: .05em;
 }
 .pill.authored { color: var(--good); border-color: var(--good); }
+/* The middle tier reads as its own thing rather than a paler version of full
+   depth: a sketch is finished work at its own tier, not an unfinished unit. */
+.pill.sketched { color: var(--hint); border-color: var(--hint); }
 .pill.outline { color: var(--dim); }
 .tag {
   display: inline-block; background: var(--raise); border-radius: 2px;

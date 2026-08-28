@@ -8,6 +8,7 @@ repository, with one thing deliberately changed.
 
 from __future__ import annotations
 
+import copy
 import json
 import os
 import shutil
@@ -15,7 +16,7 @@ import subprocess
 import tempfile
 import time
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Dict, Iterable
 
 import yaml
 
@@ -169,8 +170,47 @@ class Sandbox:
         self.write(f"knowledge/{topic['domain'].lower()}/{topic['id']}.topic.yaml", topic)
         return topic["id"]
 
-    def add_unit(self, **overrides: Any) -> str:
-        """Write a minimal valid authored unit under the base topic."""
+    #: What each depth tier adds on top of the one before it, mirroring the
+    #: contract in `unit.schema.json`. A fixture that asks for a tier gets a
+    #: document valid at it, so a test that breaks one rule breaks exactly one.
+    SKETCH_DEPTH: Dict[str, Any] = {
+        "oracle": {
+            "positive": "A value the database computed appears in the response.",
+            "negative": "Every arity and reflected position exhausted with no computed value.",
+        },
+        "sequence": [
+            "Resolve the column count by extending the arity until the error stops.",
+            "Find which of the columns is reflected into the response body.",
+            "Place one computed value in that column and read it back.",
+        ],
+        "first_false_positive": (
+            "A page that echoes the submitted arm verbatim, which proves reflection "
+            "and not execution."
+        ),
+        "done_when": (
+            "Column count resolved, the reflected index identified, and one computed "
+            "value extracted, or the reason it could not be is recorded."
+        ),
+    }
+    AUTHORED_DEPTH: Dict[str, Any] = {
+        "enter_when": ["The parameter is already known to reach the query."],
+        "preconditions": ["The column count is resolvable within the arity the tool tries."],
+        "evidence": ["The request, and the response excerpt carrying the computed value."],
+        "false_positives": ["A cached body from an earlier request in the same sweep."],
+        "safety": (
+            "Read one computed value and stop. Extracting rows is a decision to put "
+            "to the client rather than a step in a procedure."
+        ),
+    }
+
+    def add_unit(self, without: Iterable[str] = (), **overrides: Any) -> str:
+        """Write a minimal valid unit under the base topic, at the depth asked for.
+
+        Depth defaults to authored, which is what an absent status means. The
+        fixture carries whatever that tier requires: a fixture invalid for a
+        reason the test did not ask about fails the wrong rule, and the failure
+        names something the test was not written to check.
+        """
         unit = {
             "id": f"{self.BASE_TOPIC_ID}-UNION",
             "topic": self.BASE_TOPIC_ID,
@@ -183,16 +223,17 @@ class Sandbox:
                 "Determine whether a UNION arm can be appended to the query so that "
                 "attacker-chosen values appear in the response body."
             ),
-            "oracle": {
-                "positive": "A value the database computed appears in the response.",
-                "negative": "Every arity and reflected position exhausted with no computed value.",
-            },
-            "done_when": (
-                "Column count resolved, the reflected index identified, and one computed "
-                "value extracted, or the reason it could not be is recorded."
-            ),
         }
+        status = overrides.get("status", "authored")
+        if status != "outline":
+            unit.update(copy.deepcopy(self.SKETCH_DEPTH))
+        if status == "authored":
+            unit.update(copy.deepcopy(self.AUTHORED_DEPTH))
         unit.update(overrides)
+        # Removing a field the tier requires is how a depth rule is put under
+        # test, and it has to happen after the tier fills the document in.
+        for field in without:
+            unit.pop(field, None)
         domain = unit["topic"].split("-")[1].lower()
         self.write(f"knowledge/{domain}/{unit['id']}.unit.yaml", unit)
         return unit["id"]
