@@ -18,8 +18,9 @@ oracle:
 sequence:
   - "Choose a resource the tester controls or one that is inconsequential to the client, never an entry page or anything an ordinary user will request."
   - "Establish what the cache stores it under, from the cache's own indicators on a repeated ordinary request."
-  - "Send the divergent form once with a marker of the tester's own, then make an ordinary request and look for the marker."
-  - "If it appears, record it and clear the entry the way the deployment allows; if clearing is not available, stop before sending the form at all and report the divergence instead."
+  - "Establish how an entry here would be cleared before creating one: a purge the engagement grants, or a lifetime short enough to expire inside the window. Where neither is available, stop here and report the divergence -- an entry nobody can clear is one the client is left with."
+  - "Send the divergent form once with a marker of the tester's own, then make an ordinary request from a fresh client and look for the marker."
+  - "Clear the entry, and confirm an ordinary request returns what it returned before."
 
 first_false_positive: >-
   The marker returned to the tester's own repeat request from a local or
@@ -28,6 +29,7 @@ first_false_positive: >-
   a second position.
 
 done_when: >-
-  One divergent form has been sent against a resource chosen for the purpose and
-  a subsequent ordinary request recorded as carrying the marker or not, with the
-  entry cleared or the test recorded as not run.
+  Either a divergent form has been sent against a resource chosen for the
+  purpose, a subsequent ordinary request recorded as carrying the marker or not,
+  and the entry cleared with the original response confirmed back; or the test is
+  recorded as not run because no way to clear an entry was available.
