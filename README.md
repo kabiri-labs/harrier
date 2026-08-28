@@ -56,6 +56,14 @@ Navigation starts at the standard, not at Harrier's own taxonomy:
 Standard → Testing group → Test case → Harrier Test Units → Potential continuations
 ```
 
+There is one deliberate way in that does not start there, because a tester
+sometimes arrives holding evidence rather than a scope sheet. A unit may record
+the literal thing that makes it worth reaching for — *parameters named `file`,
+`path`, `page`, `tpl`* — and the search box reads that field, so typing `tpl`
+finds the traversal probe whose title and objective never mention it. The
+[chain map](#what-it-looks-like) is the other: any capability a test establishes
+opens on the tests that declare it a prerequisite.
+
 WSTG is the first standard supported, and the structure is deliberately not
 specific to it. A newer WSTG revision, or another execution standard, enters at
 the top of that path and reuses everything below it: identifiers are pinned per
@@ -103,9 +111,12 @@ choose between, because those are opposite instructions:
 ![A WSTG test case decomposed into its Test Units, split into stages and alternatives](docs/assets/decomposition.png)
 
 A Test Unit. The chain strip under the objective answers *where can this lead*
-before the procedure begins, rather than several screens after it:
+before the procedure begins, rather than several screens after it. Below it, the
+orientation a tester actually starts from — what the test assumes, where in a
+target to begin looking, and where a controlled input comes to rest — comes
+before the procedure rather than being folded into it:
 
-![A Test Unit page showing its objective and chain strip](docs/assets/test-unit.png)
+![A Test Unit page showing its objective, chain strip and orientation blocks](docs/assets/test-unit.png)
 
 The Attack Chains view. Every capability in the file, in a column for the kind
 of thing it is, shaded by how far the chart reaches from it — green where a
@@ -133,7 +144,25 @@ python -m harrier build             # writes harrier.html
 Open `harrier.html` from disk. It is one self-contained file: no server, no
 install, no network.
 
-The same graph reads from the command line:
+One line per test case of the standard, with the units that cover it and the
+depth each is written to — the output that goes into an engagement tracker:
+
+```bash
+python -m harrier checklist WSTG-ATHZ-01
+```
+
+```
+WSTG-ATHZ-01  Testing Directory Traversal File Include  [5 unit(s): 5 authored, 0 sketched, 0 outline]
+  topics: HRR-RES-01
+  [ ] HRR-RES-01-PROBE  Traversal sequence survival probe  (authored)
+  [ ] HRR-RES-01-ERROR  Error-based path disclosure  (authored)
+  [ ] HRR-RES-01-READ  Confirmed read outside the intended root  (authored)
+  [ ] HRR-RES-01-EXEC  Inclusion and execution of the resolved path  (authored)
+  [ ] HRR-RES-01-EVADE  Normalisation and encoding evasion  (authored)
+```
+
+`--uncovered` narrows it to the test cases no topic claims, which is the
+coverage gate CI runs. The same graph reads from the command line too:
 
 ```bash
 python -m harrier chain HRR-RES-01-READ
@@ -141,11 +170,17 @@ python -m harrier chain HRR-RES-01-READ
 
 ```
 HRR-RES-01-READ  Confirmed read outside the intended root
-  prerequisite (all of): A parameter selects a file by path -- 1 test(s) establish it
-  worth doing sooner given: The application's absolute path is known -- 2 test(s) establish it
-  success establishes: Arbitrary file read
+  covers: WSTG-ATHZ-01
+  role: a stage -- performed alongside the other stages of this topic
+  prerequisite (all of): A parameter selects a file by path  [surface.path.traversable] -- 1 test(s) establish it
+  worth doing sooner given: The application's absolute path is known  [recon.approot.disclosed] -- 2 test(s) establish it
+  worth doing sooner given: The path filter's behaviour is known  [control.pathfilter.identified] -- 1 test(s) establish it
+  success establishes: Arbitrary file read  [primitive.fs.read]
   potential continuations:
     HRR-RES-01-EXEC  Inclusion and execution of the resolved path
+      requires what this establishes: Arbitrary file read
+      no additional declared hard prerequisite
+    HRR-OUT-01-IMPACT  What the readable data is worth
       requires what this establishes: Arbitrary file read
       no additional declared hard prerequisite
 ```

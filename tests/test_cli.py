@@ -15,6 +15,41 @@ def run(argv):
     return status, out.getvalue(), err.getvalue()
 
 
+class TheReadmeShowsWhatTheCommandsActuallyPrint(unittest.TestCase):
+    """A pasted transcript rots exactly like a pasted figure.
+
+    Every number in the README is read from the catalogue by the suite, for the
+    reason recorded there. The command output printed beside those numbers was
+    not, and it is the part a reader will copy and run first.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+
+    def assertTranscript(self, argv):
+        """Every line the command prints appears in the README, in order."""
+        status, out, _ = run(["--root", str(REPO_ROOT), *argv])
+        self.assertEqual(status, EXIT_OK)
+        printed = [line for line in out.splitlines() if line.strip()]
+        self.assertTrue(printed, "the command printed nothing")
+        at = 0
+        for line in printed:
+            found = self.readme.find(line, at)
+            self.assertNotEqual(
+                found, -1,
+                f"the README does not show this line of `harrier "
+                f"{' '.join(argv)}`, or shows it out of order:\n  {line}",
+            )
+            at = found + len(line)
+
+    def test_the_checklist_transcript_is_what_the_checklist_prints(self):
+        self.assertTranscript(["checklist", "WSTG-ATHZ-01"])
+
+    def test_the_chain_transcript_is_what_the_chain_prints(self):
+        self.assertTranscript(["chain", "HRR-RES-01-READ"])
+
+
 class CommandLine(unittest.TestCase):
     def test_validate_exits_zero_on_the_real_repository(self):
         status, out, _ = run(["--root", str(REPO_ROOT), "validate"])
