@@ -28,7 +28,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | # | Phase | Status | Note |
 |---|---|---|---|
 | 0 | Foundation | `done` | Documents, 14 domain codes, 6 axis vocabularies, 36 surface tags, 5 dimensions, WSTG pinned and fully mapped. No content. |
-| 1 | Schema and validator | `done` | Seven schemas, six validation passes, offline suite, CI. Identifiers, axis slugs, every cross-reference and the outline/authored distinction are machine-checked. Cheap now, impossible to retrofit across 350 files. |
+| 1 | Schema and validator | `done` | Seven schemas, six validation passes, offline suite, CI. Identifiers, axis slugs, every cross-reference and the three depth tiers are machine-checked. Cheap now, impossible to retrofit across 350 files. |
 | 1.5 | Pin the reference standards | `done` | ASVS 5.0.0 at its release commit, CWE 4.20 by versioned archive and content hash. `refs.asvs` and `refs.cwe` both resolve. CVE stays out: it names one bug in one product, not a class. |
 | 2 | Topic map | `done` | 99 topics across 13 domains. Every resolvable WSTG identifier is claimed by a topic, and the validator now rejects one that is not. |
 | 3 | Unit outline pass | `done` | Every topic decomposed to units carrying an identifier, a title and a falsifiable objective. **This is where the artefact becomes genuinely useful.** Done in six batches of two or three domains, because a review of 350 files at once is not a review. |
@@ -38,7 +38,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file with every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. Its first navigation model -- a surface-anchored board driven by the facts a tester ticked -- was replaced in phase 6.5. |
 | 6.5 | Product pivot | `done` | Harrier becomes an execution companion to a standard rather than a workspace about a target. Standard-first navigation, atomic decomposition per WSTG test case, a derived local chain per unit, a progressively disclosed general graph, and the removal of every piece of engagement state. **Breaking, and deliberate.** See [`PIVOT.md`](PIVOT.md). |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. Harrier Extensions exists to receive them. This is the clearest differentiation from restating WSTG. |
-| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. |
+| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. Since 0.10.0 a unit can be sketched rather than only outlined or written in full, so the step from breadth to usable depth is twenty minutes rather than two hours. |
 
 Phases 2–5 are 1.0. Phase 6 is what makes it usable; phase 7 is what makes it
 better than the standard it is built on.
@@ -60,8 +60,8 @@ thing stopped being built.
 0.4.0 is the first version published for anyone outside the project to look at,
 and it is an alpha in the honest sense: the decomposition is broad and the depth
 behind it is not. Every resolvable WSTG identifier is claimed and 374 Test Units
-exist; 10 are written to full procedural depth, and the far half of the chain is
-barely charted.
+exist; 10 are written to full procedural depth, 2 are sketched, and the far half
+of the chain is barely charted.
 
 Both figures are in the README rather than at the bottom of it, and the suite
 reads them from the catalogue so neither can go stale in prose. The label is not
@@ -78,6 +78,14 @@ already stops a test being skipped silently. A unit that does not exist because
 nobody has written its two thousand words does none of those things, and its
 absence is invisible to the reader.
 
+Depth is therefore written in tiers rather than in one step. An outline is five
+minutes and a unit written in full is a couple of hours, which left nothing in
+between and made the gap read as wider than it is: a **sketch** is twenty
+minutes and carries the steps, the reading of a result, the mistake that most
+often imitates a positive, and what finishing means. That is most of what a
+tester uses in the field. What each tier requires is in the schema, so a status
+cannot claim more than the file carries.
+
 ## Coverage
 
 Two different numbers, kept apart because conflating them would let phase 0's
@@ -88,7 +96,8 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 364 |
+| Units — outlined | 362 |
+| Units — sketched | 2 |
 | Units — authored | 10 |
 | Units — charted | 374 |
 
@@ -207,7 +216,7 @@ Recorded so they are decisions rather than omissions. None is being built.
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
 | Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
-| More units at full depth | Ten of 374. Governed by the standing rule above: written when an engagement makes one worth writing. |
+| More units at full depth | Ten of 374, with 2 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
 
 ## Releasing

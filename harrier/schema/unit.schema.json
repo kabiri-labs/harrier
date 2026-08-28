@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Unit",
-  "description": "The atomic thing a person performs and records a separate result for. status: outline relaxes every depth field and nothing else -- an outline still needs a falsifiable objective, because that is the entire content of the file and the whole of what breadth buys.",
+  "description": "The atomic thing a person performs and records a separate result for. Depth runs in three tiers, each a strict superset of the one before it: outline relaxes every depth field and nothing else -- an outline still needs a falsifiable objective, because that is the entire content of the file and the whole of what breadth buys; sketched adds enough to run the test and recognise a wrong answer; authored adds when to enter it, what to record and where to stop.",
   "type": "object",
   "required": ["id", "topic", "title", "objective", "role"],
   "additionalProperties": false,
@@ -9,7 +9,7 @@
     "id": {"$ref": "#/$defs/unit_id"},
     "topic": {"type": "string", "pattern": "^HRR-[A-Z]{3}-[0-9]{2}$"},
     "kind": {"enum": ["test", "recon", "inquiry"]},
-    "status": {"enum": ["outline", "authored"]},
+    "status": {"enum": ["outline", "sketched", "authored"]},
     "role": {"enum": ["stage", "variant"]},
     "title": {"type": "string", "minLength": 5},
     "objective": {"type": "string", "minLength": 30},
@@ -65,33 +65,58 @@
   },
   "allOf": [
     {
-      "description": "kind: test carries an oracle and a completion criterion once authored. Absent kind means test, so nothing written before the field changes meaning.",
-      "if": {
-        "allOf": [
-          {"not": {"required": ["status"], "properties": {"status": {"const": "outline"}}}},
-          {"not": {"required": ["kind"], "properties": {"kind": {"enum": ["recon", "inquiry"]}}}}
-        ]
-      },
-      "then": {"required": ["oracle", "done_when"]}
+      "description": "A sketched test carries the judgement: what a positive and a negative result look like, the few steps that produce one, the mistake that most often imitates a positive, and what finishing means. This is the twenty-minute tier -- enough to run the test and know when the answer is wrong, without the record-keeping an authored unit also settles.",
+      "if": {"allOf": [{"$ref": "#/$defs/at_least_sketched"}, {"$ref": "#/$defs/is_test"}]},
+      "then": {"required": ["oracle", "sequence", "first_false_positive", "done_when"]}
     },
     {
-      "description": "A recon unit establishes a fact rather than judging the target, so it cannot state an oracle. Forbidding the field is the point: while it was merely optional, units wrote 'not applicable' into it and the field stopped meaning anything.",
-      "if": {"required": ["kind"], "properties": {"kind": {"const": "recon"}}},
+      "description": "A recon unit establishes a fact rather than judging the target, so its sketch is the sequence and the thing that fools it; there is no oracle to state.",
+      "if": {"allOf": [{"$ref": "#/$defs/at_least_sketched"}, {"$ref": "#/$defs/is_recon"}]},
+      "then": {"required": ["sequence", "first_false_positive", "done_when"]}
+    },
+    {
+      "description": "An inquiry unit is target-specific by nature: what it can carry at any depth is the questions to ask of the workflow and the point at which they are answered.",
+      "if": {"allOf": [{"$ref": "#/$defs/at_least_sketched"}, {"$ref": "#/$defs/is_inquiry"}]},
+      "then": {"required": ["questions", "done_when"]}
+    },
+    {
+      "description": "Authored adds what a sketch leaves out: when this unit is worth entering, what must hold before it is possible, what is recorded, what else imitates a positive, and how far to take it. Stated as schema so that 'written to full depth' is a checkable claim rather than an honour system -- the figure is published in the artefact and the README.",
+      "if": {"allOf": [{"$ref": "#/$defs/is_authored"}, {"$ref": "#/$defs/is_test"}]},
+      "then": {"required": ["enter_when", "preconditions", "evidence", "false_positives", "safety"]}
+    },
+    {
+      "description": "Recon at full depth settles the same record-keeping, but not a safety limit or a false-positive list: an enumeration that touches nothing has no limit to state, and forcing the field produces 'not applicable' rather than content.",
+      "if": {"allOf": [{"$ref": "#/$defs/is_authored"}, {"$ref": "#/$defs/is_recon"}]},
+      "then": {"required": ["enter_when", "preconditions", "evidence"]}
+    },
+    {
+      "description": "An inquiry at full depth names the answer that most often looks right and is not, in place of the oracle it cannot carry.",
+      "if": {"allOf": [{"$ref": "#/$defs/is_authored"}, {"$ref": "#/$defs/is_inquiry"}]},
+      "then": {"required": ["enter_when", "preconditions", "evidence", "first_false_positive"]}
+    },
+    {
+      "description": "Forbidding the oracle on a recon unit is the point: while it was merely optional, units wrote 'not applicable' into it and the field stopped meaning anything.",
+      "if": {"$ref": "#/$defs/is_recon"},
       "then": {"not": {"required": ["oracle"]}}
     },
     {
-      "description": "An inquiry unit is target-specific by nature; it carries questions to ask of the workflow rather than an oracle or a fixed sequence.",
-      "if": {"required": ["kind"], "properties": {"kind": {"const": "inquiry"}}},
+      "description": "An inquiry carries questions to ask of the workflow rather than an oracle or a fixed sequence.",
+      "if": {"$ref": "#/$defs/is_inquiry"},
       "then": {"allOf": [{"not": {"required": ["oracle"]}}, {"not": {"required": ["sequence"]}}]}
-    },
-    {
-      "description": "done_when is required of every authored unit regardless of kind: 'did I finish this' is a question recon and inquiry units answer as much as any other.",
-      "if": {"not": {"required": ["status"], "properties": {"status": {"const": "outline"}}}},
-      "then": {"required": ["done_when"]}
     }
   ],
   "$defs": {
     "unit_id": {"type": "string", "pattern": "^HRR-[A-Z]{3}-[0-9]{2}-[A-Z0-9]{2,10}$"},
+    "at_least_sketched": {
+      "description": "Anything but an outline. Written as a negation so that an absent status still means authored, and nothing already in the catalogue changes meaning.",
+      "not": {"required": ["status"], "properties": {"status": {"const": "outline"}}}
+    },
+    "is_authored": {
+      "not": {"required": ["status"], "properties": {"status": {"enum": ["outline", "sketched"]}}}
+    },
+    "is_test": {"not": {"required": ["kind"], "properties": {"kind": {"enum": ["recon", "inquiry"]}}}},
+    "is_recon": {"required": ["kind"], "properties": {"kind": {"const": "recon"}}},
+    "is_inquiry": {"required": ["kind"], "properties": {"kind": {"const": "inquiry"}}},
     "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
     "fact_list": {
       "type": "array", "minItems": 1, "uniqueItems": true,

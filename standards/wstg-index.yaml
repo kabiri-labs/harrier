@@ -12,6 +12,7 @@ cases:
   - HRR-RCN-06-MAP
   - HRR-RCN-06-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-APIT-02
@@ -25,6 +26,7 @@ cases:
   - HRR-ACL-02-WRITE
   - HRR-ACL-02-IMPACT
   authored: 1
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-APIT-99
@@ -49,6 +51,7 @@ cases:
   - HRR-RCN-07-PROBE
   - HRR-RCN-07-MAP
   authored: 0
+  sketched: 0
   outline: 13
   resolvable: true
 - id: WSTG-ATHN-01
@@ -63,6 +66,7 @@ cases:
   - HRR-CRY-02-CHANGE
   - HRR-CRY-02-EXPORT
   authored: 0
+  sketched: 0
   outline: 6
   resolvable: true
 - id: WSTG-ATHN-02
@@ -74,6 +78,7 @@ cases:
   - HRR-AUT-02-PROBE
   - HRR-AUT-02-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ATHN-03
@@ -86,6 +91,7 @@ cases:
   - HRR-AUT-03-REVOCATION
   - HRR-AUT-03-IMPACT
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-ATHN-04
@@ -97,6 +103,7 @@ cases:
   - HRR-AUT-04-DIFF
   - HRR-AUT-04-REPLAY
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ATHN-05
@@ -108,6 +115,7 @@ cases:
   - HRR-AUT-05-EXPIRY
   - HRR-AUT-05-REVOCATION
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ATHN-06
@@ -121,6 +129,7 @@ cases:
   - HRR-CLT-10-SCOPE
   - HRR-CLT-10-REVOCATION
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-ATHN-07
@@ -132,6 +141,7 @@ cases:
   - HRR-AUT-01-VALIDATION
   - HRR-AUT-01-SIZE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ATHN-08
@@ -143,6 +153,7 @@ cases:
   - HRR-AUT-06-VALIDATION
   - HRR-AUT-06-RATE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ATHN-09
@@ -156,6 +167,7 @@ cases:
   - HRR-AUT-07-REVOCATION
   - HRR-AUT-07-VALIDATION
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-ATHN-10
@@ -167,6 +179,7 @@ cases:
   - HRR-AUT-08-PROBE
   - HRR-AUT-08-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ATHN-11
@@ -179,6 +192,7 @@ cases:
   - HRR-AUT-09-ENTROPY
   - HRR-AUT-09-BINDING
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-ATHZ-01
@@ -192,6 +206,7 @@ cases:
   - HRR-RES-01-EXEC
   - HRR-RES-01-EVADE
   authored: 5
+  sketched: 0
   outline: 0
   resolvable: true
 - id: WSTG-ATHZ-02
@@ -203,6 +218,7 @@ cases:
   - HRR-ACL-03-ANON
   - HRR-ACL-03-LOWPRIV
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ATHZ-03
@@ -215,6 +231,7 @@ cases:
   - HRR-ACL-04-REPLAY
   - HRR-ACL-04-TOCTOU
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-ATHZ-04
@@ -228,6 +245,7 @@ cases:
   - HRR-ACL-02-WRITE
   - HRR-ACL-02-IMPACT
   authored: 1
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-ATHZ-05
@@ -240,6 +258,7 @@ cases:
   - HRR-AUT-10-SCOPE
   - HRR-AUT-10-REVOCATION
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-BUSL-01
@@ -251,6 +270,7 @@ cases:
   - HRR-BIZ-01-PROBE
   - HRR-BIZ-01-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-BUSL-02
@@ -262,6 +282,7 @@ cases:
   - HRR-BIZ-02-PROBE
   - HRR-BIZ-02-REPLAY
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-BUSL-03
@@ -273,6 +294,7 @@ cases:
   - HRR-BIZ-03-PROBE
   - HRR-BIZ-03-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-BUSL-04
@@ -284,6 +306,7 @@ cases:
   - HRR-BIZ-04-RACE
   - HRR-BIZ-04-TOCTOU
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-BUSL-05
@@ -296,6 +319,7 @@ cases:
   - HRR-BIZ-05-QUOTA
   - HRR-BIZ-05-SCOPE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-BUSL-06
@@ -307,6 +331,7 @@ cases:
   - HRR-BIZ-06-PROBE
   - HRR-BIZ-06-IMPACT
   authored: 1
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-BUSL-07
@@ -317,6 +342,7 @@ cases:
   - HRR-BIZ-07-MAP
   - HRR-BIZ-07-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-BUSL-08
@@ -333,6 +359,7 @@ cases:
   - HRR-RES-02-RATE
   - HRR-RES-02-QUOTA
   authored: 0
+  sketched: 0
   outline: 8
   resolvable: true
 - id: WSTG-BUSL-09
@@ -349,6 +376,7 @@ cases:
   - HRR-RES-02-RATE
   - HRR-RES-02-QUOTA
   authored: 0
+  sketched: 0
   outline: 8
   resolvable: true
 - id: WSTG-BUSL-10
@@ -360,6 +388,7 @@ cases:
   - HRR-BIZ-08-PROBE
   - HRR-BIZ-08-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CLNT-01
@@ -375,6 +404,7 @@ cases:
   - HRR-CLT-02-MARKUP
   - HRR-CLT-02-EVADE
   authored: 0
+  sketched: 0
   outline: 7
   resolvable: true
 - id: WSTG-CLNT-02
@@ -390,6 +420,7 @@ cases:
   - HRR-CLT-02-MARKUP
   - HRR-CLT-02-EVADE
   authored: 0
+  sketched: 0
   outline: 7
   resolvable: true
 - id: WSTG-CLNT-03
@@ -408,6 +439,7 @@ cases:
   - HRR-CLT-01-MARKUP
   - HRR-CLT-01-EVADE
   authored: 0
+  sketched: 0
   outline: 10
   resolvable: true
 - id: WSTG-CLNT-04
@@ -421,6 +453,7 @@ cases:
   - HRR-CLT-03-REFERER
   - HRR-CLT-03-EVADE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-CLNT-05
@@ -433,6 +466,7 @@ cases:
   - HRR-CLT-04-READ
   - HRR-CLT-04-EVADE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-CLNT-06
@@ -446,6 +480,7 @@ cases:
   - HRR-CLT-05-EXEC
   - HRR-CLT-05-EVADE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-CLNT-07
@@ -458,6 +493,7 @@ cases:
   - HRR-CLT-06-BINDING
   - HRR-CLT-06-READ
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-CLNT-08
@@ -468,6 +504,7 @@ cases:
   - HRR-CLT-07-MAP
   - HRR-CLT-07-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-CLNT-09
@@ -480,6 +517,7 @@ cases:
   - HRR-CLT-08-WRITE
   - HRR-CLT-08-EVADE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-CLNT-10
@@ -498,6 +536,7 @@ cases:
   - HRR-PRT-05-BINDING
   - HRR-PRT-05-TRANSPORT
   authored: 0
+  sketched: 0
   outline: 9
   resolvable: true
 - id: WSTG-CLNT-11
@@ -511,6 +550,7 @@ cases:
   - HRR-CLT-09-WRITE
   - HRR-CLT-09-EXEC
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-CLNT-12
@@ -524,6 +564,7 @@ cases:
   - HRR-CLT-10-SCOPE
   - HRR-CLT-10-REVOCATION
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-CLNT-13
@@ -536,6 +577,7 @@ cases:
   - HRR-CLT-11-ERROR
   - HRR-CLT-11-READ
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-CLNT-14
@@ -547,6 +589,7 @@ cases:
   - HRR-CLT-12-BINDING
   - HRR-CLT-12-WRITE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-01
@@ -558,6 +601,7 @@ cases:
   - HRR-CFG-01-SERVING
   - HRR-CFG-01-POLICY
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-02
@@ -569,6 +613,7 @@ cases:
   - HRR-CFG-01-SERVING
   - HRR-CFG-01-POLICY
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-03
@@ -580,6 +625,7 @@ cases:
   - HRR-CFG-02-PROBE
   - HRR-CFG-02-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-04
@@ -591,6 +637,7 @@ cases:
   - HRR-CFG-02-PROBE
   - HRR-CFG-02-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-05
@@ -601,6 +648,7 @@ cases:
   - HRR-CFG-03-MAP
   - HRR-CFG-03-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-CONF-06
@@ -611,6 +659,7 @@ cases:
   - HRR-CFG-04-PROBE
   - HRR-CFG-04-IMPACT
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-CONF-07
@@ -622,6 +671,7 @@ cases:
   - HRR-CFG-05-SCOPE
   - HRR-CFG-05-VALIDATION
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-08
@@ -631,6 +681,7 @@ cases:
   units:
   - HRR-CFG-06-PROBE
   authored: 0
+  sketched: 0
   outline: 1
   resolvable: true
 - id: WSTG-CONF-09
@@ -642,6 +693,7 @@ cases:
   - HRR-CFG-07-SERVING
   - HRR-CFG-07-STORAGE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-10
@@ -652,6 +704,7 @@ cases:
   - HRR-CFG-08-MAP
   - HRR-CFG-08-PROBE
   authored: 1
+  sketched: 0
   outline: 1
   resolvable: true
 - id: WSTG-CONF-11
@@ -663,6 +716,7 @@ cases:
   - HRR-CFG-09-NAMING
   - HRR-CFG-09-SERVING
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-12
@@ -674,6 +728,7 @@ cases:
   - HRR-CFG-05-SCOPE
   - HRR-CFG-05-VALIDATION
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CONF-13
@@ -687,6 +742,7 @@ cases:
   - HRR-PRT-04-WRITE
   - HRR-PRT-04-EVADE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-CONF-14
@@ -698,6 +754,7 @@ cases:
   - HRR-CFG-05-SCOPE
   - HRR-CFG-05-VALIDATION
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-CRYP-01
@@ -712,6 +769,7 @@ cases:
   - HRR-CRY-01-VALIDATION
   - HRR-CRY-01-TRANSPORT
   authored: 0
+  sketched: 0
   outline: 6
   resolvable: true
 - id: WSTG-CRYP-02
@@ -725,6 +783,7 @@ cases:
   - HRR-CRY-04-READ
   - HRR-CRY-04-WRITE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-CRYP-03
@@ -739,6 +798,7 @@ cases:
   - HRR-CRY-02-CHANGE
   - HRR-CRY-02-EXPORT
   authored: 0
+  sketched: 0
   outline: 6
   resolvable: true
 - id: WSTG-CRYP-04
@@ -752,6 +812,7 @@ cases:
   - HRR-CRY-03-ROTATION
   - HRR-CRY-03-STORAGE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-ERRH-01
@@ -763,6 +824,7 @@ cases:
   - HRR-ERR-01-ERROR
   - HRR-ERR-01-DIFF
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-ERRH-02
@@ -773,6 +835,7 @@ cases:
   - HRR-ERR-02-ERROR
   - HRR-ERR-02-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-IDNT-01
@@ -783,6 +846,7 @@ cases:
   - HRR-ACL-01-MAP
   - HRR-ACL-01-VERIFY
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-IDNT-02
@@ -794,6 +858,7 @@ cases:
   - HRR-IDN-01-VALIDATION
   - HRR-IDN-01-RATE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-IDNT-03
@@ -805,6 +870,7 @@ cases:
   - HRR-IDN-02-VALIDATION
   - HRR-IDN-02-REVOCATION
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-IDNT-04
@@ -816,6 +882,7 @@ cases:
   - HRR-IDN-03-TIME
   - HRR-IDN-03-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-IDNT-05
@@ -826,6 +893,7 @@ cases:
   - HRR-IDN-04-NAMING
   - HRR-IDN-04-VALIDATION
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-INFO-01
@@ -839,6 +907,7 @@ cases:
   - HRR-RCN-08-MAP
   - HRR-RCN-08-PROBE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-INFO-02
@@ -849,6 +918,7 @@ cases:
   - HRR-RCN-01-FPRINT
   - HRR-RCN-01-VERIFY
   authored: 1
+  sketched: 0
   outline: 1
   resolvable: true
 - id: WSTG-INFO-03
@@ -862,6 +932,7 @@ cases:
   - HRR-RCN-08-MAP
   - HRR-RCN-08-PROBE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-INFO-04
@@ -872,7 +943,8 @@ cases:
   - HRR-RCN-02-MAP
   - HRR-RCN-02-PROBE
   authored: 0
-  outline: 2
+  sketched: 2
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-05
   title: Review Webpage Content for Information Leakage
@@ -882,6 +954,7 @@ cases:
   - HRR-ERR-03-MAP
   - HRR-ERR-03-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-INFO-06
@@ -892,6 +965,7 @@ cases:
   - HRR-RCN-03-MAP
   - HRR-RCN-03-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-INFO-07
@@ -903,6 +977,7 @@ cases:
   - HRR-RCN-04-FPRINT
   - HRR-RCN-04-PROBE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-INFO-08
@@ -913,6 +988,7 @@ cases:
   - HRR-RCN-01-FPRINT
   - HRR-RCN-01-VERIFY
   authored: 1
+  sketched: 0
   outline: 1
   resolvable: true
 - id: WSTG-INFO-09
@@ -923,6 +999,7 @@ cases:
   - HRR-RCN-01-FPRINT
   - HRR-RCN-01-VERIFY
   authored: 1
+  sketched: 0
   outline: 1
   resolvable: true
 - id: WSTG-INFO-10
@@ -934,6 +1011,7 @@ cases:
   - HRR-RCN-04-FPRINT
   - HRR-RCN-04-PROBE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-INPV-01
@@ -952,6 +1030,7 @@ cases:
   - HRR-CLT-01-MARKUP
   - HRR-CLT-01-EVADE
   authored: 0
+  sketched: 0
   outline: 10
   resolvable: true
 - id: WSTG-INPV-02
@@ -970,6 +1049,7 @@ cases:
   - HRR-CLT-01-MARKUP
   - HRR-CLT-01-EVADE
   authored: 0
+  sketched: 0
   outline: 10
   resolvable: true
 - id: WSTG-INPV-03
@@ -980,6 +1060,7 @@ cases:
   - HRR-ACL-05-DIFF
   - HRR-ACL-05-EVADE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-INPV-04
@@ -992,6 +1073,7 @@ cases:
   - HRR-PRT-03-BODY
   - HRR-PRT-03-HEADER
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-INPV-05
@@ -1010,6 +1092,7 @@ cases:
   - HRR-INJ-01-SECOND
   - HRR-INJ-01-EVADE
   authored: 1
+  sketched: 0
   outline: 9
   resolvable: true
 - id: WSTG-INPV-06
@@ -1022,6 +1105,7 @@ cases:
   - HRR-INJ-02-BOOL
   - HRR-INJ-02-EVADE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-INPV-07
@@ -1036,6 +1120,7 @@ cases:
   - HRR-INJ-03-EXHAUST
   - HRR-INJ-03-EVADE
   authored: 0
+  sketched: 0
   outline: 6
   resolvable: true
 - id: WSTG-INPV-08
@@ -1048,6 +1133,7 @@ cases:
   - HRR-INJ-04-EXEC
   - HRR-INJ-04-EVADE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-INPV-09
@@ -1060,6 +1146,7 @@ cases:
   - HRR-INJ-05-BOOL
   - HRR-INJ-05-EVADE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-INPV-10
@@ -1071,6 +1158,7 @@ cases:
   - HRR-INJ-06-IMPACT
   - HRR-INJ-06-EVADE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-INPV-11
@@ -1084,6 +1172,7 @@ cases:
   - HRR-INJ-07-OOB
   - HRR-INJ-07-EVADE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-INPV-12
@@ -1097,6 +1186,7 @@ cases:
   - HRR-INJ-08-OOB
   - HRR-INJ-08-EVADE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-INPV-13
@@ -1108,6 +1198,7 @@ cases:
   - HRR-INJ-09-ERROR
   - HRR-INJ-09-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-INPV-14
@@ -1115,6 +1206,7 @@ cases:
   topics: []
   units: []
   authored: 0
+  sketched: 0
   outline: 0
   resolvable: false
 - id: WSTG-INPV-15
@@ -1128,6 +1220,7 @@ cases:
   - HRR-PRT-01-WRITE
   - HRR-PRT-01-EVADE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-INPV-16
@@ -1138,6 +1231,7 @@ cases:
   - HRR-RCN-05-MAP
   - HRR-RCN-05-PROBE
   authored: 0
+  sketched: 0
   outline: 2
   resolvable: true
 - id: WSTG-INPV-17
@@ -1150,6 +1244,7 @@ cases:
   - HRR-PRT-02-WRITE
   - HRR-PRT-02-EVADE
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-INPV-18
@@ -1165,6 +1260,7 @@ cases:
   - HRR-INJ-10-EXEC
   - HRR-INJ-10-EVADE
   authored: 0
+  sketched: 0
   outline: 7
   resolvable: true
 - id: WSTG-INPV-19
@@ -1179,6 +1275,7 @@ cases:
   - HRR-RES-03-READ
   - HRR-RES-03-EVADE
   authored: 0
+  sketched: 0
   outline: 6
   resolvable: true
 - id: WSTG-INPV-20
@@ -1190,6 +1287,7 @@ cases:
   - HRR-ACL-06-WRITE
   - HRR-ACL-06-IMPACT
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-01
@@ -1201,6 +1299,7 @@ cases:
   - HRR-SES-01-ENTROPY
   - HRR-SES-01-BINDING
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-02
@@ -1212,6 +1311,7 @@ cases:
   - HRR-SES-02-SCOPE
   - HRR-SES-02-EXPIRY
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-03
@@ -1223,6 +1323,7 @@ cases:
   - HRR-SES-03-REPLAY
   - HRR-SES-03-READ
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-04
@@ -1235,6 +1336,7 @@ cases:
   - HRR-SES-04-REFERER
   - HRR-SES-04-READ
   authored: 0
+  sketched: 0
   outline: 4
   resolvable: true
 - id: WSTG-SESS-05
@@ -1248,6 +1350,7 @@ cases:
   - HRR-SES-05-WRITE
   - HRR-SES-05-EVADE
   authored: 0
+  sketched: 0
   outline: 5
   resolvable: true
 - id: WSTG-SESS-06
@@ -1259,6 +1362,7 @@ cases:
   - HRR-SES-06-REVOCATION
   - HRR-SES-06-SCOPE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-07
@@ -1270,6 +1374,7 @@ cases:
   - HRR-SES-07-IDLE
   - HRR-SES-07-VALIDATION
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-08
@@ -1281,6 +1386,7 @@ cases:
   - HRR-SES-08-SECOND
   - HRR-SES-08-WRITE
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-09
@@ -1292,6 +1398,7 @@ cases:
   - HRR-SES-09-BRUTE
   - HRR-SES-09-READ
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true
 - id: WSTG-SESS-10
@@ -1310,6 +1417,7 @@ cases:
   - HRR-SES-10-BINDING
   - HRR-SES-10-REVOCATION
   authored: 0
+  sketched: 0
   outline: 9
   resolvable: true
 - id: WSTG-SESS-11
@@ -1321,5 +1429,6 @@ cases:
   - HRR-SES-11-SCOPE
   - HRR-SES-11-REVOCATION
   authored: 0
+  sketched: 0
   outline: 3
   resolvable: true

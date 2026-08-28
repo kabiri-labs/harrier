@@ -1,6 +1,6 @@
 id: HRR-RCN-02-PROBE
 topic: HRR-RCN-02
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "Which recorded names serve a distinct application"
@@ -11,3 +11,19 @@ objective: >-
 requires:
   all_of: [recon.names.mapped]
 yields: [recon.hosts.enumerated]
+
+sequence:
+  - "Request the root of each recorded name, and each address at the ports the engagement allows, following redirects and keeping where they land."
+  - "Record the identifiers that distinguish one application from another: the title, the cookie names it sets, its security headers and the technologies they name."
+  - "Ask for a name the target cannot have, and treat every response identical to that one as the catch-all it is."
+
+first_false_positive: >-
+  A default server page returned for every name and port. It is a live response
+  from a real listener and it identifies no application, which is why the
+  distinction is drawn on identifiers that differ rather than on a name having
+  answered at all.
+
+done_when: >-
+  Every recorded name and allowed port has been requested once, and each
+  response is filed as a distinct application, as the same application already
+  recorded, or as the catch-all it matched.

@@ -64,7 +64,7 @@ genuinely runs one way, it is a boundary, not a `see_also`.
 id: HRR-INJ-01-UNION
 topic: HRR-INJ-01
 kind: test                   # test | recon | inquiry
-status: outline              # outline | authored
+status: outline              # outline | sketched | authored -- see below
 role: variant                # stage | variant -- required; see below
 title: UNION-based extraction
 objective: >
@@ -109,7 +109,26 @@ dimensions: { engine: [mysql, postgresql, mssql, oracle, sqlite] }
 refs: { wstg: [WSTG-INPV-05], cwe: [89] }
 ```
 
-### `status: outline`
+### Depth: `outline`, `sketched`, `authored`
+
+Three tiers, each a strict superset of the one before it. What each requires is
+in `unit.schema.json` and checked on every run, so the status cannot claim more
+than the file carries.
+
+| | `outline` | `sketched` adds | `authored` adds |
+|---|---|---|---|
+| `kind: test` | id, title, `objective`, `role` | `oracle` (positive and negative), `sequence`, `first_false_positive`, `done_when` | `enter_when`, `preconditions`, `evidence`, `false_positives`, `safety` |
+| `kind: recon` | the same | `sequence`, `first_false_positive`, `done_when` | `enter_when`, `preconditions`, `evidence` |
+| `kind: inquiry` | the same | `questions`, `done_when` | `enter_when`, `preconditions`, `evidence`, `first_false_positive` |
+
+A **sketch** is the twenty-minute tier: enough to perform the test and to
+recognise an answer that is wrong. It is deliberately not the full page — what
+to record, when the test is worth entering and how far to take it are what
+`authored` adds, and those are the parts that take the other two hours.
+
+Recon carries no `safety` or `false_positives` at any tier because an
+enumeration that touches nothing has no limit to state, and a required field
+with nothing to say gets filled with "not applicable".
 
 An outline unit carries its identifier, title, `objective`, `surfaces` and
 `refs`, and nothing else. Everything below `oracle` is relaxed.
@@ -124,10 +143,10 @@ is it for", and already makes the gap countable. What it does not give is *how* 
 the reader supplies that from their own knowledge, which for the intended reader
 is usually enough.
 
-`status` flips to `authored` when the depth fields are filled in. A unit still
-marked `outline` while carrying everything an authored unit needs is rejected: a
-stale status makes the coverage figures lie, and those figures are the number
-this project asks to be judged on.
+`status` moves up when the fields of the next tier are filled in. A unit still
+marked at a tier below the one it has grown into is rejected: a stale status
+makes the depth figures lie, and those figures are the number this project asks
+to be judged on.
 
 ## 3. Content rules
 

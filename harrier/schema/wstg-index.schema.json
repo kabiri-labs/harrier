@@ -21,7 +21,7 @@
       "type": "array", "minItems": 1,
       "items": {
         "type": "object", "additionalProperties": false,
-        "required": ["id", "title", "topics", "units", "authored", "outline", "resolvable"],
+        "required": ["id", "title", "topics", "units", "authored", "sketched", "outline", "resolvable"],
         "properties": {
           "id": {"type": "string", "pattern": "^WSTG-[A-Z]{4}-[0-9]{2}$"},
           "title": {"type": "string", "minLength": 3},
@@ -36,6 +36,7 @@
             "items": {"type": "string", "pattern": "^HRR-[A-Z]{3}-[0-9]{2}-[A-Z0-9]+$"}
           },
           "authored": {"type": "integer", "minimum": 0},
+          "sketched": {"type": "integer", "minimum": 0},
           "outline": {"type": "integer", "minimum": 0},
           "resolvable": {
             "type": "boolean",

@@ -1040,13 +1040,44 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         """A figure maintained separately from the data it describes is wrong
         somewhere, and this file is the copy a reader has offline."""
         text = self.text("#/about")
-        authored = sum(
-            1 for u in self.data["units"].values() if u.get("status") != "outline"
-        )
+        # Counted by tier name rather than "not an outline": the middle tier
+        # exists precisely so that a sketch is not reported as full depth, and
+        # a negation here would pass while the page said the optimistic thing.
+        depths = [u.get("status", "authored") for u in self.data["units"].values()]
         self.assertShows(text, "early public alpha")
         self.assertShows(text, f"{len(self.data['units'])} tests across "
                                f"{len(self.data['topics'])} topics")
-        self.assertShows(text, f"{authored} are written to full procedural depth")
+        self.assertShows(text, f"{depths.count('authored')} are written to full "
+                               f"procedural depth")
+        self.assertShows(text, f"{depths.count('sketched')} are sketched")
+
+    def test_a_sketched_test_is_rendered_as_its_own_tier(self):
+        """The pill, the notice and the sections present are what a reader
+        judges depth by. All three once collapsed to "written in full" for
+        anything that was not an outline, which is exactly what the middle tier
+        exists to stop."""
+        page = self.open("#/unit/HRR-RCN-02-MAP")
+        self.assertEqual(page.locator("main .pill").first.inner_text().lower(), "sketched")
+        self.assertShows(self.driver.text(), "this test is sketched")
+        # Asserted against the section labels rather than the page text: the
+        # words themselves occur in the prose a unit is free to write.
+        labels = [t.strip().lower() for t in page.locator("main .k").all_inner_texts()]
+        for present in ("sequence", "first false positive", "done when"):
+            self.assertIn(present, labels)
+        for absent in ("safety boundary", "evidence", "preconditions"):
+            self.assertNotIn(absent, labels,
+                             f"a sketch showed {absent}, which it does not carry")
+
+    def test_an_outline_and_a_sketch_are_not_given_the_same_notice(self):
+        outline = self.text("#/unit/HRR-RCN-03-MAP")
+        self.assertShows(outline, "this test is an outline")
+        self.assertNotIn("this test is sketched", outline.lower())
+
+    def test_the_status_page_reports_each_tier_separately(self):
+        text = self.text("#/status")
+        depths = [u.get("status", "authored") for u in self.data["units"].values()]
+        self.assertShows(text, f"Written to full depth {depths.count('authored')}")
+        self.assertShows(text, f"Sketched {depths.count('sketched')}")
 
     def test_the_about_page_says_what_the_file_does_not_know(self):
         text = self.text("#/about")
@@ -1174,6 +1205,39 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
 
 
 @unittest.skipUnless(node_available(), "node is not installed")
+class DepthIsThreeTiersRatherThanTwo(unittest.TestCase):
+    """`depthOf` is what every count and every label on the page now goes
+    through. It was a negation -- "not an outline" -- and a third tier turned
+    that into a claim that a twenty-minute sketch was written to full depth."""
+
+    def test_each_status_maps_to_its_own_tier_and_label(self):
+        got = run_in_node("""
+            return [{status: "outline"}, {status: "sketched"}, {status: "authored"},
+                    {}, {status: "nonsense"}].map(function (u) {
+              return [H.depthOf(u), H.depthLabel(u)];
+            });
+        """, {})
+        self.assertEqual(got, [
+            ["outline", "outline"],
+            ["sketched", "sketched"],
+            ["authored", "written in full"],
+            # Absent means authored, matching every count in the repository.
+            ["authored", "written in full"],
+            ["authored", "written in full"],
+        ])
+
+    def test_the_catalogue_agrees_with_the_counts_the_page_publishes(self):
+        data = catalogue(REPO_ROOT)
+        tiers = run_in_node("""
+            const out = {outline: 0, sketched: 0, authored: 0};
+            Object.keys(D.units).forEach(function (id) { out[H.depthOf(D.units[id])] += 1; });
+            return out;
+        """, data)
+        self.assertEqual(tiers["authored"], data["counts"]["units_authored"])
+        self.assertEqual(tiers["sketched"], data["counts"]["units_sketched"])
+        self.assertEqual(sum(tiers.values()), data["counts"]["units"])
+
+
 class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
     """The listing is the first thing a tester reads, and it used to answer
     "perform all of these" and "choose one of these" with the same shape.

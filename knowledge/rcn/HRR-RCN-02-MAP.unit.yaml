@@ -1,6 +1,6 @@
 id: HRR-RCN-02-MAP
 topic: HRR-RCN-02
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "The names, certificates and addresses belonging to the target"
@@ -12,3 +12,19 @@ objective: >-
 requires:
   all_of: [recon.target.reachable]
 yields: [recon.names.mapped]
+
+sequence:
+  - "Start from the names the engagement already grants, and expand only from what those resolve to."
+  - "Read the subject alternative names off each certificate served: a certificate lists names its operator meant to serve together."
+  - "Resolve every candidate and record the address it lands on, dropping the ones that resolve outside the granted ranges."
+
+first_false_positive: >-
+  A wildcard record answering for every name asked of it. Every guess resolves,
+  the list looks large, and none of it is evidence that a host exists -- which
+  is why a name enters the record on what it resolves to rather than on the
+  fact that it resolved.
+
+done_when: >-
+  Every granted name is resolved, every certificate served by the resulting
+  addresses has had its subject alternative names read, and each recorded name
+  carries the address it resolved to or the reason it was excluded.

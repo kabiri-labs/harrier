@@ -80,7 +80,9 @@ class TheIndexIsDerivedFromTheCatalogue(unittest.TestCase):
 
     def test_the_depth_counts_add_up_to_the_units(self):
         for case in self.cases.values():
-            self.assertEqual(case.authored + case.outline, len(case.units), case.id)
+            self.assertEqual(
+                case.authored + case.sketched + case.outline, len(case.units), case.id
+            )
 
 
 class TheCommittedIndexIsCurrent(unittest.TestCase):
@@ -159,6 +161,19 @@ class TheChecklistAnswersTheTestersQuestion(unittest.TestCase):
         self.assertIn("Testing for SQL Injection", out)
         self.assertIn("HRR-INJ-01-UNION", out)
         self.assertIn("10 unit(s)", out)
+
+    def test_the_depth_of_a_case_is_reported_by_tier(self):
+        """The line a tester pastes into an engagement tracker. Collapsing the
+        middle tier into "authored" here would overstate what is written for the
+        one case it is quoted about."""
+        case = cases(Repository.load(REPO_ROOT))["WSTG-INFO-04"]
+        self.assertTrue(case.sketched, "this case no longer has a sketch to report")
+        out = self.run_cli("checklist", "WSTG-INFO-04")
+        self.assertIn(
+            f"{case.authored} authored, {case.sketched} sketched, {case.outline} outline",
+            out,
+        )
+        self.assertIn("(sketched)", out)
 
     def test_the_uncovered_view_holds_only_real_gaps(self):
         """It held one entry, and that entry was a decision rather than a gap.

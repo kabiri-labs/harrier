@@ -77,8 +77,14 @@ def _best_error(errors: Iterable[Any]) -> Any:
     return max(errors, key=lambda e: (len(e.absolute_path), -len(str(e.message))))
 
 
-def check_schemas(repo: Repository, problems: Problems) -> None:
-    """Pass 1 -- every document conforms to the schema its location selects."""
+@lru_cache(maxsize=None)
+def _validator(name: str) -> Any:
+    """The compiled validator for one schema, with every sibling resolvable.
+
+    Shared rather than built per pass: the depth rule in `check_knowledge` asks
+    the schema itself whether a document would be valid one tier up, which keeps
+    the two definitions of a tier from drifting apart.
+    """
     try:
         from jsonschema import Draft202012Validator
         from referencing import Registry, Resource
@@ -87,11 +93,22 @@ def check_schemas(repo: Repository, problems: Problems) -> None:
             "jsonschema is required to validate (pip install jsonschema)"
         ) from exc
 
-    resources = []
-    for path in SCHEMA_DIR.glob("*.schema.json"):
-        resources.append((path.name, Resource.from_contents(json.loads(path.read_text("utf-8")))))
-    registry = Registry().with_resources(resources)
+    resources = [
+        (path.name, Resource.from_contents(json.loads(path.read_text("utf-8"))))
+        for path in SCHEMA_DIR.glob("*.schema.json")
+    ]
+    return Draft202012Validator(
+        _load_schema(name), registry=Registry().with_resources(resources)
+    )
 
+
+#: The tier above each one a unit can sit at. Absent from the map means the top:
+#: there is nothing above `authored` for a unit to have grown into.
+NEXT_TIER = {"outline": "sketched", "sketched": "authored"}
+
+
+def check_schemas(repo: Repository, problems: Problems) -> None:
+    """Pass 1 -- every document conforms to the schema its location selects."""
     for path in repo.unrecognised:
         if path.parent.name == "standards":
             problems.add(
@@ -105,14 +122,8 @@ def check_schemas(repo: Repository, problems: Problems) -> None:
                 "file under knowledge/ must be named <id>.topic.yaml or <id>.unit.yaml",
             )
 
-    validators = {}
     for schema_name, doc in repo.documents():
-        if schema_name not in validators:
-            validators[schema_name] = Draft202012Validator(
-                _load_schema(schema_name), registry=registry
-            )
-        validator = validators[schema_name]
-        errors = list(validator.iter_errors(doc.data))
+        errors = list(_validator(schema_name).iter_errors(doc.data))
         if not errors:
             continue
         err = _best_error(errors)
@@ -378,11 +389,17 @@ def check_knowledge(repo: Repository, problems: Problems) -> None:
             if PLACEHOLDER.match(str(text)):
                 problems.add(doc.rel, f"oracle.{field} is a placeholder, not an oracle")
 
-        if doc.data.get("status") == "outline" and {"oracle", "sequence", "done_when"} <= set(doc.data):
+        # Depth is asked of the schema rather than restated here: a unit is
+        # stale exactly when it would still validate one tier up. Restating the
+        # contract in Python would give two definitions of "sketched" that
+        # drift, and the one nobody reads would be the one deciding the figures.
+        status = doc.data.get("status", "authored")
+        higher = NEXT_TIER.get(status)
+        if higher and not list(_validator("unit").iter_errors({**doc.data, "status": higher})):
             problems.add(
                 doc.rel,
-                "marked outline but carries everything an authored unit needs -- a "
-                "stale status makes the coverage figures wrong",
+                f"marked {status} but carries everything the {higher} tier "
+                f"requires -- a stale status makes the depth figures wrong",
             )
 
         payloads = doc.data.get("payloads")
@@ -755,7 +772,7 @@ def check_standard_index(repo: Repository, problems: Problems) -> None:
         for uid in named_units if isinstance(named_units, list) else []:
             if uid not in units:
                 problems.add(path, f"{wid} names unit {uid}, which does not exist")
-        depths = [case.get("authored"), case.get("outline")]
+        depths = [case.get("authored"), case.get("sketched"), case.get("outline")]
         if isinstance(named_units, list) and all(isinstance(n, int) for n in depths):
             counted = sum(depths)
             if counted != len(named_units):
@@ -814,7 +831,14 @@ def coverage(root: Path) -> Dict[str, int]:
         "wstg_coverable": len(coverable),
         "topics": len(repo.topics),
         "units": len(repo.units),
-        "units_authored": sum(1 for d in repo.units if d.data.get("status") != "outline"),
+        # Compared against the tier by name rather than "not outline": with a
+        # third tier in the middle, the negation would have quietly counted
+        # every sketch as written to full depth -- and this figure is published
+        # in the README, the roadmap and the artefact.
+        "units_sketched": sum(1 for d in repo.units if d.data.get("status") == "sketched"),
+        "units_authored": sum(
+            1 for d in repo.units if d.data.get("status", "authored") == "authored"
+        ),
         # The number the chain pass is judged on: a unit with neither field is
         # in the catalogue but not in the graph, which is invisible in every
         # other count here.

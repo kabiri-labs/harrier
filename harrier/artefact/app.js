@@ -529,13 +529,29 @@
     return runs;
   };
 
+  /* Depth, as three tiers rather than two. Pure and exported: the label a page
+     puts on a unit decides how much of the catalogue a reader believes is
+     written, and "not an outline" quietly counted a sketch as full depth. */
+  var DEPTH_LABEL = {
+    outline: "outline",
+    sketched: "sketched",
+    authored: "written in full"
+  };
+
+  var depthOf = function (unit) {
+    var status = (unit && unit.status) || "authored";
+    return status === "outline" || status === "sketched" ? status : "authored";
+  };
+
+  var depthLabel = function (unit) { return DEPTH_LABEL[depthOf(unit)]; };
+
   var Harrier = {
     own: own, esc: esc, md: md, bound: bound, familyOf: familyOf,
     localGraph: localGraph, negativeReading: negativeReading,
     familyOverview: familyOverview, pathsToImpact: pathsToImpact,
     stillRequired: stillRequired,
     searchAll: searchAll, wrap: wrap, layout: layout, LIMIT: LIMIT,
-    unitRuns: unitRuns
+    unitRuns: unitRuns, depthOf: depthOf, depthLabel: depthLabel
   };
   if (typeof module !== "undefined" && module.exports) module.exports = Harrier;
   if (typeof globalThis !== "undefined") globalThis.Harrier = Harrier;
@@ -563,7 +579,7 @@
   };
 
   var statusPill = function (unit) {
-    var status = unit.status === "outline" ? "outline" : "authored";
+    var status = depthOf(unit);
     return '<span class="pill ' + status + '">' + status + "</span>";
   };
 
@@ -603,7 +619,11 @@
       units: units.length,
       authored: units.filter(function (id) {
         var u = get(D.units, id);
-        return u && u.status !== "outline";
+        return u && depthOf(u) === "authored";
+      }).length,
+      sketched: units.filter(function (id) {
+        var u = get(D.units, id);
+        return u && depthOf(u) === "sketched";
       }).length
     };
   };
@@ -671,7 +691,8 @@
     var rows = group.ids.map(function (wid) {
       var c = caseCounts(wid);
       var right = c.units
-        ? c.units + " tests" + (c.authored ? " · " + c.authored + " in full" : "")
+        ? c.units + " tests" + (c.authored ? " · " + c.authored + " in full" : "") +
+          (c.sketched ? " · " + c.sketched + " sketched" : "")
         : '<span class="empty">not decomposed</span>';
       return rowLink(href("case", wid), D.wstg[wid], wid, right);
     }).join("");
@@ -875,7 +896,7 @@
     var unit = D.units[model.unit];
     columns[1].nodes.push({
       id: selfId, kind: "self", title: unit.title,
-      sub: unit.status === "outline" ? "outline" : "written in full", href: null
+      sub: depthLabel(unit), href: null
     });
 
     model.incoming.shown.forEach(function (link) {
@@ -1234,10 +1255,16 @@
     if (unit.done_when) block("Done when", "<p>" + esc(unit.done_when) + "</p>");
     if (unit.safety) block("Safety boundary", '<p class="warn">' + esc(unit.safety) + "</p>");
 
-    if (unit.status === "outline") {
+    if (depthOf(unit) === "outline") {
       out.push('<div class="notice">This test is an outline. It carries an identifier, a ' +
         "falsifiable objective and its place in the chain; the procedure has not been " +
         "written. Nothing below is invented to fill the gap.</div>");
+    } else if (depthOf(unit) === "sketched") {
+      out.push('<div class="notice">This test is sketched. It carries the steps that ' +
+        "produce a result, how to tell a real one from the mistake that most often " +
+        "imitates it, and what finishing means; when it is worth entering, what to " +
+        "record and how far to take it are not written. Nothing below is invented to " +
+        "fill the gap.</div>");
     }
 
     var payKey = String(unit.payloads || "").replace(/^payloads\//, "").replace(/\.yaml$/, "");
@@ -1490,7 +1517,7 @@
           var unit = get(D.units, id);
           if (!unit) return "";
           return rowLink(href("unit", id), unit.title, id,
-            unit.status === "outline" ? "outline" : "written in full");
+            depthLabel(unit));
         }).join("") + "</div>";
     };
 
@@ -1583,7 +1610,7 @@
       (users.length
         ? '<div class="rows">' + users.map(function (uid) {
             return rowLink(href("unit", uid), D.units[uid].title, uid,
-              D.units[uid].status === "outline" ? "outline" : "written in full");
+              depthLabel(D.units[uid]));
           }).join("") + "</div>"
         : '<p class="empty">No test names this file.</p>');
   };
@@ -1610,7 +1637,7 @@
       (users.length
         ? '<div class="rows">' + users.map(function (uid) {
             return rowLink(href("unit", uid), D.units[uid].title, uid,
-              D.units[uid].status === "outline" ? "outline" : "written in full");
+              depthLabel(D.units[uid]));
           }).join("") + "</div>"
         : '<p class="empty">No test names this tool.</p>');
   };
@@ -1665,6 +1692,8 @@
       "<tr><th>Topics</th><td>" + c.topics + " across " + Object.keys(domains).length + " domains</td></tr>" +
       "<tr><th>Tests</th><td>" + c.units + "</td></tr>" +
       "<tr><th>Written to full depth</th><td>" + c.units_authored + "</td></tr>" +
+      "<tr><th>Sketched</th><td>" + c.units_sketched +
+      ' <span class="muted">— the procedure and what refutes it, without the record-keeping</span></td></tr>' +
       "<tr><th>Placed in the chain</th><td>" + c.units_charted + "</td></tr>" +
       "<tr><th>Capabilities</th><td>" + Object.keys(D.facts).length + "</td></tr>" +
       "</table>" +
@@ -1702,7 +1731,10 @@
     var reach = D.reach || {continuation: 0, impact: 0, short: 0, uncharted: 0};
     var units = Object.keys(D.units).length;
     var authored = Object.keys(D.units).filter(function (id) {
-      return D.units[id].status !== "outline";
+      return depthOf(D.units[id]) === "authored";
+    }).length;
+    var sketched = Object.keys(D.units).filter(function (id) {
+      return depthOf(D.units[id]) === "sketched";
     }).length;
 
     return crumbs([{ text: "About" }]) +
@@ -1718,9 +1750,9 @@
       '<div class="notice">Version ' + esc(D.version) + " is an early public alpha. " +
       "The decomposition is broad — " + units + " tests across " +
       Object.keys(D.topics).length + " topics — and the depth behind it is not: " +
-      authored + " are written to full procedural depth, and what a defeated control " +
-      'permits is largely unwritten. <a href="#/status">Catalogue status</a> has the ' +
-      "figures.</div>" +
+      authored + " are written to full procedural depth, " + sketched + " are sketched, " +
+      "and what a defeated control permits is largely unwritten. " +
+      '<a href="#/status">Catalogue status</a> has the figures.</div>' +
 
       "<h3>How to use it</h3>" +
       "<ol><li>Choose the standard, then the testing group you are working in.</li>" +
@@ -1735,7 +1767,9 @@
       "it is written in full it also carries an oracle, a sequence, payloads, false " +
       "positives and a limit on how far to take it. A test marked <b>outline</b> has the " +
       "identifier, the objective, the boundary and its place in the chain, and no " +
-      "procedure — the page says so rather than inventing one.</p>" +
+      "procedure; one marked <b>sketched</b> has the procedure and what refutes it, " +
+      "without the record-keeping and the safety limit. Each page says which it is " +
+      "rather than inventing the rest.</p>" +
       "<p>A <b>capability</b> is what a success establishes, or what a test needs before " +
       "it is possible at all. Capabilities are the join keys: no test ever names another " +
       "test. A <b>declared prerequisite</b> is a condition of performing the test; a " +

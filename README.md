@@ -7,14 +7,15 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.9.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Harrier 0.10.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
-> behind them is not: 10 units are written to full procedural depth, and what a
-> defeated control permits is largely unwritten. [What that means in
-> numbers](#what-exists-today-and-what-does-not) is below, not buried at the end.
+> behind them is not: 10 units are written to full procedural depth and 2 are
+> sketched, and what a defeated control permits is largely unwritten. [What that
+> means in numbers](#what-exists-today-and-what-does-not) is below, not buried at
+> the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.9.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.10.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -189,7 +190,8 @@ stale in this file without the suite failing.
 | Topics | 106, across 14 domains |
 | Test Units | 374 |
 | Written to full procedural depth | **10** |
-| Outline only | 364 |
+| Sketched | 2 |
+| Outline only | 362 |
 
 | Chain | |
 |---|---|
@@ -208,12 +210,16 @@ stale in this file without the suite failing.
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.
 
-**An outline Test Unit is real but shallow.** It carries an identifier, a
-falsifiable objective, its boundary against neighbouring tests, and its position
-in the chain — enough to stop a test being skipped silently, and enough to appear
-in every count above. It does not carry a procedure, an oracle, payloads or a
-safety limit. Every page says which of the two you are looking at, and nothing is
-invented to fill the gap.
+**Depth runs in three tiers, and every page says which one it is looking at.**
+An **outline** Test Unit carries an identifier, a falsifiable objective, its
+boundary against neighbouring tests, and its position in the chain — enough to
+stop a test being skipped silently, and enough to appear in every count above.
+A **sketched** unit adds what it takes to run the test and recognise a wrong
+answer: the steps, what a positive and a negative result look like, the mistake
+that most often imitates a positive, and what finishing means. An **authored**
+unit adds when it is worth entering, what must hold first, what is recorded, and
+how far to take it. What each tier requires is checked by the validator rather
+than claimed, and nothing is invented to fill the gap.
 
 **The largest known gap is now the controls.** `primitive → impact` is written:
 one capability of thirty-two is still declared as a use by nothing, and 90 of

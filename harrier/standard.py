@@ -42,6 +42,7 @@ class Case:
     #: Units reached through those topics, in the order each topic declares.
     units: List[str] = field(default_factory=list)
     authored: int = 0
+    sketched: int = 0
     outline: int = 0
     #: Whether the domain map resolved this case to a domain at all. A case it
     #: deliberately did not -- rule 0 in `wstg-map.yaml` -- is not a gap in
@@ -128,8 +129,14 @@ def cases(repo: Repository) -> Dict[str, Case]:
 
     for case in out.values():
         for uid in case.units:
-            if units[uid].get("status") == "outline":
+            # Absent means authored, as everywhere else. Counted by name rather
+            # than by "not outline" so that the middle tier lands in its own
+            # column instead of inflating the one a reader trusts most.
+            status = units[uid].get("status", "authored")
+            if status == "outline":
                 case.outline += 1
+            elif status == "sketched":
+                case.sketched += 1
             else:
                 case.authored += 1
     return out
@@ -152,6 +159,7 @@ def index_document(repo: Repository) -> Dict[str, Any]:
                 "topics": case.topics,
                 "units": case.units,
                 "authored": case.authored,
+                "sketched": case.sketched,
                 "outline": case.outline,
                 "resolvable": case.resolvable,
             }

@@ -11,7 +11,7 @@ import unittest
 import yaml
 
 from harrier.validate import validate
-from tests.support import REPO_ROOT, messages
+from tests.support import REPO_ROOT, Sandbox, messages
 from tests.test_identifiers_and_axes import SandboxCase
 
 
@@ -39,9 +39,14 @@ class KindDecidesWhetherAnOracleIsAllowed(SandboxCase):
         self.box.add_unit(id="HRR-AUT-01-UNION")
         unit = {
             "id": "HRR-AUT-01-FPRINT", "topic": "HRR-AUT-01", "kind": "recon",
-            "role": "stage",
+            "role": "stage", "status": "sketched",
             "title": "Database engine fingerprint",
             "objective": "Establish which database engine answers the injectable parameter.",
+            "sequence": [
+                "Submit an expression each engine spells differently.",
+                "Read which spelling the response accepted.",
+            ],
+            "first_false_positive": "A generic error page that every malformed value produces.",
             "done_when": "The engine and version are recorded, or the reason neither could be established.",
         }
         self.box.write("knowledge/aut/HRR-AUT-01-FPRINT.unit.yaml", unit)
@@ -51,7 +56,7 @@ class KindDecidesWhetherAnOracleIsAllowed(SandboxCase):
         self.box.add_topic(axis="asset", order=["HRR-AUT-01-SEARCH"])
         unit = {
             "id": "HRR-AUT-01-SEARCH", "topic": "HRR-AUT-01", "kind": "inquiry",
-            "role": "stage",
+            "role": "stage", "status": "sketched",
             "title": "Search workflow assumptions",
             "objective": "Determine whether the search workflow trusts any value it did not compute.",
             "questions": [
@@ -137,13 +142,59 @@ class OutlineRelaxesDepthAndNothingElse(SandboxCase):
         self.box.write("knowledge/aut/HRR-AUT-01-UNION.unit.yaml", unit)
         self.assertRejected("objective is not falsifiable")
 
+
+class DepthRunsInThreeTiers(SandboxCase):
+    """outline, sketched, authored -- each a strict superset of the one before.
+
+    How many units sit at each tier is published in the README, the roadmap and
+    the artefact's own status page, so what it takes to claim a tier is checked
+    rather than trusted. A sketch carries enough to run the test and recognise a
+    wrong answer; authored adds when to enter it, what to record and where to
+    stop.
+    """
+
+    #: Yielding something is a separate rule for authored units, and this test
+    #: is not about that one.
+    YIELDS = ["primitive.db.read"]
+
+    def test_each_tier_is_accepted_carrying_exactly_what_it_requires(self):
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        for status in ("outline", "sketched", "authored"):
+            with self.subTest(status=status):
+                self.box.add_unit(status=status, yields=self.YIELDS)
+                self.assertAccepted()
+
+    def test_a_sketch_without_the_procedure_or_what_refutes_it_is_rejected(self):
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        for field in ("oracle", "sequence", "first_false_positive", "done_when"):
+            with self.subTest(field=field):
+                self.box.add_unit(status="sketched", yields=self.YIELDS, without=[field])
+                self.assertRejected(f"'{field}' is a required property")
+
+    def test_full_depth_without_the_record_or_the_limit_is_rejected(self):
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        for field in ("enter_when", "preconditions", "evidence", "false_positives", "safety"):
+            with self.subTest(field=field):
+                self.box.add_unit(status="authored", yields=self.YIELDS, without=[field])
+                self.assertRejected(f"'{field}' is a required property")
+
+    def test_an_absent_status_is_still_read_as_full_depth(self):
+        """The default is what every count in the repository assumes. A unit
+        that quietly meant 'sketched' by omitting the field would be reported as
+        written in full."""
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(yields=self.YIELDS, without=["evidence"])
+        self.assertRejected("'evidence' is a required property")
+
     def test_a_stale_outline_status_is_rejected(self):
         self.box.add_topic(order=["HRR-AUT-01-UNION"])
-        self.box.add_unit(
-            status="outline",
-            sequence=["Resolve the column count.", "Find the reflected index."],
-        )
-        self.assertRejected("marked outline but carries everything an authored unit needs")
+        self.box.add_unit(status="outline", **Sandbox.SKETCH_DEPTH)
+        self.assertRejected("marked outline but carries everything the sketched tier requires")
+
+    def test_a_stale_sketched_status_is_rejected(self):
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(status="sketched", yields=self.YIELDS, **Sandbox.AUTHORED_DEPTH)
+        self.assertRejected("marked sketched but carries everything the authored tier requires")
 
 
 class ReferencesMustResolve(SandboxCase):

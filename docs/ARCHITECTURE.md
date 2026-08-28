@@ -309,9 +309,12 @@ label.
 *test* or *atomic test*, which reads better and cannot be confused with a unit
 test in the software sense.
 
-An outline unit stays useful: its objective and its position in the chain are
-real, and the page says the procedure has not been written rather than filling
-the gap with something plausible.
+Depth runs in three tiers and the page names the one it is showing. An outline
+unit stays useful: its objective and its position in the chain are real, and the
+page says the procedure has not been written rather than filling the gap with
+something plausible. A sketched unit carries the sequence, the oracle and the
+first false positive, and says that the record-keeping and the safety limit are
+not written; a reader can perform it and can see what it is not telling them.
 
 ### The local chain
 

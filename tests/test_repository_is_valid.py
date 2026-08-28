@@ -46,7 +46,9 @@ class TheRealRepository(unittest.TestCase):
             )
         for label, value in (
             ("Topics", counts["topics"]),
-            ("Units — outlined", counts["units"] - counts["units_authored"]),
+            ("Units — outlined",
+             counts["units"] - counts["units_authored"] - counts["units_sketched"]),
+            ("Units — sketched", counts["units_sketched"]),
             ("Units — authored", counts["units_authored"]),
             ("Units — charted", counts["units_charted"]),
         ):
@@ -187,7 +189,9 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
                        f"{len({d.data['domain'] for d in Repository.load(REPO_ROOT).topics})} domains"),
             ("Test Units", str(self.counts["units"])),
             ("Written to full procedural depth", f"**{self.counts['units_authored']}**"),
-            ("Outline only", str(self.counts["units"] - self.counts["units_authored"])),
+            ("Sketched", str(self.counts["units_sketched"])),
+            ("Outline only", str(self.counts["units"] - self.counts["units_authored"]
+                                 - self.counts["units_sketched"])),
             ("Capabilities", str(len(self.chain.facts))),
             ("Tests with a potential continuation", str(reach["continuation"])),
             ("Tests that establish an impact", str(reach["impact"])),
@@ -254,7 +258,12 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         self.assertIn(
             f"{self.counts['units']} Test Units exist", self.docs["README.md"]
         )
+        # Read with the block quote's wrapping flattened: the sentence is prose
+        # and will be rewrapped, and a test that fails on a line break is a test
+        # about the paragraph's shape rather than about the figure in it.
+        notice = " ".join(self.docs["README.md"].replace(">", " ").split())
         self.assertIn(
             f"{self.counts['units_authored']} units are written to full procedural depth",
-            self.docs["README.md"],
+            notice,
         )
+        self.assertIn(f"{self.counts['units_sketched']} are sketched", notice)
