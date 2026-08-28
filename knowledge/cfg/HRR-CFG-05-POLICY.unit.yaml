@@ -1,6 +1,6 @@
 id: HRR-CFG-05-POLICY
 topic: HRR-CFG-05
-status: outline
+status: sketched
 role: stage
 title: "What the declared policies permit"
 objective: >-
@@ -10,3 +10,24 @@ objective: >-
 requires:
   all_of: [recon.entrypoints.mapped]
 yields: [control.headers.permissive]
+
+oracle:
+  positive: "A declared policy permits what its presence suggests it prevents: a script policy allowing inline execution or a source broad enough to host anything, a transport policy whose lifetime is zero or nominal, a framing rule absent from the policy that declares one."
+  negative: "Every declared policy was read directive by directive and each permits only what it names."
+
+sequence:
+  - "Collect the security headers a representative response carries, and write out each policy directive by directive rather than by header name."
+  - "For each directive, write down what it permits rather than that it is present: which sources, which lifetimes, which ancestors."
+  - "Note where a policy is declared in report-only form, since that is a policy nothing enforces."
+  - "Record every directive whose permission is wider than its purpose, with the wording that grants it."
+
+first_false_positive: >-
+  Reading the presence of a header as the control being in place. A policy that
+  allows inline execution, or one served only in report-only form, appears in
+  every header dump and prevents nothing -- which is why each directive is read
+  for what it permits.
+
+done_when: >-
+  Every security header the response carries is written out directive by
+  directive, each recorded with what it permits, and each report-only policy is
+  marked as unenforced.

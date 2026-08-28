@@ -1,6 +1,6 @@
 id: HRR-PRT-04-FPRINT
 topic: HRR-PRT-04
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "Intermediary and normalisation inventory"
@@ -10,3 +10,20 @@ objective: >-
 
 requires:
   all_of: [recon.tiers.mapped]
+
+sequence:
+  - "From the tiers already mapped, name which one matches the path against its rules and which one finally resolves it."
+  - "Send a path each layer must normalise -- a dot segment, a repeated separator, a trailing separator, an encoded separator, a path parameter -- and record what each answers."
+  - "Read the answers for what they say about order: whether the front layer decides before or after it decodes, and whether the origin decodes again."
+  - "Write down, for each layer, the normalisation it applies and the point at which it applies it."
+
+first_false_positive: >-
+  A uniform answer read as agreement between the layers. A front layer that
+  refuses every unusual form answers identically whether the origin agrees or
+  not, which is why the answers are read for what each layer did rather than for
+  whether the request succeeded.
+
+done_when: >-
+  Each layer that touches the path is recorded with the normalisation it
+  applies and where in its handling it applies it, or with the forms that could
+  not distinguish it.

@@ -1069,7 +1069,12 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                              f"a sketch showed {absent}, which it does not carry")
 
     def test_an_outline_and_a_sketch_are_not_given_the_same_notice(self):
-        outline = self.text("#/unit/HRR-RCN-03-MAP")
+        # Taken from the catalogue rather than named: naming one made this a
+        # test about a particular unit, and it failed the day that unit was
+        # written to a deeper tier rather than the day the notice broke.
+        uid = next(i for i in sorted(self.data["units"])
+                   if self.data["units"][i].get("status") == "outline")
+        outline = self.text("#/unit/" + uid)
         self.assertShows(outline, "this test is an outline")
         self.assertNotIn("this test is sketched", outline.lower())
 

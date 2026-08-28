@@ -1,6 +1,6 @@
 id: HRR-CFG-05-VALIDATION
 topic: HRR-CFG-05
-status: outline
+status: sketched
 role: stage
 title: "Whether each declared policy is effective as written"
 objective: >-
@@ -11,3 +11,23 @@ objective: >-
 requires:
   all_of: [recon.entrypoints.mapped]
 yields: [control.headers.permissive]
+
+oracle:
+  positive: "A declared policy is one a browser will not honour as written: a misspelled or unsupported directive, a policy superseded by a second copy of the same header, a nonce declared in the header that no inline block carries, or a directive whose form the browser rejects."
+  negative: "Every declared directive is spelled as its specification requires, appears once, and is one the browsers in scope enforce."
+
+sequence:
+  - "Check each directive name and value against the specification the header belongs to, rather than against what it appears to say."
+  - "Look for the same header declared twice on one response, and for a policy declared in both a header and the document, since the browser's precedence rule decides which one is real."
+  - "Where the policy relies on a nonce or a hash, confirm the served document actually carries it on every block the policy covers."
+  - "Load the page in a browser in scope and read what it reports about the policy it applied."
+
+first_false_positive: >-
+  A directive the tester does not recognise but the browsers in scope do. The
+  finding here is a policy the browser will not honour, so the specification and
+  the browser's own report decide it, not familiarity.
+
+done_when: >-
+  Every declared directive is recorded as honoured, as unsupported by the
+  browsers in scope, or as superseded, with the specification or the browser
+  report that decided each.

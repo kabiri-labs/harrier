@@ -1,6 +1,6 @@
 id: HRR-PRT-04-DIFF
 topic: HRR-PRT-04
-status: outline
+status: sketched
 role: variant
 title: "Divergent path resolution"
 objective: >-
@@ -10,3 +10,24 @@ objective: >-
 requires:
   all_of: [recon.tiers.mapped]
 yields: [surface.path.divergence]
+
+oracle:
+  positive: "One path is matched against the intermediary's rules as one thing and resolved by the origin as another: a request the intermediary treats as an allowed resource reaches a different resource behind it."
+  negative: "Every crafted form was matched and resolved as the same path by both layers, or refused by both."
+
+sequence:
+  - "Establish a baseline pair: a path the intermediary allows, and one it refuses, both confirmed as refused or allowed for the same reason."
+  - "Craft forms that the two layers may read differently -- a dot segment the origin collapses after matching, an encoded separator only one of them decodes, a path parameter one of them strips, a separator only one of them treats as one."
+  - "Send each and compare against both baselines: the finding is an allowed answer for a form that should have been refused."
+  - "Confirm each candidate against the origin directly, so the divergence is attributed to the pair rather than to either layer alone."
+
+first_false_positive: >-
+  A redirect to the same place for both the baseline and the crafted form. The
+  status differs and the destination does not, so nothing was bypassed --
+  candidates are judged on where the request finally lands, not on the first
+  response.
+
+done_when: >-
+  Every crafted form has been sent against both baselines and confirmed against
+  the origin, with each recorded as resolving identically at both layers or as
+  diverging, naming the two readings.

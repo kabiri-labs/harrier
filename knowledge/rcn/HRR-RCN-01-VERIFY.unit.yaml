@@ -1,6 +1,6 @@
 id: HRR-RCN-01-VERIFY
 topic: HRR-RCN-01
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "Corroboration from a signal the operator does not edit"
@@ -12,3 +12,18 @@ objective: >-
 requires:
   all_of: [recon.platform.identified]
 yields: [recon.platform.confirmed]
+
+sequence:
+  - "Take the identification already made, and write down which signal produced it."
+  - "Find a second signal the operator has no reason to have edited: the wording and ordering of a header set on an error the application did not author, the shape of a redirect, the name of a session cookie, the parse of a deliberately malformed request."
+  - "Record whether the second signal names the same product as the first, a different one, or nothing."
+
+first_false_positive: >-
+  A second signal that came from the same layer as the first. An edge that
+  rewrote the banner rewrites its own error pages too, so two agreeing signals
+  from one intermediary corroborate the intermediary and say nothing about the
+  origin behind it.
+
+done_when: >-
+  The identification carries at least two independent signals, or is recorded as
+  resting on one editable signal alone, with the second signal named either way.

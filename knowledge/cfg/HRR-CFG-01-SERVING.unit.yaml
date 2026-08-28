@@ -1,6 +1,6 @@
 id: HRR-CFG-01-SERVING
 topic: HRR-CFG-01
-status: outline
+status: sketched
 role: stage
 title: "What the platform serves besides the application"
 objective: >-
@@ -12,3 +12,24 @@ requires:
   all_of: [recon.names.mapped]
 yields: [control.platform.extra]
 closes: [control.platform.extra]
+
+oracle:
+  positive: "A component that is not the application answers a caller who should not reach it: a status or metrics endpoint, a management console, a diagnostics page, or sample content the platform ships."
+  negative: "Every such path was requested from the position the caller actually holds, and each is refused or absent."
+
+sequence:
+  - "From the platform already identified, list what it ships beside the application: its status and metrics endpoints, its management console, its diagnostics pages, and its sample content."
+  - "Request each at the paths that platform uses, from the position a caller actually holds rather than from inside."
+  - "Record the answer as served, refused with a challenge, or absent -- and treat a challenge as exposed surface reported separately from disclosed content."
+  - "Where something is served, record what it discloses rather than only that it answered."
+
+first_false_positive: >-
+  A component that is reachable by design and protected by something the request
+  did not exercise -- a network restriction the tester happens to be inside, or
+  a credential the browser supplied. The finding is that a caller who should not
+  reach it does, so the position the request came from is recorded with it.
+
+done_when: >-
+  Every component the identified platform ships has been requested from the
+  caller's real position, and each is recorded as served with what it discloses,
+  as challenged, or as absent.

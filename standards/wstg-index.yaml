@@ -601,8 +601,8 @@ cases:
   - HRR-CFG-01-SERVING
   - HRR-CFG-01-POLICY
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-02
   title: Test Application Platform Configuration
@@ -613,8 +613,8 @@ cases:
   - HRR-CFG-01-SERVING
   - HRR-CFG-01-POLICY
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-03
   title: Test File Extensions Handling for Sensitive Information
@@ -625,8 +625,8 @@ cases:
   - HRR-CFG-02-PROBE
   - HRR-CFG-02-IMPACT
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-04
   title: Review Old Backup and Unreferenced Files for Sensitive Information
@@ -637,8 +637,8 @@ cases:
   - HRR-CFG-02-PROBE
   - HRR-CFG-02-IMPACT
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-05
   title: Enumerate Infrastructure and Application Admin Interfaces
@@ -648,8 +648,8 @@ cases:
   - HRR-CFG-03-MAP
   - HRR-CFG-03-PROBE
   authored: 0
-  sketched: 0
-  outline: 2
+  sketched: 2
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-06
   title: Test HTTP Methods
@@ -659,8 +659,8 @@ cases:
   - HRR-CFG-04-PROBE
   - HRR-CFG-04-IMPACT
   authored: 0
-  sketched: 0
-  outline: 2
+  sketched: 2
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-07
   title: Test HTTP Strict Transport Security
@@ -671,8 +671,8 @@ cases:
   - HRR-CFG-05-SCOPE
   - HRR-CFG-05-VALIDATION
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-08
   title: Test RIA Cross Domain Policy
@@ -681,8 +681,8 @@ cases:
   units:
   - HRR-CFG-06-PROBE
   authored: 0
-  sketched: 0
-  outline: 1
+  sketched: 1
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-09
   title: Test File Permission
@@ -693,8 +693,8 @@ cases:
   - HRR-CFG-07-SERVING
   - HRR-CFG-07-STORAGE
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-10
   title: Test for Subdomain Takeover
@@ -704,8 +704,8 @@ cases:
   - HRR-CFG-08-MAP
   - HRR-CFG-08-PROBE
   authored: 1
-  sketched: 0
-  outline: 1
+  sketched: 1
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-11
   title: Test Cloud Storage
@@ -716,8 +716,8 @@ cases:
   - HRR-CFG-09-NAMING
   - HRR-CFG-09-SERVING
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-12
   title: Testing for Content Security Policy
@@ -728,8 +728,8 @@ cases:
   - HRR-CFG-05-SCOPE
   - HRR-CFG-05-VALIDATION
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-13
   title: Test Path Confusion
@@ -742,8 +742,8 @@ cases:
   - HRR-PRT-04-WRITE
   - HRR-PRT-04-EVADE
   authored: 0
-  sketched: 0
-  outline: 5
+  sketched: 5
+  outline: 0
   resolvable: true
 - id: WSTG-CONF-14
   title: Test Other HTTP Security Header Misconfigurations
@@ -754,8 +754,8 @@ cases:
   - HRR-CFG-05-SCOPE
   - HRR-CFG-05-VALIDATION
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-CRYP-01
   title: Testing for Weak Transport Layer Security
@@ -907,8 +907,8 @@ cases:
   - HRR-RCN-08-MAP
   - HRR-RCN-08-PROBE
   authored: 0
-  sketched: 0
-  outline: 4
+  sketched: 4
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-02
   title: Fingerprint Web Server
@@ -918,8 +918,8 @@ cases:
   - HRR-RCN-01-FPRINT
   - HRR-RCN-01-VERIFY
   authored: 1
-  sketched: 0
-  outline: 1
+  sketched: 1
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-03
   title: Review Webserver Metafiles for Information Leakage
@@ -932,8 +932,8 @@ cases:
   - HRR-RCN-08-MAP
   - HRR-RCN-08-PROBE
   authored: 0
-  sketched: 0
-  outline: 4
+  sketched: 4
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-04
   title: Enumerate Applications on Webserver
@@ -954,8 +954,8 @@ cases:
   - HRR-ERR-03-MAP
   - HRR-ERR-03-PROBE
   authored: 0
-  sketched: 0
-  outline: 2
+  sketched: 2
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-06
   title: Identify Application Entry Points
@@ -965,8 +965,8 @@ cases:
   - HRR-RCN-03-MAP
   - HRR-RCN-03-PROBE
   authored: 0
-  sketched: 0
-  outline: 2
+  sketched: 2
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-07
   title: Map Execution Paths Through Application
@@ -977,8 +977,8 @@ cases:
   - HRR-RCN-04-FPRINT
   - HRR-RCN-04-PROBE
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-08
   title: Fingerprint Web Application Framework
@@ -988,8 +988,8 @@ cases:
   - HRR-RCN-01-FPRINT
   - HRR-RCN-01-VERIFY
   authored: 1
-  sketched: 0
-  outline: 1
+  sketched: 1
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-09
   title: Fingerprint Web Application
@@ -999,8 +999,8 @@ cases:
   - HRR-RCN-01-FPRINT
   - HRR-RCN-01-VERIFY
   authored: 1
-  sketched: 0
-  outline: 1
+  sketched: 1
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-10
   title: Map Application Architecture
@@ -1011,8 +1011,8 @@ cases:
   - HRR-RCN-04-FPRINT
   - HRR-RCN-04-PROBE
   authored: 0
-  sketched: 0
-  outline: 3
+  sketched: 3
+  outline: 0
   resolvable: true
 - id: WSTG-INPV-01
   title: Testing for Reflected Cross Site Scripting

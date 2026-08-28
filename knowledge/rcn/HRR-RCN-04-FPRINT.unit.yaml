@@ -1,6 +1,6 @@
 id: HRR-RCN-04-FPRINT
 topic: HRR-RCN-04
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "What each intermediary is"
@@ -12,3 +12,17 @@ objective: >-
 requires:
   all_of: [recon.tiers.mapped]
 yields: [recon.intermediary.identified]
+
+sequence:
+  - "For each tier already mapped, collect what it says about itself: the header it adds, the cookie naming it uses, the wording of the error it authors, the redirect style it applies."
+  - "Confront each tier with a request it must decide about -- an unusual method, a header it is known to rewrite, a path form it must normalise -- and record how it answers."
+  - "Name each tier by product family where two signals agree, and record it as unidentified where they do not."
+
+first_false_positive: >-
+  A product name taken from a header the operator can set to anything. A
+  configurable banner names what somebody typed, so it is a starting point for
+  a second signal and never the answer on its own.
+
+done_when: >-
+  Every mapped tier is recorded as a named product family with the two signals
+  that agreed, or as unidentified with what was tried.

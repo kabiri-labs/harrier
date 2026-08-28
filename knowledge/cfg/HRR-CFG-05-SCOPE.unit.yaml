@@ -1,6 +1,6 @@
 id: HRR-CFG-05-SCOPE
 topic: HRR-CFG-05
-status: outline
+status: sketched
 role: stage
 title: "Consistency across the responses that need them"
 objective: >-
@@ -10,3 +10,23 @@ objective: >-
 requires:
   all_of: [recon.entrypoints.mapped]
 yields: [control.headers.permissive]
+
+oracle:
+  positive: "A response that needs the headers does not carry them, or carries a weaker set than the entry page: an error response, an API response, a document served for download, a page on another host of the same application."
+  negative: "Every class of response sampled carries the same headers as the entry page."
+
+sequence:
+  - "List the classes of response the application produces, not the pages: the entry page, an authenticated page, an error, an API answer, a served document, and a redirect."
+  - "Sample each class and record the headers it carries beside the entry page's set."
+  - "Repeat across the hosts the application spans, since a policy declared on one name says nothing about a sibling."
+  - "Record each difference as a class and a host rather than as a single URL."
+
+first_false_positive: >-
+  A difference produced by an intermediary that adds headers on cached responses
+  and not on ones it passes through. The application's own behaviour is
+  unchanged, so a gap is confirmed against the origin before it is recorded.
+
+done_when: >-
+  Every class of response has been sampled on every host the application spans,
+  and each carries the entry page's header set or is recorded as differing, with
+  the difference named.

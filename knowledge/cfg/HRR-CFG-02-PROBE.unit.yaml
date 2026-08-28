@@ -1,6 +1,6 @@
 id: HRR-CFG-02-PROBE
 topic: HRR-CFG-02
-status: outline
+status: sketched
 role: stage
 title: "A file served that the application does not link"
 objective: >-
@@ -11,3 +11,23 @@ requires:
   all_of: [recon.entrypoints.mapped]
 motivated_by: [recon.paths.indexed]
 yields: [surface.file.unlinked]
+
+oracle:
+  positive: "The server returns a file no page references and the application does not need to publish -- a backup or editor copy, an archive of the deployment, a configuration file, or a version control directory."
+  negative: "Every candidate derived from the observed naming was requested and each answers as the baseline for a non-existent path does."
+
+sequence:
+  - "Request each candidate at the rate the engagement permits, keeping the baseline for a non-existent path beside the results."
+  - "Judge each answer on body and length against that baseline rather than on status alone, since a friendly error page returns a success status for anything."
+  - "For each hit, record the URL, the type, the length and a short excerpt that shows what kind of file it is."
+  - "Stop at establishing that the file is served; what it carries is the next unit's question."
+
+first_false_positive: >-
+  A response that looks like a hit because it is long and successful, and is the
+  application's catch-all page for anything unmatched. Comparing length against
+  the recorded baseline separates the two before anything is downloaded.
+
+done_when: >-
+  Every candidate has been requested once, and each is recorded as served with
+  its type and length, or as matching the baseline for a path that does not
+  exist.

@@ -1,6 +1,6 @@
 id: HRR-ERR-03-PROBE
 topic: HRR-ERR-03
-status: outline
+status: sketched
 role: stage
 title: "Internal detail inside content the application meant to serve"
 objective: >-
@@ -12,3 +12,23 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]
 yields: [control.content.internal]
+
+oracle:
+  positive: "A delivered artefact carries detail the interface never displays -- an internal host name, a filesystem path, an identifier belonging to another account, a credential, or a comment naming an unreleased feature."
+  negative: "Every delivered artefact was read, and each carries only what the interface itself shows."
+
+sequence:
+  - "Read each recorded artefact for the four shapes that matter: names that resolve inside a network the caller is not on, absolute filesystem paths, identifiers of accounts other than the tester's, and anything shaped like a credential."
+  - "Follow every source map to the source it reconstructs, and read the comments as well as the code."
+  - "Trigger the application's own error and empty-state responses and read what they deliver, since those are written by whoever was debugging last."
+  - "Record each finding with the artefact and the line, and verify the value is live rather than a stale sample."
+
+first_false_positive: >-
+  A key that is published on purpose. Many client-side integrations require a
+  publishable identifier, and reporting one as a disclosure spends the client's
+  attention on a value its vendor documents as public -- so each candidate is
+  checked against what its own product says the value is for.
+
+done_when: >-
+  Every recorded artefact has been read, and each finding carries the artefact,
+  the location within it, and what makes the value internal rather than public.

@@ -1,6 +1,6 @@
 id: HRR-PRT-04-WRITE
 topic: HRR-PRT-04
-status: outline
+status: sketched
 role: stage
 title: "Cache entry created under a divergent key"
 objective: >-
@@ -10,3 +10,24 @@ objective: >-
 requires:
   all_of: [surface.path.divergence]
 yields: [primitive.content.poisoned]
+
+oracle:
+  positive: "A response stored under the divergent form is returned to a later ordinary request for the resource it shadows."
+  negative: "Every divergent form was stored under its own key, and an ordinary request for the shadowed resource returns the response it always returned."
+
+sequence:
+  - "Choose a resource the tester controls or one that is inconsequential to the client, never an entry page or anything an ordinary user will request."
+  - "Establish what the cache stores it under, from the cache's own indicators on a repeated ordinary request."
+  - "Send the divergent form once with a marker of the tester's own, then make an ordinary request and look for the marker."
+  - "If it appears, record it and clear the entry the way the deployment allows; if clearing is not available, stop before sending the form at all and report the divergence instead."
+
+first_false_positive: >-
+  The marker returned to the tester's own repeat request from a local or
+  per-connection cache rather than the shared one. Nothing was stored for anyone
+  else, so the confirming request is made from a fresh client, and ideally from
+  a second position.
+
+done_when: >-
+  One divergent form has been sent against a resource chosen for the purpose and
+  a subsequent ordinary request recorded as carrying the marker or not, with the
+  entry cleared or the test recorded as not run.

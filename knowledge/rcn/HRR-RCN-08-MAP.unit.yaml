@@ -1,6 +1,6 @@
 id: HRR-RCN-08-MAP
 topic: HRR-RCN-08
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "What the metafiles declare"
@@ -11,3 +11,19 @@ objective: >-
 requires:
   all_of: [recon.target.reachable]
 yields: [recon.metafiles.read]
+
+sequence:
+  - "Request the documents a site publishes about itself at their standard locations: the crawler directives, the sitemaps they point to and the sitemaps those point to in turn, and the well-known documents the platform's own features register."
+  - "Extract every path, host and endpoint each document names, following the sitemap chain to its leaves."
+  - "Record where each came from, since a path named by a crawler directive and one named by a sitemap are different statements about the target."
+
+first_false_positive: >-
+  Treating a crawler directive as an access control. A disallowed path is a
+  request the operator asked crawlers not to make, which is an inventory entry
+  and never a finding on its own -- and the same file is often the fastest way
+  to learn a path exists.
+
+done_when: >-
+  Every metafile served is recorded with the paths and endpoints it declares,
+  each attributed to the document that named it, and each sitemap chain is
+  followed to a document that names no further sitemap.

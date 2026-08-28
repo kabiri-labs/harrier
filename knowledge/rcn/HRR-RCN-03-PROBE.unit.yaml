@@ -1,6 +1,6 @@
 id: HRR-RCN-03-PROBE
 topic: HRR-RCN-03
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "Parameters accepted but never sent by the client"
@@ -12,3 +12,18 @@ requires:
   all_of: [recon.entrypoints.mapped]
 yields: [surface.param.hidden]
 closes: [surface.param.hidden]
+
+sequence:
+  - "Start from the parameter names the inventory already holds and from the names the platform's own conventions supply -- the fields of an object the API returns, the arguments its documentation names, the settings its framework reads."
+  - "Submit each candidate to an entry point that already accepts a related parameter, one at a time, with a value the response would have to echo or act on."
+  - "Compare each response against the same request without the candidate: a difference in body, status, timing or a later page is what says the parameter was read."
+
+first_false_positive: >-
+  A response that differs because the request differed in length or ordering
+  rather than because the parameter was read. A parameter is accepted when
+  removing it puts the response back, which is why each candidate is tested
+  against its own baseline rather than against the first response of the day.
+
+done_when: >-
+  Every candidate is recorded as accepted with the difference that showed it, or
+  as ignored against a baseline taken from the same entry point.

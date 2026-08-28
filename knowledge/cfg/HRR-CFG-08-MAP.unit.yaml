@@ -1,6 +1,6 @@
 id: HRR-CFG-08-MAP
 topic: HRR-CFG-08
-status: outline
+status: sketched
 role: stage
 kind: recon
 title: "The delegated names and what each points at"
@@ -12,3 +12,19 @@ objective: >-
 requires:
   all_of: [recon.target.reachable]
 yields: [recon.delegation.mapped]
+
+sequence:
+  - "Resolve every recorded name and keep the ones whose answer points at a third-party service rather than at the target's own addresses."
+  - "For each, record the provider it names and the resource name the delegation asks that provider for."
+  - "Include the mail and name-service delegations as well as the web ones, since a delegation is a delegation whatever record carries it."
+
+first_false_positive: >-
+  A name pointing at a service the target itself operates under a different
+  brand. It looks like a third party in the answer and is not delegated at all,
+  so the provider is confirmed from the record rather than assumed from the
+  name.
+
+done_when: >-
+  Every recorded name is resolved and each is recorded as pointing at the
+  target's own addresses or as delegated, with the provider and the resource
+  name the delegation asks for.

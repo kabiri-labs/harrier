@@ -1,6 +1,6 @@
 id: HRR-CFG-01-POLICY
 topic: HRR-CFG-01
-status: outline
+status: sketched
 role: stage
 title: "Non-production configuration present in production"
 objective: >-
@@ -12,3 +12,24 @@ requires:
   all_of: [recon.platform.identified]
 yields: [control.config.nonproduction]
 closes: [control.config.nonproduction]
+
+oracle:
+  positive: "A setting meant for development is live in the deployed environment: a debug or profiling endpoint answering, verbose errors returned to the caller, a default account or community string accepted, or a development flag visible in what the application serves."
+  negative: "Every development setting the platform defines was tested against the deployed environment and none is in effect."
+
+sequence:
+  - "List what the identified platform treats as a development setting: its debug and profiling endpoints, its verbose error mode, its default accounts, and the flags its client-side code exposes."
+  - "Test each against the deployed environment -- request the endpoint, trigger an error, offer the default credential once -- rather than reading configuration you cannot see."
+  - "Confirm the environment is the one the engagement calls production before rating anything, since a staging host with the same finding is a different report."
+  - "Record each setting as in effect with what showed it, or as absent with what was tried."
+
+first_false_positive: >-
+  A verbose error produced by an intermediary rather than by the application. The
+  page is loud, the stack belongs to something in front, and the application's
+  own error mode was never observed -- so a finding here names the layer that
+  produced it.
+
+done_when: >-
+  Every development setting the identified platform defines has been tested
+  against the deployed environment, each recorded as in effect or absent, with
+  the environment itself confirmed.
