@@ -1,0 +1,16 @@
+id: HRR-OUT-04-IMPACT
+topic: HRR-OUT-04
+status: outline
+role: stage
+kind: inquiry
+title: "Whether the altered records are read back"
+objective: >-
+  Establish whether the state a write can reach is state the application
+  later trusts -- a balance, a role, an audit row -- rather than a field
+  nothing consults again.
+
+requires:
+  any_of:
+    - primitive.db.write
+    - primitive.data.write.other
+yields: [impact.integrity.lost]

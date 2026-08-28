@@ -169,11 +169,15 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         self.assertIn("motivated by what this establishes:", out)
 
     def test_a_capability_nothing_uses_is_reported_as_where_a_chain_stops(self):
-        out = self.chain("--fact", "primitive.db.read")
+        # A blind oracle is the one capability with no outcome written for it,
+        # deliberately: it is how a value is extracted rather than something a
+        # chain arrives at. The subject moved here when the outcome layer gave
+        # the read primitives somewhere to go -- what is asserted did not.
+        out = self.chain("--fact", "primitive.blind.oracle")
         self.assertIn("no test declares a use for this", out)
 
     def test_a_test_whose_result_leads_nowhere_says_so(self):
-        out = self.chain("HRR-INJ-01-UNION")
+        out = self.chain("HRR-INJ-11-TIME")
         self.assertIn("terminal:", out)
         self.assertIn("reportable outcome", out)
 

@@ -1,0 +1,10 @@
+id: HRR-OUT-04
+title: "Integrity of stored records"
+domain: OUT
+kind: inquiry
+
+# A write nothing reads back is not an integrity failure. The question is what
+# depends on the record afterwards.
+
+order:
+  - HRR-OUT-04-IMPACT

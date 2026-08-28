@@ -1,0 +1,15 @@
+id: HRR-OUT-03-IMPACT
+topic: HRR-OUT-03
+status: outline
+role: stage
+kind: inquiry
+title: "What answers from inside the perimeter"
+objective: >-
+  Establish which internal services respond to requests issued by the
+  application, since a request that crosses the perimeter is worth what it
+  can address once it is inside and nothing if nothing answers.
+
+requires:
+  any_of:
+    - primitive.fetch.internal
+yields: [impact.network.reached]

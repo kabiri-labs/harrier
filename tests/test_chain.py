@@ -486,3 +486,103 @@ class TheRolesReadTheWayTheCatalogueIsWritten(unittest.TestCase):
             by_topic.setdefault(node.topic, []).append(node.role)
         stageless = sorted(t for t, roles in by_topic.items() if "stage" not in roles)
         self.assertEqual(stageless, [])
+
+
+class TheChainArrivesSomewhere(unittest.TestCase):
+    """A capability nothing declares a use for is where a chain stops.
+
+    That was the common case: twenty-six of thirty-two primitives were
+    established by a test and consumed by nothing, so most chains ended at the
+    capability that reached them rather than at anything a report can carry. The
+    outcome layer is what they end at now.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chain = Chain.load(REPO_ROOT)
+
+    #: The one capability deliberately left without an outcome. A reproducible
+    #: conditional signal is not something a chain arrives at -- it is how a
+    #: value is extracted, and what the extraction obtains reaches an outcome
+    #: through the capability that carries it. Pinned so that a new orphan, or a
+    #: use written for this one, both fail here.
+    WITHOUT_AN_OUTCOME = ["primitive.blind.oracle"]
+
+    def test_every_primitive_but_one_is_declared_as_a_use_somewhere(self):
+        orphans = sorted(
+            f for f in self.chain.dead_ends() if family_of(f) == "primitive"
+        )
+        self.assertEqual(orphans, self.WITHOUT_AN_OUTCOME)
+
+    def test_every_outcome_is_reachable_from_a_test(self):
+        """An impact nothing establishes is a claim about a catalogue that does
+        not exist, and it would sit in the matrix looking like coverage."""
+        for impact in self.chain.impacts():
+            self.assertTrue(self.chain.producers.get(impact), impact)
+
+    def test_an_outcome_topic_declares_no_surface(self):
+        """It is not reached by going somewhere. It is reached by holding
+        something, from wherever that was established."""
+        import yaml
+
+        for path in (REPO_ROOT / "knowledge" / "out").glob("*.topic.yaml"):
+            topic = yaml.safe_load(path.read_text(encoding="utf-8"))
+            self.assertEqual(topic["domain"], "OUT", path.name)
+            self.assertNotIn("surfaces", topic, path.name)
+
+    def test_an_outcome_is_asked_rather_than_asserted(self):
+        """Harrier has not seen the target. Every outcome unit is an inquiry --
+        it carries the question the capability makes worth asking, and claims
+        nothing about what the answer is."""
+        for uid, node in self.chain.nodes.items():
+            if uid.startswith("HRR-OUT-"):
+                self.assertEqual(node.kind, "inquiry", uid)
+
+    def test_the_worked_example_in_the_readme_runs_to_its_end(self):
+        """The README walks path traversal from the standard down to an outcome.
+        If any link in it breaks, the document is telling a reader something the
+        catalogue no longer does."""
+        walk = [
+            ("HRR-RES-01-PROBE", "surface.path.traversable"),
+            ("HRR-RES-01-READ", "primitive.fs.read"),
+            ("HRR-RES-01-EXEC", "primitive.exec.server"),
+        ]
+        index = self.chain.index()
+        for uid, established in walk:
+            self.assertIn(established, self.chain.nodes[uid].yields, uid)
+        onward = [e["unit"] for e in index["HRR-RES-01-EXEC"]["out"]]
+        self.assertIn("HRR-OUT-02-IMPACT", onward)
+        self.assertIn(
+            "impact.code.executed", self.chain.nodes["HRR-OUT-02-IMPACT"].yields
+        )
+
+
+class AnOutcomeTopicIsHeldToTheSameRules(SandboxCase):
+    def test_an_outcome_topic_declaring_a_surface_is_rejected(self):
+        """The exemption is for outcomes and cannot be borrowed. A topic that
+        named a surface would be claiming something the model has no way to
+        honour -- an outcome is reached from wherever its capability was
+        established, not from a place."""
+        self.box.edit(
+            "knowledge/out/HRR-OUT-02.topic.yaml",
+            lambda topic: topic.update(surfaces={"any_of": ["login-form"]}) or topic,
+        )
+        self.assertRejected("schema (topic)")
+
+    def test_an_ordinary_topic_still_has_to_declare_one(self):
+        def drop(topic):
+            topic.pop("surfaces", None)
+            return topic
+
+        self.box.edit("knowledge/inj/HRR-INJ-01.topic.yaml", drop)
+        self.assertRejected("surfaces")
+
+    def test_requiring_an_outcome_is_still_rejected(self):
+        """Unchanged by the outcome layer, and the rule that keeps it terminal:
+        a chain that could continue past an impact would be describing something
+        after the end of itself."""
+        self.box.edit(
+            "knowledge/out/HRR-OUT-02-IMPACT.unit.yaml",
+            lambda unit: unit.update(requires={"all_of": ["impact.code.executed"]}) or unit,
+        )
+        self.assertRejected("impact")

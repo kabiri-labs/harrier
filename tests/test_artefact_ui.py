@@ -364,8 +364,13 @@ class TheGeneralGraph(unittest.TestCase):
             f"{result['withRoute']} of {result['total']} |",
             readme,
         )
+        # The prose has to carry the figure too, because that is the sentence a
+        # reader takes away. Asserted as the number rather than as a phrasing:
+        # the adjective that fitted twelve does not fit ninety, and a test that
+        # pins the editorial rather than the fact makes the document wrong to
+        # keep it green.
         self.assertIn(
-            f"only {result['withRoute']} capabilities have any charted route to an impact",
+            f"{result['withRoute']} of {result['total']} capabilities have a charted route",
             readme,
         )
 
@@ -916,7 +921,8 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertShows(text, "Still required")
 
     def test_a_test_whose_result_leads_nowhere_explains_itself(self):
-        text = self.text("#/unit/HRR-INJ-01-UNION")
+        # See the note in test_cli: this subject is the one still terminal.
+        text = self.text("#/unit/HRR-INJ-11-TIME")
         self.assertIn("no test declares a use for it", text.lower())
         self.assertIn("does not rule out", text.lower())
 

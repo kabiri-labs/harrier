@@ -174,6 +174,49 @@ because it really is reconnaissance and authorization and business logic and
 injection at once -- and a representation forced to pick one would be wrong five
 times over.
 
+## 5c. Outcomes are a domain, and they are questions
+
+A capability nothing declares a use for is where a chain stops. That was the
+common case rather than the exception: twenty-six of thirty-two `primitive.*`
+facts were established by a test and consumed by nothing, so most chains ended
+at the capability that reached them rather than at anything a report carries.
+
+The `OUT` domain is what they end at. Each of its topics is one outcome — data
+disclosed, code executed, an internal position reached, records altered, the
+application impersonated, another user harmed, an entitlement taken — and each
+carries a single unit that consumes the capabilities leading to it and
+establishes the outcome.
+
+Three things about that layer are deliberate.
+
+**It is asked, not asserted.** Every unit under `OUT` is `kind: inquiry`.
+Harrier has not seen the target and cannot say what the executing code would
+reach on that host; what it can say is that reaching this far makes the question
+worth asking, and which capability made it worth asking. A layer that claimed
+outcomes would be claiming things about an application it has never seen, which
+is the failure `PIVOT.md` records removing.
+
+**An outcome topic declares no surface.** Every other topic says where it
+applies, because a topic that cannot say that is one nobody can decide to skip.
+An outcome does not apply to a surface at all — it is reached from wherever its
+capability was established, so a surface list there would either name everything
+or name a tag invented to mean nothing. The schema makes the exemption
+conditional on the domain and forbids an outcome topic from declaring one, so
+the exemption cannot be borrowed.
+
+**One capability is deliberately left without an outcome.**
+`primitive.blind.oracle` — a reproducible conditional signal — is not something
+a chain arrives at. It is how a value is extracted, and what the extraction
+obtains reaches an outcome through the capability that carries it. It is pinned
+in a test, so a use written for it and a new orphan both fail rather than pass
+unnoticed.
+
+The 39 unconsumed `control.*` facts are a separate gap and are not filled here.
+A control is the state of a defence, not an outcome; an edge from "the cookie is
+weakly protected" straight to a business result, with nothing in between that
+turns the weakness into anything, is exactly the speculative edge this project
+refuses to draw.
+
 ## 6. Durable and volatile content are separated
 
 Security content rots in roughly eighteen months, and three hundred stale cards

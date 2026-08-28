@@ -6,8 +6,7 @@
   "required": [
     "id",
     "title",
-    "domain",
-    "surfaces"
+    "domain"
   ],
   "additionalProperties": false,
   "properties": {
@@ -196,4 +195,47 @@
       }
     }
   }
+,
+  "allOf": [
+    {
+      "$comment": "Every topic says where it applies, except an outcome topic, which does not apply to a surface at all. An outcome is reached from wherever a capability was established, so a surface list there would either name everything or name a tag invented to mean nothing. Required everywhere else, because a topic that cannot say where it applies is one nobody can decide to skip.",
+      "if": {
+        "required": [
+          "domain"
+        ],
+        "properties": {
+          "domain": {
+            "not": {
+              "const": "OUT"
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "surfaces"
+        ]
+      }
+    },
+    {
+      "$comment": "The reverse, so the exemption cannot be borrowed. An outcome topic that declared a surface would be claiming something the model has no way to honour.",
+      "if": {
+        "required": [
+          "domain"
+        ],
+        "properties": {
+          "domain": {
+            "const": "OUT"
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "surfaces"
+          ]
+        }
+      }
+    }
+  ]
 }

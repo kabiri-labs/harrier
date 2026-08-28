@@ -59,7 +59,7 @@ thing stopped being built.
 
 0.4.0 is the first version published for anyone outside the project to look at,
 and it is an alpha in the honest sense: the decomposition is broad and the depth
-behind it is not. Every resolvable WSTG identifier is claimed and 367 Test Units
+behind it is not. Every resolvable WSTG identifier is claimed and 374 Test Units
 exist; 10 are written to full procedural depth, and the far half of the chain is
 barely charted.
 
@@ -87,10 +87,10 @@ work read as phase 2's:
 |---|---|
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
-| Topics | 99 |
-| Units — outlined | 357 |
+| Topics | 106 |
+| Units — outlined | 364 |
 | Units — authored | 10 |
-| Units — charted | 367 |
+| Units — charted | 374 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -120,7 +120,7 @@ declaring requirements against facts nothing yet establishes.
 
 The pass ended with a gate rather than a count: every fact that is not `given`
 has at least one unit producing it, and the validator enforces it from here on.
-178 facts, 367 units, and no condition in the graph without a route to it.
+185 facts, 374 units, and no condition in the graph without a route to it.
 
 The gate is one-directional, and the asymmetry is worth stating plainly. Every
 capability has a producer; many have no *consumer*. 78 of 177 are declared as a
@@ -181,9 +181,9 @@ against real material rather than an empty tree:
 | `mitigations/path-resolution.md` | The first mitigation, written because a unit referenced it. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 99 topics across 13 domains, and 367 units across all thirteen domains. |
+| `knowledge/` | 106 topics across 14 domains, and 374 units across all fourteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags, describing where a topic applies. |
-| `vocab/facts.yaml` | 178 capabilities in seven families — the join keys the chain is derived from. |
+| `vocab/facts.yaml` | 185 capabilities in seven families — the join keys the chain is derived from. |
 | `harrier/` | Nine schemas, seven validation passes, the derived chain, and the builder plus the artefact's own template, stylesheet and script. See [`VALIDATION.md`](VALIDATION.md). |
 | `tests/` | An offline suite, almost all of it negative — asserting what must be rejected. Two further runners, `node` and a browser, are used when present and skipped when not. |
 
@@ -197,12 +197,12 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart the far half of the chain** | The largest known gap, and the one that most limits the product. 78 of 178 capabilities are established by a test and used by none — 26 of 32 `primitive.*` and 39 of 59 `control.*` — so 182 of 367 tests stop short. Phase 5 ran recon → surface → primitive and stopped; primitive → impact is barely written. Until it is, most local graphs honestly end at the test that established a capability. |
+| **Chart the far half of the chain** | The largest known gap, and the one that most limits the product. 53 of 185 capabilities are established by a test and used by none — 1 of 32 `primitive.*` and 39 of 59 `control.*` — so 110 of 374 tests stop short. Phase 5 ran recon → surface → primitive and stopped; primitive → impact is barely written. Until it is, most local graphs honestly end at the test that established a capability. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Harrier improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
 | Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
-| More units at full depth | Ten of 367. Governed by the standing rule above: written when an engagement makes one worth writing. |
+| More units at full depth | Ten of 374. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
 
 ## Releasing

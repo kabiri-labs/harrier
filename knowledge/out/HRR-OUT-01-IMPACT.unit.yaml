@@ -1,0 +1,24 @@
+id: HRR-OUT-01-IMPACT
+topic: HRR-OUT-01
+status: outline
+role: stage
+kind: inquiry
+title: "What the readable data is worth"
+objective: >-
+  Establish what the reachable records actually contain -- whether personal,
+  regulated, credential or commercial material is among them, and at what
+  scale -- since a read is a finding in proportion to what it returns and
+  not to the route that reached it.
+
+requires:
+  any_of:
+    - primitive.db.read
+    - primitive.doc.read
+    - primitive.directory.read
+    - primitive.memory.read
+    - primitive.data.read.bulk
+    - primitive.data.read.tenant
+    - primitive.data.read.victim
+    - primitive.fetch.readable
+    - primitive.crypto.decrypt
+yields: [impact.data.disclosed]

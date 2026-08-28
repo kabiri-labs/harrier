@@ -10,4 +10,4 @@ objective: >-
 
 requires:
   all_of: [control.rule.clientonly]
-yields: [impact.value.obtained]
+yields: [impact.entitlement.gained]

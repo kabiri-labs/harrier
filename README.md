@@ -7,14 +7,14 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.8.1 is an early public alpha.** The WSTG decomposition is broad —
-> every resolvable identifier is claimed, and 367 Test Units exist. The depth
+> **Harrier 0.9.0 is an early public alpha.** The WSTG decomposition is broad —
+> every resolvable identifier is claimed, and 374 Test Units exist. The depth
 > behind them is not: 10 units are written to full procedural depth, and the far
 > half of the attack chain is barely charted. [What that means in
 > numbers](#what-exists-today-and-what-does-not) is below, not buried at the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.8.1-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.9.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -163,15 +163,19 @@ From the standard down:
 4. **`HRR-RES-01-EXEC`** — is the resolved path included and executed rather than
    returned? Reached through *arbitrary file read*, with no additional declared
    hard prerequisite. Success establishes *server-side code execution*.
+5. **`HRR-OUT-02-IMPACT`** — what does the executing context actually reach: which
+   account, which files, what answers from the network behind it? Reached through
+   *server-side code execution*, and where this chain ends.
 
-And there it stops. Nothing in the catalogue currently declares a use for
-*server-side code execution*, so the page says exactly that — a reportable
-outcome rather than a step onward — instead of drawing an edge nobody wrote.
+The last step is a question rather than a claim, and deliberately so. Harrier has
+not seen the host and cannot say what the code would reach on it; what it can say
+is that reaching this far means the question is now worth asking, and which
+capability made it worth asking.
 
-`WSTG-INPV-05` is the better illustration of decomposition, one checklist line
-against ten real tests, but its chain ends the same way at *database read*, which
-nothing consumes yet. It is not the end-to-end example and this README does not
-present it as one.
+Four of the five capabilities in that chain are still declared by nothing beyond
+it — the outcome layer covers what the catalogue's primitives obtain, not every
+control it records. Where a chain still stops early, the page says so rather than
+drawing an edge nobody wrote.
 
 ## What exists today, and what does not
 
@@ -182,24 +186,24 @@ stale in this file without the suite failing.
 |---|---|
 | WSTG identifiers pinned | 109, across 12 testing groups |
 | Claimed by a Harrier topic | 108 of 108 resolvable |
-| Topics | 99, across 13 domains |
-| Test Units | 367 |
+| Topics | 106, across 14 domains |
+| Test Units | 374 |
 | Written to full procedural depth | **10** |
-| Outline only | 357 |
+| Outline only | 364 |
 
 | Chain | |
 |---|---|
-| Capabilities | 178 |
-| Derived unit-to-unit edges | 566 |
-| — of them escalations between capabilities | 210 |
+| Capabilities | 185 |
+| Derived unit-to-unit edges | 641 |
+| — of them escalations between capabilities | 285 |
 | — another technique for the same test | 124 |
 | — a general prerequisite, not a step | 232 |
-| Tests with a potential continuation | 139 |
-| Tests that establish an impact | 7 |
-| Tests that stop short | 182 |
+| Tests with a potential continuation | 211 |
+| Tests that establish an impact | 14 |
+| Tests that stop short | 110 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 78 of 178 |
-| Capabilities with a charted route to an impact | 12 of 175 |
+| Capabilities used by no test, impacts excluded | 53 of 185 |
+| Capabilities with a charted route to an impact | 90 of 175 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.
@@ -211,11 +215,13 @@ in every count above. It does not carry a procedure, an oracle, payloads or a
 safety limit. Every page says which of the two you are looking at, and nothing is
 invented to fill the gap.
 
-**The largest known gap is the far half of the chain.** The chain pass charted
-reconnaissance through to primitives and stopped there; `primitive → impact` and
-`control → impact` are barely written. That is why 78 capabilities are
-established by a test and used by none, and why only 12 capabilities have any
-charted route to an impact at all.
+**The largest known gap is now the controls.** `primitive → impact` is written:
+one capability of thirty-two is still declared as a use by nothing, and 90 of
+175 capabilities have a charted route to an impact. `control → impact` is not,
+and 39 of 59 `control.*` facts are established by a test and consumed by
+nothing. A control is the state of a defence rather than a result, so the step
+that turns one into an outcome has to be written before an edge can be drawn
+from it.
 
 This is recorded rather than filled in. Generating plausible edges would make the
 matrix look complete and every route on it untrustworthy — an edge nobody thought
