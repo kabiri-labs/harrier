@@ -1153,6 +1153,35 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         titled = page.locator("table.matrix td.cell[title]").count()
         self.assertEqual(titled, page.locator("table.matrix td.cell").count())
 
+    def test_the_column_headings_stay_put_while_the_columns_are_read(self):
+        """Fifty-nine cells is a long way to scroll with no idea which column
+        you are in. The first version stuck them to a wrapper whose overflow
+        made it the scrollport, so they slid away at every width; the second
+        stuck them to the top of the viewport, where the site header already
+        is. What the offset has to track is the header's real height, which
+        changes as it wraps."""
+        page = self.open("#/chains")
+        for width in (1280, 700):
+            with self.subTest(width=width):
+                page.set_viewport_size({"width": width, "height": 800})
+                self.open("#/chains")
+                page.evaluate("window.scrollTo(0, 1500)")
+                self.driver.wait_for_render(
+                    lambda: page.evaluate("window.scrollY") > 1000
+                )
+                below = page.evaluate("""() => {
+                  const bar = document.querySelector('header').getBoundingClientRect().bottom;
+                  const tallest = [...document.querySelectorAll('.mcol')].sort(
+                    (a, b) => b.getBoundingClientRect().height - a.getBoundingClientRect().height)[0];
+                  return tallest.querySelector('.mhead').getBoundingClientRect().top - bar;
+                }""")
+                self.assertGreaterEqual(
+                    below, -1.5,
+                    "the column heading is behind the site header rather than below it",
+                )
+                self.assertLess(below, 40, "the column heading is not stuck at all")
+        page.set_viewport_size({"width": 1280, "height": 900})
+
     def test_the_map_filter_narrows_the_picture_and_gives_it_back(self):
         page = self.open("#/chains")
         every = page.locator(".mcell").count()

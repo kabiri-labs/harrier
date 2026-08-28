@@ -215,13 +215,20 @@ table.matrix th.rowhead { text-align: left; }
    hairball. Columns carry what a reader wants -- what kind of thing each
    capability is, and how far the chart reaches from it -- without drawing a
    single line that would have to be believed. */
-.chainmap { display: flex; gap: .5rem; align-items: flex-start; min-width: 100%; }
-/* Narrow enough that all seven columns fit without the last one --
-   the outcomes, which is the column a reader is looking for -- being the one
-   that falls off the edge. */
-.mcol { flex: 1 1 0; min-width: 7rem; }
+.chainmap { display: flex; gap: .5rem; align-items: flex-start; }
+/* Every column shrinks rather than the last one -- the outcomes, which is the
+   column a reader is looking for -- falling off the edge. No minimum, because a
+   minimum needs a scroll container to overflow into, and a scroll container is
+   what stopped the headings sticking. */
+.mcol { flex: 1 1 0; min-width: 0; }
+/* Sticky under the site header rather than under the top of the viewport,
+   which is where the site header already is. The offset is measured rather
+   than guessed: the header wraps at two widths and carries a different height
+   in each, so a constant here would be correct at one screen size and wrong at
+   the two below it. */
 .mhead {
-  position: sticky; top: 0; background: var(--bg); padding: .2rem 0 .35rem;
+  position: sticky; top: var(--stick, 0px); background: var(--bg);
+  padding: .2rem 0 .35rem; z-index: 2;
   border-bottom: 1px solid var(--line); margin-bottom: .35rem;
 }
 .mhead a { font-size: .8rem; font-weight: 500; }
