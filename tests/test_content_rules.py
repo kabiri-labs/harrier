@@ -191,6 +191,18 @@ class OrientationIsSeparateFromProcedure(SandboxCase):
         self.box.add_unit(triage=["Review the parameters for anything interesting."])
         self.assertRejected("triage entry is not a place to start looking")
 
+    def test_a_triage_line_may_name_a_token_that_reads_like_an_instruction(self):
+        """The field carries the literal name a tester will type, and a target
+        can have a parameter called `review` or an endpoint at `/explore`. The
+        gate matches an instruction at the head of the line, not a word
+        anywhere in it -- otherwise it rejects exactly what triage is for."""
+        self.box.add_topic(order=["HRR-AUT-01-UNION"])
+        self.box.add_unit(triage=[
+            "Parameters named review, approval, status or explore.",
+            "Endpoints under /review, /explore and /investigate.",
+        ])
+        self.assertAccepted()
+
     def test_a_hypothesis_may_say_that_nobody_reviewed_something(self):
         """The asymmetry is deliberate. A hypothesis is a claim about the
         target, not an instruction, so the verb list that governs an objective
