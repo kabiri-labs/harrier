@@ -102,8 +102,15 @@ jobs:
           cat "harrier-$VERSION.html.sha256"
           echo "value=$(cut -d' ' -f1 "harrier-$VERSION.html.sha256")" >> "$GITHUB_OUTPUT"
 
-      # Rebuilt from a clean checkout and compared. If two builds of one commit
-      # differ, the digest published beside the file means nothing.
+      # Built a second time in this checkout and compared. If two builds of one
+      # commit differ, the digest published beside the file means nothing.
+      #
+      # A second checkout would be the stronger check and is not what this does:
+      # it would catch a first build that left something behind for the second
+      # to read. What this does catch is a build that reads a clock, a random
+      # value, or anything else that moves between two runs in one checkout --
+      # and the digest is published as a claim about this commit, so the check
+      # standing behind it should say which of the two it is.
       - name: Rebuild and confirm the digest is reproducible
         env:
           VERSION: ${{ steps.version.outputs.value }}
