@@ -219,6 +219,19 @@ Recorded so they are decisions rather than omissions. None is being built.
 | More units at full depth | Ten of 374, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
 
+## Governance and distribution
+
+Inbound contribution terms are in [`CONTRIBUTING.md`](../CONTRIBUTING.md), and
+were written before the project accepted its first outside contribution rather
+than after: a licence decision that has to be renegotiated with past
+contributors is one that cannot be made.
+
+Three settled questions -- the repository stays public, a hosted site is a later
+second build target, and any commercial layer lives outside this repository --
+are recorded with their reasoning in
+[`DISTRIBUTION.md`](DISTRIBUTION.md). They are decisions rather than omissions,
+and the record says what would have to change for each to be revisited.
+
 ## Releasing
 
 `release.yml` attaches the built artefact to a release published from the GitHub

@@ -1,6 +1,7 @@
 """The repository itself passes, and the counts it publishes are true."""
 
 import collections
+import re
 import unittest
 
 from harrier import Repository
@@ -54,6 +55,48 @@ class TheRealRepository(unittest.TestCase):
         ):
             with self.subTest(label=label):
                 self.assertIn(f"| {label} | {value} |", roadmap, why)
+
+
+class EveryDocumentLinkResolves(unittest.TestCase):
+    """The documents link each other rather than repeat each other, which is the
+    right trade and makes a dead link cost more than a stale paragraph would.
+
+    Checked over every markdown file in the repository rather than the ones
+    touched last, because the link that breaks is the one in the file nobody
+    opened.
+    """
+
+    #: `[text](target)` where the target is a path rather than a URL. Anchors
+    #: and query strings are stripped: what is under test is that the file a
+    #: reader is sent to exists.
+    LINK = re.compile(r"\[[^\]]+\]\((?!https?://|mailto:)([^)#?]+)")
+
+    def test_no_relative_link_in_any_document_is_dead(self):
+        docs = sorted(REPO_ROOT.glob("*.md")) + sorted(REPO_ROOT.glob("docs/*.md"))
+        self.assertGreater(len(docs), 5, "no documents were found to check")
+        for doc in docs:
+            text = doc.read_text(encoding="utf-8")
+            for target in self.LINK.findall(text):
+                with self.subTest(doc=doc.name, target=target):
+                    self.assertTrue(
+                        (doc.parent / target).resolve().exists(),
+                        f"{doc.name} links {target}, which does not exist",
+                    )
+
+    def test_the_readme_sends_a_contributor_to_the_terms(self):
+        """The terms are the one thing a contributor has to see before writing
+        anything, and the README is where they will be standing."""
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("(CONTRIBUTING.md)", readme)
+
+    def test_the_contributing_terms_name_the_content_directories(self):
+        """A licence grant that reads as code-only leaves the catalogue --
+        which is most of what this repository is -- outside its own terms."""
+        terms = (REPO_ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        for directory in ("knowledge/", "vocab/", "cards/", "payloads/",
+                          "mitigations/", "toolbox/", "docs/"):
+            with self.subTest(directory=directory):
+                self.assertIn(f"`{directory}`", terms)
 
 
 class UnitsBelongToTheAxisTheirTopicDeclares(unittest.TestCase):
