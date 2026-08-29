@@ -135,21 +135,30 @@ release](https://github.com/kabiri-labs/harrier/releases/latest). Two assets:
 `harrier-<version>.html`, and `harrier-<version>.html.sha256` beside it.
 
 Open the `.html` from disk. It is one self-contained file — no server, no
-install, no network — and everything below works from it.
+install, no network — and it is the whole product. The command line further down
+is for working on the catalogue and needs a source checkout.
 
-**Verify it before you open it.** This is a file you are being asked to open on
-an engagement network on the strength of what it claims not to do, and the
-digest is published so that claim can be checked rather than taken:
+**Check what you downloaded.**
 
 ```bash
 sha256sum -c harrier-*.html.sha256          # shasum -a 256 -c on macOS
 ```
 
 The checksum file names the file it covers, so nothing here carries a version
-that can go stale. The digest is produced by the release workflow, which
-rebuilds the artefact from scratch a second time and refuses to publish if the
-two builds disagree — a digest beside a file nobody rebuilt says only that the
-file was hashed once.
+that can go stale.
+
+That is an integrity check and nothing more: it says the file you have is the
+file the workflow published. It is not a check of what the file does, and it is
+not proof against a bad release — the checksum sits in the same release as the
+artefact, so whoever could replace one could replace both.
+
+What it is worth rests on the build being reproducible. The release workflow
+builds the artefact twice and refuses to publish if the two builds disagree.
+That gives anyone who wants more than integrity somewhere to go: build the same
+tag from source below, compare your own digest against the published one, and
+run the suite — it drives a real browser over `file://` and asserts that every
+request the page attempted, and every console error, comes back empty. The
+behaviour is checkable that way. It is not checkable from a digest.
 
 ### Or build it from source
 
@@ -159,16 +168,23 @@ particular commit rather than at a release:
 ```bash
 git clone https://github.com/kabiri-labs/harrier.git
 cd harrier
+git checkout v<version>             # omit for the catalogue as it stands
 python -m pip install "PyYAML>=6,<7" "jsonschema>=4,<5"
 
 python -m harrier validate          # the catalogue is internally consistent
 python -m harrier build             # writes harrier.html
 ```
 
-The build is deterministic: the same catalogue produces the same bytes, which
-is what makes the published digest worth checking.
+The build is deterministic: one commit produces one set of bytes, which is what
+makes the published digest worth checking and what makes checking it against
+your own build mean something. Build at the release tag to compare; build at
+`main` for the catalogue as it stands, which will not match a published digest
+and is not meant to.
 
 ### From the command line
+
+These read the catalogue in a checkout rather than the downloaded file, so they
+need the source path above.
 
 One line per test case of the standard, with the units that cover it and the
 depth each is written to — the output that goes into an engagement tracker:
