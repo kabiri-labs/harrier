@@ -63,7 +63,9 @@ class EveryDocumentLinkResolves(unittest.TestCase):
 
     Checked over every markdown file in the repository rather than the ones
     touched last, because the link that breaks is the one in the file nobody
-    opened.
+    opened. That claim was false when it was first written: the scan covered
+    the root and `docs/`, which is ten of fifteen and misses precisely the
+    files the sentence is about.
     """
 
     #: `[text](target)` where the target is a path rather than a URL. Anchors
@@ -71,16 +73,43 @@ class EveryDocumentLinkResolves(unittest.TestCase):
     #: reader is sent to exists.
     LINK = re.compile(r"\[[^\]]+\]\((?!https?://|mailto:)([^)#?]+)")
 
+    @staticmethod
+    def documents():
+        """Every markdown file in the repository, not the two directories that
+        hold most of them. Cards, mitigations and the directory READMEs are the
+        ones a reader reaches by following a link from somewhere else, which
+        makes them exactly the documents whose links nobody notices breaking."""
+        return sorted(
+            path
+            for path in REPO_ROOT.rglob("*.md")
+            if not any(part.startswith(".") for part in path.parts)
+        )
+
+    def test_the_scan_reaches_past_the_root_and_the_docs_directory(self):
+        outside = [
+            doc for doc in self.documents()
+            if doc.parent != REPO_ROOT and doc.parent.name != "docs"
+        ]
+        self.assertTrue(
+            outside,
+            "the scan covers only the root and docs/, which is where a dead "
+            "link is least likely to survive unnoticed",
+        )
+
     def test_no_relative_link_in_any_document_is_dead(self):
-        docs = sorted(REPO_ROOT.glob("*.md")) + sorted(REPO_ROOT.glob("docs/*.md"))
+        docs = self.documents()
         self.assertGreater(len(docs), 5, "no documents were found to check")
         for doc in docs:
+            # Named by path rather than by filename: three of these are called
+            # README.md, and a failure that does not say which one is a failure
+            # somebody has to reproduce before they can act on it.
+            rel = doc.relative_to(REPO_ROOT)
             text = doc.read_text(encoding="utf-8")
             for target in self.LINK.findall(text):
-                with self.subTest(doc=doc.name, target=target):
+                with self.subTest(doc=str(rel), target=target):
                     self.assertTrue(
                         (doc.parent / target).resolve().exists(),
-                        f"{doc.name} links {target}, which does not exist",
+                        f"{rel} links {target}, which does not exist",
                     )
 
     def test_the_readme_sends_a_contributor_to_the_terms(self):
@@ -94,7 +123,7 @@ class EveryDocumentLinkResolves(unittest.TestCase):
         which is most of what this repository is -- outside its own terms."""
         terms = (REPO_ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
         for directory in ("knowledge/", "vocab/", "cards/", "payloads/",
-                          "mitigations/", "toolbox/", "docs/"):
+                          "mitigations/", "toolbox/", "standards/", "docs/"):
             with self.subTest(directory=directory):
                 self.assertIn(f"`{directory}`", terms)
 
