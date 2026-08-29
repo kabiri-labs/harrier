@@ -1153,6 +1153,41 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         titled = page.locator("table.matrix td.cell[title]").count()
         self.assertEqual(titled, page.locator("table.matrix td.cell").count())
 
+    def test_the_sticky_offset_tracks_the_header_it_has_to_clear(self):
+        """The mechanism, asserted directly rather than through the geometry it
+        produces.
+
+        The sibling test below reads the heading's position, which depends on
+        scroll, on which column is tallest and on how the cells wrapped. When it
+        failed under load it took a diagnosis to learn that the offset itself
+        was stale. This asks the offset, at all three widths the site header
+        wraps at: one row, two rows, three.
+        """
+        page = self.driver.page
+        read = lambda: (
+            page.evaluate("parseFloat(getComputedStyle(document.documentElement)"
+                          ".getPropertyValue('--stick')) || 0"),
+            page.evaluate("document.querySelector('header').getBoundingClientRect().height"),
+        )
+        for width in (1280, 700, 480):
+            with self.subTest(width=width):
+                page.set_viewport_size({"width": width, "height": 800})
+                self.open("#/chains")
+                # The observer delivers its first notification on the frame
+                # after it starts observing, so the assertion is about where
+                # the offset settles rather than what it reads in the first
+                # millisecond. A value that never settles fails here, which is
+                # the defect this replaced.
+                self.driver.wait_for_render(
+                    lambda: abs(read()[0] - read()[1]) <= 1.5
+                )
+                offset, header = read()
+                self.assertAlmostEqual(
+                    offset, header, delta=1.5,
+                    msg=f"the offset is {offset} and the header is {header}",
+                )
+        page.set_viewport_size({"width": 1280, "height": 900})
+
     def test_the_column_headings_stay_put_while_the_columns_are_read(self):
         """Fifty-nine cells is a long way to scroll with no idea which column
         you are in. The first version stuck them to a wrapper whose overflow
