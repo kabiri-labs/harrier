@@ -2066,7 +2066,17 @@
   /* How far down the site header reaches, published to the stylesheet so a
      sticky heading inside the page can stop underneath it rather than behind
      it. Measured because the header wraps at narrow widths and is a different
-     height in each regime. */
+     height in each regime.
+
+     Observed rather than measured at two moments chosen by hand. The first
+     version read the height on every draw and on every resize, which is two
+     guesses at when layout has settled: under load the suite caught it holding
+     the one-row height while a two-row header was on screen, and a heading
+     stuck forty pixels too high is a heading behind the bar it exists to clear.
+     A resize observer is the browser saying the size changed, after it has
+     changed, for whatever reason it changed -- including the ones nobody
+     enumerated. It also fires once on observe, so the initial value needs no
+     separate call. */
   var siteHeader = document.querySelector("header");
   var measureHeader = function () {
     if (!siteHeader) return;
@@ -2074,12 +2084,18 @@
       "--stick", Math.round(siteHeader.getBoundingClientRect().height) + "px"
     );
   };
-  window.addEventListener("resize", measureHeader);
+  if (siteHeader && typeof ResizeObserver === "function") {
+    new ResizeObserver(measureHeader).observe(siteHeader);
+  } else {
+    // Older browser: back to the two hand-placed measurements. Worse, and
+    // better than a sticky heading with no offset at all.
+    window.addEventListener("resize", measureHeader);
+    measureHeader();
+  }
 
   var draw = function () {
     var page = route();
     main.innerHTML = page.html;
-    measureHeader();
     Array.prototype.forEach.call(document.querySelectorAll("nav a"), function (a) {
       a.classList.toggle("on", a.dataset.nav === page.nav);
     });
