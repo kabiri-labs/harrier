@@ -313,32 +313,17 @@ observe.
 
 ## Contributing
 
-Read [`docs/AUTHORING.md`](docs/AUTHORING.md) for what a Test Unit must contain,
-[`docs/CHAINING.md`](docs/CHAINING.md) for the chain semantics,
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the model, and
-[`docs/VALIDATION.md`](docs/VALIDATION.md) for what is checked mechanically.
+[`CONTRIBUTING.md`](CONTRIBUTING.md) carries the terms a contribution arrives
+under, what a pull request must not contain, and the two commands CI runs. It
+links the four documents that describe the work itself — what a Test Unit must
+contain, what a chain edge asserts, the model, and what is checked mechanically
+— rather than restating them.
 
-**A chain edge is a security claim.** Declaring a capability a prerequisite
-asserts the test is not performable without it. Declaring that a success
-establishes a capability asserts the result proves that much and no more. Both
-are judgements a reader will rely on, so bulk or speculative edge generation is
-not acceptable here.
-
-Before opening a pull request:
-
-```bash
-python -m unittest discover -s tests -t .
-python -m harrier validate
-```
-
-Both must pass, and CI runs exactly them. Two runners inside the suite are
-optional locally and installed in CI: `node` executes the artefact's own graph,
-layout, path-walk and search functions against the real catalogue, and a browser
-driven through Playwright uses the built file. Install them with:
-
-```bash
-python -m pip install playwright && python -m playwright install chromium
-```
+Two things worth knowing before you read it. **A chain edge is a security
+claim**, so bulk or speculative edge generation is not acceptable here. And
+**contributions are licensed under terms that let the project license the same
+material differently later** — you keep your copyright, and nothing already
+published under Apache-2.0 can be withdrawn by it.
 
 ## Standards, attribution and licence
 
