@@ -130,7 +130,31 @@ that run the other way are named on the page:
 
 ## Try it
 
-There is no downloadable release yet. Build it from source:
+Download the built file from the [latest
+release](https://github.com/kabiri-labs/harrier/releases/latest). Two assets:
+`harrier-<version>.html`, and `harrier-<version>.html.sha256` beside it.
+
+Open the `.html` from disk. It is one self-contained file — no server, no
+install, no network — and everything below works from it.
+
+**Verify it before you open it.** This is a file you are being asked to open on
+an engagement network on the strength of what it claims not to do, and the
+digest is published so that claim can be checked rather than taken:
+
+```bash
+sha256sum -c harrier-*.html.sha256          # shasum -a 256 -c on macOS
+```
+
+The checksum file names the file it covers, so nothing here carries a version
+that can go stale. The digest is produced by the release workflow, which
+rebuilds the artefact from scratch a second time and refuses to publish if the
+two builds disagree — a digest beside a file nobody rebuilt says only that the
+file was hashed once.
+
+### Or build it from source
+
+For contributors, and for anyone who wants the artefact as it stands at a
+particular commit rather than at a release:
 
 ```bash
 git clone https://github.com/kabiri-labs/harrier.git
@@ -141,8 +165,10 @@ python -m harrier validate          # the catalogue is internally consistent
 python -m harrier build             # writes harrier.html
 ```
 
-Open `harrier.html` from disk. It is one self-contained file: no server, no
-install, no network.
+The build is deterministic: the same catalogue produces the same bytes, which
+is what makes the published digest worth checking.
+
+### From the command line
 
 One line per test case of the standard, with the units that cover it and the
 depth each is written to — the output that goes into an engagement tracker:
