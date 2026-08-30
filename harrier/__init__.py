@@ -90,7 +90,15 @@ SAFE_LOADER = _SafeLoader
 #: the model as a picture -- every capability in a column for what kind of
 #: thing it is, shaded by how far the chart reaches from it, each one a way
 #: into the routes that run through it.
-__version__ = "0.13.0"
+#:
+#: 0.13.1 fixes a test that measured a transient. The sticky column heading
+#: takes its offset from a resize observer, which reports after layout rather
+#: than during it, so for a frame after the viewport changes the offset still
+#: holds the previous width's header height. The check asserted the settled
+#: state without waiting for it and failed about once in fifteen runs at the
+#: width where the header wraps -- a red build that said nothing about the
+#: artefact, which is the kind that teaches people to re-run rather than read.
+__version__ = "0.13.1"
 
 __all__ = [
     "SAFE_LOADER",
