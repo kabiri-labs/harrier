@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.13.1 is an early public alpha.** The WSTG decomposition is broad —
+> **Harrier 0.14.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
 > behind them is not: 13 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.13.1-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.14.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
