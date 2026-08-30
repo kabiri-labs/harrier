@@ -23,8 +23,9 @@ entries:
     detect: "Escapes the closing delimiter on engines that honour backslash escapes, breaking the statement where a quote alone was filtered."
 
   - name: balanced string equivalent
-    payload: "' 'a' = 'a"
+    payload: "' AND '1'='1"
     detect: "Must return the baseline record. A baseline-identical response here alongside an error for the lone quote is the concatenation proof."
+    note: "Reconstructs the closing quote and adds a tautology, which parses on all five engines. Adjacent string literals -- ' 'a' = 'a -- look equivalent and are not: only MySQL concatenates literals by juxtaposition, so on PostgreSQL and SQLite that form is a syntax error indistinguishable from the lone quote."
 
   - name: balanced string true
     payload: "' OR '1'='1"

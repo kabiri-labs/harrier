@@ -38,7 +38,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file with every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. Its first navigation model -- a surface-anchored board driven by the facts a tester ticked -- was replaced in phase 6.5. |
 | 6.5 | Product pivot | `done` | Harrier becomes an execution companion to a standard rather than a workspace about a target. Standard-first navigation, atomic decomposition per WSTG test case, a derived local chain per unit, a progressively disclosed general graph, and the removal of every piece of engagement state. **Breaking, and deliberate.** See [`PIVOT.md`](PIVOT.md). |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. Harrier Extensions exists to receive them. This is the clearest differentiation from restating WSTG. |
-| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. Since 0.10.0 a unit can be sketched rather than only outlined or written in full, so the step from breadth to usable depth is twenty minutes rather than two hours. 0.11.0 sketched the seventeen reconnaissance and configuration topics an engagement opens with. 0.14.0 authored the terminal outcome layer first, because a chain whose last step is an outline stops at a capability rather than at an outcome. |
+| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. Since 0.10.0 a unit can be sketched rather than only outlined or written in full, so the step from breadth to usable depth is twenty minutes rather than two hours. 0.11.0 sketched the seventeen reconnaissance and configuration topics an engagement opens with. 0.14.0 authored the terminal outcome layer first, because a chain whose last step is an outline stops at a capability rather than at an outcome; 0.15.0 wrote the supporting layer for SQL injection before its units, because the validator rejects a unit referencing a card or a mitigation that does not exist yet. |
 
 Phases 2–5 are 1.0. Phase 6 is what makes it usable; phase 7 is what makes it
 better than the standard it is built on.
@@ -193,7 +193,10 @@ against real material rather than an empty tree:
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
 | `cards/traversal/path-resolution.md` | The second card, shared by all five units of `HRR-RES-01`. |
 | `cards/outcome/proportionate-demonstration.md` | The third card, shared by the three terminal outcome units: how much is enough to answer what a capability was worth. |
+| `cards/sqli/injection-points.md` | Shared by the five `HRR-INJ-01` units that reason about where a value lands in the statement rather than what to do once it is there. |
+| `cards/sqli/inference.md` | Shared by the four `HRR-INJ-01` channels that read a database, and the basis for choosing between the two shapes they divide into. |
 | `mitigations/path-resolution.md` | The first mitigation, written because a unit referenced it. |
+| `mitigations/parameterised-query.md` | CWE-89, for `HRR-INJ-01`: binding rather than escaping, what cannot be bound, and what least privilege changes about each capability the topic charts. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
 | `knowledge/` | 106 topics across 14 domains, and 374 units across all fourteen domains. |
