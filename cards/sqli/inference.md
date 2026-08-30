@@ -18,26 +18,37 @@ than the noise is not a differential.
 **Pad both forms to the same length** — otherwise the difference being read is
 the payload's length rather than its truth.
 
-**The delay holds a connection.** On a pooled backend the request that shows the
-delay may be the *next* one, from somebody else.
+**The delay holds a connection.** It shows on its own request, synchronously.
+What the held connection does is add latency to *other* requests, the control in
+your own pair included.
 
 **One label per request, not per engagement** — an out-of-band label that
 repeats cannot say which request produced which interaction.
 
-**Order: error, then boolean, then time, then out-of-band** — each is roughly an
-order of magnitude more expensive per bit than the one before it.
+**Order: error, then boolean, then time, then out-of-band** — error returns a
+value per request, the two inference channels a bit, and time multiplies each
+bit by the delay.
 
 ---
 
 ## Depth
 
-### The one model
+### Two shapes, not one
 
-Whatever the channel, the shape is identical. The tester writes a condition, the
-statement evaluates it, and exactly one bit comes back: true or false. Reading a
-value means asking about it until enough bits have arrived.
+The four channels divide into two, and the division is what the choice between
+them turns on.
 
-That makes every technique here measurable in the same units:
+**Direct extraction — error and out-of-band.** The channel carries a value, not
+a verdict. An engine error quotes the offending operand, and an out-of-band
+lookup carries a computed string in the name it resolves. One request returns as
+much of the value as the channel is wide, so the cost is one or two requests
+per value and the limit is *width* rather than length: an error message
+truncates, a label has a length ceiling, and a long value is read in a few
+bounded slices rather than a few hundred requests.
+
+**Inference — boolean and time.** The channel carries one bit. The tester writes
+a condition, the statement evaluates it, and true or false comes back. Reading a
+value means asking about it until enough bits have arrived:
 
 ```
 requests = bits × repetitions
@@ -47,9 +58,10 @@ cost     = requests × cost-per-request
 For a character-at-a-time read with a binary search, "bits" is about 7 per
 character. A 30-character version string is therefore around 210 requests
 without repetition, and around 630 with the three repetitions a noisy endpoint
-needs. That number is why the ordering below matters, and why every unit in this
-family stops at one short metadata value: the technique is proven by the first
-value, and everything after it is arithmetic somebody else is paying for.
+needs -- against one or two for the same string through an error message. That
+two-order-of-magnitude gap is why the ordering below matters, and why every unit
+in this family stops at one short metadata value: the technique is proven by the
+first value, and everything after it is arithmetic somebody else is paying for.
 
 ### Measure the baseline first, in both dimensions
 
@@ -103,10 +115,16 @@ the pool, and the eleventh request, belonging to a real user, waits.
 
 Two consequences:
 
-1. **The delay may not appear on the request that caused it.** A request that
-   returns quickly while a *later* one is slow is the pool draining, not the
-   condition being false. Alternating the pair and repeating is what separates
-   these; a single pass cannot.
+1. **The contention lands on other requests, not on this one.** A synchronous
+   query holds its connection until the delay finishes, so the delayed request
+   is always the slow one -- the signal never moves off its cause. What moves is
+   everything else: the control form sent immediately after a delayed one can be
+   slow because the pool is still draining, which makes a false condition look
+   true. Alternate the pair, leave the pool time to recover between them, and
+   compare medians rather than adjacent readings. (The exception is a genuinely
+   asynchronous path -- a query the application fires and does not wait for, or
+   one that hits a statement timeout -- where the delay is absorbed rather than
+   observed, and the channel has to be read some other way.)
 2. **This is a denial-of-service primitive at low request rates.** Not at flood
    rates — at ten requests. That is why `HRR-INJ-01-TIME` is the one unit in the
    topic whose `safety` names an availability limit, and why a timing sweep is
