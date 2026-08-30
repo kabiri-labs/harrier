@@ -12,8 +12,9 @@ credits:
 entries:
   - name: string concatenation with double pipe
     engine: [postgresql, oracle, sqlite]
-    payload: "' || 'a' = 'a"
-    detect: "Baseline-identical response. Narrows to PostgreSQL, Oracle or SQLite; MySQL treats double pipe as logical OR by default."
+    payload: "' || ''"
+    detect: "Baseline-identical response. Narrows to PostgreSQL, Oracle or SQLite; MySQL treats double pipe as logical OR by default and turns the comparison false."
+    note: "Concatenating an empty string is a no-op where || concatenates, so a baseline-identical response is the whole signal. The earlier form -- ' || 'a' = 'a -- chained two comparisons: PostgreSQL rejects that outright because = is non-associative, and SQLite evaluates it to a non-baseline result, so it identified nothing on two of the three engines it claimed."
 
   - name: string concatenation with plus
     engine: [mssql]
