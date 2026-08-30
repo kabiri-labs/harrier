@@ -98,7 +98,15 @@ SAFE_LOADER = _SafeLoader
 #: state without waiting for it and failed about once in fifteen runs at the
 #: width where the header wraps -- a red build that said nothing about the
 #: artefact, which is the kind that teaches people to re-run rather than read.
-__version__ = "0.13.1"
+#:
+#: 0.14.0 gives the chains somewhere to end. Every route in the catalogue
+#: stopped at a capability: a tester who confirmed a read, a write to another
+#: party's record, or execution in somebody else's browser had established a
+#: primitive and had nowhere that said what it was worth. The three terminal
+#: outcome units are written to full depth, once for the whole catalogue rather
+#: than for one topic, with the card that decides how much is enough to answer
+#: the question -- the smallest observation, agreed before the first read.
+__version__ = "0.14.0"
 
 __all__ = [
     "SAFE_LOADER",
