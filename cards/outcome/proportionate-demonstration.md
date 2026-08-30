@@ -123,6 +123,18 @@ So the reach questions are answered from the application's own behaviour:
 - **Whether it persists** is read from whether it survives a fresh session and a
   cache the tester does not control.
 
+Three of the six capabilities that reach this unit leave nothing in the
+application at all, and the same questions still have answers. A chosen redirect
+is read from the response that issues it — which destinations the parameter
+accepts, and whether the browser follows without a prompt. A framed or
+foreign-origin action is read from what the application does *not* send: a
+missing frame ancestry directive, an origin the message handler never checks, a
+state change that needs no token. An effect on a request in flight is read from
+how the front end and the origin disagree about where one request ends. In each
+case the artefact is in the attacker's page or on the wire, not in the client's
+store, so there is nothing to remove — and the reach question is answered from
+the response rather than from a delivery.
+
 Every one of those is answerable without a single real user receiving anything.
 A tester who cannot answer one of them without delivery records it as
 unestablished and says why. That is a smaller finding than the alternative and a

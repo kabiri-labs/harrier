@@ -47,15 +47,21 @@ evidence:
 
 done_when: >-
   The receiving party, the privileges of that context, the trigger and the
-  persistence are each answered from how the application stores and serves the
-  payload -- and every stored payload placed is listed with its location and
-  either removed or handed to the client in writing.
+  persistence are each answered from the application's own behaviour -- where a
+  payload is stored and served, from how it is stored and served; where the
+  capability is a chosen redirect, a framed or foreign-origin action, or an
+  effect on a request in flight, from the response that carries it -- and every
+  stored payload placed is recorded with its location and confirmed removed,
+  by the tester or by the client, before the engagement closes.
 
 safety: >-
   This is the one outcome unit whose subject is a third party who never agreed
   to anything. Nothing is delivered to a real user: reach is established from
-  how the application stores and serves the payload, not by sending it to
-  somebody. Every stored payload is silent, its location is recorded, and it is
-  removed or handed to the client in writing before the engagement closes.
+  what the application stores, serves or redirects, not by sending it to
+  somebody. Every stored payload is silent and its location is recorded, and
+  nothing placed outlives the engagement -- where the tester cannot remove it,
+  the client's removal is confirmed rather than merely requested, because a
+  location handed over and left live is attacker-controlled content still being
+  served to people who never agreed to any of this.
 
 card: cards/outcome/proportionate-demonstration.md
