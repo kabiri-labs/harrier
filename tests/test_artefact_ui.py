@@ -1204,6 +1204,21 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                 self.driver.wait_for_render(
                     lambda: page.evaluate("window.scrollY") > 1000
                 )
+                # The offset is delivered by a resize observer, which runs after
+                # layout rather than during it, so between the render and that
+                # delivery --stick still holds the previous width's height. The
+                # assertions below are about the settled state; measuring before
+                # the observer has caught up reads a transient the page corrects
+                # a frame later, and fails roughly once in fifteen runs at the
+                # width where the header wraps.
+                self.driver.wait_for_render(
+                    lambda: page.evaluate("""() => {
+                      const stick = parseFloat(getComputedStyle(document.documentElement)
+                                      .getPropertyValue('--stick')) || 0;
+                      return Math.abs(stick - document.querySelector('header')
+                                      .getBoundingClientRect().height) <= 1;
+                    }""")
+                )
                 below = page.evaluate("""() => {
                   const bar = document.querySelector('header').getBoundingClientRect().bottom;
                   const tallest = [...document.querySelectorAll('.mcol')].sort(
