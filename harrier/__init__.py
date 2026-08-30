@@ -106,7 +106,13 @@ SAFE_LOADER = _SafeLoader
 #: outcome units are written to full depth, once for the whole catalogue rather
 #: than for one topic, with the card that decides how much is enough to answer
 #: the question -- the smallest observation, agreed before the first read.
-__version__ = "0.14.0"
+#:
+#: 0.15.0 writes the supporting layer for SQL injection: two cards split by what
+#: their units reason about rather than by identifier, and the mitigation keyed
+#: to the weakness. Two payload entries were wrong and running them is what
+#: showed it -- a balanced probe and an engine fingerprint that both errored on
+#: the engines they claimed, neither of which a reading would have caught.
+__version__ = "0.15.0"
 
 __all__ = [
     "SAFE_LOADER",
