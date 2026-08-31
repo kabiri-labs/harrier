@@ -37,7 +37,7 @@ oracle:
 sequence:
   - "Measure the endpoint's own variation first: ten baseline requests, recording the spread of status, length and rendered content."
   - "Send the true and false forms of one condition, and confirm the true form reproduces the baseline."
-  - "Alternate the pair three times to rule out ordering and caching as the source of the difference."
+  - "Alternate the pair three times where a difference appeared, to rule out ordering and caching as its source; where none appeared, take the alternation to ten before recording a negative, since ruling the channel out costs more evidence than confirming it."
   - "Read one short value through the channel -- the engine version, not a table of rows -- and stop."
 
 first_false_positive: >-
@@ -61,11 +61,13 @@ done_when: >-
   repetition count and the baseline variation they were read against.
 
 safety: >-
-  A character-at-a-time read costs one request per character, so a table is
-  thousands of requests against a production database and reads as an attack in
-  every log that sees it. Prove the channel with one short value; extracting
-  anything larger is a decision to put to the client rather than the next step
-  of a procedure.
+  A character costs a binary search, not a request: roughly seven comparisons
+  for an ASCII character, plus the requests that bound the value's length. A
+  thirty-character version string is therefore around two hundred requests
+  before any repetition, and a table is tens of thousands against a production
+  database -- which reads as an attack in every log that sees it. Prove the
+  channel with one short value; extracting anything larger is a decision to put
+  to the client rather than the next step of a procedure.
 
 payloads: payloads/sqli/boolean.yaml
 tools: [burp-repeater, burp-intruder]

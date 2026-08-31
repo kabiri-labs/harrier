@@ -29,8 +29,8 @@ enter_when:
   - "The error, boolean and UNION routes have each been recorded as producing nothing."
 
 oracle:
-  positive: "The delayed form exceeds the baseline by at least the injected interval across repetitions, and the identical payload with the delay disabled does not."
-  negative: "The delayed form and its control are indistinguishable across ten repetitions at an interval well above the measured jitter."
+  positive: "Where the engine offers a sleep primitive, the delayed form exceeds the baseline by at least the injected interval across repetitions while the same payload with the delay disabled does not; where the delay is a workload rather than an interval, the delayed form is reproducibly slower than its control by a margin that scales with the workload. In both, the control decides it."
+  negative: "The delayed form and its control are indistinguishable across ten repetitions, at an interval -- or a workload -- well above the measured jitter."
   inconclusive: "The endpoint's own latency spread is wider than the largest interval that can safely be injected."
 
 sequence:
