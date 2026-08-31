@@ -31,7 +31,7 @@ enter_when:
   - "A parameter reaches a listing, a lookup, a sort or a page size, and its ordinary behaviour has been observed at least once."
 
 oracle:
-  positive: "The single quote and its balanced equivalent produce two different responses, and the balanced form returns to the baseline -- the value was parsed as SQL rather than compared as text."
+  positive: "In a string or numeric position, the breaking form and its balanced equivalent produce two different responses and the balanced form returns to the baseline; in an identifier position, two orderings the engine had to evaluate differ from each other. Either way the value was parsed as SQL rather than compared as text."
   negative: "Every string, numeric and identifier form leaves the response identical to the baseline, the arithmetic pair included."
   inconclusive: "The endpoint answers with one generic page for every value including the baseline, so nothing distinguishes a parse from a rejection."
 
@@ -39,7 +39,7 @@ sequence:
   - "Capture the baseline three times and record status, length and elapsed time; a non-deterministic endpoint invalidates every comparison below."
   - "Send a single quote, then the balanced form. A difference followed by a return to the baseline is the string-context signal."
   - "For a numeric position, send an arithmetic pair that evaluates to the original value -- 7-6 where the value is 1 -- and compare it against the literal."
-  - "Where neither moves, send the boolean pair into a sort column or a sort direction, which is the identifier position no quote reaches."
+  - "Where neither moves, replace the value outright with the two ordinals, then with the conditional ordering pair -- the identifier position takes no quote and no appended arithmetic, so the row order is the observable."
   - "Record the position and its context. Choosing a technique from it belongs to the sibling units."
 
 first_false_positive: >-

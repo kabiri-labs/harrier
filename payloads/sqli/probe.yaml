@@ -54,6 +54,37 @@ entries:
     detect: "Same intent as above; listed separately because Oracle's implicit numeric conversion differs and may error where other engines coerce."
     note: "If this errors while the plain id succeeds, the value is being bound rather than concatenated."
 
+  # The identifier position -- a sort column or a sort direction -- takes none of
+  # the forms above: no quote is involved and no arithmetic is appended, because
+  # the value *is* the identifier rather than sitting inside a comparison. These
+  # five replace the parameter's value outright, and the observable is the row
+  # order rather than the row count.
+  - name: identifier ordinal, first column
+    payload: "1"
+    detect: "Replaces a sort column outright. Ordering by the first column; pair with the second ordinal below and read the row order, not the row count."
+    note: "Ordinal ordering is standard SQL and accepted by all five engines, which makes this the cheapest identifier probe that needs no column name."
+
+  - name: identifier ordinal, second column
+    payload: "2"
+    detect: "A row order differing from the first ordinal is the identifier-context signal: the value reached an ORDER BY clause rather than a comparison."
+
+  - name: identifier direction reversal
+    payload: "name DESC"
+    detect: "Where the parameter names a direction rather than a column, the reversed order is the signal. Substitute the column the endpoint actually sorts by."
+
+  - name: identifier conditional ordering, true
+    payload: "(CASE WHEN 1=1 THEN id ELSE 0 END)"
+    detect: "Orders by the real column. Pair with the false form: two different row orders prove the engine evaluated a condition, which no template echo can do."
+    note: "The identifier position's equivalent of the arithmetic pair. Both CASE branches must share a type -- a text branch beside an integer one is rejected by PostgreSQL and Oracle before the condition is ever evaluated."
+
+  - name: identifier conditional ordering, false
+    payload: "(CASE WHEN 1=2 THEN id ELSE 0 END)"
+    detect: "Orders by a constant, so the rows keep their natural order. The difference from the true form is the whole signal."
+
+  - name: identifier non-existent column
+    payload: "hrr_no_such_column"
+    detect: "An error naming the column proves the value is interpolated into an identifier position. A generic page instead means the parameter is validated against a list before any statement is built."
+
   - name: inert hostile control
     payload: "<<sqli-control-not-sql>>"
     detect: "Looks hostile but contains no SQL syntax. If this is blocked identically to the quote, the block is a filter and not a query error -- go to HRR-INJ-01-EVADE."
