@@ -335,10 +335,14 @@ def render(data: Dict[str, Any]) -> str:
     script = (ARTEFACT_DIR / "app.js").read_text(encoding="utf-8")
 
     blob = json.dumps(data, separators=(",", ":"), sort_keys=True)
-    # "</script>" inside a string would end the block early and leave the rest of
-    # the catalogue rendering as markup. Escaping the slash keeps the JSON valid
-    # and the parser inside the tag.
-    blob = blob.replace("</", "<\\/")
+    # A "<" inside a string is escaped to its JSON unicode form rather than left
+    # as itself. "</script>" would end the block early and leave the rest of the
+    # catalogue rendering as markup, and escaping only the slash stops exactly
+    # that one sequence -- but the catalogue now carries payload text that is
+    # markup on purpose, and none of it should be a "<" in the file at all.
+    # JSON.parse restores every one of these, so the data is unchanged and the
+    # published file contains no tag it did not write itself.
+    blob = blob.replace("<", "\\u003c")
 
     # The stylesheet and the script are this project's own files, not catalogue
     # content, and neither may contain a closing tag for the element it sits in.
