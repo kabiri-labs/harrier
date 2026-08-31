@@ -13,7 +13,7 @@ PTN-<DOM>-<NN>            a topic     PTN-INJ-01
 PTN-<DOM>-<NN>-<SLUG>     a unit      PTN-INJ-01-UNION
 ```
 
-- `HRR` — the project prefix. Deliberately not `WSTG`: the scope is web
+- `PTN` — the project prefix. Deliberately not `WSTG`: the scope is web
   application testing, and a large part of it has no WSTG identifier.
 - `<DOM>` — a three-letter domain code from §2. **Frozen at creation.**
 - `<NN>` — a two-digit serial within the domain, assigned in creation order and

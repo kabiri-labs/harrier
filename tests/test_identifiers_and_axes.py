@@ -6,10 +6,12 @@ quietly stopped firing, and a rule that has stopped firing looks exactly like a
 repository with no problems.
 """
 
+import json
+import re
 import unittest
 
 from pentest_navgrid.validate import validate
-from tests.support import Sandbox, messages
+from tests.support import REPO_ROOT, Sandbox, messages
 
 
 class SandboxCase(unittest.TestCase):
@@ -25,6 +27,52 @@ class SandboxCase(unittest.TestCase):
     def assertAccepted(self):
         problems = validate(self.box.root)
         self.assertFalse(problems, messages(problems))
+
+
+class TheTaxonomyDocumentAgreesWithTheSchemaThatEnforcesIt(unittest.TestCase):
+    """`docs/TAXONOMY.md` is where an author looks up how to name a thing, and
+    `unit.schema.json` is what rejects a name that is wrong. Nothing connected
+    them.
+
+    That let the rename leave the document naming the old prefix three lines
+    under a grammar block showing the new one: an author reading the
+    authoritative file would have chosen the obsolete one, and every test stayed
+    green because the document is prose and prose was not checked.
+
+    The grammar block is not parsed. It is read for the one token both files
+    have to agree on, which is the whole of what went wrong.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.doc = (REPO_ROOT / "docs" / "TAXONOMY.md").read_text(encoding="utf-8")
+        cls.schema = json.loads(
+            (REPO_ROOT / "pentest_navgrid" / "schema" / "unit.schema.json")
+            .read_text(encoding="utf-8")
+        )
+
+    def prefix_from_schema(self):
+        pattern = self.schema["$defs"]["unit_id"]["pattern"]
+        found = re.match(r"\^([A-Z]+)-", pattern)
+        self.assertIsNotNone(found, f"cannot read a prefix out of {pattern!r}")
+        return found.group(1)
+
+    def test_the_document_names_the_prefix_the_schema_requires(self):
+        prefix = self.prefix_from_schema()
+        self.assertIn(f"- `{prefix}` — the project prefix.", self.doc)
+
+    def test_the_document_shows_the_grammar_the_schema_requires(self):
+        prefix = self.prefix_from_schema()
+        for shape in (f"{prefix}-<DOM>-<NN>", f"{prefix}-<DOM>-<NN>-<SLUG>"):
+            with self.subTest(shape=shape):
+                self.assertIn(shape, self.doc)
+
+    def test_no_other_prefix_is_left_being_explained(self):
+        """A second prefix presented as this project's is the failure itself,
+        whatever it happens to be. Historical mentions elsewhere are fine; this
+        line is the one an author acts on."""
+        explained = re.findall(r"- `([A-Z]{3})` — the project prefix", self.doc)
+        self.assertEqual(explained, [self.prefix_from_schema()])
 
 
 class UnitSlugsComeFromTheDeclaredAxis(SandboxCase):
