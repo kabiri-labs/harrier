@@ -7,15 +7,15 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.17.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Harrier 0.18.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
-> behind them is not: 26 units are written to full procedural depth and 40 are
+> behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
 > means in numbers](#what-exists-today-and-what-does-not) is below, not buried at
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.17.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.18.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -270,22 +270,27 @@ stale in this file without the suite failing.
 | Claimed by a Harrier topic | 108 of 108 resolvable |
 | Topics | 106, across 14 domains |
 | Test Units | 374 |
-| Written to full procedural depth | **26** |
+| Written to full procedural depth | **36** |
 | Sketched | 40 |
-| Outline only | 308 |
+| Outline only | 298 |
+
+Three chains are now written end to end rather than one: SQL injection under
+`WSTG-INPV-05`, cross-site scripting under `WSTG-INPV-01`, `WSTG-INPV-02` and
+`WSTG-CLNT-03`, and object-level access control under `WSTG-ATHZ-04` — each from
+the standard's own test case through its Test Units to a stated business outcome.
 
 | Chain | |
 |---|---|
 | Capabilities | 185 |
-| Derived unit-to-unit edges | 677 |
-| — of them escalations between capabilities | 321 |
+| Derived unit-to-unit edges | 701 |
+| — of them escalations between capabilities | 345 |
 | — another technique for the same test | 124 |
 | — a general prerequisite, not a step | 232 |
-| Tests with a potential continuation | 237 |
+| Tests with a potential continuation | 240 |
 | Tests that establish an impact | 14 |
-| Tests that stop short | 84 |
+| Tests that stop short | 81 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 50 of 185 |
+| Capabilities used by no test, impacts excluded | 49 of 185 |
 | Capabilities with a charted route to an impact | 90 of 175 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
@@ -305,17 +310,18 @@ than claimed, and nothing is invented to fill the gap.
 **The largest known gap is now the controls.** `primitive → impact` is written:
 one capability of thirty-two is still declared as a use by nothing, and 90 of
 175 capabilities have a charted route to an impact. `control → impact` is not,
-and 37 of 59 `control.*` facts are established by a test and consumed by
+and 36 of 59 `control.*` facts are established by a test and consumed by
 nothing. A control is the state of a defence rather than a result, so the step
 that turns one into an outcome has to be written before an edge can be drawn
 from it.
 
-Two of those `control.*` facts gained a consumer with the SQL injection chain,
-and that is not progress against this gap. The new edges say *worth reaching for
-sooner*, not *now possible*: a verbose error makes error-based inference the
-first channel to try, and a characterised filter decides whether a statement
-separator can reach the driver. Nothing yet says what a defeated control
-**permits**, which is the whole of what is missing.
+Three of those `control.*` facts have gained a consumer across the three
+chains, and that is not progress against this gap. The new edges say *worth
+reaching for sooner*, not *now possible*: a verbose error makes error-based
+inference the first channel to try, a characterised filter decides whether a
+statement separator can reach the driver, and permissive headers make an
+execution test worth reaching for before a markup one. Nothing yet says what a
+defeated control **permits**, which is the whole of what is missing.
 
 This is recorded rather than filled in. Generating plausible edges would make the
 matrix look complete and every route on it untrustworthy — an edge nobody thought

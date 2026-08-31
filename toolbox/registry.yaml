@@ -137,3 +137,26 @@
       cmd: "dig +nssearch {{HOST}}"
       flags:
         "+nssearch": "Asks every authoritative server directly, which distinguishes a delegation that is genuinely stale from one cached mid-migration."
+
+- id: browser-devtools
+  name: Browser developer tools
+  url: https://developer.chrome.com/docs/devtools
+  purpose: >
+    Reading what the browser built, and separating it from what the server sent.
+  invocations:
+    - purpose: "Read the context a value landed in"
+      cmd: "View the raw response body in the network panel, not the elements panel."
+      flags:
+        "raw body rather than the element tree": "The element tree is what the browser built after recovering from broken markup. Reading the context there reads the browser's repair rather than what the application sent, which is the first false positive of the whole topic."
+    - purpose: "Confirm execution rather than injection"
+      cmd: "Watch the console for the marker while loading the page normally."
+      flags:
+        "loaded normally rather than pasted into the console": "A payload evaluated in the console proves the console evaluates script. The marker has to arrive from the page's own load."
+    - purpose: "Separate a browser policy from an encoder"
+      cmd: "Read the response headers for a content policy while the payload sits intact in the body."
+      flags:
+        "headers and body together": "Payload intact and nothing running is a policy finding; payload encoded is an application finding. The two are read from different parts of one response and are materially different reports."
+  safety: >
+    A page opened in the tester's ordinary profile carries the tester's own
+    sessions and extensions into the observation. Use a separate profile, so an
+    extension's own injection is never mistaken for the application's.

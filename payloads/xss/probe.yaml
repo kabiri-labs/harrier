@@ -1,0 +1,43 @@
+# Where a value is returned, and what survives on the way.
+#
+# Two conventions hold across payloads/xss/:
+#   - The marker is computed or unique, never a literal the request also
+#     carries. A reflected literal proves the template echoed input; it does not
+#     prove the browser ran anything.
+#   - A reflected proof may raise a dialog; a stored one may not. A stored
+#     payload fires in real users' browsers, so its marker is silent and its
+#     location is recorded for removal.
+id: xss/probe
+title: Reflection and delimiter survival probes
+reviewed: "2026-08-31"
+variables: [MARKER, TAG]
+safety: >-
+  Nothing in this file introduces an element or runs script. Every entry is a
+  marker or a single character, sent to establish where a value is returned and
+  what survives on the way -- which is why this file is safe to run before
+  anything about the target is known.
+entries:
+  - name: locator
+    payload: "{{MARKER}}"
+    detect: "Find every occurrence in the raw body, not the rendered page. One parameter is frequently returned in more than one context, and only one of them may be unencoded."
+
+  - name: angle brackets
+    payload: "{{MARKER}}<>{{MARKER}}"
+    detect: "Both brackets present unencoded between the markers means element content can be opened. Either one entity-encoded is the element-content encoder working."
+
+  - name: quote pair
+    payload: "{{MARKER}}\"'{{MARKER}}"
+    detect: "Which of the two survives says which attribute quoting the template uses, and whether a script string literal is escapable."
+    note: "Send both in one request and read them in the body separately; sending them one at a time doubles the requests and answers no more."
+
+  - name: attribute separator
+    payload: "{{MARKER}} {{MARKER}}"
+    detect: "A surviving space inside an unquoted attribute value is enough to add a second attribute, with no quote needed at all."
+
+  - name: element escape
+    payload: "</{{TAG}}>{{MARKER}}"
+    detect: "Where the value lands inside textarea, title, noscript or a comment, this is what tells whether the element can be closed. Nothing else in this file answers it."
+
+  - name: backslash
+    payload: "{{MARKER}}\\{{MARKER}}"
+    detect: "Inside a script string literal, a surviving backslash decides whether the escaping is a real encoder or a single-character filter."

