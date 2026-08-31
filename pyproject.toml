@@ -10,8 +10,12 @@
 # suite is offline and deterministic, and an unannounced resolver change in a
 # dependency is the one thing that could stop it being either.
 
+# 77 rather than something older: the [project] table below declares its licence
+# as an SPDX string with `license-files` beside it, which is PEP 639, and
+# setuptools only understands that form from 77.0.0. A lower bound that permits
+# 68 permits a backend that rejects this file's own metadata.
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
