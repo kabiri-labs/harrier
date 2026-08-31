@@ -438,9 +438,9 @@ cases:
   - HRR-CLT-01-SVG
   - HRR-CLT-01-MARKUP
   - HRR-CLT-01-EVADE
-  authored: 0
+  authored: 10
   sketched: 0
-  outline: 10
+  outline: 0
   resolvable: true
 - id: WSTG-CLNT-04
   title: Testing for Client-Side URL Redirect
@@ -1029,9 +1029,9 @@ cases:
   - HRR-CLT-01-SVG
   - HRR-CLT-01-MARKUP
   - HRR-CLT-01-EVADE
-  authored: 0
+  authored: 10
   sketched: 0
-  outline: 10
+  outline: 0
   resolvable: true
 - id: WSTG-INPV-02
   title: Testing for Stored Cross Site Scripting
@@ -1048,9 +1048,9 @@ cases:
   - HRR-CLT-01-SVG
   - HRR-CLT-01-MARKUP
   - HRR-CLT-01-EVADE
-  authored: 0
+  authored: 10
   sketched: 0
-  outline: 10
+  outline: 0
   resolvable: true
 - id: WSTG-INPV-03
   title: Testing for HTTP Verb Tampering

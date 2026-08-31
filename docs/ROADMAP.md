@@ -38,7 +38,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file with every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. Its first navigation model -- a surface-anchored board driven by the facts a tester ticked -- was replaced in phase 6.5. |
 | 6.5 | Product pivot | `done` | Harrier becomes an execution companion to a standard rather than a workspace about a target. Standard-first navigation, atomic decomposition per WSTG test case, a derived local chain per unit, a progressively disclosed general graph, and the removal of every piece of engagement state. **Breaking, and deliberate.** See [`PIVOT.md`](PIVOT.md). |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. Harrier Extensions exists to receive them. This is the clearest differentiation from restating WSTG. |
-| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. Since 0.10.0 a unit can be sketched rather than only outlined or written in full, so the step from breadth to usable depth is twenty minutes rather than two hours. 0.11.0 sketched the seventeen reconnaissance and configuration topics an engagement opens with. 0.14.0 authored the terminal outcome layer first, because a chain whose last step is an outline stops at a capability rather than at an outcome; 0.15.0 wrote the supporting layer for SQL injection before its units, because the validator rejects a unit referencing a card or a mitigation that does not exist yet; 0.16.0 took the nine remaining `HRR-INJ-01` units to full depth, which makes SQL injection the first chain readable end to end from the standard's own test case to a stated business outcome; 0.17.0 did the same for object-level access control, a chain with no payload axis at all, where the whole difficulty is in the oracle and the evidence. |
+| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. Since 0.10.0 a unit can be sketched rather than only outlined or written in full, so the step from breadth to usable depth is twenty minutes rather than two hours. 0.11.0 sketched the seventeen reconnaissance and configuration topics an engagement opens with. 0.14.0 authored the terminal outcome layer first, because a chain whose last step is an outline stops at a capability rather than at an outcome; 0.15.0 wrote the supporting layer for SQL injection before its units, because the validator rejects a unit referencing a card or a mitigation that does not exist yet; 0.16.0 took the nine remaining `HRR-INJ-01` units to full depth, which makes SQL injection the first chain readable end to end from the standard's own test case to a stated business outcome; 0.17.0 did the same for object-level access control, a chain with no payload axis at all, where the whole difficulty is in the oracle and the evidence; 0.18.0 completed the third with cross-site scripting, whose eight context units are eight different answers to what has already been escaped by the time the value arrives. Three chains now run end to end rather than one. |
 
 Phases 2–5 are 1.0. Phase 6 is what makes it usable; phase 7 is what makes it
 better than the standard it is built on.
@@ -60,7 +60,7 @@ thing stopped being built.
 0.4.0 is the first version published for anyone outside the project to look at,
 and it is an alpha in the honest sense: the decomposition is broad and the depth
 behind it is not. Every resolvable WSTG identifier is claimed and 374 Test Units
-exist; 26 are written to full procedural depth, 40 are sketched, and the far half
+exist; 36 are written to full procedural depth, 40 are sketched, and the far half
 of the chain is barely charted.
 
 Both figures are in the README rather than at the bottom of it, and the suite
@@ -96,9 +96,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 308 |
+| Units — outlined | 298 |
 | Units — sketched | 40 |
-| Units — authored | 26 |
+| Units — authored | 36 |
 | Units — charted | 374 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -187,9 +187,10 @@ against real material rather than an empty tree:
 |---|---|
 | `standards/wstg.yaml` | 109 identifiers, pinned by commit and SHA-256, every entry verified. |
 | `standards/wstg-map.yaml` | All 109 resolved to a domain by the ordered procedure, with the deciding rule and a note on each contested one. |
-| `payloads/sqli/` | 99 SQL injection payloads across 10 files, covering probe, fingerprint, seven techniques and evasion. |
+| `payloads/sqli/` | 105 SQL injection payloads across 10 files, covering probe, fingerprint, seven techniques and evasion. |
 | `payloads/traversal/` | 4 files: survival probes, encodings and what each distinguishes, read targets with fingerprints, and the read-versus-interpret pair. |
-| `toolbox/registry.yaml` | 7 tools with per-flag rationale. |
+| `payloads/xss/` | 48 payloads across 10 files, one per context plus the probe and the evasion set, each executable entry run in a browser rather than recalled. |
+| `toolbox/registry.yaml` | 8 tools with per-flag rationale. |
 | `cards/sqli/union-extraction.md` | One card in the recall-first layout, as the worked example of the format. |
 | `cards/traversal/path-resolution.md` | The second card, shared by all five units of `HRR-RES-01`. |
 | `cards/outcome/proportionate-demonstration.md` | The third card, shared by the three terminal outcome units: how much is enough to answer what a capability was worth. |
@@ -199,6 +200,9 @@ against real material rather than an empty tree:
 | `cards/access-control/object-ownership.md` | Shared by all five `HRR-ACL-02` units: the two-account method, the empty-record trap, and the ceiling that keeps enumeration a sample. |
 | `payloads/access-control/identifiers.yaml` | Identifier shapes and adjacency -- transformations of an identifier the engagement holds, never a guess into real records. |
 | `mitigations/parameterised-query.md` | CWE-89, for `HRR-INJ-01`: binding rather than escaping, what cannot be bound, and what least privilege changes about each capability the topic charts. |
+| `cards/xss/contexts.md` | Shared by the probe and all eight `HRR-CLT-01` context units: the context table, and why an encoder written for one context leaves another live. |
+| `cards/xss/evasion.md` | The four mechanisms that produce one clean result, and the single observation that separates each. |
+| `mitigations/output-encoding.md` | CWE-79 and CWE-80, for `HRR-CLT-01`: encode at output for the context, and why a content policy is a second layer rather than the fix. |
 | `mitigations/object-authorization.md` | CWE-639 and CWE-566, for `HRR-ACL-02`: authorize the object rather than the route, enforce at the data-access layer, and why an unguessable identifier is exposure surface rather than a control. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
@@ -218,12 +222,14 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart what a defeated control permits** | The largest remaining gap. 50 of 185 capabilities are established by a test and used by none, and 37 of 59 of them are `control.*`; `primitive.*` is down to 1 of 32 since the outcome layer landed. The SQL injection chain gave two control facts their first consumer, and those are `motivated_by` hints rather than escalations — nothing yet says what a defeated control *permits*, which is what this item is for. A control is the state of a defence rather than a result, so the step that turns one into something — what a weak cookie, a permissive cache or an absent binding actually lets somebody do — has to be written before an edge can honestly be drawn from it. Until it is, 84 of 374 tests still end at the capability they established. |
+| **Chart what a defeated control permits** | The largest remaining gap. 49 of 185 capabilities are established by a test and used by none, and 36 of 59 of them are `control.*`; `primitive.*` is down to 1 of 32 since the outcome layer landed. The three phase-1 chains gave three control facts their first consumer, and those are `motivated_by` hints rather than escalations — nothing yet says what a defeated control *permits*, which is what this item is for. A control is the state of a defence rather than a result, so the step that turns one into something — what a weak cookie, a permissive cache or an absent binding actually lets somebody do — has to be written before an edge can honestly be drawn from it. Until it is, 81 of 374 tests still end at the capability they established. |
+| **`HRR-CLT-02` — DOM cross-site scripting** | The sibling of the chain 0.18.0 wrote, and the natural next one. A second instance of a shape already proven, which is why it waited. |
+| **`HRR-RES-03` — server-side request forgery** | A fourth chain shape: `primitive.fetch.internal` to `impact.network.reached`, through `HRR-OUT-03`. The first candidate once the three phase-1 chains have been used in anger. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Harrier improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
 | Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
-| More units at full depth | Twenty-six of 374, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
+| More units at full depth | Thirty-six of 374, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
 
 ## Governance and distribution

@@ -1,0 +1,31 @@
+# URL-bearing attributes, where the scheme rather than the path decides what
+# happens. The marker is computed or unique, never a literal the request also
+# carries; a reflected proof may raise a dialog, a stored one may not.
+id: xss/htmluri
+title: URL-attribute scheme control
+reviewed: "2026-08-31"
+variables: [MARKER, HOST]
+safety: >-
+  The only external destination in this file is a host the tester controls.
+  Nothing points at a third party, because a request carrying the target's
+  referrer and session context must not arrive at somebody else's server.
+entries:
+  - name: executable scheme
+    payload: "javascript:console.log('{{MARKER}}')"
+    detect: "Activating the element runs script in the page's own origin. Read the raw body first to confirm the scheme survived unrewritten."
+
+  - name: scheme split by a control character
+    payload: "java\tscript:console.log('{{MARKER}}')"
+    detect: "A rewriter matching the scheme as a literal string does not match this, while the browser strips tab, newline and carriage return from a URL before parsing the scheme. A positive here identifies the mechanism as a string comparison."
+
+  - name: protocol-relative destination
+    payload: "//{{HOST}}/{{MARKER}}"
+    detect: "Displaces a prefix the application prepends. A request arriving at the tester's host proves the destination is controlled, which is a redirect finding rather than execution."
+
+  - name: data destination
+    payload: "data:text/html,{{MARKER}}"
+    detect: "Where it loads at all, the document is in an opaque origin in current browsers -- this entry records what the attribute accepts, not an execution route in the page's origin."
+
+  - name: rewriting control
+    payload: "https://{{HOST}}/{{MARKER}}"
+    detect: "An ordinary absolute URL. If this is rewritten or refused, the attribute is filtered generally and every entry above fails for that reason."

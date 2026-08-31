@@ -126,7 +126,16 @@ SAFE_LOADER = _SafeLoader
 #: a refusal, a deliberately shared object recorded as a broken control, and
 #: enumeration performed against real records because the identifier space was
 #: guessable, which is the tester creating the breach they came to find.
-__version__ = "0.17.0"
+#:
+#: 0.18.0 completes the third chain and the phase with it. Cross-site scripting
+#: decomposes on a different axis from the other two: its eight context units
+#: are eight answers to what has already been escaped by the time the value
+#: arrives, and each carries a different negative result. A value correctly
+#: HTML-encoded into element content is still live inside a script string on the
+#: same page, and a checklist that ticks the test case once cannot record that.
+#: Three chains now run from a WSTG identifier to a stated business outcome
+#: where one did, and the vocabulary took all three without a new fact.
+__version__ = "0.18.0"
 
 __all__ = [
     "SAFE_LOADER",
