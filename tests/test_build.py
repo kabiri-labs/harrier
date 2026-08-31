@@ -22,6 +22,7 @@ from harrier.build import (
     family_edges,
     family_of,
     render,
+    surface_index,
     unit_order,
     wstg_groups,
 )
@@ -150,9 +151,43 @@ class NoEngagementStateRemains(unittest.TestCase):
         cls.data = catalogue(REPO_ROOT)
         cls.page = render(cls.data)
 
+    #: The browser storage this file must never touch. Named as literals so a
+    #: regression is caught by the words a developer would actually type.
+    STORAGE = ("localStorage", "sessionStorage", "indexedDB", "document.cookie")
+
+    def _script(self):
+        return self.page.rsplit("<script>", 1)[1].rsplit("</script>", 1)[0]
+
+    def _blob(self):
+        return self.page.split('type="application/json">', 1)[1].split("</script>", 1)[0]
+
     def test_nothing_is_stored_in_the_browser(self):
-        for token in ("localStorage", "sessionStorage", "indexedDB", "document.cookie"):
-            self.assertNotIn(token, self.page, token)
+        """Asserted on the block that executes rather than on the whole file.
+
+        The guarantee is about what the page does, and only the script does
+        anything: the data block is parsed by `JSON.parse` and never evaluated,
+        which the policy's refusal of `unsafe-eval` is what actually enforces.
+
+        Scanning the file flat used to be the same assertion and stopped being
+        one. The catalogue describes surfaces a tester meets, and one of them is
+        client-side storage -- naming `localStorage` is how that surface is
+        recognised. A flat scan cannot tell prose about a target apart from a
+        call this file makes, so it would have forced the catalogue to stop
+        saying the true thing to keep the test quiet. Split, both properties are
+        checked and neither is traded for the other.
+        """
+        script = self._script()
+        for token in self.STORAGE:
+            self.assertNotIn(token, script, token)
+
+    def test_where_storage_is_named_at_all_it_is_catalogue_prose(self):
+        """The other half. Absent from the script is the guarantee; present only
+        in the data is the reason it is allowed to appear in the file, and a
+        third occurrence in the template or the stylesheet would be neither."""
+        script, blob = self._script(), self._blob()
+        for token in self.STORAGE:
+            elsewhere = self.page.replace(script, "").replace(blob, "")
+            self.assertNotIn(token, elsewhere, token)
 
     def test_there_is_no_run_to_import_or_export(self):
         for token in ("harrier.run", "runOut", "runIn", "exportRun", "importRun",
@@ -689,6 +724,105 @@ class TheFamilyViewSummarisesTheWholeGraph(unittest.TestCase):
         self.assertEqual(
             family_edges(units), [{"from": "recon", "to": "impact", "units": 1}]
         )
+
+
+class TheSurfaceIndexIsDerivedRatherThanWalkedInTheBrowser(unittest.TestCase):
+    """The context selector's join key, closed here so the suite can hold it.
+
+    A transitive closure computed in the page is a closure no test can check
+    without a browser, and this one decides which tests a reader is shown.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+        cls.vocab = yaml.safe_load(
+            (REPO_ROOT / "vocab" / "surfaces.yaml").read_text(encoding="utf-8")
+        )["surfaces"]
+
+    def test_every_tag_in_the_vocabulary_reaches_the_page(self):
+        """The tag is only half of what makes a tag choosable. Without the label
+        and the discovery hint a reader is picking from slugs."""
+        emitted = {s["tag"] for s in self.data["surfaces"]}
+        self.assertEqual(emitted, {s["tag"] for s in self.vocab})
+        for entry in self.data["surfaces"]:
+            self.assertTrue(entry["label"], entry["tag"])
+            self.assertTrue(entry["hint"], entry["tag"])
+
+    def test_the_closure_is_transitive_and_excludes_the_tag_itself(self):
+        declared = {s["tag"]: set(s.get("emits") or ()) for s in self.vocab}
+        for entry in self.data["surfaces"]:
+            implied = set(entry["implies"])
+            self.assertNotIn(entry["tag"], implied, "a tag implies itself")
+            self.assertTrue(declared[entry["tag"]] <= implied, entry["tag"])
+            # Every step of the way out is in the answer, not only the first.
+            for tag in list(implied):
+                self.assertTrue(declared[tag] - {entry["tag"]} <= implied, tag)
+
+    def test_a_topic_is_indexed_only_under_the_tags_it_declares(self):
+        """Listing a topic under a tag it never declared would make the tag look
+        broader than the catalogue says it is, and the page could no longer tell
+        a reader which of the two reasons put a topic in front of them."""
+        for entry in self.data["surfaces"]:
+            for tid in entry["topics"]:
+                clause = self.data["topics"][tid].get("surfaces") or {}
+                self.assertIn(entry["tag"], clause.get("any_of") or [], tid)
+
+    def test_every_topic_is_reachable_by_a_tag_or_declared_universal(self):
+        """A topic in neither bucket is unreachable from the context view. That
+        is allowed -- outcomes carry no surface -- but it has to be visible as a
+        deliberate omission rather than discovered one search at a time."""
+        indexed = {tid for e in self.data["surfaces"] for tid in e["topics"]}
+        always = set(self.data["alwaysTopics"])
+        self.assertFalse(indexed & always, "a topic is both universal and tagged")
+        missing = sorted(set(self.data["topics"]) - indexed - always)
+        # The outcome family is the terminal layer: it is reached through the
+        # chain from a test, never from a description of a surface.
+        self.assertTrue(
+            all(tid.startswith("HRR-OUT-") for tid in missing),
+            f"topics with no surface clause outside the outcome family: {missing}",
+        )
+
+    def test_a_tag_no_topic_declares_is_kept_rather_than_dropped(self):
+        """Shown in the page as reaching nothing. Omitted, a reader who went
+        looking for it would conclude the vocabulary lacks it."""
+        unused = [e["tag"] for e in self.data["surfaces"] if not e["topics"]]
+        self.assertEqual(unused, ["nosql-backed-param"])
+
+    def test_the_index_is_computed_from_its_arguments(self):
+        """Called with a vocabulary and topics of its own, so the derivation is
+        tested rather than the repository's current contents."""
+        surfaces, always = surface_index(
+            [
+                {"tag": "a", "label": "A", "discovery_hint": "h", "emits": ["b"]},
+                {"tag": "b", "label": "B", "discovery_hint": "h", "emits": ["c"]},
+                {"tag": "c", "label": "C", "discovery_hint": "h"},
+            ],
+            {
+                "T1": {"surfaces": {"any_of": ["a"]}},
+                "T2": {"surfaces": {"any_of": ["c"]}},
+                "T3": {"surfaces": {"always": True}},
+                "T4": {},
+            },
+        )
+        by_tag = {s["tag"]: s for s in surfaces}
+        self.assertEqual(by_tag["a"]["implies"], ["b", "c"])
+        self.assertEqual(by_tag["c"]["implies"], [])
+        self.assertEqual(by_tag["a"]["topics"], ["T1"])
+        self.assertEqual(by_tag["b"]["topics"], [])
+        self.assertEqual(always, ["T3"])
+
+    def test_a_cycle_in_the_vocabulary_terminates(self):
+        """The validator refuses a tag that emits itself; it does not refuse two
+        that emit each other. The closure must not be what discovers that."""
+        surfaces, _ = surface_index(
+            [
+                {"tag": "a", "label": "A", "discovery_hint": "h", "emits": ["b"]},
+                {"tag": "b", "label": "B", "discovery_hint": "h", "emits": ["a"]},
+            ],
+            {},
+        )
+        self.assertEqual({s["tag"]: s["implies"] for s in surfaces}, {"a": ["b"], "b": ["a"]})
 
 
 class TheIndexesNameOnlyThingsThatTravelWithTheFile(unittest.TestCase):

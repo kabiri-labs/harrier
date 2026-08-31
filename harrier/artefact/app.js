@@ -617,6 +617,123 @@
 
   var depthLabel = function (unit) { return DEPTH_LABEL[depthOf(unit)]; };
 
+  /* ------------------------- context selection ------------------------- *
+   *
+   * The other way into the catalogue. Standards answer "what does the
+   * methodology require me to cover"; this answers "given the kind of thing in
+   * front of me, which tests may be relevant".
+   *
+   * The join key is the attack-surface tag, which the catalogue has carried on
+   * every topic since before this view existed and which until now was rendered
+   * as inert text. Nothing about a target is asked for, entered or kept: a tag
+   * describes a kind of surface, not an instance of one, and the selection
+   * lives in the URL for the length of one visit.
+   * --------------------------------------------------------------------- */
+
+  /* Chosen tags plus everything they imply, in one sorted list.
+
+     The implication is read from the build's closure rather than walked here.
+     A tag emitting another states something true of every surface carrying it,
+     so a tester who said "search box" has already said "parameter reaching a
+     query" and should not have to say it twice. */
+  var contextClosure = function (D, chosen) {
+    var picked = {}, implied = {};
+    var byTag = {};
+    (D.surfaces || []).forEach(function (s) { byTag[s.tag] = s; });
+    (chosen || []).forEach(function (tag) {
+      if (!own(byTag, tag)) return;
+      picked[tag] = true;
+      (byTag[tag].implies || []).forEach(function (t) { implied[t] = true; });
+    });
+    // A tag chosen outright is chosen, even where another selection also
+    // implies it. Reporting it as implied would tell the reader the catalogue
+    // inferred something they had said themselves.
+    Object.keys(picked).forEach(function (t) { delete implied[t]; });
+    return { selected: Object.keys(picked).sort(), implied: Object.keys(implied).sort() };
+  };
+
+  /* The topics a context reaches, each with the tags that put it there.
+
+     Two kinds of match, never merged. A topic matched by a tag the reader chose
+     is the answer to their question. A topic matched only through an implied
+     tag is a step further out, and one that matches every context regardless --
+     `always` in the catalogue -- is not an answer to any question at all: it is
+     the part of the methodology that does not depend on what you are looking
+     at. Merging the three would make the third bury the first, because there
+     are seventeen of them and they never vary. */
+  var contextTopics = function (D, chosen) {
+    var closure = contextClosure(D, chosen);
+    var direct = {}, weak = {};
+    (D.surfaces || []).forEach(function (s) {
+      var isSelected = closure.selected.indexOf(s.tag) >= 0;
+      var isImplied = !isSelected && closure.implied.indexOf(s.tag) >= 0;
+      if (!isSelected && !isImplied) return;
+      (s.topics || []).forEach(function (tid) {
+        var into = isSelected ? direct : weak;
+        (into[tid] = into[tid] || []).push(s.tag);
+      });
+    });
+    // A topic reached both ways is reported the stronger way only, with every
+    // tag that reached it, so the reason line is complete and the topic appears
+    // once.
+    var order = function (a, b) { return a < b ? -1 : a > b ? 1 : 0; };
+    var rows = Object.keys(direct).sort(order).map(function (tid) {
+      return { topic: tid, via: direct[tid].concat(weak[tid] || []).sort(), implied: false };
+    });
+    Object.keys(weak).sort(order).forEach(function (tid) {
+      if (!own(direct, tid)) rows.push({ topic: tid, via: weak[tid].sort(), implied: true });
+    });
+    return {
+      selected: closure.selected,
+      implied: closure.implied,
+      topics: rows,
+      always: (D.alwaysTopics || []).slice()
+    };
+  };
+
+  /* What a unit still owes, split by the kind of thing it owes it to.
+
+     A context is a kind of surface and establishes no capability, so this can
+     never say "your context supplies this" -- there is no mapping from a
+     surface tag to a fact, and inventing one would be the page asserting
+     something about a target it has never seen. What it can say is which of the
+     two kinds of precondition a unit carries, and the vocabulary already
+     records that on every fact:
+
+       engagement   a general condition of the engagement -- holding a session,
+                    having mapped the entrypoints. An engagement usually
+                    supplies it, and it is not a test you have to have run.
+       topic/chain  something another test has to establish first. Named with
+                    the test that establishes it, which is the chain the rest of
+                    this file is about.
+
+     A unit owing nothing of the second kind is one a tester can start on today.
+     That is the only "can I begin here" claim the data supports, and it is
+     about the catalogue rather than about the target. */
+  var entryCost = function (D, unitId) {
+    var unit = get(D.units, unitId) || {};
+    var requires = unit.requires || {};
+    var given = {};
+    (D.given || []).forEach(function (f) { given[f] = true; });
+    var engagement = [], earned = [];
+    var needed = (requires.all_of || []).concat(requires.any_of || []);
+    needed.forEach(function (f) {
+      var body = get(D.facts, f) || {};
+      // `given` is supplied unconditionally and `granted` may be; neither is
+      // earned by a test, so neither belongs in the list of things still owed.
+      if (own(given, f) || body.granted || body.tier === "engagement") engagement.push(f);
+      else earned.push(f);
+    });
+    return {
+      engagement: engagement,
+      earned: earned,
+      // Any-of is a choice, so one of several alternatives being earned still
+      // leaves the unit enterable where another alternative is not. Reported as
+      // the weaker claim: entry-level means nothing here has to be earned.
+      entry: earned.length === 0
+    };
+  };
+
   var Harrier = {
     own: own, esc: esc, md: md, bound: bound, familyOf: familyOf,
     localGraph: localGraph, negativeReading: negativeReading,
@@ -624,6 +741,8 @@
     stillRequired: stillRequired,
     searchAll: searchAll, wrap: wrap, layout: layout, LIMIT: LIMIT,
     unitRuns: unitRuns, depthOf: depthOf, depthLabel: depthLabel,
+    contextClosure: contextClosure, contextTopics: contextTopics,
+    entryCost: entryCost,
     chainMap: chainMap, chainBackEdges: chainBackEdges, CHAIN_ORDER: CHAIN_ORDER
   };
   if (typeof module !== "undefined" && module.exports) module.exports = Harrier;
@@ -654,6 +773,16 @@
   var statusPill = function (unit) {
     var status = depthOf(unit);
     return '<span class="pill ' + status + '">' + status + "</span>";
+  };
+
+  /* The same label without the link. A row is itself a link, and an anchor
+     inside an anchor is not nesting the parser accepts: it closes the outer one
+     and everything after it becomes a sibling, so the row visibly breaks apart.
+     Nothing is lost by dropping the link -- the row leads to the test, and the
+     test names the same capability as a link. */
+  var capLabel = function (fact, cls) {
+    return '<span class="tag ' + (cls || "cap") + '" title="' + esc(fact) + '">' +
+      esc(factLabel(fact)) + "</span>";
   };
 
   var capTag = function (fact, cls) {
@@ -1544,13 +1673,181 @@
       '<div class="chainmap">' + grid + "</div>";
   };
 
+  /* The tag grid. Every tag in the vocabulary, each a link to the selection it
+     would produce, so selecting is navigation and there is no state held
+     anywhere. A tag reaching no topic is shown as that rather than omitted: a
+     vocabulary entry the catalogue never uses is a fact about the catalogue,
+     and hiding it would leave the reader to conclude the tag does not exist. */
+  var contextChips = function (chosen) {
+    var on = {};
+    chosen.forEach(function (t) { on[t] = true; });
+    return '<div class="chips">' + (D.surfaces || []).map(function (s) {
+      var reach = (s.topics || []).length;
+      var next = own(on, s.tag)
+        ? chosen.filter(function (t) { return t !== s.tag; })
+        : chosen.concat([s.tag]);
+      var target = next.length ? "#/chains/context/" + next.join("+") : "#/chains/context";
+      var title = s.label + (s.hint ? " — " + s.hint : "");
+      return '<a class="chip' + (own(on, s.tag) ? " on" : "") +
+        (reach ? "" : " none") + '" href="' + target +
+        '" title="' + esc(title) + '">' + esc(s.tag) +
+        '<span class="c">' + reach + "</span></a>";
+    }).join("") + "</div>";
+  };
+
+  /* One topic in a context result: why it is here, and its tests in the order
+     the topic declares. The reason line is the whole point -- a list of tests
+     with no statement of what put them in front of the reader is a
+     recommendation, and this file does not make recommendations. */
+  var contextTopicCard = function (row) {
+    var topic = get(D.topics, row.topic);
+    if (!topic) return "";
+    var byTag = {};
+    (D.surfaces || []).forEach(function (s) { byTag[s.tag] = s; });
+    var why = row.via.map(function (tag) {
+      var s = byTag[tag];
+      return '<span class="tag ctx" title="' + esc((s && s.hint) || tag) + '">' +
+        esc((s && s.label) || tag) + "</span>";
+    }).join("");
+
+    var units = (topic.units || []).map(function (uid) {
+      var unit = get(D.units, uid);
+      if (!unit) return "";
+      var cost = entryCost(D, uid);
+      var note = cost.entry
+        ? '<span class="need ok">no earlier test declared</span>'
+        : '<span class="need">still required: ' +
+          cost.earned.map(function (f) { return capLabel(f, "req"); }).join("") + "</span>";
+      /* The requirement line sits in the left column with the title, not in
+         the right one with the depth pill. The right column is a short status
+         and does not wrap; a capability label put there overflows the row and
+         lands outside the box it belongs to. */
+      return '<a class="row" href="' + href("unit", uid) + '"><span class="who">' +
+        '<span class="t">' + esc(unit.title) + "</span>" +
+        '<span class="s">' + esc(uid) + " · " +
+        esc(unit.role === "variant" ? "alternative technique" : "stage") + "</span>" +
+        note + "</span><span class=\"n\">" + statusPill(unit) + "</span></a>";
+    }).join("");
+
+    return '<div class="card"><h4><a href="' + href("topic", row.topic) + '">' +
+      esc(topic.title) + "</a></h4>" +
+      '<div class="why">Matched because the context is: ' + why + "</div>" +
+      '<div class="rows">' + units + "</div></div>";
+  };
+
+  var viewContext = function (raw) {
+    var known = {};
+    (D.surfaces || []).forEach(function (s) { known[s.tag] = true; });
+    /* Unknown tags are dropped rather than reported as an error page. The
+       selection arrives in a URL a reader may have edited or a colleague may
+       have sent from a different version of this file, and the useful answer to
+       a tag this build does not carry is the rest of the selection. */
+    var chosen = String(raw || "").split("+").filter(function (t) {
+      return t && own(known, t);
+    });
+    chosen = chosen.filter(function (t, i) { return chosen.indexOf(t) === i; }).sort();
+
+    var result = contextTopics(D, chosen);
+    var head = crumbs([
+      { text: "Attack Chains", href: "#/chains" },
+      { text: chosen.length ? "Context: " + chosen.join(", ") : "Choose a context" }
+    ]) +
+      "<h2>Tests by context</h2>" +
+      '<p class="lede">Describe the kind of surface in front of you and this lists the ' +
+      "tests that may apply to it, and what each one would have to establish first. " +
+      "Every tag below names a <i>kind</i> of surface, never one you are looking at: " +
+      "nothing you choose here is stored, sent, or kept after you close the page.</p>" +
+      contextChips(chosen);
+
+    if (!chosen.length) {
+      return head +
+        '<p class="empty">Nothing chosen yet. Pick one or more tags above — the number ' +
+        "on each is how many topics in this catalogue declare it.</p>" +
+        '<p class="muted">Choosing more than one narrows nothing and adds: a surface is ' +
+        "usually several of these at once, and each tag brings its own tests. Some tags " +
+        "imply others, so a search box already counts as a parameter reaching a query " +
+        "and does not have to be said twice.</p>" +
+        '<p class="muted">This is a reading of the catalogue, not of an application. It ' +
+        "cannot tell you a test is applicable, reachable or worth doing here — only that " +
+        "the catalogue files it under the kind of surface you described.</p>";
+    }
+
+    var strong = result.topics.filter(function (r) { return !r.implied; });
+    var weak = result.topics.filter(function (r) { return r.implied; });
+    var counted = function (rows) {
+      var n = 0;
+      rows.forEach(function (r) {
+        var t = get(D.topics, r.topic);
+        n += t ? (t.units || []).length : 0;
+      });
+      return n;
+    };
+
+    var implied = result.implied.length
+      ? '<p class="muted">Also counted as chosen, because the tags above imply them: ' +
+        result.implied.map(function (t) { return "<code>" + esc(t) + "</code>"; }).join(", ") +
+        ". A tag implies another where the second is true of every surface carrying " +
+        "the first.</p>"
+      : "";
+
+    var body = implied +
+      "<h3>" + strong.length + " topic" + (strong.length === 1 ? "" : "s") +
+      (strong.length === 1 ? " declares" : " declare") +
+      " a tag you chose <span class=\"muted\">— " + counted(strong) +
+      " tests</span></h3>";
+
+    body += strong.length
+      ? strong.map(contextTopicCard).join("")
+      : '<p class="empty">No topic in this catalogue declares any of these tags.</p>';
+
+    if (weak.length) {
+      body += "<h3>" + weak.length + " more through an implied tag " +
+        '<span class="muted">— ' + counted(weak) + " tests</span></h3>" +
+        '<p class="muted">Reached one step further out: these declare a tag your ' +
+        "selection implies rather than one you chose.</p>" +
+        weak.map(contextTopicCard).join("");
+    }
+
+    body += "<details class=\"fold\"><summary>" + result.always.length +
+      " topics that apply to every context <span class=\"muted\">— " +
+      counted(result.always.map(function (t) { return { topic: t }; })) +
+      " tests</span></summary>" +
+      '<p class="muted">These declare no surface at all: they are the part of the ' +
+      "methodology that does not depend on what you are looking at, and they would " +
+      "appear under every tag. Folded away rather than repeated into each result.</p>" +
+      '<div class="rows">' + result.always.map(function (tid) {
+        var t = get(D.topics, tid);
+        return t ? rowLink(href("topic", tid), t.title, tid,
+          (t.units || []).length + " tests") : "";
+      }).join("") + "</div></details>";
+
+    body += '<h3>What this list is not</h3>' +
+      '<p class="muted">A tag is carried by the topic, not by the individual test, so ' +
+      "every test in a matched topic is listed even where the topic spans contexts a " +
+      "single tag cannot separate. <b>Still required</b> is read from the capability " +
+      "vocabulary and says a test in the catalogue has to establish that first; it is " +
+      "never a claim that you do or do not have it. Outcomes — what a chain is for — " +
+      "carry no surface tag and are reached through the chain from a test here, not " +
+      "from this page.</p>";
+
+    return head + body;
+  };
+
   var viewChains = function () {
+    var reach = 0;
+    (D.surfaces || []).forEach(function (s) { reach += (s.topics || []).length ? 1 : 0; });
     return crumbs([{ text: "Attack Chains" }]) +
       "<h2>Attack chains</h2>" +
       '<p class="lede">A route is a sequence of tests, each establishing something ' +
       "the next one declares it needs. Nothing here is a statement about a target: " +
       "the file has never seen one, and which of these applies today is yours to " +
       "decide.</p>" +
+      '<div class="card"><h4><a href="#/chains/context">Start from what you are ' +
+      "looking at</a></h4><p>Choose the kind of surface in front of you — " + reach +
+      " of the " + (D.surfaces || []).length + " tags reach a topic — and read the " +
+      "tests filed under it, each with what it would have to establish first. The " +
+      "way in that needs neither a " + esc(D.standard.short) +
+      " identifier nor a capability name.</p></div>" +
       viewChainMap() +
       "<h3>Where chains are meant to end</h3>" +
       '<p class="muted">Nothing in the catalogue requires an impact: it is where a ' +
@@ -2048,6 +2345,7 @@
     }
     if (head === "extensions") return { nav: "standards", html: viewExtensions() };
     if (head === "chains") {
+      if (arg === "context") return { nav: "chains", html: viewContext(parts[2] || "") };
       if (arg === "family") return { nav: "chains", html: viewFamily(parts[2] || "") };
       if (arg === "span") {
         return { nav: "chains", html: viewSpan(parts[2] || "", parts[3] || "") };

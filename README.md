@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.18.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.19.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -118,13 +118,25 @@ before the procedure rather than being folded into it:
 
 ![A Test Unit page showing its objective, chain strip and orientation blocks](docs/assets/test-unit.png)
 
-The Attack Chains view. Every capability in the file, in a column for the kind
-of thing it is, shaded by how far the chart reaches from it — green where a
-charted route arrives at an outcome, grey where it runs out. Each cell opens on
-the tests that establish it and the tests that declare it a prerequisite, which
-is the one way into the catalogue that does not start at the standard. The
-columns are ordered by where the catalogue's own edges run, and the fourteen
-that run the other way are named on the page:
+The Attack Chains view, entered from what is in front of you. A tester
+mid-engagement is not holding a WSTG identifier or a capability name; they are
+looking at an upload, a sort parameter, a token. Choosing the kind of surface
+lists the tests the catalogue files under it, says which tag put each topic
+there, and separates the tests nothing has to precede from the ones waiting on
+a capability another test establishes:
+
+![Tests selected by the kind of surface, each topic showing the tag that matched and each test what it still requires](docs/assets/test-paths.png)
+
+The selection is a URL and nothing else. Nothing is stored, and a tag names a
+*kind* of surface rather than one you are looking at — the file still holds no
+target, and "may apply" is the strongest thing it says.
+
+The same view carries the capability map. Every capability in the file, in a
+column for the kind of thing it is, shaded by how far the chart reaches from it
+— green where a charted route arrives at an outcome, grey where it runs out.
+Each cell opens on the tests that establish it and the tests that declare it a
+prerequisite. The columns are ordered by where the catalogue's own edges run,
+and the fourteen that run the other way are named on the page:
 
 ![The chain map: every capability in a column for its family, shaded by how far the chart reaches from it](docs/assets/attack-chains.png)
 

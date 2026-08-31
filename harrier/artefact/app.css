@@ -299,3 +299,32 @@ details.fold[open] > summary { margin-bottom: .4rem; }
   color: var(--faint); font-size: .7rem; background: var(--panel); line-height: 1;
 }
 .rstep .also { margin: .1rem 0 0; }
+
+/* The context selector. Fifty-odd tags is too many for a list and few enough
+   for a grid, and every one of them is a link rather than a control: the
+   selection lives in the URL, so a chosen context can be sent to a colleague
+   and nothing is held in this browser. */
+.chips { display: flex; flex-wrap: wrap; gap: .3rem; margin: .6rem 0 1.2rem; }
+.chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+  padding: .2rem .5rem; font-size: .78rem; font-family: var(--mono);
+  color: var(--dim);
+}
+a.chip:hover { border-color: var(--accent); color: var(--ink); text-decoration: none; }
+.chip .c { color: var(--faint); font-size: .7rem; }
+.chip.on { border-color: var(--accent); color: var(--ink); background: var(--raise); }
+.chip.on .c { color: var(--accent); }
+/* A tag no topic declares. Shown rather than hidden, because a reader who
+   cannot find it would conclude the vocabulary lacks it. */
+.chip.none { opacity: .45; }
+
+.tag.ctx { color: var(--hint); }
+.why { color: var(--faint); font-size: .78rem; margin: .1rem 0 .5rem; }
+
+/* Read from the capability vocabulary, and about the catalogue rather than
+   about a target: green says no test has to come first, amber names the ones
+   that do. */
+.row .who .need { display: block; margin-top: .3rem; font-size: .76rem; }
+.row .who .need .tag { margin: 0 .22rem .12rem 0; }
+.need.ok { color: var(--good); }
