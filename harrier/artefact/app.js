@@ -1688,8 +1688,13 @@
         : chosen.concat([s.tag]);
       var target = next.length ? "#/chains/context/" + next.join("+") : "#/chains/context";
       var title = s.label + (s.hint ? " — " + s.hint : "");
+      /* The href is escaped even though the schema constrains a tag to
+         `[a-z0-9-]` and the validator refuses anything else. This is the one
+         attribute here built by concatenation rather than from a fixed string,
+         and a value reaching it that the schema was supposed to have stopped is
+         exactly the case worth surviving. */
       return '<a class="chip' + (own(on, s.tag) ? " on" : "") +
-        (reach ? "" : " none") + '" href="' + target +
+        (reach ? "" : " none") + '" href="' + esc(target) +
         '" title="' + esc(title) + '">' + esc(s.tag) +
         '<span class="c">' + reach + "</span></a>";
     }).join("") + "</div>";
