@@ -37,9 +37,9 @@ The edge means: *if A succeeds, B may become relevant.* It does not mean B is
 now possible. B may need three other things as well, and one of them may be
 something no test can supply.
 
-**Why not name the next test directly.** The derivation currently yields 646
+**Why not name the next test directly.** The derivation currently yields 677
 unit-to-unit edges across 374 units, and that is with the far half of the chain
-barely charted. Written down they would be 646 hand-maintained links, each
+barely charted. Written down they would be 677 hand-maintained links, each
 needing to be inserted into the `next` list of every unit that could precede it
 — so the cost of adding a unit grows with the size of the catalogue, and the
 edges nobody updated look exactly like edges that were checked and found not to
@@ -244,10 +244,10 @@ validator rejects anything requiring one, and it is shown as where a chain is
 reportable result where the chart simply does not go on. Folding impacts into
 that count would inflate it and would describe arriving as failing to arrive.
 
-This is currently the common case rather than the rare one. 53 of 185
+This is currently the common case rather than the rare one. 50 of 185
 capabilities are established by a test and used by none, including 1 of 32
-`primitive.*` and 39 of 59 `control.*`. Of 374 tests, 211 have a potential
-continuation, 14 establish an impact, 110 stop short, and 39 declare no
+`primitive.*` and 37 of 59 `control.*`. Of 374 tests, 237 have a potential
+continuation, 14 establish an impact, 84 stop short, and 39 declare no
 capability at all — a partition, and the four sum to the catalogue. Phase 5
 charted reconnaissance through to primitives and stopped there; primitive to
 impact is largely unwritten. `harrier chain` reports the split and the artefact

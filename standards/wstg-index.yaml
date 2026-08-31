@@ -1091,9 +1091,9 @@ cases:
   - HRR-INJ-01-STACK
   - HRR-INJ-01-SECOND
   - HRR-INJ-01-EVADE
-  authored: 1
+  authored: 10
   sketched: 0
-  outline: 9
+  outline: 0
   resolvable: true
 - id: WSTG-INPV-06
   title: Testing for LDAP Injection

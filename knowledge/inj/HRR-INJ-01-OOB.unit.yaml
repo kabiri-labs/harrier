@@ -1,6 +1,6 @@
 id: HRR-INJ-01-OOB
 topic: HRR-INJ-01
-status: outline
+status: authored
 role: variant
 title: "Out-of-band extraction"
 objective: >-
@@ -11,3 +11,68 @@ requires:
   all_of: [surface.sql.injectable]
 motivated_by: [recon.engine.identified]
 yields: [primitive.db.read, primitive.fetch.outbound]
+
+hypotheses:
+  - "The engine offers a function that resolves a name or opens a network file, and the application's account is permitted to call it."
+  - "The database's resolver reaches the outside where the application server does not, because the two sit on different egress paths."
+  - "Where a full interaction is blocked the name lookup still leaves the perimeter, and a lookup carries a short value on its own."
+
+triage:
+  - "A parameter confirmed injectable where every in-band route returned nothing."
+  - "MSSQL and Oracle deployments, whose out-of-band functions are reachable more often than the other three engines'."
+  - "A database known to resolve external names -- a managed service, or a host configured with a public resolver."
+
+sink: >-
+  The resolver or network client the database itself calls, which is a
+  different egress path from the application's own.
+
+enter_when:
+  - "Every in-band route has been recorded as producing nothing, and out-of-band interaction is inside the agreed scope."
+
+oracle:
+  positive: "A collector the tester controls records an interaction whose name carries the value the payload asked the database to compute."
+  negative: "No interaction is recorded for any engine-specific form, across the name-lookup and full-request variants, within the agreed window."
+  inconclusive: "An interaction arrives carrying no per-request label, so it cannot be attributed to this payload rather than to background scanning."
+
+sequence:
+  - "Register a unique label per request, so an arriving interaction identifies which payload produced it."
+  - "Send the name-lookup form first: it leaves the perimeter in deployments where the full-request form is blocked."
+  - "Read the interaction's name for the computed value rather than reading the interaction's existence as the finding."
+  - "Record one labelled interaction and stop; the channel is the result."
+
+first_false_positive: >-
+  An interaction produced by something other than this request. Shared
+  collectors receive background scanning constantly, and an unlabelled hit
+  proves nothing -- which is why the label is per request rather than per
+  engagement.
+
+false_positives:
+  - "A security product resolving the payload while inspecting it, which produces an interaction the database never made."
+  - "A cached name answer suppressing the second and later requests, read as the channel closing."
+
+preconditions:
+  - "A collector under the tester's control, reachable from the target's network position."
+  - "Written agreement covering out-of-band interaction, because the channel carries target-derived data outside the target's network."
+
+evidence:
+  - "The collector's record of the interaction, with its label and timestamp."
+  - "The request that produced it."
+
+done_when: >-
+  One labelled interaction is recorded carrying a database-computed value, or
+  every engine-specific form is recorded as producing none within the agreed
+  window.
+
+safety: >-
+  Out-of-band extraction sends the target's own data past every resolver on the
+  path, and those resolvers belong to neither party. Nothing beyond a metadata
+  value goes into a label, the collector is one the tester controls rather than
+  a public one, and the client agrees to the channel in writing: this is the
+  technique most likely to fall outside a scope that never mentioned it.
+
+payloads: payloads/sqli/oob.yaml
+tools: [interactsh, dig, burp-repeater]
+card: cards/sqli/inference.md
+mitigation: mitigations/parameterised-query.md
+dimensions:
+  engine: [mysql, postgresql, mssql, oracle, sqlite]

@@ -7,15 +7,15 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.15.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Harrier 0.16.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
-> behind them is not: 13 units are written to full procedural depth and 40 are
+> behind them is not: 22 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
 > means in numbers](#what-exists-today-and-what-does-not) is below, not buried at
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.15.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.16.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -270,22 +270,22 @@ stale in this file without the suite failing.
 | Claimed by a Harrier topic | 108 of 108 resolvable |
 | Topics | 106, across 14 domains |
 | Test Units | 374 |
-| Written to full procedural depth | **13** |
+| Written to full procedural depth | **22** |
 | Sketched | 40 |
-| Outline only | 321 |
+| Outline only | 312 |
 
 | Chain | |
 |---|---|
 | Capabilities | 185 |
-| Derived unit-to-unit edges | 646 |
-| — of them escalations between capabilities | 290 |
+| Derived unit-to-unit edges | 677 |
+| — of them escalations between capabilities | 321 |
 | — another technique for the same test | 124 |
 | — a general prerequisite, not a step | 232 |
-| Tests with a potential continuation | 211 |
+| Tests with a potential continuation | 237 |
 | Tests that establish an impact | 14 |
-| Tests that stop short | 110 |
+| Tests that stop short | 84 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 53 of 185 |
+| Capabilities used by no test, impacts excluded | 50 of 185 |
 | Capabilities with a charted route to an impact | 90 of 175 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
@@ -305,10 +305,17 @@ than claimed, and nothing is invented to fill the gap.
 **The largest known gap is now the controls.** `primitive → impact` is written:
 one capability of thirty-two is still declared as a use by nothing, and 90 of
 175 capabilities have a charted route to an impact. `control → impact` is not,
-and 39 of 59 `control.*` facts are established by a test and consumed by
+and 37 of 59 `control.*` facts are established by a test and consumed by
 nothing. A control is the state of a defence rather than a result, so the step
 that turns one into an outcome has to be written before an edge can be drawn
 from it.
+
+Two of those `control.*` facts gained a consumer with the SQL injection chain,
+and that is not progress against this gap. The new edges say *worth reaching for
+sooner*, not *now possible*: a verbose error makes error-based inference the
+first channel to try, and a characterised filter decides whether a statement
+separator can reach the driver. Nothing yet says what a defeated control
+**permits**, which is the whole of what is missing.
 
 This is recorded rather than filled in. Generating plausible edges would make the
 matrix look complete and every route on it untrustworthy — an edge nobody thought

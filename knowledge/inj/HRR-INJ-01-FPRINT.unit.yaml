@@ -1,6 +1,6 @@
 id: HRR-INJ-01-FPRINT
 topic: HRR-INJ-01
-status: outline
+status: authored
 role: stage
 kind: recon
 title: "Database engine fingerprint"
@@ -11,3 +11,45 @@ objective: >-
 requires:
   all_of: [surface.sql.injectable]
 yields: [recon.engine.identified]
+
+hypotheses:
+  - "The engines disagree about string concatenation, and the disagreement shows in any response that renders the joined value."
+  - "Where errors are suppressed the engines still disagree about which expressions parse at all, so accepted-against-rejected identifies the family with no text at all."
+  - "A managed platform pins one engine, so the platform fingerprint narrows the answer before a payload is sent."
+
+triage:
+  - "The platform already identified: .NET in front of MSSQL, Rails in front of PostgreSQL, and a shared-hosting PHP stack in front of MySQL are the common pairings."
+  - "An error string naming a product, a driver or a client library version."
+  - "A version endpoint, an admin page or debug output the application serves itself."
+
+enter_when:
+  - "Before any technique whose payload shape differs by engine, which is every one of them except the boolean pair."
+
+sequence:
+  - "Send the concatenation form each engine spells differently, and read which spelling returned the joined value."
+  - "Where nothing renders, send an expression only one engine parses and read accepted against rejected rather than any message text."
+  - "Once the family is narrowed to one, confirm with a version expression in the same position."
+  - "Reconcile the result against the platform fingerprint before writing a version down."
+
+first_false_positive: >-
+  A driver or ORM name read as the engine. A driver narrows the family and does
+  not establish the product, and a version taken from it is the client
+  library's rather than the server's.
+
+preconditions:
+  - "The injection point's context is known: an identifier position accepts none of the string forms this unit sends."
+
+evidence:
+  - "The request and response for each spelling that was accepted, and for each that was refused."
+
+done_when: >-
+  One engine family is recorded, with a version where an expression returned
+  one, or the family is recorded as undetermined with the spellings that were
+  tried.
+
+payloads: payloads/sqli/fingerprint.yaml
+tools: [burp-repeater, curl]
+card: cards/sqli/injection-points.md
+mitigation: mitigations/parameterised-query.md
+dimensions:
+  engine: [mysql, postgresql, mssql, oracle, sqlite]

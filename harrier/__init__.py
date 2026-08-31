@@ -112,7 +112,13 @@ SAFE_LOADER = _SafeLoader
 #: to the weakness. Two payload entries were wrong and running them is what
 #: showed it -- a balanced probe and an engine fingerprint that both errored on
 #: the engines they claimed, neither of which a reading would have caught.
-__version__ = "0.15.0"
+#:
+#: 0.16.0 takes the nine remaining SQL injection units to full depth, which
+#: makes HRR-INJ-01 the first topic readable end to end: WSTG-INPV-05 to a
+#: probe that names the context, to seven non-substitutable techniques, to an
+#: outcome unit that asks what the reachable data was worth. The decomposition
+#: argument the README makes is now demonstrated rather than asserted.
+__version__ = "0.16.0"
 
 __all__ = [
     "SAFE_LOADER",
