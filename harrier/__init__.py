@@ -118,7 +118,15 @@ SAFE_LOADER = _SafeLoader
 #: probe that names the context, to seven non-substitutable techniques, to an
 #: outcome unit that asks what the reachable data was worth. The decomposition
 #: argument the README makes is now demonstrated rather than asserted.
-__version__ = "0.16.0"
+#:
+#: 0.17.0 writes object-level access control end to end. It is the chain with no
+#: payload axis and nothing injected: every unit is a comparison between two
+#: principals, so the difficulty is entirely in the oracle and the evidence.
+#: Three failure modes recur and each unit closes one -- an empty record read as
+#: a refusal, a deliberately shared object recorded as a broken control, and
+#: enumeration performed against real records because the identifier space was
+#: guessable, which is the tester creating the breach they came to find.
+__version__ = "0.17.0"
 
 __all__ = [
     "SAFE_LOADER",

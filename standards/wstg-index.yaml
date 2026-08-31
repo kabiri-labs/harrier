@@ -25,9 +25,9 @@ cases:
   - HRR-ACL-02-TENANT
   - HRR-ACL-02-WRITE
   - HRR-ACL-02-IMPACT
-  authored: 1
+  authored: 5
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-APIT-99
   title: Testing GraphQL
@@ -244,9 +244,9 @@ cases:
   - HRR-ACL-02-TENANT
   - HRR-ACL-02-WRITE
   - HRR-ACL-02-IMPACT
-  authored: 1
+  authored: 5
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHZ-05
   title: Testing for OAuth Weaknesses

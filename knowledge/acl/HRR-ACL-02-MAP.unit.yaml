@@ -1,6 +1,6 @@
 id: HRR-ACL-02-MAP
 topic: HRR-ACL-02
-status: outline
+status: authored
 role: stage
 kind: recon
 title: "The object identifiers and where they appear"
@@ -12,3 +12,45 @@ objective: >-
 requires:
   all_of: [access.user, access.peer]
 yields: [artifact.objectid.known]
+
+hypotheses:
+  - "The identifier the request carries is the one the record has in storage, so its shape says how large the space is and how it is walked."
+  - "An identifier issued to one account appears in a response to another for an ordinary reason -- a shared document, an audit trail, a notification -- which is where the tester gets one without guessing."
+  - "The same object is addressed differently in different places: a path segment on the page, a body field in the API, an alias in a batch."
+
+triage:
+  - "Path segments and body fields carrying an identifier: id, uid, ref, order_id, account, doc, file, invoice, tenant."
+  - "Exports, print views, notification payloads and webhook bodies, which carry identifiers the interface never displays."
+  - "Sequential integers, timestamp-bearing identifiers, and base64 that decodes to either -- each says the space can be walked."
+  - "A composite identifier where one part names the tenant and another names the object."
+
+enter_when:
+  - "Two accounts are held and the object types the application manages have been listed."
+
+sequence:
+  - "Collect every identifier each held account is issued, from responses rather than from the interface."
+  - "Record the shape of each: length, alphabet, whether it decodes, and whether two consecutive creations differ predictably."
+  - "Record every request shape that accepts one, including the API and export routes the interface does not use."
+  - "Note which identifiers appeared in an account that does not own the object, since those are the ones needing no guess at all."
+
+first_false_positive: >-
+  A random-looking identifier recorded as unguessable. An encoded sequential
+  value, a timestamp-bearing identifier and a hash of a small input all look
+  opaque and all narrow to a walkable space -- the shape is decided by decoding
+  two of them and comparing, not by looking at one.
+
+preconditions:
+  - "Two accounts the engagement is permitted to use, and permission to create records under each."
+
+evidence:
+  - "The identifier inventory: value shape, issuing account, and every request shape that accepts it."
+
+done_when: >-
+  Every object type is recorded with its identifier shape, the request shapes
+  that accept it, and whether an identifier from one account was observed in
+  another account's responses.
+
+payloads: payloads/access-control/identifiers.yaml
+tools: [burp-repeater]
+card: cards/access-control/object-ownership.md
+mitigation: mitigations/object-authorization.md
