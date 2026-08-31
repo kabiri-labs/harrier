@@ -1,0 +1,12 @@
+id: PTN-INJ-12-TIME
+topic: PTN-INJ-12
+status: outline
+role: variant
+title: "Time-based inference"
+objective: >-
+  Determine whether a conditional delay injected into a resolver argument is
+  reproducibly observable in response latency.
+
+requires:
+  all_of: [surface.graphql.injectable]
+yields: [primitive.blind.oracle]

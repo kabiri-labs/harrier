@@ -1,7 +1,7 @@
 # Authoring
 
 The rules, and what each one is protecting. Most are enforced by
-`python -m harrier validate` rather than by review — see
+`python -m pentest_navgrid validate` rather than by review — see
 [`VALIDATION.md`](VALIDATION.md) — because every one of them reads perfectly
 well in a diff.
 
@@ -21,7 +21,7 @@ exists, what it is for, and that they have not done it.
 ## 1. A topic file
 
 ```yaml
-id: HRR-INJ-01
+id: PTN-INJ-01
 title: SQL injection
 domain: INJ
 axis: technique              # the primary axis; units are named from its vocabulary
@@ -30,17 +30,17 @@ surfaces:                    # attack-surface tags this topic attaches to
 dimensions:
   engine: [mysql, postgresql, mssql, oracle, sqlite]
 order:                       # the sequence a tester works these units in
-  - HRR-INJ-01-PROBE
-  - HRR-INJ-01-FPRINT
-  - HRR-INJ-01-UNION
+  - PTN-INJ-01-PROBE
+  - PTN-INJ-01-FPRINT
+  - PTN-INJ-01-UNION
 boundaries:                  # canonical-home statements; see ARCHITECTURE.md §4
   - subject: "LDAP injection"
-    home: HRR-INJ-04
+    home: PTN-INJ-04
     note: "A different interpreter: no SQL grammar, different metacharacters."
   - subject: "NoSQL operator injection"
     home: null
     note: "Not yet written. Recorded so the gap stays visible rather than reading as covered."
-see_also: [HRR-API-02]
+see_also: [PTN-API-02]
 refs:
   wstg: [WSTG-INPV-05]
   cwe: [89]
@@ -61,8 +61,8 @@ genuinely runs one way, it is a boundary, not a `see_also`.
 ## 2. A unit file
 
 ```yaml
-id: HRR-INJ-01-UNION
-topic: HRR-INJ-01
+id: PTN-INJ-01-UNION
+topic: PTN-INJ-01
 kind: test                   # test | recon | inquiry
 status: outline              # outline | sketched | authored -- see below
 role: variant                # stage | variant -- required; see below
@@ -186,7 +186,7 @@ for.
 
 ## 3. Content rules
 
-These are not style preferences. `python -m harrier validate` fails on them, and
+These are not style preferences. `python -m pentest_navgrid validate` fails on them, and
 the suite asserts that it still does.
 
 **`objective` is one falsifiable sentence.** It must be possible to be wrong

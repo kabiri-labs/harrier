@@ -1,0 +1,41 @@
+id: PTN-RCN-02-MAP
+topic: PTN-RCN-02
+status: sketched
+role: stage
+kind: recon
+title: "The names, certificates and addresses belonging to the target"
+objective: >-
+  Record the DNS names, certificate subjects and address ranges that belong to
+  the target, since the surface is defined by this list and nothing outside it
+  may be touched.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.names.mapped]
+
+hypotheses:
+  - "One address commonly fronts several names, and the operator did not intend all of them to be found together."
+  - "A certificate lists the names its operator meant to serve from one place, which is a statement about grouping and not about ownership."
+  - "A wildcard or catch-all record answers for names that were never configured, so resolution alone proves nothing exists."
+
+triage:
+  - "The subject alternative names on every certificate served by an address already in scope."
+  - "Names that resolve into an address range the engagement granted, and names that resolve outside it."
+  - "A record that answers for a name the target cannot plausibly have, which marks the catch-all before any guessing starts."
+
+sequence:
+  - "Start from the names the engagement already grants, and expand only from what those resolve to."
+  - "Read the subject alternative names off each certificate served and hold them as candidates: a shared certificate lists the tenants beside the target as readily as the target."
+  - "Resolve every candidate and record the address it lands on. A name joins the target set when the engagement grants that name -- never because the address it resolved to is in range."
+
+first_false_positive: >-
+  A wildcard record answering for every name asked of it. Every guess resolves,
+  the list looks large, and none of it is evidence that a host exists -- which
+  is why a candidate becomes a recorded name on the address it lands on and the
+  grant that covers it, never on the fact that it resolved.
+
+done_when: >-
+  Every granted name is resolved, every certificate served by the resulting
+  addresses has had its subject alternative names read, and each candidate is
+  either in the target set with the grant that admitted it, or set aside with
+  the reason.

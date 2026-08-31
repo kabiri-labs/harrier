@@ -1,0 +1,12 @@
+id: PTN-INJ-12-ERROR
+topic: PTN-INJ-12
+status: outline
+role: variant
+title: "Error-based inference"
+objective: >-
+  Determine whether a malformed argument produces a resolver error carrying
+  datastore or stack detail in the errors array.
+
+requires:
+  all_of: [surface.graphql.injectable]
+yields: [recon.engine.identified]

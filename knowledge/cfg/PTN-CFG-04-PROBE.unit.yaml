@@ -1,0 +1,48 @@
+id: PTN-CFG-04-PROBE
+topic: PTN-CFG-04
+status: sketched
+role: stage
+title: "Methods accepted beyond those the application uses"
+objective: >-
+  Determine which request methods a resource accepts beyond the ones its own
+  client issues.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.method.extra]
+closes: [surface.method.extra]
+
+hypotheses:
+  - "A server accepts the methods its framework registered, not the ones the application uses."
+  - "A front layer refuses a method the application behind it would still honour, so a refusal names a layer rather than the application."
+  - "Where a method is refused outright, an override header or parameter reaches the same handler by a route the filter does not inspect."
+
+triage:
+  - "What a resource advertises as allowed, beside what its own client actually issues."
+  - "Override headers and parameters the framework honours: X-HTTP-Method-Override, and a method parameter on the query or the body."
+  - "A resource whose read and write paths are the same URL."
+  - "The same request sent to the origin where the target is fronted."
+
+sink: >-
+  The framework's method dispatch, which chooses a handler from the verb before
+  the application's own code decides anything about the request.
+
+oracle:
+  positive: "A resource accepts a method its own client never issues, answering it as a request rather than refusing it."
+  negative: "Every resource tested answers each unused method with a refusal, and the set it advertises matches the set its client issues."
+
+sequence:
+  - "Ask each representative resource what it allows, and record the answer beside the methods its own client actually issues."
+  - "Send each unused method to the resource and read the response: what a refusal looks like here, and which methods produce something else."
+  - "Repeat the ones that are refused with an override header and an override parameter, since a front layer often refuses what the application behind it still honours."
+  - "Where the target is fronted, repeat against the origin: a method refused at the edge and accepted behind it is the finding."
+
+first_false_positive: >-
+  A method refusal that comes from an intermediary rather than the application.
+  The edge answers before the origin sees it, so the set the application accepts
+  is unknown until the same request reaches it directly.
+
+done_when: >-
+  Every representative resource has been asked what it allows and sent each
+  unused method, plainly and by override, with each result recorded against the
+  layer that answered.

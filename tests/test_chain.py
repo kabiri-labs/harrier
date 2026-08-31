@@ -9,8 +9,8 @@ satisfied at all.
 
 import unittest
 
-from harrier.chain import Chain, chain_index, family_of, still_required, tier_of
-from harrier.validate import validate
+from pentest_navgrid.chain import Chain, chain_index, family_of, still_required, tier_of
+from pentest_navgrid.validate import validate
 from tests.support import REPO_ROOT, Sandbox, messages
 
 REAL_FACT = "surface.sql.injectable"
@@ -44,14 +44,14 @@ class FactsComeFromTheVocabulary(SandboxCase):
 
     def test_an_invented_required_fact_is_rejected(self):
         self.box.edit(
-            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            "knowledge/inj/PTN-INJ-01-UNION.unit.yaml",
             lambda u: u.update(requires={"all_of": ["surface.invented.here"]}),
         )
         self.assertRejected("requires names unknown fact surface.invented.here")
 
     def test_an_invented_yielded_fact_is_rejected(self):
         self.box.edit(
-            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            "knowledge/inj/PTN-INJ-01-UNION.unit.yaml",
             lambda u: u.update(yields=["primitive.invented.here"]),
         )
         self.assertRejected("yields names unknown fact primitive.invented.here")
@@ -73,7 +73,7 @@ class FactsComeFromTheVocabulary(SandboxCase):
 class AUnitCannotDependOnItself(SandboxCase):
     def test_requiring_what_it_yields_is_rejected(self):
         self.box.edit(
-            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            "knowledge/inj/PTN-INJ-01-UNION.unit.yaml",
             lambda u: u.update(requires={"all_of": [REAL_FACT]}, yields=[REAL_FACT]),
         )
         self.assertRejected("requires and yields both name surface.sql.injectable")
@@ -95,7 +95,7 @@ class ImpactsEndChains(SandboxCase):
 
         self.box.edit("vocab/facts.yaml", add_impact)
         self.box.edit(
-            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            "knowledge/inj/PTN-INJ-01-UNION.unit.yaml",
             lambda u: u.update(requires={"all_of": ["impact.data.disclosed"]}),
         )
         self.assertRejected("an impact is where a chain ends")
@@ -104,7 +104,7 @@ class ImpactsEndChains(SandboxCase):
 class ANegativeResultClosesOnlyWhatItCouldOpen(SandboxCase):
     def test_closing_a_fact_it_does_not_yield_is_rejected(self):
         self.box.edit(
-            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            "knowledge/inj/PTN-INJ-01-UNION.unit.yaml",
             lambda u: u.update(closes=["recon.engine.identified"]),
         )
         self.assertRejected("closes recon.engine.identified without yielding it")
@@ -119,7 +119,7 @@ class OnlyASoleProducerMayCloseAFact(SandboxCase):
     def test_closing_a_fact_another_unit_also_yields_is_rejected(self):
         # primitive.exec.client is established by ten units across two topics.
         self.box.edit(
-            "knowledge/clt/HRR-CLT-01-HTMLBODY.unit.yaml",
+            "knowledge/clt/PTN-CLT-01-HTMLBODY.unit.yaml",
             lambda u: u.update(closes=["primitive.exec.client"]),
         )
         self.assertRejected("other unit(s) also establish")
@@ -138,7 +138,7 @@ class EveryConditionHasAProducer(SandboxCase):
         # RCN-03-MAP is the only unit that produces the entry-point inventory,
         # which most of the catalogue is conditioned on.
         self.box.edit(
-            "knowledge/rcn/HRR-RCN-03-MAP.unit.yaml",
+            "knowledge/rcn/PTN-RCN-03-MAP.unit.yaml",
             lambda u: u.update(yields=["recon.hosts.enumerated"]),
         )
         self.assertRejected("recon.entrypoints.mapped is required but no unit establishes it")
@@ -170,7 +170,7 @@ class AnAuthoredUnitEstablishesSomething(SandboxCase):
         def strip(unit):
             unit.pop("yields", None)
 
-        self.box.edit("knowledge/inj/HRR-INJ-01-UNION.unit.yaml", strip)
+        self.box.edit("knowledge/inj/PTN-INJ-01-UNION.unit.yaml", strip)
         self.assertRejected("authored without yields")
 
 
@@ -192,13 +192,13 @@ class TheDerivedGraph(unittest.TestCase):
         return {link["unit"]: link for link in self.index[uid]["out"]}
 
     def test_a_probe_leads_to_the_technique_that_needs_what_it_establishes(self):
-        link = self.onward("HRR-INJ-01-PROBE").get("HRR-INJ-01-UNION")
+        link = self.onward("PTN-INJ-01-PROBE").get("PTN-INJ-01-UNION")
         self.assertIsNotNone(link)
         self.assertEqual(link["kind"], "requires")
         self.assertIn("surface.sql.injectable", link["via"])
 
     def test_a_fingerprint_motivates_rather_than_conditions(self):
-        link = self.onward("HRR-INJ-01-FPRINT").get("HRR-INJ-01-UNION")
+        link = self.onward("PTN-INJ-01-FPRINT").get("PTN-INJ-01-UNION")
         self.assertIsNotNone(link)
         self.assertEqual(link["kind"], "motivated_by")
         self.assertEqual(link["via"], [])
@@ -211,7 +211,7 @@ class TheDerivedGraph(unittest.TestCase):
         self.assertTrue(self.chain.producers.get("access.user"))
 
     def test_a_condition_success_does_not_supply_is_reported_as_still_required(self):
-        link = self.onward("HRR-ACL-02-MAP").get("HRR-ACL-02-PEER")
+        link = self.onward("PTN-ACL-02-MAP").get("PTN-ACL-02-PEER")
         self.assertIsNotNone(link)
         self.assertIn("artifact.objectid.known", link["via"])
         # Reaching it through one capability is not the same as being able to
@@ -341,26 +341,26 @@ class ContinuationsAreOrderedByTier(unittest.TestCase):
 
     def test_a_chain_edge_precedes_an_engagement_edge_from_the_same_unit(self):
         units = {
-            "HRR-A-01-P": {
-                "id": "HRR-A-01-P",
-                "topic": "HRR-A-01",
+            "PTN-A-01-P": {
+                "id": "PTN-A-01-P",
+                "topic": "PTN-A-01",
                 "yields": ["access.user", "artifact.token"],
             },
-            "HRR-A-01-GENERIC": {
-                "id": "HRR-A-01-GENERIC",
-                "topic": "HRR-A-01",
+            "PTN-A-01-GENERIC": {
+                "id": "PTN-A-01-GENERIC",
+                "topic": "PTN-A-01",
                 "requires": {"all_of": ["access.user"]},
             },
-            "HRR-B-02-ESCALATION": {
-                "id": "HRR-B-02-ESCALATION",
-                "topic": "HRR-B-02",
+            "PTN-B-02-ESCALATION": {
+                "id": "PTN-B-02-ESCALATION",
+                "topic": "PTN-B-02",
                 "requires": {"all_of": ["artifact.token"]},
             },
         }
         index = chain_index(units, given=set(), tiers=TIERS)
-        out = index["HRR-A-01-P"]["out"]
+        out = index["PTN-A-01-P"]["out"]
         self.assertEqual(
-            [e["unit"] for e in out], ["HRR-B-02-ESCALATION", "HRR-A-01-GENERIC"]
+            [e["unit"] for e in out], ["PTN-B-02-ESCALATION", "PTN-A-01-GENERIC"]
         )
         self.assertEqual([e["tier"] for e in out], ["chain", "engagement"])
 
@@ -372,20 +372,20 @@ class ContinuationsAreOrderedByTier(unittest.TestCase):
         only the hard side would file it under the session -- hiding exactly the
         relation the tier exists to surface."""
         units = {
-            "HRR-A-01-P": {
-                "id": "HRR-A-01-P",
-                "topic": "HRR-A-01",
+            "PTN-A-01-P": {
+                "id": "PTN-A-01-P",
+                "topic": "PTN-A-01",
                 "yields": ["access.user", "artifact.token"],
             },
-            "HRR-B-02-C": {
-                "id": "HRR-B-02-C",
-                "topic": "HRR-B-02",
+            "PTN-B-02-C": {
+                "id": "PTN-B-02-C",
+                "topic": "PTN-B-02",
                 "requires": {"all_of": ["access.user"]},
                 "motivated_by": ["artifact.token"],
             },
         }
         index = chain_index(units, given=set(), tiers=TIERS)
-        edge = index["HRR-A-01-P"]["out"][0]
+        edge = index["PTN-A-01-P"]["out"][0]
         self.assertEqual(edge["via"], ["access.user"])
         self.assertEqual(edge["hint"], ["artifact.token"])
         self.assertEqual(edge["kind"], "requires")
@@ -398,11 +398,11 @@ class ContinuationsAreOrderedByTier(unittest.TestCase):
         chain = Chain.load(REPO_ROOT)
         index = chain.index()
         known = {
-            ("HRR-INJ-03-READ", "HRR-RES-01-EXEC"),
-            ("HRR-INJ-04-READ", "HRR-RES-01-EXEC"),
-            ("HRR-INJ-10-READ", "HRR-RES-01-EXEC"),
-            ("HRR-SES-04-READ", "HRR-SES-09-READ"),
-            ("HRR-SES-04-READ", "HRR-SES-09-REPLAY"),
+            ("PTN-INJ-03-READ", "PTN-RES-01-EXEC"),
+            ("PTN-INJ-04-READ", "PTN-RES-01-EXEC"),
+            ("PTN-INJ-10-READ", "PTN-RES-01-EXEC"),
+            ("PTN-SES-04-READ", "PTN-SES-09-READ"),
+            ("PTN-SES-04-READ", "PTN-SES-09-REPLAY"),
         }
         seen = {
             (uid, edge["unit"]): edge["tier"]
@@ -440,12 +440,12 @@ class EveryUnitSaysHowItStandsToItsSiblings(SandboxCase):
             unit.pop("role", None)
             return unit
 
-        self.box.edit("knowledge/inj/HRR-INJ-01-UNION.unit.yaml", drop)
+        self.box.edit("knowledge/inj/PTN-INJ-01-UNION.unit.yaml", drop)
         self.assertRejected("role")
 
     def test_a_role_outside_the_two_is_rejected(self):
         self.box.edit(
-            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            "knowledge/inj/PTN-INJ-01-UNION.unit.yaml",
             lambda u: u.update(role="sometimes") or u,
         )
         self.assertRejected("role")
@@ -463,12 +463,12 @@ class TheRolesReadTheWayTheCatalogueIsWritten(unittest.TestCase):
         return self.chain.nodes[uid].role
 
     def test_a_probe_and_a_fingerprint_are_stages(self):
-        for uid in ("HRR-INJ-01-PROBE", "HRR-INJ-01-FPRINT", "HRR-INJ-01-EVADE"):
+        for uid in ("PTN-INJ-01-PROBE", "PTN-INJ-01-FPRINT", "PTN-INJ-01-EVADE"):
             self.assertEqual(self.role(uid), "stage", uid)
 
     def test_the_seven_sql_techniques_are_alternatives(self):
         for slug in ("ERROR", "BOOL", "TIME", "UNION", "OOB", "STACK", "SECOND"):
-            uid = f"HRR-INJ-01-{slug}"
+            uid = f"PTN-INJ-01-{slug}"
             self.assertEqual(self.role(uid), "variant", uid)
 
     def test_every_unit_declares_one_of_the_two(self):
@@ -478,7 +478,7 @@ class TheRolesReadTheWayTheCatalogueIsWritten(unittest.TestCase):
     def test_no_topic_asks_for_a_choice_before_offering_a_way_in(self):
         """A topic of nothing but alternatives has no entry: the tester is asked
         to pick a route before anything has established there is a surface to
-        pick one for. `HRR-ACL-04` was the last of them and now opens with the
+        pick one for. `PTN-ACL-04` was the last of them and now opens with the
         stage that records where privilege is decided, which is the thing all
         three of its routes attack."""
         by_topic = {}
@@ -531,11 +531,11 @@ class TheChainArrivesSomewhere(unittest.TestCase):
             self.assertNotIn("surfaces", topic, path.name)
 
     def test_an_outcome_is_asked_rather_than_asserted(self):
-        """Harrier has not seen the target. Every outcome unit is an inquiry --
+        """Pentest NavGrid has not seen the target. Every outcome unit is an inquiry --
         it carries the question the capability makes worth asking, and claims
         nothing about what the answer is."""
         for uid, node in self.chain.nodes.items():
-            if uid.startswith("HRR-OUT-"):
+            if uid.startswith("PTN-OUT-"):
                 self.assertEqual(node.kind, "inquiry", uid)
 
     def test_the_worked_example_in_the_readme_runs_to_its_end(self):
@@ -543,17 +543,17 @@ class TheChainArrivesSomewhere(unittest.TestCase):
         If any link in it breaks, the document is telling a reader something the
         catalogue no longer does."""
         walk = [
-            ("HRR-RES-01-PROBE", "surface.path.traversable"),
-            ("HRR-RES-01-READ", "primitive.fs.read"),
-            ("HRR-RES-01-EXEC", "primitive.exec.server"),
+            ("PTN-RES-01-PROBE", "surface.path.traversable"),
+            ("PTN-RES-01-READ", "primitive.fs.read"),
+            ("PTN-RES-01-EXEC", "primitive.exec.server"),
         ]
         index = self.chain.index()
         for uid, established in walk:
             self.assertIn(established, self.chain.nodes[uid].yields, uid)
-        onward = [e["unit"] for e in index["HRR-RES-01-EXEC"]["out"]]
-        self.assertIn("HRR-OUT-02-IMPACT", onward)
+        onward = [e["unit"] for e in index["PTN-RES-01-EXEC"]["out"]]
+        self.assertIn("PTN-OUT-02-IMPACT", onward)
         self.assertIn(
-            "impact.code.executed", self.chain.nodes["HRR-OUT-02-IMPACT"].yields
+            "impact.code.executed", self.chain.nodes["PTN-OUT-02-IMPACT"].yields
         )
 
 
@@ -564,7 +564,7 @@ class AnOutcomeTopicIsHeldToTheSameRules(SandboxCase):
         honour -- an outcome is reached from wherever its capability was
         established, not from a place."""
         self.box.edit(
-            "knowledge/out/HRR-OUT-02.topic.yaml",
+            "knowledge/out/PTN-OUT-02.topic.yaml",
             lambda topic: topic.update(surfaces={"any_of": ["login-form"]}) or topic,
         )
         self.assertRejected("schema (topic)")
@@ -574,7 +574,7 @@ class AnOutcomeTopicIsHeldToTheSameRules(SandboxCase):
             topic.pop("surfaces", None)
             return topic
 
-        self.box.edit("knowledge/inj/HRR-INJ-01.topic.yaml", drop)
+        self.box.edit("knowledge/inj/PTN-INJ-01.topic.yaml", drop)
         self.assertRejected("surfaces")
 
     def test_requiring_an_outcome_is_still_rejected(self):
@@ -582,7 +582,7 @@ class AnOutcomeTopicIsHeldToTheSameRules(SandboxCase):
         a chain that could continue past an impact would be describing something
         after the end of itself."""
         self.box.edit(
-            "knowledge/out/HRR-OUT-02-IMPACT.unit.yaml",
+            "knowledge/out/PTN-OUT-02-IMPACT.unit.yaml",
             lambda unit: unit.update(requires={"all_of": ["impact.code.executed"]}) or unit,
         )
         self.assertRejected("impact")

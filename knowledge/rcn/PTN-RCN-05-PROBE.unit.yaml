@@ -1,0 +1,14 @@
+id: PTN-RCN-05-PROBE
+topic: PTN-RCN-05
+status: outline
+role: stage
+kind: recon
+title: "Which channels can be interposed"
+objective: >-
+  Record which channels accept the tester's proxy and which refuse it, and on
+  what grounds, so an uncapturable channel is a stated limit rather than a
+  silent gap.
+
+requires:
+  all_of: [recon.channels.mapped]
+yields: [recon.traffic.captured]

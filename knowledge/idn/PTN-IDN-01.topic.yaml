@@ -1,0 +1,15 @@
+id: PTN-IDN-01
+title: "Account registration controls"
+domain: IDN
+axis: property
+
+surfaces:
+  any_of: [registration]
+
+order:
+  - PTN-IDN-01-POLICY
+  - PTN-IDN-01-VALIDATION
+  - PTN-IDN-01-RATE
+
+refs:
+  wstg: [WSTG-IDNT-02]

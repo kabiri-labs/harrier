@@ -1,0 +1,14 @@
+id: PTN-AUT-10-VALIDATION
+topic: PTN-AUT-10
+status: outline
+role: stage
+title: "How the authorization request's return location is matched"
+objective: >-
+  Determine how strictly the registered return location is matched, since
+  prefix or wildcard matching hands the authorization response to a location
+  the client never registered.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.oauth.flow]

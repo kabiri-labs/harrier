@@ -1,0 +1,15 @@
+id: PTN-AUT-08
+title: "Alternative authentication channels"
+domain: AUT
+
+surfaces:
+  any_of: [alternative-channel]
+
+order:
+  - PTN-AUT-08-MAP
+  - PTN-AUT-08-PROBE
+  - PTN-AUT-08-IMPACT
+
+refs:
+  wstg: [WSTG-ATHN-10]
+  cwe: [287]

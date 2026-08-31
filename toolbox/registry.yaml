@@ -57,7 +57,7 @@
     - purpose: "Confirming a manually found injection point without re-running discovery"
       cmd: "sqlmap -u '{{URL}}' -p {{PARAM}} --batch --dbms={{DBMS}} --technique=U --union-cols=1-10 --banner"
       flags:
-        "--dbms": "Skips fingerprinting when HRR-INJ-01-FPRINT already identified the engine, cutting request volume substantially."
+        "--dbms": "Skips fingerprinting when PTN-INJ-01-FPRINT already identified the engine, cutting request volume substantially."
         "--technique=U": "Restricts to the technique already proven manually, so the tool corroborates rather than re-explores."
         "--banner": "Reads one metadata value as proof and stops, instead of enumerating the schema."
     - purpose: "Authenticated testing with a session cookie"
@@ -98,7 +98,7 @@
     - purpose: "Repeated timing series for the jitter baseline"
       cmd: "for i in $(seq 1 10); do curl -s -o /dev/null -w '%{time_total}\\n' '{{URL}}'; done"
       flags:
-        "ten repetitions": "The minimum series HRR-INJ-01-TIME requires before a delay can be called a signal."
+        "ten repetitions": "The minimum series PTN-INJ-01-TIME requires before a delay can be called a signal."
     - purpose: "POST body probe where the parameter is not in the query string"
       cmd: "curl -s -i -X POST '{{URL}}' -H 'Content-Type: application/x-www-form-urlencoded' --data '{{DATA}}'"
       flags:

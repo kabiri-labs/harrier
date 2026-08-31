@@ -1,0 +1,30 @@
+id: PTN-INJ-10
+title: "Server-side template injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [template-param, stored-then-rendered, rich-text]
+
+boundaries:
+  - subject: "A reflected expression evaluated by the browser"
+    home: PTN-CLT-01
+    note: >-
+      A template engine evaluating an expression server-side is here; the
+      same-looking payload rendered as script in the client is cross-site
+      scripting.
+
+see_also: [PTN-CLT-01]
+
+order:
+  - PTN-INJ-10-PROBE
+  - PTN-INJ-10-FPRINT
+  - PTN-INJ-10-ERROR
+  - PTN-INJ-10-OOB
+  - PTN-INJ-10-READ
+  - PTN-INJ-10-EXEC
+  - PTN-INJ-10-EVADE
+
+refs:
+  wstg: [WSTG-INPV-18]
+  cwe: [1336]

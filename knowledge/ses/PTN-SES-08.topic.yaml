@@ -1,0 +1,16 @@
+id: PTN-SES-08
+title: "Session variable collision"
+domain: SES
+axis: technique
+
+surfaces:
+  any_of: [session-cookie, business-workflow]
+
+order:
+  - PTN-SES-08-MAP
+  - PTN-SES-08-SECOND
+  - PTN-SES-08-WRITE
+
+refs:
+  wstg: [WSTG-SESS-08]
+  cwe: [841]

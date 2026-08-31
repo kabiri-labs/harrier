@@ -1,0 +1,12 @@
+id: PTN-AUT-05-REVOCATION
+topic: PTN-AUT-05
+status: outline
+role: stage
+title: "Invalidation on sign-out and on credential change"
+objective: >-
+  Determine whether signing out or changing the credential stops the
+  previously issued persistent secret from authenticating.
+
+requires:
+  all_of: [access.user]
+yields: [control.persistent.weak]

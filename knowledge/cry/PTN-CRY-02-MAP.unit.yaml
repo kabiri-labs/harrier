@@ -1,0 +1,12 @@
+id: PTN-CRY-02-MAP
+topic: PTN-CRY-02
+status: outline
+role: stage
+kind: recon
+title: "Sensitive payload inventory"
+objective: >-
+  Establish which requests and responses carry credentials, tokens, personal
+  data or payment details, and over which channel each travels.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

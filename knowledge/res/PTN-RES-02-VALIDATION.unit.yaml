@@ -1,0 +1,13 @@
+id: PTN-RES-02-VALIDATION
+topic: PTN-RES-02
+status: outline
+role: stage
+title: "Type and content validation"
+objective: >-
+  Determine whether the endpoint accepts a file whose declared type, extension
+  and magic bytes disagree with one another.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [surface.upload.unrestricted]
+closes: [surface.upload.unrestricted]

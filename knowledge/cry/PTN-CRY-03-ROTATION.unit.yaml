@@ -1,0 +1,12 @@
+id: PTN-CRY-03-ROTATION
+topic: PTN-CRY-03
+status: outline
+role: stage
+title: "Key lifecycle"
+objective: >-
+  Determine whether keys can be rotated and retired, and whether material
+  superseded by a rotation stops being accepted.
+
+requires:
+  all_of: [surface.appcrypto]
+yields: [control.crypto.unsound]

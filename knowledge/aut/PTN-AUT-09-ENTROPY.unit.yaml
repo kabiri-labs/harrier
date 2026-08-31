@@ -1,0 +1,12 @@
+id: PTN-AUT-09-ENTROPY
+topic: PTN-AUT-09
+status: outline
+role: stage
+title: "Guessability of the one-time value"
+objective: >-
+  Determine whether the one-time value's length and alphabet leave a space
+  small enough to be covered within the value's lifetime.
+
+requires:
+  all_of: [access.user]
+yields: [control.mfa.bypassable]

@@ -31,7 +31,7 @@ class Sandbox:
     REPO_ROOT = REPO_ROOT
 
     def __init__(self) -> None:
-        self._tmp = tempfile.mkdtemp(prefix="harrier-test-")
+        self._tmp = tempfile.mkdtemp(prefix="navgrid-test-")
         self.root = Path(self._tmp) / "repo"
         shutil.copytree(
             REPO_ROOT,
@@ -68,8 +68,8 @@ class Sandbox:
     #: own `see_also` on a topic with inbound links would collide with them and
     #: fail on the wrong rule. Units are not a constraint on the choice --
     #: `add_topic` drops the base's own units from the copy.
-    BASE_TOPIC = "knowledge/aut/HRR-AUT-01.topic.yaml"
-    BASE_TOPIC_ID = "HRR-AUT-01"
+    BASE_TOPIC = "knowledge/aut/PTN-AUT-01.topic.yaml"
+    BASE_TOPIC_ID = "PTN-AUT-01"
 
     #: Kept as a separate name because the reason differs: some tests need a
     #: topic nothing links to, which is a weaker requirement than the base's.
@@ -103,8 +103,8 @@ class Sandbox:
         substituting one failure for another would leave the tests passing for
         the wrong reason.
         """
-        from harrier import Repository
-        from harrier.standard import INDEX_PATH, index_document
+        from pentest_navgrid import Repository
+        from pentest_navgrid.standard import INDEX_PATH, index_document
 
         target = self.path(INDEX_PATH.as_posix())
         if not target.is_file():
@@ -246,7 +246,7 @@ def messages(problems: Any) -> str:
 # --- helpers for exercising the artefact itself ------------------------------
 
 def _artefact(name: str) -> Path:
-    return REPO_ROOT / "harrier" / "artefact" / name
+    return REPO_ROOT / "pentest_navgrid" / "artefact" / name
 
 
 def node_available() -> bool:
@@ -264,7 +264,7 @@ def run_in_node(body: str, data: Any) -> Any:
 
     Offline and local: node is already how the suite checks the script parses.
     """
-    tmp = Path(tempfile.mkdtemp(prefix="harrier-node-"))
+    tmp = Path(tempfile.mkdtemp(prefix="navgrid-node-"))
     try:
         (tmp / "data.json").write_text(json.dumps(data), encoding="utf-8")
         script = (

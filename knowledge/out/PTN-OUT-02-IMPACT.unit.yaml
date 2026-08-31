@@ -1,0 +1,15 @@
+id: PTN-OUT-02-IMPACT
+topic: PTN-OUT-02
+status: outline
+role: stage
+kind: inquiry
+title: "What the executing context reaches"
+objective: >-
+  Establish what the code runs as and what that principal can reach: the
+  account, the filesystem it can read, the credentials in the environment,
+  and whether anything answers from the network behind it.
+
+requires:
+  any_of:
+    - primitive.exec.server
+yields: [impact.code.executed]

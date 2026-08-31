@@ -1,0 +1,14 @@
+id: PTN-CLT-08-PROBE
+topic: PTN-CLT-08
+status: outline
+role: stage
+title: "Framing confirmation"
+objective: >-
+  Determine whether the page renders inside a frame on an origin the tester
+  controls rather than refusing to load.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.frameable]
+closes: [surface.frameable]

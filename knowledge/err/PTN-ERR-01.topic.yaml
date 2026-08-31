@@ -1,0 +1,18 @@
+id: PTN-ERR-01
+title: "Error response handling"
+domain: ERR
+axis: technique
+
+surfaces:
+  always: true
+
+order:
+  - PTN-ERR-01-MAP
+  - PTN-ERR-01-ERROR
+  - PTN-ERR-01-DIFF
+
+see_also: [PTN-ERR-02, PTN-IDN-03]
+
+refs:
+  wstg: [WSTG-ERRH-01]
+  cwe: [209, 755]

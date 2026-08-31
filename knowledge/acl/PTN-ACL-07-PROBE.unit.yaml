@@ -1,0 +1,12 @@
+id: PTN-ACL-07-PROBE
+topic: PTN-ACL-07
+status: outline
+role: stage
+title: "A field resolving for a role that should not read it"
+objective: >-
+  Determine whether a field outside the caller's role resolves to a value
+  rather than to an authorization error.
+
+requires:
+  all_of: [recon.schema.known, access.user]
+yields: [primitive.privileged.action]

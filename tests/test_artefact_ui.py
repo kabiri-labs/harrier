@@ -22,7 +22,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from harrier.build import build, catalogue
+from pentest_navgrid.build import build, catalogue
 from tests.support import (
     Page,
     REPO_ROOT,
@@ -65,7 +65,7 @@ class TheLocalGraphModel(unittest.TestCase):
 
     def test_the_totals_survive_the_preview_being_smaller_than_the_tier(self):
         result = self.run_js("""
-            const g = H.localGraph(D, "HRR-IDN-01-POLICY", 3);
+            const g = H.localGraph(D, "PTN-IDN-01-POLICY", 3);
             return {
               shown: g.outgoing.shown.length,
               engagement: g.tierTotals.engagement,
@@ -76,7 +76,7 @@ class TheLocalGraphModel(unittest.TestCase):
         # Derived, not written down: the point is that the totals exceed the
         # preview, and a literal here would go stale the first time a unit is
         # added -- which is the failure these counts exist to prevent.
-        edges = self.data["chain"]["HRR-IDN-01-POLICY"]["out"]
+        edges = self.data["chain"]["PTN-IDN-01-POLICY"]["out"]
         expected = collections.Counter(e["tier"] for e in edges)
         self.assertEqual(result["chain"], expected["chain"])
         self.assertEqual(result["engagement"], expected["engagement"])
@@ -214,7 +214,7 @@ class TheLocalGraphModel(unittest.TestCase):
 
     def test_a_unit_with_several_routes_is_not_rendered_as_a_line(self):
         result = self.run_js("""
-            const g = H.localGraph(D, "HRR-INJ-01-UNION", 9999);
+            const g = H.localGraph(D, "PTN-INJ-01-UNION", 9999);
             return {
               incoming: g.incoming.shown.length,
               kinds: g.incoming.shown.map(function (l) { return l.kind; })
@@ -242,7 +242,7 @@ class TheNegativeReading(unittest.TestCase):
 
     def test_a_clean_union_result_does_not_exclude_sql_injection(self):
         result = run_in_node("""
-            const r = H.negativeReading(D, "HRR-INJ-01-UNION");
+            const r = H.negativeReading(D, "PTN-INJ-01-UNION");
             return {
               closes: r.closes,
               open: r.open.map(function (o) { return [o.fact, o.others.length]; })
@@ -383,8 +383,8 @@ class TheGeneralGraph(unittest.TestCase):
         tests establish, and how many of them nothing outside the chain declares
         -- as a prerequisite or as a motivation, since either is a declared use.
         """
-        walk = ["HRR-RES-01-PROBE", "HRR-RES-01-READ",
-                "HRR-RES-01-EXEC", "HRR-OUT-02-IMPACT"]
+        walk = ["PTN-RES-01-PROBE", "PTN-RES-01-READ",
+                "PTN-RES-01-EXEC", "PTN-OUT-02-IMPACT"]
         established = []
         for uid in walk:
             for fact in self.data["units"][uid].get("yields") or []:
@@ -433,18 +433,18 @@ class TheGeneralGraph(unittest.TestCase):
             "facts": {"a.start": {}, "a.mid": {}, "impact.done": {}},
             "given": [],
             "units": {
-                "HRR-A-01-P": {"id": "HRR-A-01-P", "requires": {"all_of": ["a.start"]}, "yields": ["a.mid"]},
-                "HRR-A-01-Q": {"id": "HRR-A-01-Q", "requires": {"all_of": ["a.start"]}, "yields": ["a.mid"]},
-                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"all_of": ["a.mid"]}, "yields": ["impact.done"]},
+                "PTN-A-01-P": {"id": "PTN-A-01-P", "requires": {"all_of": ["a.start"]}, "yields": ["a.mid"]},
+                "PTN-A-01-Q": {"id": "PTN-A-01-Q", "requires": {"all_of": ["a.start"]}, "yields": ["a.mid"]},
+                "PTN-A-01-Z": {"id": "PTN-A-01-Z", "requires": {"all_of": ["a.mid"]}, "yields": ["impact.done"]},
             },
-            "requiredBy": {"a.start": ["HRR-A-01-P", "HRR-A-01-Q"], "a.mid": ["HRR-A-01-Z"]},
+            "requiredBy": {"a.start": ["PTN-A-01-P", "PTN-A-01-Q"], "a.mid": ["PTN-A-01-Z"]},
         }
         routes = run_in_node(
             "return H.pathsToImpact(D, 'a.start', {maxPaths: 9, maxDepth: 5});", forked
         )
         self.assertEqual(
             sorted(tuple(s["unit"] for s in r["steps"]) for r in routes),
-            [("HRR-A-01-P", "HRR-A-01-Z"), ("HRR-A-01-Q", "HRR-A-01-Z")],
+            [("PTN-A-01-P", "PTN-A-01-Z"), ("PTN-A-01-Q", "PTN-A-01-Z")],
         )
 
     def test_every_step_carries_the_conditions_that_step_still_owes(self):
@@ -479,12 +479,12 @@ class TheGeneralGraph(unittest.TestCase):
             "facts": {"a.1": {}, "b.1": {}, "b.2": {}, "impact.done": {}},
             "given": [],
             "units": {
-                "HRR-A-01-X": {"id": "HRR-A-01-X", "requires": {"all_of": ["a.1"]},
+                "PTN-A-01-X": {"id": "PTN-A-01-X", "requires": {"all_of": ["a.1"]},
                                "yields": ["b.1", "b.2"]},
-                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"all_of": ["b.1", "b.2"]},
+                "PTN-A-01-Z": {"id": "PTN-A-01-Z", "requires": {"all_of": ["b.1", "b.2"]},
                                "yields": ["impact.done"]},
             },
-            "requiredBy": {"a.1": ["HRR-A-01-X"], "b.1": ["HRR-A-01-Z"], "b.2": ["HRR-A-01-Z"]},
+            "requiredBy": {"a.1": ["PTN-A-01-X"], "b.1": ["PTN-A-01-Z"], "b.2": ["PTN-A-01-Z"]},
         }
         routes = run_in_node(
             "return H.pathsToImpact(D, 'a.1', {maxPaths: 9, maxDepth: 5});", multi
@@ -492,7 +492,7 @@ class TheGeneralGraph(unittest.TestCase):
         self.assertTrue(routes)
         for route in routes:
             final = route["steps"][-1]
-            self.assertEqual(final["unit"], "HRR-A-01-Z")
+            self.assertEqual(final["unit"], "PTN-A-01-Z")
             self.assertEqual(
                 final["also"], {"all_of": [], "any_of": []},
                 "X yielded both, so Z owes nothing on either route",
@@ -506,12 +506,12 @@ class TheGeneralGraph(unittest.TestCase):
             "facts": {"a.1": {}, "b.1": {}, "b.2": {}, "impact.done": {}},
             "given": [],
             "units": {
-                "HRR-A-01-X": {"id": "HRR-A-01-X", "requires": {"all_of": ["a.1"]},
+                "PTN-A-01-X": {"id": "PTN-A-01-X", "requires": {"all_of": ["a.1"]},
                                "yields": ["b.1", "b.2"]},
-                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"any_of": ["b.1", "b.2"]},
+                "PTN-A-01-Z": {"id": "PTN-A-01-Z", "requires": {"any_of": ["b.1", "b.2"]},
                                "yields": ["impact.done"]},
             },
-            "requiredBy": {"a.1": ["HRR-A-01-X"], "b.1": ["HRR-A-01-Z"], "b.2": ["HRR-A-01-Z"]},
+            "requiredBy": {"a.1": ["PTN-A-01-X"], "b.1": ["PTN-A-01-Z"], "b.2": ["PTN-A-01-Z"]},
         }
         routes = run_in_node(
             "return H.pathsToImpact(D, 'a.1', {maxPaths: 9, maxDepth: 5});", multi
@@ -520,12 +520,12 @@ class TheGeneralGraph(unittest.TestCase):
             tuple((s["from"], s["unit"], s["to"]) for s in r["steps"]) for r in routes
         )
         self.assertEqual(shapes, [
-            (("a.1", "HRR-A-01-X", "b.1"), ("b.1", "HRR-A-01-Z", "impact.done")),
-            (("a.1", "HRR-A-01-X", "b.2"), ("b.2", "HRR-A-01-Z", "impact.done")),
+            (("a.1", "PTN-A-01-X", "b.1"), ("b.1", "PTN-A-01-Z", "impact.done")),
+            (("a.1", "PTN-A-01-X", "b.2"), ("b.2", "PTN-A-01-Z", "impact.done")),
         ])
         self.assertEqual(
             {tuple(s["unit"] for s in r["steps"]) for r in routes},
-            {("HRR-A-01-X", "HRR-A-01-Z")},
+            {("PTN-A-01-X", "PTN-A-01-Z")},
             "the two routes share their units, which is why units alone cannot identify them",
         )
 
@@ -536,12 +536,12 @@ class TheGeneralGraph(unittest.TestCase):
             "facts": {"a.1": {}, "a.2": {}, "impact.done": {}},
             "given": [],
             "units": {
-                "HRR-A-01-X": {"id": "HRR-A-01-X", "requires": {"all_of": ["a.1"]},
+                "PTN-A-01-X": {"id": "PTN-A-01-X", "requires": {"all_of": ["a.1"]},
                                "yields": ["a.2", "a.1"]},
-                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"all_of": ["a.2"]},
+                "PTN-A-01-Z": {"id": "PTN-A-01-Z", "requires": {"all_of": ["a.2"]},
                                "yields": ["impact.done"]},
             },
-            "requiredBy": {"a.1": ["HRR-A-01-X"], "a.2": ["HRR-A-01-Z"]},
+            "requiredBy": {"a.1": ["PTN-A-01-X"], "a.2": ["PTN-A-01-Z"]},
         }
         routes = run_in_node(
             "return H.pathsToImpact(D, 'a.1', {maxPaths: 9, maxDepth: 6});", loop
@@ -564,10 +564,10 @@ class TheGeneralGraph(unittest.TestCase):
               facts: {"a.one": {}, "a.two": {}, "impact.done": {}},
               given: [],
               units: {
-                "HRR-A-01-X": {id: "HRR-A-01-X", requires: {all_of: ["a.one"]}, yields: ["a.two"]},
-                "HRR-A-01-Y": {id: "HRR-A-01-Y", requires: {all_of: ["a.two", "a.one"]}, yields: ["impact.done"]}
+                "PTN-A-01-X": {id: "PTN-A-01-X", requires: {all_of: ["a.one"]}, yields: ["a.two"]},
+                "PTN-A-01-Y": {id: "PTN-A-01-Y", requires: {all_of: ["a.two", "a.one"]}, yields: ["impact.done"]}
               },
-              requiredBy: {"a.one": ["HRR-A-01-X", "HRR-A-01-Y"], "a.two": ["HRR-A-01-Y"]}
+              requiredBy: {"a.one": ["PTN-A-01-X", "PTN-A-01-Y"], "a.two": ["PTN-A-01-Y"]}
             };
             return H.pathsToImpact(chained, "a.one", {maxPaths: 5, maxDepth: 4});
         """, self.data)
@@ -576,11 +576,11 @@ class TheGeneralGraph(unittest.TestCase):
             for r in result
         }
         self.assertEqual(
-            routes.get(("HRR-A-01-Y",)), {"all_of": ["a.two"], "any_of": []},
+            routes.get(("PTN-A-01-Y",)), {"all_of": ["a.two"], "any_of": []},
             "reached directly, Y still owes what nothing established",
         )
         self.assertEqual(
-            routes.get(("HRR-A-01-X", "HRR-A-01-Y")), {"all_of": [], "any_of": []},
+            routes.get(("PTN-A-01-X", "PTN-A-01-Y")), {"all_of": [], "any_of": []},
             "reached through X, Y owes nothing: X established it on the way",
         )
 
@@ -597,11 +597,11 @@ class TheGeneralGraph(unittest.TestCase):
         cyclic = {
             "facts": {"a.one": {}, "a.two": {}, "impact.done": {}},
             "units": {
-                "HRR-A-01-X": {"id": "HRR-A-01-X", "requires": {"all_of": ["a.one"]}, "yields": ["a.two"]},
-                "HRR-A-01-Y": {"id": "HRR-A-01-Y", "requires": {"all_of": ["a.two"]}, "yields": ["a.one"]},
-                "HRR-A-01-Z": {"id": "HRR-A-01-Z", "requires": {"all_of": ["a.two"]}, "yields": ["impact.done"]},
+                "PTN-A-01-X": {"id": "PTN-A-01-X", "requires": {"all_of": ["a.one"]}, "yields": ["a.two"]},
+                "PTN-A-01-Y": {"id": "PTN-A-01-Y", "requires": {"all_of": ["a.two"]}, "yields": ["a.one"]},
+                "PTN-A-01-Z": {"id": "PTN-A-01-Z", "requires": {"all_of": ["a.two"]}, "yields": ["impact.done"]},
             },
-            "requiredBy": {"a.one": ["HRR-A-01-X"], "a.two": ["HRR-A-01-Y", "HRR-A-01-Z"]},
+            "requiredBy": {"a.one": ["PTN-A-01-X"], "a.two": ["PTN-A-01-Y", "PTN-A-01-Z"]},
         }
         result = run_in_node(
             "return H.pathsToImpact(D, 'a.one', {maxPaths: 9, maxDepth: 9});", cyclic
@@ -729,9 +729,9 @@ class SearchRetrievesEverythingTheFileCarries(unittest.TestCase):
             return H.searchAll(D, "tpl").filter(function (g) { return g.kind === "Tests"; })
               .map(function (g) { return g.items.map(function (i) { return i.sub; }); })[0] || [];
         """, self.data)
-        self.assertIn("HRR-RES-01-PROBE", hits)
+        self.assertIn("PTN-RES-01-PROBE", hits)
         # Not reachable from the title or the objective, which is the point.
-        unit = self.data["units"]["HRR-RES-01-PROBE"]
+        unit = self.data["units"]["PTN-RES-01-PROBE"]
         self.assertNotIn("tpl", (unit["title"] + unit["objective"]).lower())
 
     def test_a_sink_is_searchable_as_prose(self):
@@ -904,7 +904,7 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         recommendations."""
         out = self.run_js("""
             const r = H.contextTopics(D, ["object-id-param", "rest-api"]);
-            const hit = r.topics.filter(function (t) { return t.topic === "HRR-ACL-02"; })[0];
+            const hit = r.topics.filter(function (t) { return t.topic === "PTN-ACL-02"; })[0];
             return hit || null;
         """)
         self.assertEqual(out["via"], ["object-id-param", "rest-api"])
@@ -917,13 +917,13 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
             r.topics.forEach(function (t) { rows[t.topic] = t.implied; });
             return rows;
         """)
-        self.assertFalse(out["HRR-CLT-01"], "declares search itself")
-        self.assertFalse(out["HRR-IDN-03"], "declares search itself")
+        self.assertFalse(out["PTN-CLT-01"], "declares search itself")
+        self.assertFalse(out["PTN-IDN-03"], "declares search itself")
         # SQL injection is not filed under "search". It is filed under a
         # parameter reaching a query, which is what a search box is -- so it
         # arrives one step out, and the page has to say which of the two it was.
-        self.assertTrue(out["HRR-INJ-01"], "reached only through sql-backed-param")
-        self.assertTrue(out["HRR-CLT-04"], "reached only through stored-then-rendered")
+        self.assertTrue(out["PTN-INJ-01"], "reached only through sql-backed-param")
+        self.assertTrue(out["PTN-CLT-04"], "reached only through stored-then-rendered")
 
     def test_a_topic_is_listed_once_even_when_two_tags_reach_it(self):
         out = self.run_js("""
@@ -954,16 +954,16 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         """
         out = self.run_js("""
             const out = {};
-            D.topics["HRR-INJ-01"].units.forEach(function (id) {
+            D.topics["PTN-INJ-01"].units.forEach(function (id) {
               const c = H.entryCost(D, id);
               out[id] = { entry: c.entry, earned: c.earned };
             });
             return out;
         """)
-        self.assertTrue(out["HRR-INJ-01-PROBE"]["entry"])
+        self.assertTrue(out["PTN-INJ-01-PROBE"]["entry"])
         # Everything else in the topic waits on what the probe establishes,
         # which is the chain this view exists to lead a reader into.
-        rest = [k for k in out if k != "HRR-INJ-01-PROBE"]
+        rest = [k for k in out if k != "PTN-INJ-01-PROBE"]
         self.assertTrue(rest)
         for uid in rest:
             self.assertFalse(out[uid]["entry"], uid)
@@ -1000,13 +1000,13 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         """
         out = self.run_js("""
             const out = {};
-            ["HRR-INJ-10-PROBE", "HRR-ACL-02-PEER"].forEach(function (id) {
+            ["PTN-INJ-10-PROBE", "PTN-ACL-02-PEER"].forEach(function (id) {
               const c = H.entryCost(D, id);
               out[id] = { engagement: c.engagement, earned: c.earned, entry: c.entry };
             });
             return out;
         """)
-        probe = out["HRR-INJ-10-PROBE"]
+        probe = out["PTN-INJ-10-PROBE"]
         self.assertIn("recon.entrypoints.mapped", probe["engagement"])
         # Producers exist for it, which is exactly why the old label was wrong.
         self.assertTrue(self.data["producers"]["recon.entrypoints.mapped"])
@@ -1068,8 +1068,8 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls._tmp = TemporaryDirectory(prefix="harrier-browser-")
-        target = Path(cls._tmp.name) / "harrier.html"
+        cls._tmp = TemporaryDirectory(prefix="navgrid-browser-")
+        target = Path(cls._tmp.name) / "pentest-navgrid.html"
         build(REPO_ROOT, target)
         cls.data = catalogue(REPO_ROOT)
         cls.driver = Page(target)
@@ -1109,15 +1109,15 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
             ("#/wstg", "Input Validation Testing"),
             ("#/wstg/INPV", "Testing for SQL Injection"),
             ("#/case/WSTG-INPV-05", "SQL injection"),
-            ("#/unit/HRR-INJ-01-UNION", "UNION-based extraction"),
+            ("#/unit/PTN-INJ-01-UNION", "UNION-based extraction"),
             ("#/wstg/ATHZ", "Testing Directory Traversal File Include"),
-            ("#/unit/HRR-RES-01-READ", "Confirmed read outside the intended root"),
+            ("#/unit/PTN-RES-01-READ", "Confirmed read outside the intended root"),
         ):
             with self.subTest(fragment=fragment):
                 self.assertIn(expected, self.text(fragment))
 
     def test_the_test_detail_carries_what_a_tester_performs_it_from(self):
-        text = self.text("#/unit/HRR-INJ-01-UNION")
+        text = self.text("#/unit/PTN-INJ-01-UNION")
         for section in ("Objective", "Why this is a separate test", "Oracle",
                         "Sequence", "First false positive", "Done when",
                         "Safety boundary", "Payloads", "Tool", "Card",
@@ -1127,7 +1127,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
     def test_where_success_may_lead_is_answered_before_the_procedure(self):
         """On an authored unit the procedure runs for several screens. The
         product's own feature must not be at the bottom of them."""
-        page = self.open("#/unit/HRR-RES-01-READ")
+        page = self.open("#/unit/PTN-RES-01-READ")
         strip = page.evaluate(
             "document.querySelector('.strip').getBoundingClientRect().top"
         )
@@ -1143,7 +1143,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertShows(text, "Inclusion and execution of the resolved path")
 
     def test_the_local_chain_is_drawn_with_its_reasons(self):
-        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        page = self.open("#/unit/PTN-INJ-01-PROBE")
         self.assertGreaterEqual(page.locator(".gnode").count(), 5)
         self.assertGreaterEqual(page.locator(".gedge").count(), 4)
         text = self.driver.text()
@@ -1154,7 +1154,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertGreater(page.locator("path.gedge[marker-end]").count(), 0)
 
     def test_every_producer_of_a_prerequisite_is_named_not_just_the_first(self):
-        text = self.text("#/unit/HRR-RES-01-READ")
+        text = self.text("#/unit/PTN-RES-01-READ")
         self.assertShows(text, "Established by")
         self.assertShows(text, "Traversal sequence survival probe")
 
@@ -1162,14 +1162,14 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         # Succeeding here supplies one condition of each continuation and not
         # the rest, which is the ordinary case and the one the old model got
         # wrong by calling it "unlocked".
-        text = self.text("#/unit/HRR-RCN-07-MAP")
+        text = self.text("#/unit/PTN-RCN-07-MAP")
         self.assertShows(text, "Potential continuation")
         self.assertShows(text, "Established here")
         self.assertShows(text, "Still required")
 
     def test_a_test_whose_result_leads_nowhere_explains_itself(self):
         # See the note in test_cli: this subject is the one still terminal.
-        text = self.text("#/unit/HRR-INJ-11-TIME")
+        text = self.text("#/unit/PTN-INJ-11-TIME")
         self.assertIn("no test declares a use for it", text.lower())
         self.assertIn("does not rule out", text.lower())
 
@@ -1178,7 +1178,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         list, and the standard-first one -- through the test case -- is the one
         the documentation calls primary. A split that reached only the other
         route would be a split most readers never see."""
-        for fragment in ("#/topic/HRR-INJ-01", "#/case/WSTG-INPV-05"):
+        for fragment in ("#/topic/PTN-INJ-01", "#/case/WSTG-INPV-05"):
             with self.subTest(route=fragment):
                 body = self.text(fragment)
                 self.assertIn("Stages", body)
@@ -1190,7 +1190,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         """EVADE reads a negative result from one of the techniques, so the
         topic lists it after them. Collecting the stages together would move it
         ahead of the tests it depends on."""
-        body = self.text("#/topic/HRR-INJ-01")
+        body = self.text("#/topic/PTN-INJ-01")
         probe = body.index("Injection point probe")
         union = body.index("UNION-based extraction")
         evade = body.index("Filter and encoding evasion")
@@ -1321,7 +1321,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         judges depth by. All three once collapsed to "written in full" for
         anything that was not an outline, which is exactly what the middle tier
         exists to stop."""
-        page = self.open("#/unit/HRR-RCN-02-MAP")
+        page = self.open("#/unit/PTN-RCN-02-MAP")
         self.assertEqual(page.locator("main .pill").first.inner_text().lower(), "sketched")
         self.assertShows(self.driver.text(), "this test is sketched")
         # Asserted against the section labels rather than the page text: the
@@ -1346,7 +1346,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
     def test_the_orientation_fields_are_rendered_before_the_procedure(self):
         """Where to start comes before how to run it. A reader who cannot answer
         the first has nothing to point the sequence at."""
-        page = self.open("#/unit/HRR-RES-01-PROBE")
+        page = self.open("#/unit/PTN-RES-01-PROBE")
         text = self.driver.text()
         for section in ("What this assumes", "Where to start", "Where the input lands"):
             self.assertShows(text, section)
@@ -1358,7 +1358,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
     def test_a_recon_unit_shows_no_sink(self):
         """The schema forbids the field there; this is the page agreeing, so a
         section cannot appear from a stale build."""
-        page = self.open("#/unit/HRR-RCN-02-MAP")
+        page = self.open("#/unit/PTN-RCN-02-MAP")
         labels = [t.strip().lower() for t in page.locator("main .k").all_inner_texts()]
         self.assertIn("where to start", labels)
         self.assertNotIn("where the input lands", labels)
@@ -1541,7 +1541,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertShows(self.driver.text(), "Everything the file carries is searchable")
 
     def test_clicking_a_node_in_the_graph_opens_what_it_names(self):
-        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        page = self.open("#/unit/PTN-INJ-01-PROBE")
         node = page.locator(".gnode.link").first
         target = node.get_attribute("data-go")
         before = self.driver.heading()
@@ -1550,7 +1550,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertEqual(self.driver.hash(), target)
 
     def test_a_graph_node_is_reachable_and_usable_from_the_keyboard(self):
-        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        page = self.open("#/unit/PTN-INJ-01-PROBE")
         node = page.locator(".gnode.link").first
         self.assertEqual(node.get_attribute("role"), "link")
         self.assertTrue(node.get_attribute("aria-label"))
@@ -1562,7 +1562,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertEqual(self.driver.hash(), target)
 
     def test_show_more_expands_the_graph_and_is_a_place_to_come_back_to(self):
-        page = self.open("#/unit/HRR-INJ-01-PROBE")
+        page = self.open("#/unit/PTN-INJ-01-PROBE")
         before = page.locator(".gnode").count()
         self.assertShows(self.driver.text(), "Show more")
         page.click("a.more")
@@ -1576,11 +1576,11 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertNotIn("/all", self.driver.hash())
 
     def test_a_continuation_navigates_to_its_own_test(self):
-        page = self.open("#/unit/HRR-RES-01-READ")
+        page = self.open("#/unit/PTN-RES-01-READ")
         before = self.driver.heading()
         page.click("text=Inclusion and execution of the resolved path")
         self.driver.wait_for_view(before)
-        self.assertIn("HRR-RES-01-EXEC", self.driver.hash())
+        self.assertIn("PTN-RES-01-EXEC", self.driver.hash())
 
     def test_the_boundary_notes_are_folded_away_until_asked_for(self):
         page = self.open("#/case/WSTG-INPV-05")
@@ -1603,14 +1603,14 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         forbidden = ("unlocked", "available now", "you hold", "your target",
                      "ruled out for", "is possible now")
         for fragment in ("", "#/wstg", "#/case/WSTG-INPV-05",
-                         "#/unit/HRR-INJ-01-UNION", "#/unit/HRR-RES-01-READ",
+                         "#/unit/PTN-INJ-01-UNION", "#/unit/PTN-RES-01-READ",
                          "#/chains", "#/status", "#/capability/access.user"):
             text = self.text(fragment).lower()
             for phrase in forbidden:
                 self.assertNotIn(phrase, text, f"{fragment}: {phrase}")
 
     def test_the_conditional_wording_the_model_depends_on_is_present(self):
-        text = self.text("#/unit/HRR-INJ-01-PROBE")
+        text = self.text("#/unit/PTN-INJ-01-PROBE")
         self.assertShows(text, "may become relevant")
         self.assertShows(text, "Potential continuation")
 
@@ -1684,7 +1684,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertShows(text, "Unauthenticated caller")
         # Its own line, so it cannot be read as either of the other two states.
         self.assertTrue(self.driver.count(".need.assumed") > 0)
-        row = page.inner_text('a.row[href="#/unit/HRR-INJ-01-PROBE"]')
+        row = page.inner_text('a.row[href="#/unit/PTN-INJ-01-PROBE"]')
         self.assertIn("assumed held", row)
         self.assertIn("no chain step has to precede it", row)
 
@@ -1710,7 +1710,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         own: what follows a test is the same derivation it always was."""
         page = self.open("#/chains/context/sql-backed-param")
         before = self.driver.heading()
-        page.click('a.row[href="#/unit/HRR-INJ-01-PROBE"]')
+        page.click('a.row[href="#/unit/PTN-INJ-01-PROBE"]')
         self.assertEqual(self.driver.wait_for_view(before), "Injection point probe")
         self.assertShows(self.driver.text(), "Local attack chain")
 
@@ -1766,7 +1766,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         reached a screenshot rather than a failing test the first time.
         """
         for fragment in ("#/chains/context/sql-backed-param", "#/chains/context/search",
-                         "#/chains", "#/unit/HRR-INJ-01-PROBE", "#/topic/HRR-INJ-01",
+                         "#/chains", "#/unit/PTN-INJ-01-PROBE", "#/topic/PTN-INJ-01",
                          "#/case/WSTG-INPV-05", "#/status", "#/search/injection"):
             page = self.open(fragment)
             with self.subTest(fragment=fragment):
@@ -1793,7 +1793,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         """A policy that blocks something the page needed reports it here and
         nowhere else. Runs last so it covers what the others did."""
         self.open("#/chains")
-        self.open("#/unit/HRR-RES-01-READ")
+        self.open("#/unit/PTN-RES-01-READ")
         self.assertEqual(self.driver.console_errors, [])
 
 
@@ -1948,7 +1948,7 @@ class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
 
     def test_the_declared_order_is_preserved_exactly(self):
         """The order carries meaning that collecting the roles destroys, and
-        HRR-INJ-01 is the case: EVADE reads a negative result from one of the
+        PTN-INJ-01 is the case: EVADE reads a negative result from one of the
         techniques, so it is listed after them and must stay there."""
         mismatched = run_in_node("""
             const out = {};
@@ -1968,14 +1968,14 @@ class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
 
     def test_a_topic_that_returns_to_its_stages_gets_three_runs(self):
         result = run_in_node("""
-            return H.unitRuns(D, D.topics["HRR-INJ-01"]).map(function (r) {
+            return H.unitRuns(D, D.topics["PTN-INJ-01"]).map(function (r) {
               return {role: r.role, units: r.units};
             });
         """, self.data)
         self.assertEqual([r["role"] for r in result], ["stage", "variant", "stage"])
-        self.assertEqual(result[0]["units"], ["HRR-INJ-01-PROBE", "HRR-INJ-01-FPRINT"])
+        self.assertEqual(result[0]["units"], ["PTN-INJ-01-PROBE", "PTN-INJ-01-FPRINT"])
         self.assertEqual(len(result[1]["units"]), 7)
-        self.assertEqual(result[2]["units"], ["HRR-INJ-01-EVADE"])
+        self.assertEqual(result[2]["units"], ["PTN-INJ-01-EVADE"])
 
     def test_nothing_in_the_catalogue_falls_through_to_unclassified(self):
         strays = run_in_node("""
@@ -1995,7 +1995,7 @@ class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
         silently would be the one outcome worse than showing it uncategorised."""
         result = run_in_node("""
             const D2 = JSON.parse(JSON.stringify(D));
-            const tid = "HRR-INJ-01";
+            const tid = "PTN-INJ-01";
             const uid = D2.topics[tid].units[0];
             delete D2.units[uid].role;
             return H.unitRuns(D2, D2.topics[tid]).map(function (r) {

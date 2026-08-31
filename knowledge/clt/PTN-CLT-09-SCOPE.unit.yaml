@@ -1,0 +1,12 @@
+id: PTN-CLT-09-SCOPE
+topic: PTN-CLT-09
+status: outline
+role: stage
+title: "Outbound target origin"
+objective: >-
+  Determine whether the page sends a message containing anything sensitive with
+  a wildcard target origin.
+
+requires:
+  all_of: [surface.postmessage.listener]
+yields: [primitive.data.read.victim]

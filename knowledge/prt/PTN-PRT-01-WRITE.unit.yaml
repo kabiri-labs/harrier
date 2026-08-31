@@ -1,0 +1,12 @@
+id: PTN-PRT-01-WRITE
+topic: PTN-PRT-01
+status: outline
+role: stage
+title: "Effect on another party's request"
+objective: >-
+  Determine whether the desync alters a request the tester did not send, rather
+  than only their own follow-up.
+
+requires:
+  all_of: [surface.desync.confirmed]
+yields: [primitive.request.victim]

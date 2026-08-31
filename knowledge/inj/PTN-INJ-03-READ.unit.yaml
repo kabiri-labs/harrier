@@ -1,0 +1,13 @@
+id: PTN-INJ-03-READ
+topic: PTN-INJ-03
+status: outline
+role: stage
+title: "Local file disclosure"
+objective: >-
+  Determine whether a resolved entity returns the contents of a file on the
+  parsing host into the response.
+
+requires:
+  all_of: [surface.xml.parsed]
+motivated_by: [primitive.fetch.outbound]
+yields: [primitive.fs.read]

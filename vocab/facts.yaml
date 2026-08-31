@@ -32,7 +32,7 @@
 #
 # `granted: true` marks one an engagement may supply and often does not, such as
 # access to the host itself. It is never assumed at the start, and the tester
-# states it with `harrier chain --held` when they have it. The producer gate
+# states it with `pentest-navgrid chain --held` when they have it. The producer gate
 # exempts both, since neither is earned by a test.
 #
 # Everything else has to be earned.
@@ -57,7 +57,7 @@
 # than no label: the reader would have learnt a heading that later means
 # something else.
 #
-# The split is not cosmetic. A single unit, HRR-IDN-01-POLICY, produces ninety-odd
+# The split is not cosmetic. A single unit, PTN-IDN-01-POLICY, produces ninety-odd
 # engagement-tier edges on its own -- and exactly two escalations. Printing them
 # all under one heading is what made those two unfindable.
 version: 1

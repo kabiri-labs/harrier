@@ -1,0 +1,36 @@
+id: PTN-RES-02
+title: "File upload handling"
+domain: RES
+axis: property
+
+surfaces:
+  any_of: [file-upload]
+
+boundaries:
+  - subject: "Whether the file type is one the business expects"
+    home: null
+    note: >-
+      Published under business logic. Type acceptance is a validation question
+      inside this mechanism, not a separate test: the server stores and later
+      serves what the attacker supplied.
+  - subject: "Where the object store puts it"
+    home: PTN-CFG-09
+    note: >-
+      What the application accepts is here; how the storage it lands in is
+      configured is a configuration finding.
+
+see_also: [PTN-CFG-09]
+
+order:
+  - PTN-RES-02-PROBE
+  - PTN-RES-02-VALIDATION
+  - PTN-RES-02-NAMING
+  - PTN-RES-02-PARSING
+  - PTN-RES-02-SERVING
+  - PTN-RES-02-SIZE
+  - PTN-RES-02-RATE
+  - PTN-RES-02-QUOTA
+
+refs:
+  wstg: [WSTG-BUSL-08, WSTG-BUSL-09]
+  cwe: [434, 646]

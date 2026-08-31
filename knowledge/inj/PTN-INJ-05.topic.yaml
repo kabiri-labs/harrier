@@ -1,0 +1,19 @@
+id: PTN-INJ-05
+title: "XPath injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [xpath-backed-param]
+
+see_also: [PTN-INJ-01]
+
+order:
+  - PTN-INJ-05-PROBE
+  - PTN-INJ-05-ERROR
+  - PTN-INJ-05-BOOL
+  - PTN-INJ-05-EVADE
+
+refs:
+  wstg: [WSTG-INPV-09]
+  cwe: [643]

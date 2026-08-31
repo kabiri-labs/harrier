@@ -1,6 +1,6 @@
 # Object-level authorization
 
-Applies to `HRR-ACL-02`. Cross-references: ASVS V8.2, V8.3, CWE-639, CWE-566.
+Applies to `PTN-ACL-02`. Cross-references: ASVS V8.2, V8.3, CWE-639, CWE-566.
 
 ## The fix that works
 

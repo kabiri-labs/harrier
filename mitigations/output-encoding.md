@@ -1,6 +1,6 @@
 # Contextual output encoding
 
-Applies to `HRR-CLT-01`, and to `HRR-CLT-02` when it is written. Cross-references:
+Applies to `PTN-CLT-01`, and to `PTN-CLT-02` when it is written. Cross-references:
 ASVS V1.1, V1.3, CWE-79, CWE-80.
 
 ## The fix that works

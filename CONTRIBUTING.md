@@ -15,7 +15,7 @@ has to satisfy is in four documents, and is not repeated here:
 
 ## Inbound licensing
 
-Harrier is published under Apache-2.0 and that is not changing. The terms below
+Pentest NavGrid is published under Apache-2.0 and that is not changing. The terms below
 exist so that the project can *also* license the same material differently in
 future -- a hosted build, or a commercial layer -- without having to find and
 ask every past contributor. A project that cannot answer that question ends up
@@ -135,7 +135,7 @@ acceptable here, however plausible they look.
 
 ```bash
 python -m unittest discover -s tests -t .
-python -m harrier validate
+python -m pentest_navgrid validate
 ```
 
 Both must pass, and CI runs exactly them -- no CI-only extras, because a check
@@ -151,7 +151,7 @@ ran them, so CI fails if either is missing. Install them with:
 python -m pip install playwright && python -m playwright install chromium
 ```
 
-If your change alters what the catalogue holds, `python -m harrier index`
+If your change alters what the catalogue holds, `python -m pentest_navgrid index`
 regenerates `standards/wstg-index.yaml`; CI fails if the committed file has
 drifted from what the catalogue derives.
 

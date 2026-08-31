@@ -1,0 +1,12 @@
+id: PTN-SES-02-SCOPE
+topic: PTN-SES-02
+status: outline
+role: stage
+title: "Domain and path reach"
+objective: >-
+  Determine whether the cookie is scoped to more hosts or paths than the
+  application that issued it occupies.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.cookie.weak]

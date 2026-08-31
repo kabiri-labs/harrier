@@ -1,0 +1,11 @@
+id: PTN-CLT-11-PROBE
+topic: PTN-CLT-11
+status: outline
+role: stage
+title: "Cross-origin inclusion probe"
+objective: >-
+  Determine whether such an endpoint can be loaded by a script tag on an origin
+  the tester controls without being refused.
+
+requires:
+  all_of: [surface.xssi.endpoint]

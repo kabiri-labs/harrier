@@ -1,0 +1,25 @@
+id: PTN-ERR-02
+title: "Stack traces and debug output"
+domain: ERR
+axis: technique
+
+surfaces:
+  always: true
+
+order:
+  - PTN-ERR-02-ERROR
+  - PTN-ERR-02-PROBE
+
+boundaries:
+  - subject: "Identifying the platform and its version"
+    home: PTN-RCN-01
+    note: >-
+      A trace naming the framework is one of the routes the fingerprint is
+      built from. The finding here is that execution detail is returned at
+      all, not what it identifies.
+
+see_also: [PTN-ERR-01]
+
+refs:
+  wstg: [WSTG-ERRH-02]
+  cwe: [209, 489]

@@ -1,0 +1,30 @@
+id: PTN-ACL-02
+title: "Object-level access control"
+domain: ACL
+axis: principal
+
+surfaces:
+  any_of: [object-id-param, path-param, rest-api, graphql, multi-tenant]
+
+dimensions:
+  operation: [update, delete, create]
+
+order:
+  - PTN-ACL-02-MAP
+  - PTN-ACL-02-PEER
+  - PTN-ACL-02-TENANT
+  - PTN-ACL-02-WRITE
+  - PTN-ACL-02-IMPACT
+
+boundaries:
+  - subject: "The same failure reached through an API rather than a page"
+    home: null
+    note: >-
+      Not a separate topic. Broken object level authorization is this test;
+      rest-api and graphql are surface tags on it.
+
+see_also: [PTN-ACL-03, PTN-ACL-06, PTN-ACL-07, PTN-RES-01]
+
+refs:
+  wstg: [WSTG-ATHZ-04, WSTG-APIT-02]
+  cwe: [639, 566]

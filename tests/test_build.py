@@ -14,8 +14,8 @@ import unittest
 
 import yaml
 
-from harrier import __version__
-from harrier.build import (
+from pentest_navgrid import __version__
+from pentest_navgrid.build import (
     catalogue,
     chain_index,
     content_security_policy,
@@ -26,7 +26,7 @@ from harrier.build import (
     unit_order,
     wstg_groups,
 )
-from harrier.validate import coverage
+from pentest_navgrid.validate import coverage
 from tests.support import REPO_ROOT
 
 def _without_comments(page: str) -> str:
@@ -190,7 +190,7 @@ class NoEngagementStateRemains(unittest.TestCase):
             self.assertNotIn(token, elsewhere, token)
 
     def test_there_is_no_run_to_import_or_export(self):
-        for token in ("harrier.run", "runOut", "runIn", "exportRun", "importRun",
+        for token in ("navgrid.run", "runOut", "runIn", "exportRun", "importRun",
                       "createObjectURL", "FileReader", "download="):
             self.assertNotIn(token, self.page, token)
 
@@ -373,7 +373,7 @@ class TheStandardIsIndexedTheWayItIsNavigated(unittest.TestCase):
         for wid in self.data["wstg"]:
             if wid in unresolved:
                 continue
-            self.assertTrue(self.data["claims"].get(wid), f"{wid} reaches no Harrier topic")
+            self.assertTrue(self.data["claims"].get(wid), f"{wid} reaches no Pentest NavGrid topic")
 
     def test_an_identifier_the_map_does_not_resolve_is_named_as_that(self):
         # Not a hole: WSTG-INPV-14 is recorded as one the ordered procedure
@@ -412,26 +412,26 @@ class UnitOrderKeepsWhatTheTopicDidNotDeclare(unittest.TestCase):
     not become a unit nobody can reach."""
 
     def test_declared_units_come_first_in_the_declared_order(self):
-        units = {"HRR-X-01-B": {"topic": "HRR-X-01"}, "HRR-X-01-A": {"topic": "HRR-X-01"}}
-        topic = {"id": "HRR-X-01", "order": ["HRR-X-01-B", "HRR-X-01-A"]}
-        self.assertEqual(unit_order(topic, units), ["HRR-X-01-B", "HRR-X-01-A"])
+        units = {"PTN-X-01-B": {"topic": "PTN-X-01"}, "PTN-X-01-A": {"topic": "PTN-X-01"}}
+        topic = {"id": "PTN-X-01", "order": ["PTN-X-01-B", "PTN-X-01-A"]}
+        self.assertEqual(unit_order(topic, units), ["PTN-X-01-B", "PTN-X-01-A"])
 
     def test_an_undeclared_unit_follows_rather_than_disappearing(self):
         units = {
-            "HRR-X-01-A": {"topic": "HRR-X-01"},
-            "HRR-X-01-Z": {"topic": "HRR-X-01"},
+            "PTN-X-01-A": {"topic": "PTN-X-01"},
+            "PTN-X-01-Z": {"topic": "PTN-X-01"},
         }
-        topic = {"id": "HRR-X-01", "order": ["HRR-X-01-A"]}
-        self.assertEqual(unit_order(topic, units), ["HRR-X-01-A", "HRR-X-01-Z"])
+        topic = {"id": "PTN-X-01", "order": ["PTN-X-01-A"]}
+        self.assertEqual(unit_order(topic, units), ["PTN-X-01-A", "PTN-X-01-Z"])
 
     def test_an_order_naming_a_unit_that_is_not_here_does_not_invent_one(self):
-        units = {"HRR-X-01-A": {"topic": "HRR-X-01"}}
-        topic = {"id": "HRR-X-01", "order": ["HRR-X-01-A", "HRR-X-01-GONE"]}
-        self.assertEqual(unit_order(topic, units), ["HRR-X-01-A"])
+        units = {"PTN-X-01-A": {"topic": "PTN-X-01"}}
+        topic = {"id": "PTN-X-01", "order": ["PTN-X-01-A", "PTN-X-01-GONE"]}
+        self.assertEqual(unit_order(topic, units), ["PTN-X-01-A"])
 
     def test_another_topics_units_are_not_absorbed(self):
-        units = {"HRR-X-01-A": {"topic": "HRR-X-01"}, "HRR-Y-01-A": {"topic": "HRR-Y-01"}}
-        self.assertEqual(unit_order({"id": "HRR-X-01"}, units), ["HRR-X-01-A"])
+        units = {"PTN-X-01-A": {"topic": "PTN-X-01"}, "PTN-Y-01-A": {"topic": "PTN-Y-01"}}
+        self.assertEqual(unit_order({"id": "PTN-X-01"}, units), ["PTN-X-01-A"])
 
 
 class TheGroupIndexIsReadRatherThanDeclaredTwice(unittest.TestCase):
@@ -568,15 +568,15 @@ class TheLocalChainIsDerivedAndBoundedToTheReason(unittest.TestCase):
         # Folding it into what success supplies would hide a real condition
         # behind an assumption about somebody's engagement.
         units = {
-            "HRR-A-01-P": {"id": "HRR-A-01-P", "yields": ["surface.x"]},
-            "HRR-A-01-U": {
-                "id": "HRR-A-01-U",
+            "PTN-A-01-P": {"id": "PTN-A-01-P", "yields": ["surface.x"]},
+            "PTN-A-01-U": {
+                "id": "PTN-A-01-U",
                 "requires": {"all_of": ["surface.x", "access.host"]},
             },
         }
         index = chain_index(units, given={"recon.target.reachable"})
         self.assertEqual(
-            index["HRR-A-01-P"]["out"][0]["also"], {"all_of": ["access.host"]}
+            index["PTN-A-01-P"]["out"][0]["also"], {"all_of": ["access.host"]}
         )
 
     def test_a_dead_end_is_a_capability_nothing_uses_and_is_not_an_impact(self):
@@ -650,17 +650,17 @@ class TheLocalChainIsDerivedAndBoundedToTheReason(unittest.TestCase):
 
     def test_the_index_is_derived_and_not_a_stored_edge_list(self):
         units = {
-            "HRR-A-01-P": {"id": "HRR-A-01-P", "yields": ["surface.x"]},
-            "HRR-A-01-U": {
-                "id": "HRR-A-01-U",
+            "PTN-A-01-P": {"id": "PTN-A-01-P", "yields": ["surface.x"]},
+            "PTN-A-01-U": {
+                "id": "PTN-A-01-U",
                 "requires": {"all_of": ["surface.x", "access.host"]},
             },
-            "HRR-A-01-M": {"id": "HRR-A-01-M", "motivated_by": ["surface.x"]},
+            "PTN-A-01-M": {"id": "PTN-A-01-M", "motivated_by": ["surface.x"]},
         }
         index = chain_index(units, given=set())
-        forward = index["HRR-A-01-P"]["out"]
-        self.assertEqual([e["unit"] for e in forward], ["HRR-A-01-U", "HRR-A-01-M"])
-        self.assertEqual(index["HRR-A-01-U"]["out"], [])
+        forward = index["PTN-A-01-P"]["out"]
+        self.assertEqual([e["unit"] for e in forward], ["PTN-A-01-U", "PTN-A-01-M"])
+        self.assertEqual(index["PTN-A-01-U"]["out"], [])
         self.assertEqual(forward[0]["kind"], "requires")
         self.assertEqual(forward[0]["also"], {"all_of": ["access.host"]})
         self.assertEqual(forward[1]["kind"], "motivated_by")
@@ -668,14 +668,14 @@ class TheLocalChainIsDerivedAndBoundedToTheReason(unittest.TestCase):
 
     def test_a_given_capability_is_not_listed_as_a_further_condition(self):
         units = {
-            "HRR-A-01-P": {"id": "HRR-A-01-P", "yields": ["surface.x"]},
-            "HRR-A-01-U": {
-                "id": "HRR-A-01-U",
+            "PTN-A-01-P": {"id": "PTN-A-01-P", "yields": ["surface.x"]},
+            "PTN-A-01-U": {
+                "id": "PTN-A-01-U",
                 "requires": {"all_of": ["surface.x"], "any_of": ["access.anon"]},
             },
         }
         index = chain_index(units, given={"access.anon"})
-        self.assertEqual(index["HRR-A-01-P"]["out"][0]["also"], {})
+        self.assertEqual(index["PTN-A-01-P"]["out"][0]["also"], {})
 
 
 class TheFamilyViewSummarisesTheWholeGraph(unittest.TestCase):
@@ -715,8 +715,8 @@ class TheFamilyViewSummarisesTheWholeGraph(unittest.TestCase):
 
     def test_family_edges_are_derived_from_the_units_and_nothing_else(self):
         units = {
-            "HRR-A-01-U": {
-                "id": "HRR-A-01-U",
+            "PTN-A-01-U": {
+                "id": "PTN-A-01-U",
                 "requires": {"all_of": ["recon.a"]},
                 "yields": ["impact.b"],
             }
@@ -743,12 +743,12 @@ class TheReadmeNamesTheVersionItDescribes(unittest.TestCase):
         self.assertIn(f"badge/version-{__version__}-blue", self.readme)
 
     def test_the_alpha_notice_names_the_package_version(self):
-        self.assertIn(f"**Harrier {__version__} is an early public alpha.**", self.readme)
+        self.assertIn(f"**Pentest NavGrid {__version__} is an early public alpha.**", self.readme)
 
     def test_no_earlier_version_is_left_describing_this_checkout(self):
         """Historical mentions are fine and the roadmap is full of them. What
         must not survive is another version presented as the current one."""
-        stale = re.findall(r"Harrier (\d+\.\d+\.\d+) is an early public alpha", self.readme)
+        stale = re.findall(r"Pentest NavGrid (\d+\.\d+\.\d+) is an early public alpha", self.readme)
         self.assertEqual(stale, [__version__])
 
 
@@ -805,7 +805,7 @@ class TheSurfaceIndexIsDerivedRatherThanWalkedInTheBrowser(unittest.TestCase):
         # The outcome family is the terminal layer: it is reached through the
         # chain from a test, never from a description of a surface.
         self.assertTrue(
-            all(tid.startswith("HRR-OUT-") for tid in missing),
+            all(tid.startswith("PTN-OUT-") for tid in missing),
             f"topics with no surface clause outside the outcome family: {missing}",
         )
 

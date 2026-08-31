@@ -1,0 +1,20 @@
+id: PTN-CLT-09
+title: "Web messaging"
+domain: CLT
+axis: property
+
+surfaces:
+  any_of: [cross-window]
+
+see_also: [PTN-CLT-02]
+
+order:
+  - PTN-CLT-09-MAP
+  - PTN-CLT-09-VALIDATION
+  - PTN-CLT-09-SCOPE
+  - PTN-CLT-09-WRITE
+  - PTN-CLT-09-EXEC
+
+refs:
+  wstg: [WSTG-CLNT-11]
+  cwe: [346]

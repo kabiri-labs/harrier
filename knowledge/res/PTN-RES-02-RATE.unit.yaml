@@ -1,0 +1,12 @@
+id: PTN-RES-02-RATE
+topic: PTN-RES-02
+status: outline
+role: stage
+title: "Upload rate limit"
+objective: >-
+  Determine whether the endpoint limits how frequently one principal may
+  upload, independently of any per-object size cap.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [control.limit.absent]

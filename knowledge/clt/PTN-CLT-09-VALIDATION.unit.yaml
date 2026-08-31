@@ -1,0 +1,13 @@
+id: PTN-CLT-09-VALIDATION
+topic: PTN-CLT-09
+status: outline
+role: stage
+title: "Sender origin checking"
+objective: >-
+  Determine whether a listener acts on a message whose origin it never checked,
+  or checked with a substring comparison.
+
+requires:
+  all_of: [surface.postmessage.listener]
+yields: [control.message.origin.unchecked]
+closes: [control.message.origin.unchecked]

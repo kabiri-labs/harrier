@@ -1,0 +1,12 @@
+id: PTN-PRT-02-WRITE
+topic: PTN-PRT-02
+status: outline
+role: stage
+title: "Persistence of the substituted host"
+objective: >-
+  Determine whether a substituted host survives into content the application
+  delivers later rather than into the immediate response alone.
+
+requires:
+  all_of: [surface.host.controlled]
+yields: [primitive.content.poisoned]

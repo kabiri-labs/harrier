@@ -1,0 +1,16 @@
+id: PTN-SES-02
+title: "Session cookie attributes"
+domain: SES
+axis: property
+
+surfaces:
+  any_of: [session-cookie]
+
+order:
+  - PTN-SES-02-FLAGS
+  - PTN-SES-02-SCOPE
+  - PTN-SES-02-EXPIRY
+
+refs:
+  wstg: [WSTG-SESS-02]
+  cwe: [1004, 614]

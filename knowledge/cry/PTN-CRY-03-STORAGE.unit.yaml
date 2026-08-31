@@ -1,0 +1,12 @@
+id: PTN-CRY-03-STORAGE
+topic: PTN-CRY-03
+status: outline
+role: stage
+title: "Key material at rest"
+objective: >-
+  Determine whether key material is held somewhere that survives a source-code
+  disclosure or a backup restore.
+
+requires:
+  all_of: [surface.appcrypto]
+yields: [control.crypto.keyexposed]

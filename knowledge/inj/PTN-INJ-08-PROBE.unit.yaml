@@ -1,0 +1,13 @@
+id: PTN-INJ-08-PROBE
+topic: PTN-INJ-08
+status: outline
+role: stage
+title: "Separator survival probe"
+objective: >-
+  Determine whether a command separator or substitution submitted in the
+  parameter changes the response relative to the same request without it.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.oscmd.injectable]

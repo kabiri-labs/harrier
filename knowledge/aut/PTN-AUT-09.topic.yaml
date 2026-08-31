@@ -1,0 +1,25 @@
+id: PTN-AUT-09
+title: "Multi-factor authentication"
+domain: AUT
+axis: property
+
+surfaces:
+  any_of: [mfa]
+
+order:
+  - PTN-AUT-09-POLICY
+  - PTN-AUT-09-VALIDATION
+  - PTN-AUT-09-ENTROPY
+  - PTN-AUT-09-BINDING
+
+boundaries:
+  - subject: "A caller-supplied value deciding the primary authentication outcome"
+    home: PTN-AUT-04
+    note: >-
+      The same defect on the first factor is a bypass of authentication
+      itself, and is recorded there even when the second factor is what
+      exposed it.
+
+refs:
+  wstg: [WSTG-ATHN-11]
+  cwe: [308]

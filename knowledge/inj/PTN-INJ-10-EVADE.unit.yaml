@@ -1,0 +1,14 @@
+id: PTN-INJ-10-EVADE
+topic: PTN-INJ-10
+status: outline
+role: stage
+kind: recon
+title: "Delimiter and sandbox evasion"
+objective: >-
+  Determine whether a negative result is caused by a sandbox or delimiter
+  filter rather than by the absence of evaluation.
+
+requires:
+  all_of: [surface.template.injectable]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

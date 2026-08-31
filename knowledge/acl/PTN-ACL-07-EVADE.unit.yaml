@@ -1,0 +1,14 @@
+id: PTN-ACL-07-EVADE
+topic: PTN-ACL-07
+status: outline
+role: stage
+title: "A field reached by a route the top-level check does not inspect"
+objective: >-
+  Determine whether a field the same query was refused at the top level is
+  returned when the query names it another way. Performed once for every
+  selection shape the topic declares as a dimension, because a check that
+  inspects the parsed query walks some of those shapes and not others.
+
+requires:
+  all_of: [recon.schema.known, access.user]
+yields: [primitive.privileged.action]

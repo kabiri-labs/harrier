@@ -1,0 +1,28 @@
+id: PTN-PRT-04
+title: "Path confusion and normalisation"
+domain: PRT
+axis: technique
+
+surfaces:
+  any_of: [reverse-proxy, cache-fronted, path-param]
+
+boundaries:
+  - subject: "The server resolving a path the attacker wrote"
+    home: PTN-RES-01
+    note: >-
+      Two components disagreeing about what the path means is here; one
+      component resolving it to a file outside the intended root is resource
+      handling.
+
+see_also: [PTN-PRT-01, PTN-RES-01]
+
+order:
+  - PTN-PRT-04-FPRINT
+  - PTN-PRT-04-DIFF
+  - PTN-PRT-04-READ
+  - PTN-PRT-04-WRITE
+  - PTN-PRT-04-EVADE
+
+refs:
+  wstg: [WSTG-CONF-13]
+  cwe: [22]

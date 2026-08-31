@@ -1,0 +1,20 @@
+id: PTN-CLT-03
+title: "Client-side open redirect"
+domain: CLT
+axis: vector
+
+surfaces:
+  any_of: [redirect-param, dom-sink]
+
+see_also: [PTN-CLT-01]
+
+order:
+  - PTN-CLT-03-PROBE
+  - PTN-CLT-03-QUERY
+  - PTN-CLT-03-PATH
+  - PTN-CLT-03-REFERER
+  - PTN-CLT-03-EVADE
+
+refs:
+  wstg: [WSTG-CLNT-04]
+  cwe: [601]

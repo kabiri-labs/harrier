@@ -1,0 +1,48 @@
+# Packaging, so the command has a name of its own.
+#
+# The project has never needed installing -- the product is one HTML file and
+# the tooling runs from a checkout with `python -m pentest_navgrid`. That still
+# works and is what the documents show, because it needs no install step. This
+# file exists so `pip install .` also puts a `pentest-navgrid` command on the
+# path, which is the name the CLI already prints in its own messages.
+#
+# Dependencies are pinned by major version for the reason CI pins them: the
+# suite is offline and deterministic, and an unannounced resolver change in a
+# dependency is the one thing that could stop it being either.
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pentest-navgrid"
+description = "An offline execution companion for web application security testing standards."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Ahmad Kabiri", email = "ad.kabiri@gmail.com" }]
+keywords = ["security", "pentest", "wstg", "owasp", "appsec"]
+dependencies = ["PyYAML>=6,<7", "jsonschema>=4,<5"]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/kabiri-labs/pentest-navgrid"
+Source = "https://github.com/kabiri-labs/pentest-navgrid"
+
+[project.scripts]
+pentest-navgrid = "pentest_navgrid.cli:main"
+
+# Read from the package rather than written here. Two places holding one version
+# is two places to forget, and the README badge is already asserted against the
+# package's own value.
+[tool.setuptools.dynamic]
+version = { attr = "pentest_navgrid.__version__" }
+
+[tool.setuptools]
+# The catalogue is data the repository carries, not package data: the CLI is
+# pointed at a checkout. Only the code and the files the builder reads ship.
+packages = ["pentest_navgrid"]
+
+[tool.setuptools.package-data]
+pentest_navgrid = ["schema/*.json", "artefact/*"]

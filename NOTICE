@@ -1,7 +1,7 @@
-Harrier
+Pentest NavGrid
 Copyright 2026 Ahmad Kabiri
 
-This product includes software developed by Ahmad Kabiri and the Harrier
+This product includes software developed by Ahmad Kabiri and the Pentest NavGrid
 contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -23,16 +23,16 @@ OWASP Web Security Testing Guide (WSTG)
     https://owasp.org/www-project-web-security-testing-guide/
     Licensed CC BY-SA 4.0.
 
-    Harrier references WSTG test identifiers and official test titles for
+    Pentest NavGrid references WSTG test identifiers and official test titles for
     cross-mapping only. No WSTG prose is copied or paraphrased into this
-    repository; all Harrier content is originally written. Harrier is not
+    repository; all Pentest NavGrid content is originally written. Pentest NavGrid is not
     affiliated with, endorsed by, or sponsored by OWASP.
 
 OWASP Application Security Verification Standard (ASVS) 5.0.0
     https://github.com/OWASP/ASVS
     Licensed CC BY-SA 4.0.
 
-    Harrier references ASVS requirement identifiers and the names of its
+    Pentest NavGrid references ASVS requirement identifiers and the names of its
     chapters and sections, for cross-mapping only. No ASVS requirement text is
     reproduced; remediation prose under mitigations/ is originally written.
 
@@ -50,7 +50,7 @@ MITRE Common Weakness Enumeration (CWE) 4.20
     names and classifications for cross-mapping; weakness descriptions are not
     reproduced. This notice is that condition being met, not a courtesy.
 
-The following public bodies of work informed the technique coverage of Harrier's
+The following public bodies of work informed the technique coverage of Pentest NavGrid's
 payload files. No text or payload from them is copied verbatim; entries under
 payloads/ are written for this project.
 

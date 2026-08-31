@@ -1,0 +1,67 @@
+id: PTN-OUT-06-IMPACT
+topic: PTN-OUT-06
+status: authored
+role: stage
+kind: inquiry
+title: "What is done through the other party"
+objective: >-
+  Establish what reaches a person who is not the tester -- what their
+  browser would run, what their request would carry, what they would be
+  shown -- and what that permits against their account rather than against
+  the tester's.
+
+requires:
+  any_of:
+    - primitive.exec.client
+    - primitive.markup.inject
+    - primitive.content.poisoned
+    - primitive.redirect.offsite
+    - primitive.action.victim
+    - primitive.request.victim
+yields: [impact.visitor.compromised]
+
+enter_when:
+  - "Execution, markup injection, content poisoning, a chosen redirect, or a state change driven as another user has been confirmed."
+
+questions:
+  - "Who actually receives it: the tester alone, a chosen user, every visitor to one page, or everyone using the application?"
+  - "What does the receiving context hold that the tester does not -- a session, a role, an internal network position, a stored credential?"
+  - "Does anything reach the receiving context without an action on that person's part, or does it need a click the attacker has to obtain?"
+  - "Is the delivery persistent, so that it reaches people after the engagement ends unless something is removed?"
+  - "What was placed, where exactly, and what removes it?"
+  - "Would the answers change for an administrator's session rather than an ordinary user's, and can that be established without using one?"
+
+first_false_positive: >-
+  The tester's own session read as another party's. A payload that runs in the
+  tester's browser with the tester's session establishes the execution and
+  nothing about the reach, and the questions above are all about somebody who is
+  not in the room.
+
+preconditions:
+  - "A confirmed client-side capability, and agreement on whether anything may be delivered to a real user at all -- for most engagements the answer is no."
+  - "For a persistent delivery, a recorded location and a removal step agreed before it is placed."
+
+evidence:
+  - "The exact location of anything placed, sufficient for the client to find and remove it."
+  - "The reach answers, each established from the application's own behaviour rather than from a delivery to a real person."
+
+done_when: >-
+  The receiving party, the privileges of that context, the trigger and the
+  persistence are each answered from the application's own behaviour -- where a
+  payload is stored and served, from how it is stored and served; where the
+  capability is a chosen redirect, a framed or foreign-origin action, or an
+  effect on a request in flight, from the response that carries it -- and every
+  stored payload placed is recorded with its location and confirmed removed,
+  by the tester or by the client, before the engagement closes.
+
+safety: >-
+  This is the one outcome unit whose subject is a third party who never agreed
+  to anything. Nothing is delivered to a real user: reach is established from
+  what the application stores, serves or redirects, not by sending it to
+  somebody. Every stored payload is silent and its location is recorded, and
+  nothing placed outlives the engagement -- where the tester cannot remove it,
+  the client's removal is confirmed rather than merely requested, because a
+  location handed over and left live is attacker-controlled content still being
+  served to people who never agreed to any of this.
+
+card: cards/outcome/proportionate-demonstration.md

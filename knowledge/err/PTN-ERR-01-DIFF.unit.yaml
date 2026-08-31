@@ -1,0 +1,13 @@
+id: PTN-ERR-01-DIFF
+topic: PTN-ERR-01
+status: outline
+role: variant
+title: "State disclosed by the difference between two errors"
+objective: >-
+  Determine whether two errors differ in a way that reveals which of two
+  internal states the application is in.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [primitive.blind.oracle]

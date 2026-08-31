@@ -1,0 +1,13 @@
+id: PTN-RES-03-DIFF
+topic: PTN-RES-03
+status: outline
+role: variant
+title: "Blind response differential"
+objective: >-
+  Determine whether responses to reachable and unreachable destinations differ
+  enough to enumerate what the server can reach.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.fetch.controlled]

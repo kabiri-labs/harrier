@@ -1,0 +1,22 @@
+id: PTN-RCN-05
+title: "Traffic capture and proxy interposition"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  always: true
+
+order:
+  - PTN-RCN-05-MAP
+  - PTN-RCN-05-PROBE
+
+boundaries:
+  - subject: "Client-pinned or certificate-pinned channels"
+    home: null
+    note: >-
+      Interposition may be impossible on some clients; record the limit rather
+      than reporting the surface as covered.
+
+refs:
+  wstg: [WSTG-INPV-16]

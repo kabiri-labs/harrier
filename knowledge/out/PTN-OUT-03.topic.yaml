@@ -1,0 +1,11 @@
+id: PTN-OUT-03
+title: "Internal network reach"
+domain: OUT
+kind: inquiry
+
+# The distinction from disclosure is the position rather than the payload:
+# what matters is being able to address the inside, before anything is read
+# from it.
+
+order:
+  - PTN-OUT-03-IMPACT

@@ -190,7 +190,7 @@ class TheReleasePathCannotPublishOnItsOwn(unittest.TestCase):
         # The reusable workflow is the only place the checks are written down.
         release_runs = " ".join(step.get("run") or "" for _, step in self.steps)
         self.assertNotIn("unittest discover", release_runs)
-        self.assertNotIn("harrier validate", release_runs)
+        self.assertNotIn("pentest_navgrid validate", release_runs)
 
     def test_the_job_that_can_write_runs_none_of_this_project_s_code(self):
         """The finding this workflow was rewritten for.

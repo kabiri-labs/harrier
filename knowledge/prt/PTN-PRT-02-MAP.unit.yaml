@@ -1,0 +1,12 @@
+id: PTN-PRT-02-MAP
+topic: PTN-PRT-02
+status: outline
+role: stage
+kind: recon
+title: "Host-derived value inventory"
+objective: >-
+  Establish which responses contain absolute URLs, and which of those the
+  application composes from a value the request supplied.
+
+requires:
+  all_of: [recon.entrypoints.mapped]

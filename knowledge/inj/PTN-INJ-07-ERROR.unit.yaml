@@ -1,0 +1,12 @@
+id: PTN-INJ-07-ERROR
+topic: PTN-INJ-07
+status: outline
+role: variant
+title: "Error-based inference"
+objective: >-
+  Determine whether a deliberately invalid expression produces a language error
+  naming the evaluator or the failing construct.
+
+requires:
+  all_of: [surface.code.injectable]
+yields: [recon.engine.identified]

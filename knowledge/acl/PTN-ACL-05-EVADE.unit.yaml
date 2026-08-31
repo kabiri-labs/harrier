@@ -1,0 +1,14 @@
+id: PTN-ACL-05-EVADE
+topic: PTN-ACL-05
+status: outline
+role: stage
+title: "A method override the server honours"
+objective: >-
+  Determine whether an override header or parameter makes the server act on a
+  method other than the one the access-control check inspected.
+
+requires:
+  all_of: [recon.roles.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.method.override]
+closes: [control.method.override]

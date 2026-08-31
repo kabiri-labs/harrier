@@ -1,0 +1,12 @@
+id: PTN-BIZ-03-MAP
+topic: PTN-BIZ-03
+status: outline
+role: stage
+kind: recon
+title: "The state that travels through the client"
+objective: >-
+  Record which values the application hands to the client and expects back
+  unchanged, and what protects each in transit through it.
+
+requires:
+  all_of: [access.user]

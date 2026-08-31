@@ -1,0 +1,13 @@
+id: PTN-ERR-01-ERROR
+topic: PTN-ERR-01
+status: outline
+role: variant
+title: "Internal detail in the text of an error"
+objective: >-
+  Determine whether an induced error returns text describing the fault inside
+  the application rather than the caller's mistake.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.error.verbose]

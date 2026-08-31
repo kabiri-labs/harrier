@@ -1,0 +1,13 @@
+id: PTN-CRY-04-PROBE
+topic: PTN-CRY-04
+status: outline
+role: stage
+title: "Ciphertext malleability probe"
+objective: >-
+  Determine whether altering a byte of an opaque value produces a response
+  distinguishable from altering a different byte.
+
+requires:
+  all_of: [surface.appcrypto]
+motivated_by: [control.crypto.unsound]
+yields: [surface.crypto.oracle]

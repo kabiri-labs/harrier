@@ -1,0 +1,22 @@
+id: PTN-ACL-01
+title: "Role and permission model"
+domain: ACL
+axis: phase
+kind: recon
+
+surfaces:
+  always: true
+
+order:
+  - PTN-ACL-01-MAP
+  - PTN-ACL-01-VERIFY
+
+boundaries:
+  - subject: "Whether each role's grant is actually enforced"
+    home: PTN-ACL-03
+    note: >-
+      The model is recorded here as the input every access-control test reads;
+      enforcement is tested against it.
+
+refs:
+  wstg: [WSTG-IDNT-01]

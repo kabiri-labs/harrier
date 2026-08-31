@@ -1,0 +1,12 @@
+id: PTN-INJ-03-ERROR
+topic: PTN-INJ-03
+status: outline
+role: variant
+title: "Error-based disclosure"
+objective: >-
+  Determine whether a parser error caused by an unresolvable entity discloses a
+  filesystem path or the content it attempted to read.
+
+requires:
+  all_of: [surface.xml.parsed]
+yields: [recon.approot.disclosed]

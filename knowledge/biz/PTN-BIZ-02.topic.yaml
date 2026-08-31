@@ -1,0 +1,26 @@
+id: PTN-BIZ-02
+title: "Forged and replayed requests"
+domain: BIZ
+axis: technique
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment]
+
+order:
+  - PTN-BIZ-02-MAP
+  - PTN-BIZ-02-PROBE
+  - PTN-BIZ-02-REPLAY
+
+boundaries:
+  - subject: "Ambient authority making a cross-site request succeed"
+    home: PTN-SES-05
+    note: >-
+      Forging a request the client should not be able to construct is here; a
+      request the victim's own browser sends is a session failure.
+
+see_also: [PTN-SES-05]
+
+refs:
+  wstg: [WSTG-BUSL-02]
+  cwe: [807, 602]

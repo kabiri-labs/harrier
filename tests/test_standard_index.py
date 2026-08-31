@@ -15,10 +15,10 @@ from pathlib import Path
 
 import yaml
 
-from harrier import Repository, find_root
-from harrier.standard import INDEX_PATH, cases, index_document
+from pentest_navgrid import Repository, find_root
+from pentest_navgrid.standard import INDEX_PATH, cases, index_document
 from tests.support import REPO_ROOT, Sandbox, messages
-from harrier.validate import validate
+from pentest_navgrid.validate import validate
 
 
 class TheIndexIsDerivedFromTheCatalogue(unittest.TestCase):
@@ -58,7 +58,7 @@ class TheIndexIsDerivedFromTheCatalogue(unittest.TestCase):
         self.assertEqual(len(spread), 5)
         self.assertEqual(
             sorted(spread["WSTG-APIT-99"]),
-            ["HRR-ACL-07", "HRR-BIZ-09", "HRR-INJ-12", "HRR-RCN-07"],
+            ["PTN-ACL-07", "PTN-BIZ-09", "PTN-INJ-12", "PTN-RCN-07"],
         )
 
     def test_the_units_of_a_case_are_the_units_of_the_topics_claiming_it(self):
@@ -75,7 +75,7 @@ class TheIndexIsDerivedFromTheCatalogue(unittest.TestCase):
     def test_the_declared_order_of_a_topic_survives_into_the_index(self):
         """The order is the sequence a tester works, so it is carried rather
         than sorted."""
-        topic = next(d.data for d in self.repo.topics if d.data["id"] == "HRR-INJ-01")
+        topic = next(d.data for d in self.repo.topics if d.data["id"] == "PTN-INJ-01")
         self.assertEqual(self.cases["WSTG-INPV-05"].units, topic["order"])
 
     def test_the_depth_counts_add_up_to_the_units(self):
@@ -93,11 +93,11 @@ class TheCommittedIndexIsCurrent(unittest.TestCase):
     def test_the_file_on_disk_is_what_the_catalogue_derives(self):
         expected = index_document(Repository.load(REPO_ROOT))
         actual = yaml.safe_load((REPO_ROOT / INDEX_PATH).read_text(encoding="utf-8"))
-        self.assertEqual(actual, expected, "run `harrier index`")
+        self.assertEqual(actual, expected, "run `pentest-navgrid index`")
 
     def test_the_check_flag_agrees(self):
         done = subprocess.run(
-            [sys.executable, "-m", "harrier", "index", "--check"],
+            [sys.executable, "-m", "pentest_navgrid", "index", "--check"],
             cwd=REPO_ROOT, capture_output=True, text=True,
         )
         self.assertEqual(done.returncode, 0, done.stderr)
@@ -109,10 +109,10 @@ class TheCommittedIndexIsCurrent(unittest.TestCase):
         self.addCleanup(box.close)
         target = box.path(INDEX_PATH.as_posix())
         document = yaml.safe_load(target.read_text(encoding="utf-8"))
-        document["cases"][0]["units"].append("HRR-INJ-01-INVENTED")
+        document["cases"][0]["units"].append("PTN-INJ-01-INVENTED")
         target.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
         done = subprocess.run(
-            [sys.executable, "-m", "harrier", "index", "--check"],
+            [sys.executable, "-m", "pentest_navgrid", "index", "--check"],
             cwd=box.root, capture_output=True, text=True,
         )
         self.assertEqual(done.returncode, 1)
@@ -150,7 +150,7 @@ class TheIndexIsCheckedLikeEveryOtherStandard(unittest.TestCase):
 class TheChecklistAnswersTheTestersQuestion(unittest.TestCase):
     def run_cli(self, *args):
         done = subprocess.run(
-            [sys.executable, "-m", "harrier", *args],
+            [sys.executable, "-m", "pentest_navgrid", *args],
             cwd=REPO_ROOT, capture_output=True, text=True,
         )
         self.assertEqual(done.returncode, 0, done.stderr)
@@ -159,7 +159,7 @@ class TheChecklistAnswersTheTestersQuestion(unittest.TestCase):
     def test_one_case_lists_the_units_a_tester_would_work(self):
         out = self.run_cli("checklist", "WSTG-INPV-05")
         self.assertIn("Testing for SQL Injection", out)
-        self.assertIn("HRR-INJ-01-UNION", out)
+        self.assertIn("PTN-INJ-01-UNION", out)
         self.assertIn("10 unit(s)", out)
 
     def test_the_depth_of_a_case_is_reported_by_tier(self):
@@ -190,16 +190,16 @@ class TheChecklistAnswersTheTestersQuestion(unittest.TestCase):
 
     def test_an_unknown_case_is_an_error_rather_than_an_empty_result(self):
         done = subprocess.run(
-            [sys.executable, "-m", "harrier", "checklist", "WSTG-NOPE-01"],
+            [sys.executable, "-m", "pentest_navgrid", "checklist", "WSTG-NOPE-01"],
             cwd=REPO_ROOT, capture_output=True, text=True,
         )
         self.assertEqual(done.returncode, 1)
         self.assertIn("no such test case", done.stderr)
 
     def test_the_chain_view_names_the_test_case_that_leads_to_a_unit(self):
-        """`harrier chain HRR-INJ-01-BOOL` never said WSTG-INPV-05, so a reader
+        """`pentest-navgrid chain PTN-INJ-01-BOOL` never said WSTG-INPV-05, so a reader
         had no route back to the line item that sent them there."""
-        out = self.run_cli("chain", "HRR-INJ-01-BOOL")
+        out = self.run_cli("chain", "PTN-INJ-01-BOOL")
         self.assertIn("covers: WSTG-INPV-05", out)
 
 
@@ -224,14 +224,14 @@ class AUnitsOwnReferenceWinsOverItsTopics(unittest.TestCase):
         box = Sandbox()
         self.addCleanup(box.close)
         box.edit(
-            "knowledge/inj/HRR-INJ-01-UNION.unit.yaml",
+            "knowledge/inj/PTN-INJ-01-UNION.unit.yaml",
             lambda unit: unit.update(refs={"wstg": ["WSTG-INPV-06"]}) or unit,
         )
         built = self.index_of(box.root)
-        self.assertIn("HRR-INJ-01-UNION", built["WSTG-INPV-06"].units)
-        self.assertNotIn("HRR-INJ-01-UNION", built["WSTG-INPV-05"].units)
+        self.assertIn("PTN-INJ-01-UNION", built["WSTG-INPV-06"].units)
+        self.assertNotIn("PTN-INJ-01-UNION", built["WSTG-INPV-05"].units)
         # and its siblings, which name nothing, stay where their topic puts them
-        self.assertIn("HRR-INJ-01-BOOL", built["WSTG-INPV-05"].units)
+        self.assertIn("PTN-INJ-01-BOOL", built["WSTG-INPV-05"].units)
 
 
 class TheIndexResolvesLikeEveryOtherReference(unittest.TestCase):
@@ -254,12 +254,12 @@ class TheIndexResolvesLikeEveryOtherReference(unittest.TestCase):
 
     def test_a_unit_identifier_that_resolves_to_nothing_is_rejected(self):
         problems = self.mutate(
-            lambda d: d["cases"][0].update(units=["HRR-INJ-99-NOSUCH"], authored=0, outline=1)
+            lambda d: d["cases"][0].update(units=["PTN-INJ-99-NOSUCH"], authored=0, outline=1)
         )
         self.assertIn("does not exist", messages(problems))
 
     def test_a_topic_identifier_that_resolves_to_nothing_is_rejected(self):
-        problems = self.mutate(lambda d: d["cases"][0].update(topics=["HRR-ZZZ-01"]))
+        problems = self.mutate(lambda d: d["cases"][0].update(topics=["PTN-ZZZ-01"]))
         self.assertIn("does not exist", messages(problems))
 
     def test_a_pinned_case_with_no_row_is_rejected(self):
@@ -277,7 +277,7 @@ class TheIndexResolvesLikeEveryOtherReference(unittest.TestCase):
             ("no id", lambda d: d["cases"][0].pop("id")),
             ("a string where a row belongs", lambda d: d.update(cases=["not-a-row"])),
             ("cases is not a list", lambda d: d.update(cases="nope")),
-            ("units is not a list", lambda d: d["cases"][0].update(units="HRR-INJ-01-PROBE")),
+            ("units is not a list", lambda d: d["cases"][0].update(units="PTN-INJ-01-PROBE")),
             ("a depth count that is text", lambda d: d["cases"][0].update(authored="two")),
         ):
             with self.subTest(shape=label):

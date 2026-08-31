@@ -1,0 +1,62 @@
+id: PTN-INJ-01-UNION
+topic: PTN-INJ-01
+status: authored
+role: variant
+title: "UNION-based extraction"
+objective: >-
+  Determine whether a UNION arm can be appended so that attacker-chosen,
+  database-computed values appear in the response body.
+
+requires:
+  all_of: [surface.sql.injectable]
+  any_of: [access.anon, access.user]
+motivated_by: [recon.engine.identified, recon.query.structure]
+yields: [primitive.db.read]
+
+enter_when:
+  - "A parameter has already been shown to change the statement's behaviour."
+  - "The statement is a SELECT whose result set reaches the response."
+
+oracle:
+  positive: "A value the database computed, not one the request carried, appears in the response."
+  negative: "Every arity up to the practical ceiling tried, every reflected position identified, and no computed value returned."
+  inconclusive: "Responses vary between identical requests, or rate limiting stopped the sweep before the arity was resolved."
+
+sequence:
+  - "Resolve the column count with ORDER BY N, incrementing until the response changes."
+  - "If ORDER BY is filtered or swallowed, NULL-pad a UNION arm one column at a time instead."
+  - "Identify which column position actually reaches the response body."
+  - "Extract one computed value into that position, and stop."
+
+first_false_positive: >-
+  The template echoing the submitted input rather than the query returning it.
+  A static marker cannot tell the two apart; a computed expression can, which is
+  why the proof value is an arithmetic result and never a string.
+
+false_positives:
+  - "A cached response from an earlier request, which makes an arity look accepted that was not."
+  - "An error page that renders the parameter, so every payload appears reflected."
+
+preconditions:
+  - "The injection is in a SELECT: an INSERT value list or an UPDATE predicate is injectable but takes no UNION arm."
+
+evidence:
+  - "The request and response proving the arity boundary."
+  - "The request and response carrying the computed value."
+
+done_when: >-
+  Column count resolved, the reflected column position identified, and one
+  computed value extracted -- or the reason the arity could not be resolved is
+  written down.
+
+safety: >-
+  Extraction stops at one computed value. Reading records out of a live database
+  is the client's data leaving their control, so the proof is the capability and
+  never the contents.
+
+payloads: payloads/sqli/union.yaml
+tools: [burp-repeater, sqlmap]
+card: cards/sqli/union-extraction.md
+mitigation: mitigations/parameterised-query.md
+dimensions:
+  engine: [mysql, postgresql, mssql, oracle, sqlite]

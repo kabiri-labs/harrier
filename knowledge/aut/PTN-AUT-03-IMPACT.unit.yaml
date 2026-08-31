@@ -1,0 +1,13 @@
+id: PTN-AUT-03-IMPACT
+topic: PTN-AUT-03
+status: outline
+role: stage
+title: "Denial of service through the lockout itself"
+objective: >-
+  Determine whether an attacker can lock a chosen legitimate account out at
+  will, which turns the protection into the attack.
+
+requires:
+  all_of: [control.lockout.enforced]
+motivated_by: [artifact.accountlist]
+yields: [impact.account.denied]

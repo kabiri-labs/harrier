@@ -1,0 +1,43 @@
+id: PTN-INJ-01
+title: "SQL injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [sql-backed-param]
+
+# The engine changes payload syntax and nothing else: the same seven techniques
+# apply, and each one's oracle is identical across all five. Splitting on it
+# would produce thirty-five units where seven are needed.
+dimensions:
+  engine: [mysql, postgresql, mssql, oracle, sqlite]
+
+boundaries:
+  - subject: "Operator injection against a document store"
+    home: null
+    note: >-
+      The payload is a structured operator rather than a concatenated SQL
+      fragment. Not yet written; recorded so the gap stays visible.
+  - subject: "Injection into an LDAP filter"
+    home: PTN-INJ-02
+    note: >-
+      A different interpreter with different metacharacters and no SQL
+      grammar.
+
+see_also: [PTN-INJ-02, PTN-INJ-05, PTN-INJ-12]
+
+order:
+  - PTN-INJ-01-PROBE
+  - PTN-INJ-01-FPRINT
+  - PTN-INJ-01-ERROR
+  - PTN-INJ-01-BOOL
+  - PTN-INJ-01-TIME
+  - PTN-INJ-01-UNION
+  - PTN-INJ-01-OOB
+  - PTN-INJ-01-STACK
+  - PTN-INJ-01-SECOND
+  - PTN-INJ-01-EVADE
+
+refs:
+  wstg: [WSTG-INPV-05]
+  cwe: [89]

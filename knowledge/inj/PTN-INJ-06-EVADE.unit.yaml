@@ -1,0 +1,14 @@
+id: PTN-INJ-06-EVADE
+topic: PTN-INJ-06
+status: outline
+role: stage
+kind: recon
+title: "Encoding and normalisation evasion"
+objective: >-
+  Determine whether a negative result is caused by header encoding rather than
+  by the field never reaching a message.
+
+requires:
+  all_of: [surface.mail.injectable]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

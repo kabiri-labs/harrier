@@ -1,0 +1,12 @@
+id: PTN-CRY-01-MAP
+topic: PTN-CRY-01
+status: outline
+role: stage
+kind: recon
+title: "TLS listener inventory"
+objective: >-
+  Establish every hostname and port that completes a handshake, including those
+  terminated at an intermediary rather than the application.
+
+requires:
+  all_of: [recon.names.mapped]

@@ -1,7 +1,7 @@
 # Injection points and what they are made of
 
-Shared by `HRR-INJ-01-PROBE`, `HRR-INJ-01-FPRINT`, `HRR-INJ-01-STACK`,
-`HRR-INJ-01-SECOND` and `HRR-INJ-01-EVADE`: all five reason about *where the
+Shared by `PTN-INJ-01-PROBE`, `PTN-INJ-01-FPRINT`, `PTN-INJ-01-STACK`,
+`PTN-INJ-01-SECOND` and `PTN-INJ-01-EVADE`: all five reason about *where the
 value lands in the statement* rather than about what to do once it is there, so
 that reasoning is written once here.
 
@@ -74,7 +74,7 @@ oppositely. A parser sees an escaped quote inside a string and the statement
 parses. A signature filter sees a quote and refuses, twice as much as before.
 So: error on the first and a clean parse on the second means the statement
 broke; identical refusal for both means the refusal never reached a statement,
-and `HRR-INJ-01-EVADE` is the next unit rather than any extraction technique.
+and `PTN-INJ-01-EVADE` is the next unit rather than any extraction technique.
 
 Sent afterwards instead of alongside, the same information arrives after the
 tester has already decided what they are looking at.
@@ -158,9 +158,9 @@ costs an afternoon:
 
 | Shape | What it looks like | Where it sat | Next |
 |---|---|---|---|
-| **Engine error** | Driver or SQL text, a line number, a constraint or column name | The statement — the value reached the parser | `HRR-INJ-01-ERROR`; the channel may carry values |
-| **Application error page** | The application's own template, generic wording, HTTP 200 or 500 | The application caught the exception | `HRR-INJ-01-BOOL` or `-TIME`; the injection may be live with no visible channel |
-| **Filter block** | A different template entirely, a 403, a themed page, sometimes a reference number | Upstream of the application | `HRR-INJ-01-EVADE` — nothing about the database has been learnt yet |
+| **Engine error** | Driver or SQL text, a line number, a constraint or column name | The statement — the value reached the parser | `PTN-INJ-01-ERROR`; the channel may carry values |
+| **Application error page** | The application's own template, generic wording, HTTP 200 or 500 | The application caught the exception | `PTN-INJ-01-BOOL` or `-TIME`; the injection may be live with no visible channel |
+| **Filter block** | A different template entirely, a 403, a themed page, sometimes a reference number | Upstream of the application | `PTN-INJ-01-EVADE` — nothing about the database has been learnt yet |
 | **Silent normalisation** | Baseline response, no error, payload gone from any echo | A sanitiser, or a type coercion | Re-probe in another context; the parameter may still be injectable elsewhere |
 
 The inert control payload in `payloads/sqli/probe.yaml` exists for the third
@@ -171,11 +171,11 @@ two conclusions lead to opposite reports.
 
 ## Related units
 
-- `HRR-INJ-01-PROBE` — establishes the context, and is the sole producer of
+- `PTN-INJ-01-PROBE` — establishes the context, and is the sole producer of
   `surface.sql.injectable`.
-- `HRR-INJ-01-FPRINT` — the engine, which decides payload syntax for everything
+- `PTN-INJ-01-FPRINT` — the engine, which decides payload syntax for everything
   downstream.
-- `HRR-INJ-01-STACK` — a second statement, decided by the driver as above.
-- `HRR-INJ-01-SECOND` — the silent-store case.
-- `HRR-INJ-01-EVADE` — where a uniform refusal goes before it is read as a
+- `PTN-INJ-01-STACK` — a second statement, decided by the driver as above.
+- `PTN-INJ-01-SECOND` — the silent-store case.
+- `PTN-INJ-01-EVADE` — where a uniform refusal goes before it is read as a
   negative.

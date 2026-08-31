@@ -1,0 +1,27 @@
+id: PTN-INJ-11
+title: "WebSocket message injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [websocket]
+
+boundaries:
+  - subject: "The handshake and its origin check"
+    home: PTN-PRT-05
+    note: >-
+      Message content reaching a server-side interpreter is injection; how the
+      connection was established is a protocol concern.
+
+see_also: [PTN-PRT-05]
+
+order:
+  - PTN-INJ-11-MAP
+  - PTN-INJ-11-PROBE
+  - PTN-INJ-11-ERROR
+  - PTN-INJ-11-TIME
+  - PTN-INJ-11-EVADE
+
+refs:
+  wstg: [WSTG-CLNT-10]
+  cwe: [74]

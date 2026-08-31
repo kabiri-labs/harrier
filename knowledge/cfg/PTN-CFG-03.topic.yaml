@@ -1,0 +1,23 @@
+id: PTN-CFG-03
+title: "Administrative interface exposure"
+domain: CFG
+axis: phase
+
+surfaces:
+  any_of: [admin-panel, privileged-function]
+
+order:
+  - PTN-CFG-03-MAP
+  - PTN-CFG-03-PROBE
+
+boundaries:
+  - subject: "Whether the interface enforces authorization once reached"
+    home: PTN-ACL-03
+    note: >-
+      Reachability is a configuration finding; what it lets you do once
+      reached is access control.
+
+see_also: [PTN-ACL-03, PTN-RCN-02]
+
+refs:
+  wstg: [WSTG-CONF-05]

@@ -1,0 +1,24 @@
+id: PTN-IDN-02
+title: "Account provisioning and deprovisioning"
+domain: IDN
+axis: property
+
+surfaces:
+  any_of: [registration, admin-panel, privileged-function]
+
+order:
+  - PTN-IDN-02-MAP
+  - PTN-IDN-02-VALIDATION
+  - PTN-IDN-02-REVOCATION
+
+boundaries:
+  - subject: "Whether a provisioned role can exceed its grant"
+    home: PTN-ACL-04
+    note: >-
+      How an account comes to exist is identity; what it may then do is access
+      control.
+
+see_also: [PTN-ACL-04]
+
+refs:
+  wstg: [WSTG-IDNT-03]

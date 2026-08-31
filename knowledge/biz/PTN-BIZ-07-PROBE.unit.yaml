@@ -1,0 +1,14 @@
+id: PTN-BIZ-07-PROBE
+topic: PTN-BIZ-07
+status: outline
+role: stage
+kind: inquiry
+title: "Whether sustained misuse changes the application's behaviour"
+objective: >-
+  Establish whether behaviour no legitimate user would produce, sustained long
+  enough to be unambiguous, changes how the application responds.
+
+requires:
+  all_of: [access.user]
+yields: [control.misuse.undetected]
+closes: [control.misuse.undetected]

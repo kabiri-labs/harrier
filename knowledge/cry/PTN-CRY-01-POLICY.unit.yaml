@@ -1,0 +1,13 @@
+id: PTN-CRY-01-POLICY
+topic: PTN-CRY-01
+status: outline
+role: stage
+title: "Offered protocol versions and suites"
+objective: >-
+  Determine whether a listener negotiates a protocol version or cipher suite
+  that is no longer considered sound.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.tls.weak]
+closes: [control.tls.weak]

@@ -1,0 +1,18 @@
+id: PTN-BIZ-08
+title: "Payment and value handling"
+domain: BIZ
+kind: inquiry
+
+surfaces:
+  any_of: [payment]
+
+order:
+  - PTN-BIZ-08-MAP
+  - PTN-BIZ-08-PROBE
+  - PTN-BIZ-08-IMPACT
+
+see_also: [PTN-BIZ-03]
+
+refs:
+  wstg: [WSTG-BUSL-10]
+  cwe: [602]

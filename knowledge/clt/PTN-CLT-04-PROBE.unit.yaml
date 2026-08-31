@@ -1,0 +1,13 @@
+id: PTN-CLT-04-PROBE
+topic: PTN-CLT-04
+status: outline
+role: stage
+title: "Declaration parsing probe"
+objective: >-
+  Determine whether an injected style declaration is parsed and applied rather
+  than escaped or discarded.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.css.injectable]

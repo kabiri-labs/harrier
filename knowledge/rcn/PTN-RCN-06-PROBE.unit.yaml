@@ -1,0 +1,14 @@
+id: PTN-RCN-06-PROBE
+topic: PTN-RCN-06
+status: outline
+role: stage
+kind: recon
+title: "Endpoints beyond those the client uses"
+objective: >-
+  Record endpoints the interface answers that its own client never calls,
+  including superseded versions still routed.
+
+requires:
+  all_of: [recon.api.mapped]
+yields: [surface.api.undocumented]
+closes: [surface.api.undocumented]

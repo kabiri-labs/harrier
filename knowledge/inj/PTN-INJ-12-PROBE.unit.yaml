@@ -1,0 +1,12 @@
+id: PTN-INJ-12-PROBE
+topic: PTN-INJ-12
+status: outline
+role: stage
+title: "Argument metacharacter probe"
+objective: >-
+  Determine whether a syntax-breaking character in a resolver argument changes
+  the response relative to the same query without it.
+
+requires:
+  all_of: [recon.schema.known]
+yields: [surface.graphql.injectable]

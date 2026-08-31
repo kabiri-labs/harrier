@@ -1,0 +1,12 @@
+id: PTN-INJ-11-PROBE
+topic: PTN-INJ-11
+status: outline
+role: stage
+title: "Field metacharacter probe"
+objective: >-
+  Determine whether a syntax-breaking character in a message field changes the
+  reply relative to the same message without it.
+
+requires:
+  all_of: [recon.ws.mapped]
+yields: [surface.ws.injectable]

@@ -7,7 +7,7 @@ that says what a test needs in order to be possible at all, and what a success
 makes relevant afterwards.
 
 **The graph is generic.** It is a statement about the relationships between
-tests, not about anybody's application. Harrier is context-free: it has never
+tests, not about anybody's application. Pentest NavGrid is context-free: it has never
 seen your target, holds nothing about it, and cannot know which of these
 relationships is live today. So the chain says *requires*, *establishes*,
 *may become relevant* — and never *you hold*, *unlocked*, or *available now*.
@@ -65,7 +65,7 @@ correct reading, not an omission.
 **`closes` is a subset of `yields`,** enforced. A unit can only rule out a claim
 it was capable of establishing. A negative UNION result does not close
 `primitive.db.read`, because a boolean or timing route could still read the same
-database — so `HRR-INJ-01-UNION` closes nothing, and says so by leaving the
+database — so `PTN-INJ-01-UNION` closes nothing, and says so by leaving the
 field out.
 
 **`requires` is about possibility, never likelihood.** A WAF being absent makes
@@ -131,7 +131,7 @@ fact is called:
 
 The derivation cannot tell these apart from the join alone: "A yields what B
 requires" is the same sentence for all three. Without the tier they printed under
-one heading, and the arithmetic of that is unforgiving — `HRR-IDN-01-POLICY`
+one heading, and the arithmetic of that is unforgiving — `PTN-IDN-01-POLICY`
 yields `access.user`, which 90 tests require, and the two genuine escalations
 leaving that unit sorted somewhere among the ninety.
 
@@ -172,17 +172,17 @@ rather than left to be remembered.
 ## 6. Reading the graph
 
 ```
-harrier chain                          summary, and how far the chart reaches
-harrier chain HRR-INJ-01-UNION         one test: what it needs, establishes, and may lead to
-harrier chain --fact primitive.db.read one capability: who establishes it, who declares a use
-harrier checklist                      one line per test case of the standard
-harrier checklist WSTG-INPV-05         one test case, and the units that cover it
-harrier checklist --uncovered          the test cases no topic claims
-harrier index                          regenerate standards/wstg-index.yaml
+pentest-navgrid chain                          summary, and how far the chart reaches
+pentest-navgrid chain PTN-INJ-01-UNION         one test: what it needs, establishes, and may lead to
+pentest-navgrid chain --fact primitive.db.read one capability: who establishes it, who declares a use
+pentest-navgrid checklist                      one line per test case of the standard
+pentest-navgrid checklist WSTG-INPV-05         one test case, and the units that cover it
+pentest-navgrid checklist --uncovered          the test cases no topic claims
+pentest-navgrid index                          regenerate standards/wstg-index.yaml
 ```
 
-`harrier chain <unit>` names the test cases that lead to the unit, because the
-identifier on a tester's scope sheet is the standard's and not Harrier's. That
+`pentest-navgrid chain <unit>` names the test cases that lead to the unit, because the
+identifier on a tester's scope sheet is the standard's and not Pentest NavGrid's. That
 relation lives on the topic rather than the unit, so a reader of this output
 previously had no route back to the line item that sent them there.
 
@@ -250,7 +250,7 @@ capabilities are established by a test and used by none, including 1 of 32
 continuation, 14 establish an impact, 81 stop short, and 39 declare no
 capability at all — a partition, and the four sum to the catalogue. Phase 5
 charted reconnaissance through to primitives and stopped there; primitive to
-impact is largely unwritten. `harrier chain` reports the split and the artefact
+impact is largely unwritten. `pentest-navgrid chain` reports the split and the artefact
 reports it on the Attack Chains page, because a reader meeting a dozen dead ends
 should be told it is the chart's reach rather than inferring the catalogue is
 broken.

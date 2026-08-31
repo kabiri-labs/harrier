@@ -13,7 +13,7 @@ venv/
 # committed, because a stale committed copy is indistinguishable from a current
 # one at a glance and only one of those is safe to hand to someone.
 build/
-harrier.html
+pentest-navgrid.html
 
 # Editor / OS noise
 .DS_Store

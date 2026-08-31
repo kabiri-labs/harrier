@@ -1,0 +1,12 @@
+id: PTN-CLT-10-MAP
+topic: PTN-CLT-10
+status: outline
+role: stage
+kind: recon
+title: "Client-side storage inventory"
+objective: >-
+  Establish what the application writes into local storage, session storage,
+  indexed storage and the browser cache, and when.
+
+requires:
+  all_of: [access.user]

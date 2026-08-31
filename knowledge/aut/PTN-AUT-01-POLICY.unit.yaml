@@ -1,0 +1,13 @@
+id: PTN-AUT-01-POLICY
+topic: PTN-AUT-01
+status: outline
+role: stage
+title: "The weakest accepted credential"
+objective: >-
+  Determine the weakest credential the application actually accepts, which is
+  the enforced policy regardless of what the published one says.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.credential.weak]

@@ -1,0 +1,18 @@
+id: PTN-ACL-03
+title: "Function-level access control"
+domain: ACL
+axis: principal
+
+surfaces:
+  any_of: [privileged-function, admin-panel, rest-api, graphql]
+
+order:
+  - PTN-ACL-03-MAP
+  - PTN-ACL-03-ANON
+  - PTN-ACL-03-LOWPRIV
+
+see_also: [PTN-ACL-02, PTN-AUT-04, PTN-CFG-03]
+
+refs:
+  wstg: [WSTG-ATHZ-02]
+  cwe: [285, 862]

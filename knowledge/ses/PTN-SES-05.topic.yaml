@@ -1,0 +1,28 @@
+id: PTN-SES-05
+title: "Cross-site request forgery"
+domain: SES
+axis: technique
+
+surfaces:
+  any_of: [session-cookie, business-workflow, privileged-function]
+
+boundaries:
+  - subject: "Cross-origin reads rather than writes"
+    home: PTN-CLT-06
+    note: >-
+      Ambient authority on a state-changing request is a session failure; a
+      policy that lets another origin read the response is a browser-enforced
+      one.
+
+see_also: [PTN-BIZ-02, PTN-CLT-06]
+
+order:
+  - PTN-SES-05-MAP
+  - PTN-SES-05-PROBE
+  - PTN-SES-05-REPLAY
+  - PTN-SES-05-WRITE
+  - PTN-SES-05-EVADE
+
+refs:
+  wstg: [WSTG-SESS-05]
+  cwe: [352]

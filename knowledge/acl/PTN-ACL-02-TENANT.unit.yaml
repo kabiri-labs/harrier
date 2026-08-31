@@ -1,0 +1,70 @@
+id: PTN-ACL-02-TENANT
+topic: PTN-ACL-02
+status: authored
+role: stage
+title: "An object belonging to another tenant"
+objective: >-
+  Determine whether an object belonging to a different tenant is served to a
+  caller whose session was issued under this one.
+
+requires:
+  all_of: [artifact.objectid.known, access.user]
+yields: [primitive.data.read.tenant]
+closes: [primitive.data.read.tenant]
+
+hypotheses:
+  - "The tenant is decided by a value the request carries -- a header, a subdomain, a path segment, a field -- rather than by the session, so the caller chooses it."
+  - "The object identifier is unique across all tenants, so the query finds it and the tenant filter is the only thing that would have stopped it."
+  - "One route enforces the boundary and another does not, because the second was written later and reads the same store directly."
+
+triage:
+  - "A tenant named in a header, a subdomain, a path prefix or a body field that the client always sends and never changes."
+  - "Reporting, export and administrative routes, which frequently read the store without the filter the ordinary route applies."
+  - "An identifier whose shape is global rather than per tenant, which means uniqueness is doing the work a filter should do."
+
+sink: >-
+  The query the application builds for the object, and whether the tenant
+  predicate in it comes from the session or from the request.
+
+enter_when:
+  - "The application is multi-tenant, two tenants are available to the engagement, and an identifier from the second is in hand."
+
+oracle:
+  positive: "The response carries the other tenant's record rather than an authorization error or an empty result."
+  negative: "Every route that accepts the identifier refuses it under the first tenant's session, including the export and reporting routes."
+  inconclusive: "The endpoint answers a refused object and a missing one identically, so refusal cannot be told from absence."
+
+sequence:
+  - "Capture the request naming an object under the second tenant, with that tenant's own session."
+  - "Replay it under the first tenant's session, changing only the session."
+  - "Where the tenant is carried in the request as well, change that value alone and compare with the session change."
+  - "Repeat on one route of each kind -- read, list, export -- rather than many times on one route."
+
+first_false_positive: >-
+  An empty record read as a served one. The endpoint authorized the caller and
+  found nothing under this tenant, which is the control working, and a status
+  code alone cannot tell that from the other tenant's data arriving.
+
+false_positives:
+  - "A demonstration or template tenant whose objects are deliberately visible to everybody."
+  - "A cached response from the second tenant's own session, when both sessions were used in one browser profile."
+
+preconditions:
+  - "Two tenants the engagement is permitted to use, both created for testing rather than belonging to real customers."
+
+evidence:
+  - "The owning tenant's request and response, and the identical request under the other tenant's session."
+
+done_when: >-
+  One route of each kind has been replayed across the tenant boundary, and each
+  is recorded as served, refused, or indistinguishable.
+
+safety: >-
+  Read-only, and only between tenants the engagement created. An identifier
+  guessed into a real customer's tenant is that customer's data, and no finding
+  needs it: a boundary that fails between two test tenants has failed.
+
+payloads: payloads/access-control/identifiers.yaml
+tools: [burp-repeater]
+card: cards/access-control/object-ownership.md
+mitigation: mitigations/object-authorization.md

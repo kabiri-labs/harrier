@@ -1,0 +1,12 @@
+id: PTN-ACL-04-DIFF
+topic: PTN-ACL-04
+status: outline
+role: variant
+title: "A caller-supplied value deciding the role applied"
+objective: >-
+  Determine whether the role applied to a request is read from a value the
+  caller supplies, by comparing two responses that differ only in that value.
+
+requires:
+  all_of: [recon.roles.mapped, recon.privilege.carrier, access.user]
+yields: [access.role.elevated]

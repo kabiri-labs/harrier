@@ -1,0 +1,24 @@
+id: PTN-RCN-07
+title: "GraphQL schema introspection"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  any_of: [graphql]
+
+order:
+  - PTN-RCN-07-PROBE
+  - PTN-RCN-07-MAP
+
+boundaries:
+  - subject: "Per-field authorization"
+    home: PTN-ACL-07
+    note: >-
+      Reading the schema is recon; whether each field enforces access control
+      is an access-control test.
+
+see_also: [PTN-ACL-07, PTN-RCN-06]
+
+refs:
+  wstg: [WSTG-APIT-99]

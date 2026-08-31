@@ -40,7 +40,7 @@ entries:
     engine: [mssql]
     payload: "'; WAITFOR DELAY '0:0:{{DELAY}}'--"
     detect: "SQL Server's delay is a statement, so this doubles as a stacked-query signal."
-    note: "If this delays, HRR-INJ-01-STACK is likely to succeed as well -- record the observation there."
+    note: "If this delays, PTN-INJ-01-STACK is likely to succeed as well -- record the observation there."
 
   - name: conditional delay
     engine: [mssql]

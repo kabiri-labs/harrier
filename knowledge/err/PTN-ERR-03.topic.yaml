@@ -1,0 +1,30 @@
+id: PTN-ERR-03
+title: "Information leakage in delivered content"
+domain: ERR
+
+surfaces:
+  always: true
+
+order:
+  - PTN-ERR-03-MAP
+  - PTN-ERR-03-PROBE
+
+boundaries:
+  - subject: "Products and versions named by response metadata"
+    home: PTN-RCN-01
+    note: >-
+      Headers and document metadata that name a product are the fingerprint's
+      own input. What is recorded here is internal detail the interface never
+      meant to deliver.
+
+  - subject: "Files that should not be served at all"
+    home: PTN-CFG-02
+    note: >-
+      Content disclosed inside a page the application meant to serve is here;
+      a backup file nobody meant to publish is configuration.
+
+see_also: [PTN-CFG-02, PTN-RCN-08]
+
+refs:
+  wstg: [WSTG-INFO-05, WSTG-INFO-03]
+  cwe: [200, 615]

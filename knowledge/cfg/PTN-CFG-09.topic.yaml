@@ -1,0 +1,25 @@
+id: PTN-CFG-09
+title: "Cloud storage exposure"
+domain: CFG
+axis: property
+
+surfaces:
+  any_of: [cloud-storage]
+
+order:
+  - PTN-CFG-09-POLICY
+  - PTN-CFG-09-NAMING
+  - PTN-CFG-09-SERVING
+
+boundaries:
+  - subject: "Uploads that reach storage"
+    home: PTN-RES-02
+    note: >-
+      How the object store is configured is here; what the application accepts
+      into it is resource handling.
+
+see_also: [PTN-RES-02]
+
+refs:
+  wstg: [WSTG-CONF-11]
+  cwe: [732]

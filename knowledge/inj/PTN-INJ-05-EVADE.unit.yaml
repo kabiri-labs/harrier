@@ -1,0 +1,14 @@
+id: PTN-INJ-05-EVADE
+topic: PTN-INJ-05
+status: outline
+role: stage
+kind: recon
+title: "Expression and encoding evasion"
+objective: >-
+  Determine whether a negative result is caused by escaping of expression
+  metacharacters rather than by a compiled query.
+
+requires:
+  all_of: [surface.xpath.injectable]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

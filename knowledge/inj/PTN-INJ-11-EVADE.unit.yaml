@@ -1,0 +1,14 @@
+id: PTN-INJ-11-EVADE
+topic: PTN-INJ-11
+status: outline
+role: stage
+kind: recon
+title: "Frame and encoding evasion"
+objective: >-
+  Determine whether a negative result is caused by message validation rather
+  than by the field never reaching an interpreter.
+
+requires:
+  all_of: [surface.ws.injectable]
+motivated_by: [recon.intermediary.identified]
+yields: [control.filter.identified]

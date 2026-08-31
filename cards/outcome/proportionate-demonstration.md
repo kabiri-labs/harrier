@@ -1,6 +1,6 @@
 # Proportionate demonstration
 
-Shared by `HRR-OUT-01-IMPACT`, `HRR-OUT-04-IMPACT` and `HRR-OUT-06-IMPACT`: the
+Shared by `PTN-OUT-01-IMPACT`, `PTN-OUT-04-IMPACT` and `PTN-OUT-06-IMPACT`: the
 three outcome units ask different questions of different capabilities, and the
 reasoning about *how much* to do to answer them is one argument written once.
 
@@ -49,7 +49,7 @@ always looks free.
 
 ### What a schema establishes, and what it does not
 
-Reading table and column names is the cheapest observation in `HRR-OUT-01-IMPACT`
+Reading table and column names is the cheapest observation in `PTN-OUT-01-IMPACT`
 and it is routinely over-read. A schema establishes:
 
 - that the store is reachable through the confirmed route,
@@ -93,7 +93,7 @@ is indistinguishable from a concealed one.
 **A read is irreversible.** Nothing undoes it. This is the entire reason the
 limit sits before the observation rather than after it.
 
-**A write is reversible only if arranged.** `HRR-OUT-04-IMPACT` requires a
+**A write is reversible only if arranged.** `PTN-OUT-04-IMPACT` requires a
 restoration path established before the change, on a record the engagement
 created where one exists. Restoring a field is not the same as restoring a
 record: an application that stamps a modification time, fires a webhook on
@@ -107,7 +107,7 @@ from memory at the end of the week.
 
 ### The third-party problem
 
-`HRR-OUT-06-IMPACT` is the only one of the three whose subject is a person who
+`PTN-OUT-06-IMPACT` is the only one of the three whose subject is a person who
 never agreed to anything. The client consented to the engagement. A visitor who
 loads a poisoned page did not, and cannot, because they do not know it happened.
 
@@ -147,8 +147,8 @@ somebody's afternoon, caused deliberately, by a person they never engaged.
 
 ## Related units
 
-- `HRR-OUT-01-IMPACT` — what the readable data is worth, reached from eleven
+- `PTN-OUT-01-IMPACT` — what the readable data is worth, reached from eleven
   read capabilities across the catalogue.
-- `HRR-OUT-04-IMPACT` — whether the altered records are read back.
-- `HRR-OUT-06-IMPACT` — what is done through the other party, and the one unit
+- `PTN-OUT-04-IMPACT` — whether the altered records are read back.
+- `PTN-OUT-06-IMPACT` — what is done through the other party, and the one unit
   here whose subject never consented.

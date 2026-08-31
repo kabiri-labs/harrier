@@ -1,0 +1,40 @@
+id: PTN-CFG-08-MAP
+topic: PTN-CFG-08
+status: sketched
+role: stage
+kind: recon
+title: "The delegated names and what each points at"
+objective: >-
+  Record every name the target delegates and the third-party service each
+  resolves to, since a takeover is only possible where the delegation outlives
+  the resource.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.delegation.mapped]
+
+hypotheses:
+  - "A delegation outlives the resource it points at, because removing the record is a separate task from cancelling the service."
+  - "A name pointing at a service the target itself operates looks like a third party in the answer and is not delegated at all."
+  - "Mail and name-service delegations are delegations too, and are reviewed less often than the web ones."
+
+triage:
+  - "Recorded names whose answer points somewhere other than the target's own addresses."
+  - "The provider each delegation names, and the resource name it asks that provider for."
+  - "Mail and name-service records, not only the ones serving pages."
+
+sequence:
+  - "Resolve every recorded name and keep the ones whose answer points at a third-party service rather than at the target's own addresses."
+  - "For each, record the provider it names and the resource name the delegation asks that provider for."
+  - "Include the mail and name-service delegations as well as the web ones, since a delegation is a delegation whatever record carries it."
+
+first_false_positive: >-
+  A name pointing at a service the target itself operates under a different
+  brand. It looks like a third party in the answer and is not delegated at all,
+  so the provider is confirmed from the record rather than assumed from the
+  name.
+
+done_when: >-
+  Every recorded name is resolved and each is recorded as pointing at the
+  target's own addresses or as delegated, with the provider and the resource
+  name the delegation asks for.

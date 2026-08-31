@@ -1,0 +1,29 @@
+id: PTN-CRY-02
+title: "Sensitive data over unprotected transport"
+domain: CRY
+axis: asset
+
+surfaces:
+  any_of: [login-form, registration, password-change, password-reset, payment, token-bearing]
+
+boundaries:
+  - subject: "Credentials specifically"
+    home: null
+    note: >-
+      Published as its own authentication test. Not a separate topic here: it
+      is the same test whether the data is a credential, a session token or a
+      payment detail, so the data type is the axis.
+
+see_also: [PTN-CRY-01]
+
+order:
+  - PTN-CRY-02-MAP
+  - PTN-CRY-02-LOGIN
+  - PTN-CRY-02-REGISTER
+  - PTN-CRY-02-RESET
+  - PTN-CRY-02-CHANGE
+  - PTN-CRY-02-EXPORT
+
+refs:
+  wstg: [WSTG-CRYP-03, WSTG-ATHN-01]
+  cwe: [319]

@@ -1,0 +1,13 @@
+id: PTN-IDN-03-DIFF
+topic: PTN-IDN-03
+status: outline
+role: variant
+title: "A content differential between an existing and a non-existing account"
+objective: >-
+  Determine whether the response body, status or redirect differs according to
+  whether the submitted account exists.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.account.enumerable]

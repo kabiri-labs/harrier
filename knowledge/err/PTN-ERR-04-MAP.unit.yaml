@@ -1,0 +1,37 @@
+id: PTN-ERR-04-MAP
+topic: PTN-ERR-04
+status: sketched
+role: stage
+kind: recon
+title: "What public indexes and archives hold about the target"
+objective: >-
+  Record which of the target's assets are present in search indexes, caches
+  and web archives, and at which point in time each copy was taken.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [recon.paths.indexed]
+
+hypotheses:
+  - "What was public once stays retrievable after the target withdraws it, because the holder is not the target."
+  - "The organisation's name is indexed on properties the organisation does not operate."
+  - "A copy carries a date, and the date is what makes it evidence rather than a rumour."
+
+triage:
+  - "Results under the granted names, held by indexes, caches and archives."
+  - "Results under the organisation's naming on code hosting, package registries and document stores."
+  - "The date each holder gives for its copy, and whether the holder still serves the content or only the reference."
+
+sequence:
+  - "Query each public index, cache and archive for the recorded names, and collect what each holds for the target."
+  - "Record for every copy the URL it was taken from, the date the holder gives it, and whether the holder still serves the content or only the reference."
+  - "Repeat for the names of the target's own artefacts -- code hosting, package registries, document and object stores under the target's naming -- since those are indexed under the organisation rather than the site."
+
+first_false_positive: >-
+  A result matching the target's brand on somebody else's property. The name in
+  a result is not ownership, so each copy is tied back to a name the engagement
+  granted before it enters the record.
+
+done_when: >-
+  Every index, cache and archive queried is recorded with what it holds for each
+  granted name, each copy carrying its source URL and the date its holder gives.

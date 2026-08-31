@@ -1,0 +1,13 @@
+id: PTN-AUT-10-BINDING
+topic: PTN-AUT-10
+status: outline
+role: stage
+title: "Binding of the authorization response to the request that started it"
+objective: >-
+  Determine whether an authorization response is refused when it does not
+  correspond to a request this caller started.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [control.oauth.flow]

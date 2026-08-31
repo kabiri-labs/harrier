@@ -1,0 +1,13 @@
+id: PTN-CLT-10-STORAGE
+topic: PTN-CLT-10
+status: outline
+role: stage
+title: "Sensitive data at rest in the browser"
+objective: >-
+  Determine whether anything persisted client-side would be damaging in the
+  hands of someone with later access to the device.
+
+requires:
+  all_of: [access.user]
+yields: [control.storage.sensitive]
+closes: [control.storage.sensitive]

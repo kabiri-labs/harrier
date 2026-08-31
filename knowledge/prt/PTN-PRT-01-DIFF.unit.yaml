@@ -1,0 +1,13 @@
+id: PTN-PRT-01-DIFF
+topic: PTN-PRT-01
+status: outline
+role: variant
+title: "Differential confirmation of a poisoned socket"
+objective: >-
+  Determine whether a prefix left on the connection is prepended to the next
+  request, by observing a response that does not belong to it.
+
+requires:
+  all_of: [recon.tiers.mapped]
+motivated_by: [recon.intermediary.identified]
+yields: [surface.desync.confirmed]

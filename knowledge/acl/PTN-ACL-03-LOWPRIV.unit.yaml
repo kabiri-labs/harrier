@@ -1,0 +1,12 @@
+id: PTN-ACL-03-LOWPRIV
+topic: PTN-ACL-03
+status: outline
+role: stage
+title: "A privileged function reached by a lesser role"
+objective: >-
+  Determine whether a privileged function executes for an authenticated caller
+  whose role does not include it.
+
+requires:
+  all_of: [recon.roles.mapped, access.user]
+yields: [primitive.privileged.action]

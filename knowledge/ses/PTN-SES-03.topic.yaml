@@ -1,0 +1,16 @@
+id: PTN-SES-03
+title: "Session fixation"
+domain: SES
+axis: technique
+
+surfaces:
+  any_of: [session-cookie, token-bearing, login-form]
+
+order:
+  - PTN-SES-03-PROBE
+  - PTN-SES-03-REPLAY
+  - PTN-SES-03-READ
+
+refs:
+  wstg: [WSTG-SESS-03]
+  cwe: [384]

@@ -1,6 +1,6 @@
 # Four mechanisms, one clean result
 
-For `HRR-CLT-01-EVADE`. A context unit came back negative. That negative has
+For `PTN-CLT-01-EVADE`. A context unit came back negative. That negative has
 four possible causes, they are defeated differently or not at all, and telling
 them apart is worth more than any single bypass.
 
@@ -133,5 +133,5 @@ and there is no target behaviour it can call vulnerable on its own.
 
 - The eight context units — each can return a negative this unit explains, and
   each is re-run with whatever survives.
-- `HRR-CLT-01-PROBE` — a refusal seen here may mean the value never reached the
+- `PTN-CLT-01-PROBE` — a refusal seen here may mean the value never reached the
   context at all, which the probe settles first.

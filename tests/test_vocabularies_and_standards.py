@@ -6,7 +6,7 @@ later as many failures with no obvious common cause.
 
 import unittest
 
-from harrier.validate import validate
+from pentest_navgrid.validate import validate
 from tests.support import messages
 from tests.test_identifiers_and_axes import SandboxCase
 
@@ -302,18 +302,18 @@ class EveryResolvedIdentifierIsClaimedByATopic(SandboxCase):
         # Deleting the only topic claiming an identifier leaves it mapped to a
         # domain and covered by nothing, which is a coverage hole rather than a
         # decision.
-        self.box.path("knowledge/inj/HRR-INJ-01.topic.yaml").unlink()
+        self.box.path("knowledge/inj/PTN-INJ-01.topic.yaml").unlink()
         self.assertRejected("WSTG-INPV-05 is mapped to INJ but no INJ topic claims it")
 
     def test_a_domain_claim_cannot_be_masked_by_another_domain(self):
         # WSTG-INFO-01 resolves to both RCN and ERR: two pieces of work. Checking
         # identifier presence alone would let the ERR topic report the RCN half
         # as covered, which reports full coverage over a hole.
-        self.box.path("knowledge/rcn/HRR-RCN-08.topic.yaml").unlink()
+        self.box.path("knowledge/rcn/PTN-RCN-08.topic.yaml").unlink()
         self.assertRejected("WSTG-INFO-01 is mapped to RCN but no RCN topic claims it")
 
     def test_the_surviving_domain_is_not_also_reported(self):
-        self.box.path("knowledge/rcn/HRR-RCN-08.topic.yaml").unlink()
+        self.box.path("knowledge/rcn/PTN-RCN-08.topic.yaml").unlink()
         problems = validate(self.box.root)
         self.assertNotIn("mapped to ERR but no ERR topic", messages(problems))
 
@@ -325,7 +325,7 @@ class EveryResolvedIdentifierIsClaimedByATopic(SandboxCase):
         self.assertRejected("which the map resolves to no domain")
 
     def test_the_coverage_numerator_never_exceeds_its_denominator(self):
-        from harrier.validate import coverage
+        from pentest_navgrid.validate import coverage
 
         self.box.add_topic(refs={"wstg": ["WSTG-INPV-05", "WSTG-INPV-14"]})
         counts = coverage(self.box.root)

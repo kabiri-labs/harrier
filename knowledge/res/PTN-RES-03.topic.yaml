@@ -1,0 +1,21 @@
+id: PTN-RES-03
+title: "Server-side request forgery"
+domain: RES
+axis: technique
+
+surfaces:
+  any_of: [server-fetch, file-upload, xml-ingest]
+
+see_also: [PTN-INJ-03]
+
+order:
+  - PTN-RES-03-OOB
+  - PTN-RES-03-DIFF
+  - PTN-RES-03-TIME
+  - PTN-RES-03-PIVOT
+  - PTN-RES-03-READ
+  - PTN-RES-03-EVADE
+
+refs:
+  wstg: [WSTG-INPV-19]
+  cwe: [918]

@@ -1,0 +1,20 @@
+id: PTN-INJ-07
+title: "Code injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [code-eval, deserialization]
+
+see_also: [PTN-INJ-08]
+
+order:
+  - PTN-INJ-07-PROBE
+  - PTN-INJ-07-ERROR
+  - PTN-INJ-07-TIME
+  - PTN-INJ-07-OOB
+  - PTN-INJ-07-EVADE
+
+refs:
+  wstg: [WSTG-INPV-11]
+  cwe: [94, 502]

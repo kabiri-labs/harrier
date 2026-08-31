@@ -1,0 +1,18 @@
+id: PTN-BIZ-03
+title: "Integrity of client-supplied state"
+domain: BIZ
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment, object-id-param]
+
+order:
+  - PTN-BIZ-03-MAP
+  - PTN-BIZ-03-PROBE
+  - PTN-BIZ-03-IMPACT
+
+see_also: [PTN-ACL-06, PTN-BIZ-01, PTN-BIZ-08]
+
+refs:
+  wstg: [WSTG-BUSL-03]
+  cwe: [565]

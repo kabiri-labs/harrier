@@ -1,0 +1,17 @@
+id: PTN-RCN-06
+title: "API surface enumeration"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  any_of: [rest-api, graphql, websocket]
+
+order:
+  - PTN-RCN-06-MAP
+  - PTN-RCN-06-PROBE
+
+see_also: [PTN-RCN-07]
+
+refs:
+  wstg: [WSTG-APIT-01]

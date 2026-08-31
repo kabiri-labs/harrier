@@ -1,0 +1,13 @@
+id: PTN-INJ-09-PROBE
+topic: PTN-INJ-09
+status: outline
+role: stage
+title: "Conversion specifier probe"
+objective: >-
+  Determine whether a conversion specifier submitted as input is consumed by a
+  formatting function rather than echoed literally.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.format.injectable]

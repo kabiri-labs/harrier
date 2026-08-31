@@ -1,13 +1,13 @@
-# Harrier
+# Pentest NavGrid
 
-**WSTG tells you what to cover. Harrier shows you the real tests inside each
+**WSTG tells you what to cover. Pentest NavGrid shows you the real tests inside each
 test case, and where a successful one may lead.**
 
 An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.19.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Pentest NavGrid 0.20.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.19.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.20.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -27,7 +27,7 @@ Units**, and derives the attack-chain continuations each success may open.
 A testing standard is a coverage structure. It is very good at that, and WSTG in
 particular is the reason nothing standard goes missing from a scope. But two
 things a working tester needs sit outside what a coverage structure is for, and
-Harrier exists for exactly those two.
+Pentest NavGrid exists for exactly those two.
 
 **A test case is not a test.** `WSTG-INPV-05` is one line on a checklist and ten
 materially different tests in practice — a probe, an engine fingerprint, five
@@ -35,26 +35,26 @@ inference and extraction techniques, a stacked-statement variant, a second-order
 variant, and a filter-evasion pass. Each has its own payloads, its own oracle,
 and its own separately recordable result. A checklist that ticks once for all ten
 can be complete while most of the work was never done, and nothing in it will say
-so. Harrier makes those tests explicit, individually named, and bounded against
+so. Pentest NavGrid makes those tests explicit, individually named, and bounded against
 each other.
 
 **A result is not the end of the test.** Establishing that a parameter reaches a
 SQL statement is not a finding on its own; it is a capability that makes several
 other tests worth performing. Standards enumerate test cases as independent line
 items, so that relationship lives only in the tester's head and leaves with them
-when they move to the next line. Harrier writes each test's prerequisites and
+when they move to the next line. Pentest NavGrid writes each test's prerequisites and
 established capabilities down, and derives the connections between them.
 
 Neither is a criticism of the standard. A coverage structure that also tried to
 be a decomposition and an attack graph would be worse at the thing it is for.
-Harrier is the layer that sits on top of one.
+Pentest NavGrid is the layer that sits on top of one.
 
 ## Standard-first, by construction
 
-Navigation starts at the standard, not at Harrier's own taxonomy:
+Navigation starts at the standard, not at Pentest NavGrid's own taxonomy:
 
 ```
-Standard → Testing group → Test case → Harrier Test Units → Potential continuations
+Standard → Testing group → Test case → Pentest NavGrid Test Units → Potential continuations
 ```
 
 Three deliberate ways in do not start there, because a tester sometimes arrives
@@ -71,9 +71,9 @@ that declare it a prerequisite.
 WSTG is the first standard supported, and the structure is deliberately not
 specific to it. A newer WSTG revision, or another execution standard, enters at
 the top of that path and reuses everything below it: identifiers are pinned per
-standard, and a Test Unit is filed under whichever test case claims it. A Harrier
+standard, and a Test Unit is filed under whichever test case claims it. A Pentest NavGrid
 topic with no test case in the current standard is not lost — it appears under
-**Harrier Extensions**, which is where beyond-WSTG material goes as it is
+**Pentest NavGrid Extensions**, which is where beyond-WSTG material goes as it is
 written.
 
 OWASP Top 10 is a different shape and would enter differently. It classifies
@@ -89,8 +89,8 @@ Five words carry the model, and they are worth two minutes.
 | | |
 |---|---|
 | **Test case** | The standard's unit of coverage. `WSTG-INPV-05`, "Testing for SQL Injection". Identifier and title come from a pinned copy of the standard. |
-| **Topic** | Harrier's subject boundary inside a test case — "SQL injection" — declaring the axis its tests are split on and notes marking what belongs to a neighbouring topic instead. One test case may be claimed by several topics; `WSTG-APIT-99` is claimed by four. |
-| **Test Unit** | The atomic thing a person performs and records one result for. `HRR-INJ-01-UNION`, "UNION-based extraction". It has an objective that can be wrong, a boundary against its siblings, and — where written to depth — an oracle, a sequence, payloads, false positives and a safety limit. It may also say where in a target to start looking, and the search box reads that field — so a test can be reached from a parameter name rather than from an identifier. |
+| **Topic** | Pentest NavGrid's subject boundary inside a test case — "SQL injection" — declaring the axis its tests are split on and notes marking what belongs to a neighbouring topic instead. One test case may be claimed by several topics; `WSTG-APIT-99` is claimed by four. |
+| **Test Unit** | The atomic thing a person performs and records one result for. `PTN-INJ-01-UNION`, "UNION-based extraction". It has an objective that can be wrong, a boundary against its siblings, and — where written to depth — an oracle, a sequence, payloads, false positives and a safety limit. It may also say where in a target to start looking, and the search box reads that field — so a test can be reached from a parameter name rather than from an identifier. |
 | **Capability** | What a success establishes, or what a test needs before it is possible at all. "A parameter reaches a SQL statement." Capabilities are the join keys: no Test Unit ever names another Test Unit. |
 | **Impact** | A business outcome. Terminal by construction — nothing may require one, and the validator enforces it. |
 
@@ -99,7 +99,7 @@ distinction exists to prevent: a **declared prerequisite** is a condition of the
 test being performable at all, and a **motivation** makes it worth reaching for
 sooner without ever being a gate.
 
-**Harrier has no view of your target.** It has never seen it and does not ask
+**Pentest NavGrid has no view of your target.** It has never seen it and does not ask
 about it. Every chain statement is about the relationship between two tests —
 *potential continuation*, *may become relevant*, *no additional declared hard
 prerequisite* — never a claim that something is true of an application. A
@@ -147,8 +147,8 @@ and the 15 that run the other way are named on the page:
 ## Try it
 
 Download the built file from the [latest
-release](https://github.com/kabiri-labs/harrier/releases/latest). Two assets:
-`harrier-<version>.html`, and `harrier-<version>.html.sha256` beside it.
+release](https://github.com/kabiri-labs/pentest-navgrid/releases/latest). Two assets:
+`pentest-navgrid-<version>.html`, and `pentest-navgrid-<version>.html.sha256` beside it.
 
 Open the `.html` from disk. It is one self-contained file — no server, no
 install, no network — and it is the whole product. The command line further down
@@ -157,7 +157,7 @@ is for working on the catalogue and needs a source checkout.
 **Check what you downloaded.**
 
 ```bash
-sha256sum -c harrier-*.html.sha256          # shasum -a 256 -c on macOS
+sha256sum -c pentest-navgrid-*.html.sha256          # shasum -a 256 -c on macOS
 ```
 
 The checksum file names the file it covers, so nothing here carries a version
@@ -182,13 +182,13 @@ For contributors, and for anyone who wants the artefact as it stands at a
 particular commit rather than at a release:
 
 ```bash
-git clone https://github.com/kabiri-labs/harrier.git
-cd harrier
+git clone https://github.com/kabiri-labs/pentest-navgrid.git
+cd pentest-navgrid
 git checkout v<version>             # omit for the catalogue as it stands
 python -m pip install "PyYAML>=6,<7" "jsonschema>=4,<5"
 
-python -m harrier validate          # the catalogue is internally consistent
-python -m harrier build             # writes harrier.html
+python -m pentest_navgrid validate          # the catalogue is internally consistent
+python -m pentest_navgrid build             # writes pentest-navgrid.html
 ```
 
 The build is deterministic: one commit produces one set of bytes, which is what
@@ -206,28 +206,28 @@ One line per test case of the standard, with the units that cover it and the
 depth each is written to — the output that goes into an engagement tracker:
 
 ```bash
-python -m harrier checklist WSTG-ATHZ-01
+python -m pentest_navgrid checklist WSTG-ATHZ-01
 ```
 
 ```
 WSTG-ATHZ-01  Testing Directory Traversal File Include  [5 unit(s): 5 authored, 0 sketched, 0 outline]
-  topics: HRR-RES-01
-  [ ] HRR-RES-01-PROBE  Traversal sequence survival probe  (authored)
-  [ ] HRR-RES-01-ERROR  Error-based path disclosure  (authored)
-  [ ] HRR-RES-01-READ  Confirmed read outside the intended root  (authored)
-  [ ] HRR-RES-01-EXEC  Inclusion and execution of the resolved path  (authored)
-  [ ] HRR-RES-01-EVADE  Normalisation and encoding evasion  (authored)
+  topics: PTN-RES-01
+  [ ] PTN-RES-01-PROBE  Traversal sequence survival probe  (authored)
+  [ ] PTN-RES-01-ERROR  Error-based path disclosure  (authored)
+  [ ] PTN-RES-01-READ  Confirmed read outside the intended root  (authored)
+  [ ] PTN-RES-01-EXEC  Inclusion and execution of the resolved path  (authored)
+  [ ] PTN-RES-01-EVADE  Normalisation and encoding evasion  (authored)
 ```
 
 `--uncovered` narrows it to the test cases no topic claims, which is the
 coverage gate CI runs. The same graph reads from the command line too:
 
 ```bash
-python -m harrier chain HRR-RES-01-READ
+python -m pentest_navgrid chain PTN-RES-01-READ
 ```
 
 ```
-HRR-RES-01-READ  Confirmed read outside the intended root
+PTN-RES-01-READ  Confirmed read outside the intended root
   covers: WSTG-ATHZ-01
   role: a stage -- performed alongside the other stages of this topic
   prerequisite (all of): A parameter selects a file by path  [surface.path.traversable] -- 1 test(s) establish it
@@ -235,10 +235,10 @@ HRR-RES-01-READ  Confirmed read outside the intended root
   worth doing sooner given: The path filter's behaviour is known  [control.pathfilter.identified] -- 1 test(s) establish it
   success establishes: Arbitrary file read  [primitive.fs.read]
   potential continuations:
-    HRR-RES-01-EXEC  Inclusion and execution of the resolved path
+    PTN-RES-01-EXEC  Inclusion and execution of the resolved path
       requires what this establishes: Arbitrary file read
       no additional declared hard prerequisite
-    HRR-OUT-01-IMPACT  What the readable data is worth
+    PTN-OUT-01-IMPACT  What the readable data is worth
       requires what this establishes: Arbitrary file read
       no additional declared hard prerequisite
 ```
@@ -249,23 +249,23 @@ Path traversal, under `WSTG-ATHZ-01`, was the first topic written to full depth
 and is the shortest to read end to end. From the standard down:
 
 1. **Authorization Testing → `WSTG-ATHZ-01`**, "Testing Directory Traversal File
-   Include". Harrier decomposes it into five Test Units.
-2. **`HRR-RES-01-PROBE`** — does a traversal sequence in the parameter change
+   Include". Pentest NavGrid decomposes it into five Test Units.
+2. **`PTN-RES-01-PROBE`** — does a traversal sequence in the parameter change
    which file is opened? Success establishes *a parameter selects a file by
    path*.
-3. **`HRR-RES-01-READ`** — is content the application never meant to serve
+3. **`PTN-RES-01-READ`** — is content the application never meant to serve
    returned in the response body? It declares the probe's capability as a
    prerequisite, and two other tests as motivations: knowing the application's
    absolute path, and knowing how the path filter behaves. Success establishes
    *arbitrary file read*.
-4. **`HRR-RES-01-EXEC`** — is the resolved path included and executed rather than
+4. **`PTN-RES-01-EXEC`** — is the resolved path included and executed rather than
    returned? Reached through *arbitrary file read*, with no additional declared
    hard prerequisite. Success establishes *server-side code execution*.
-5. **`HRR-OUT-02-IMPACT`** — what does the executing context actually reach: which
+5. **`PTN-OUT-02-IMPACT`** — what does the executing context actually reach: which
    account, which files, what answers from the network behind it? Reached through
    *server-side code execution*, and where this chain ends.
 
-The last step is a question rather than a claim, and deliberately so. Harrier has
+The last step is a question rather than a claim, and deliberately so. Pentest NavGrid has
 not seen the host and cannot say what the code would reach on it; what it can say
 is that reaching this far means the question is now worth asking, and which
 capability made it worth asking.
@@ -283,7 +283,7 @@ stale in this file without the suite failing.
 | Taxonomy | |
 |---|---|
 | WSTG identifiers pinned | 109, across 12 testing groups |
-| Claimed by a Harrier topic | 108 of 108 resolvable |
+| Claimed by a Pentest NavGrid topic | 108 of 108 resolvable |
 | Topics | 106, across 14 domains |
 | Test Units | 374 |
 | Written to full procedural depth | **36** |
@@ -344,7 +344,7 @@ matrix look complete and every route on it untrustworthy — an edge nobody thou
 about is indistinguishable from one that was checked, and the second is the only
 reason the first is worth reading. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
-## What Harrier is not
+## What Pentest NavGrid is not
 
 - **Not a scanner or an exploit framework.** Nothing here scans, exploits, or
   talks to a target.
@@ -401,7 +401,7 @@ published under Apache-2.0 can be withdrawn by it.
 
 Apache-2.0. See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
 
-Harrier is not affiliated with, endorsed by, or sponsored by OWASP. WSTG
+Pentest NavGrid is not affiliated with, endorsed by, or sponsored by OWASP. WSTG
 identifiers, official test titles and testing-group headings are referenced for
 navigation and cross-mapping only, from a copy pinned by commit and SHA-256. No
 prose from WSTG or ASVS is reproduced anywhere in this repository; both are
