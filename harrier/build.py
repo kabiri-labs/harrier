@@ -104,6 +104,75 @@ def unit_order(topic: Dict[str, Any], units: Dict[str, Any]) -> List[str]:
     return declared + rest
 
 
+def surface_index(
+    surfaces: List[Dict[str, Any]], topics: Dict[str, Any]
+) -> Tuple[List[Dict[str, Any]], List[str]]:
+    """The attack-surface tags, each with what it implies and what it reaches.
+
+    Derived here rather than in the page for the reason the rest of this module
+    is: a transitive closure computed in a browser is a closure no test can
+    check without one. The page reads the answer; this function is what the
+    suite holds to it.
+
+    `implies` is the transitive closure of `emits`, self excluded. A tag emitting
+    another says something true of every surface carrying it -- a search box is
+    a parameter reaching a query -- so a tester who described the surface once
+    should not have to describe it twice. Closing it here means the page unions
+    a list instead of walking a graph.
+
+    `topics` names only the topics that declare the tag themselves. The implied
+    ones are reachable through `implies` and are deliberately not merged in: a
+    topic listed under a tag it never declared would make the tag look broader
+    than the catalogue says it is, and the page has to be able to tell the
+    reader which of the two reasons put a topic in front of them.
+
+    Topics whose surface clause is `always` are returned separately. They match
+    every context by construction, so folding them into each tag would bury the
+    handful of topics the context actually selected under the same forty-odd
+    rows every time.
+    """
+    emits = {s["tag"]: list(s.get("emits") or []) for s in surfaces}
+
+    def closure(tag: str) -> List[str]:
+        seen: Set[str] = set()
+        stack = list(emits.get(tag, ()))
+        while stack:
+            current = stack.pop()
+            if current in seen or current == tag:
+                continue
+            seen.add(current)
+            stack.extend(emits.get(current, ()))
+        return sorted(seen)
+
+    declared: Dict[str, List[str]] = {}
+    always: List[str] = []
+    for tid in sorted(topics):
+        clause = topics[tid].get("surfaces") or {}
+        if clause.get("always"):
+            always.append(tid)
+            continue
+        for tag in clause.get("any_of") or []:
+            declared.setdefault(tag, []).append(tid)
+
+    return (
+        [
+            {
+                "tag": entry["tag"],
+                "label": entry.get("label", entry["tag"]),
+                "description": _text(entry.get("description", "")),
+                "hint": _text(entry.get("discovery_hint", "")),
+                "implies": closure(entry["tag"]),
+                # Sorted so the page never has to, and so a tag reaching nothing
+                # is an empty list rather than a missing key the page reads as
+                # undefined and renders as the string "undefined".
+                "topics": sorted(declared.get(entry["tag"], ())),
+            }
+            for entry in sorted(surfaces, key=lambda s: s["tag"])
+        ],
+        always,
+    )
+
+
 def family_edges(units: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Family-to-family counts: the whole graph at the only scale that reads.
 
@@ -204,6 +273,14 @@ def catalogue(root: Path) -> Dict[str, Any]:
         for axis in repo.vocab["axes"].data["axes"]
     }
 
+    # The tags a tester navigates by. The vocabulary calls itself the primary
+    # navigation axis; until now only the tags themselves reached the page, as
+    # inert text on a topic, and the label, the discovery hint and the emits
+    # relation that make a tag choosable stayed in the repository.
+    surfaces, always_topics = surface_index(
+        repo.vocab["surfaces"].data["surfaces"], topics
+    )
+
     return {
         "version": __version__,
         "counts": coverage(root),
@@ -231,6 +308,8 @@ def catalogue(root: Path) -> Dict[str, Any]:
         "units": units,
         "facts": facts,
         "axes": axes,
+        "surfaces": surfaces,
+        "alwaysTopics": always_topics,
         "families": [
             {
                 "name": name,

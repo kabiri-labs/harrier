@@ -135,7 +135,20 @@ SAFE_LOADER = _SafeLoader
 #: same page, and a checklist that ticks the test case once cannot record that.
 #: Three chains now run from a WSTG identifier to a stated business outcome
 #: where one did, and the vocabulary took all three without a new fact.
-__version__ = "0.18.0"
+#:
+#: 0.19.0 opens the second way in. Until now the catalogue could be entered from
+#: a standard or from a capability, and a tester mid-engagement starts from
+#: neither: they are looking at an upload, a sort parameter, a token, and the
+#: question is which tests that surface admits. The attack-surface tags have
+#: been on every topic since the vocabulary was written -- it calls itself the
+#: primary navigation axis -- and reached the page as inert text nothing could
+#: be selected from. They are now a way to navigate, with the emits relation
+#: closed so a surface described once does not have to be described twice.
+#: What a context does *not* do is establish anything: a tag names a kind of
+#: surface, the two vocabularies do not meet, and every claim on the page stays
+#: about how the catalogue files a test rather than about anybody's
+#: application.
+__version__ = "0.19.0"
 
 __all__ = [
     "SAFE_LOADER",

@@ -826,6 +826,155 @@ class TheMarkdownRendererStaysSafe(unittest.TestCase):
         self.assertIn("<code>code</code>", out)
 
 
+@unittest.skipUnless(node_available(), "node is not installed")
+class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
+    """The second way in: from the kind of surface rather than from a standard.
+
+    Everything asserted here is a statement about the catalogue -- which topics
+    declare which tags, and which capabilities a test still owes. None of it is
+    a statement about an application, and the tests below are as much about that
+    boundary holding as about the selection being right.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+
+    def run_js(self, body):
+        return run_in_node(body, self.data)
+
+    def test_choosing_a_tag_brings_the_tags_it_implies(self):
+        """A tester who said "search box" has already said "parameter reaching a
+        query". Making them say it twice is how a tag goes unselected and its
+        tests unread."""
+        out = self.run_js("""
+            const r = H.contextClosure(D, ["search"]);
+            return { selected: r.selected, implied: r.implied };
+        """)
+        self.assertEqual(out["selected"], ["search"])
+        self.assertEqual(out["implied"], ["sql-backed-param", "stored-then-rendered"])
+
+    def test_a_tag_chosen_outright_is_never_reported_as_inferred(self):
+        """Telling a reader the catalogue worked something out when they said it
+        themselves misrepresents where the answer came from."""
+        out = self.run_js("""
+            return H.contextClosure(D, ["search", "sql-backed-param"]);
+        """)
+        self.assertIn("sql-backed-param", out["selected"])
+        self.assertNotIn("sql-backed-param", out["implied"])
+
+    def test_an_unknown_tag_is_ignored_rather_than_invented(self):
+        out = self.run_js("""
+            return H.contextClosure(D, ["not-a-tag", "search"]);
+        """)
+        self.assertEqual(out["selected"], ["search"])
+
+    def test_a_topic_is_reported_with_every_tag_that_reached_it(self):
+        """The reason line is the whole point. A list of tests with no statement
+        of what put them there is a recommendation, and this file does not make
+        recommendations."""
+        out = self.run_js("""
+            const r = H.contextTopics(D, ["object-id-param", "rest-api"]);
+            const hit = r.topics.filter(function (t) { return t.topic === "HRR-ACL-02"; })[0];
+            return hit || null;
+        """)
+        self.assertEqual(out["via"], ["object-id-param", "rest-api"])
+        self.assertFalse(out["implied"])
+
+    def test_a_topic_reached_only_through_an_implication_is_marked_as_weaker(self):
+        out = self.run_js("""
+            const r = H.contextTopics(D, ["search"]);
+            const rows = {};
+            r.topics.forEach(function (t) { rows[t.topic] = t.implied; });
+            return rows;
+        """)
+        self.assertFalse(out["HRR-CLT-01"], "declares search itself")
+        self.assertFalse(out["HRR-IDN-03"], "declares search itself")
+        # SQL injection is not filed under "search". It is filed under a
+        # parameter reaching a query, which is what a search box is -- so it
+        # arrives one step out, and the page has to say which of the two it was.
+        self.assertTrue(out["HRR-INJ-01"], "reached only through sql-backed-param")
+        self.assertTrue(out["HRR-CLT-04"], "reached only through stored-then-rendered")
+
+    def test_a_topic_is_listed_once_even_when_two_tags_reach_it(self):
+        out = self.run_js("""
+            const seen = {}, dup = [];
+            H.contextTopics(D, D.surfaces.map(function (s) { return s.tag; }))
+              .topics.forEach(function (t) {
+                if (seen[t.topic]) dup.push(t.topic);
+                seen[t.topic] = true;
+              });
+            return dup;
+        """)
+        self.assertEqual(out, [])
+
+    def test_selecting_every_tag_still_leaves_the_universal_topics_apart(self):
+        """Seventeen topics that match every context would bury the handful the
+        context actually selected, every time, under the same rows."""
+        out = self.run_js("""
+            const r = H.contextTopics(D, D.surfaces.map(function (s) { return s.tag; }));
+            const tagged = {};
+            r.topics.forEach(function (t) { tagged[t.topic] = true; });
+            return r.always.filter(function (t) { return tagged[t]; });
+        """)
+        self.assertEqual(out, [])
+
+    def test_an_entry_test_is_one_no_other_test_has_to_precede(self):
+        """The only "you can begin here" claim the data supports. It is about
+        the catalogue: nothing in it is a claim that a target permits the test.
+        """
+        out = self.run_js("""
+            const out = {};
+            D.topics["HRR-INJ-01"].units.forEach(function (id) {
+              const c = H.entryCost(D, id);
+              out[id] = { entry: c.entry, earned: c.earned };
+            });
+            return out;
+        """)
+        self.assertTrue(out["HRR-INJ-01-PROBE"]["entry"])
+        # Everything else in the topic waits on what the probe establishes,
+        # which is the chain this view exists to lead a reader into.
+        rest = [k for k in out if k != "HRR-INJ-01-PROBE"]
+        self.assertTrue(rest)
+        for uid in rest:
+            self.assertFalse(out[uid]["entry"], uid)
+            self.assertEqual(out[uid]["earned"], ["surface.sql.injectable"], uid)
+
+    def test_a_general_condition_of_the_engagement_is_not_something_owed(self):
+        """Holding a session is not a test that has to have been run. Counting
+        it as one would put "still required" on all but eight of the catalogue
+        and make the label carry no information at all."""
+        out = self.run_js("""
+            let entry = 0, wrong = [];
+            Object.keys(D.units).forEach(function (id) {
+              const c = H.entryCost(D, id);
+              if (c.entry) entry += 1;
+              c.earned.forEach(function (f) {
+                if ((D.facts[f] || {}).tier === "engagement") wrong.push([id, f]);
+              });
+            });
+            return { entry: entry, wrong: wrong, total: Object.keys(D.units).length };
+        """)
+        self.assertEqual(out["wrong"], [])
+        # A figure rather than a range: it is what the view's usefulness rests
+        # on, and it must move visibly when the catalogue moves.
+        self.assertEqual(out["entry"], 176)
+        self.assertEqual(out["total"], 374)
+
+    def test_a_context_establishes_no_capability(self):
+        """The boundary this whole view sits behind. A surface tag describes a
+        kind of thing, and no tag may be read as a fact in hand -- the two
+        vocabularies do not meet, and a page that let them would be asserting
+        something about a target it has never seen."""
+        out = self.run_js("""
+            const facts = {};
+            Object.keys(D.facts).forEach(function (f) { facts[f] = true; });
+            return D.surfaces.filter(function (s) { return facts[s.tag]; })
+              .map(function (s) { return s.tag; });
+        """)
+        self.assertEqual(out, [])
+
+
 @unittest.skipUnless(browser_available(), "no browser driver is installed")
 class TheBuiltFileWorksInABrowser(unittest.TestCase):
     """The artefact, driven the way a person drives it.
@@ -1386,6 +1535,149 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         text = self.text("#/unit/HRR-INJ-01-PROBE")
         self.assertShows(text, "may become relevant")
         self.assertShows(text, "Potential continuation")
+
+    # --- the context journey ---------------------------------------------
+
+    def test_attack_chains_offers_a_way_in_that_needs_no_identifier(self):
+        """The page a reader lands on from the navigation. Before this it opened
+        on the capability map, which is the model rather than a way in."""
+        text = self.text("#/chains")
+        self.assertShows(text, "Start from what you are looking at")
+
+    def test_the_selector_lists_every_tag_with_what_it_reaches(self):
+        page = self.open("#/chains/context")
+        self.assertEqual(self.driver.count(".chip"), len(self.data["surfaces"]))
+        self.assertShows(self.driver.text(), "Nothing chosen yet")
+        # A tag no topic declares is dimmed rather than dropped: a reader who
+        # cannot find it would conclude the vocabulary lacks it.
+        self.assertEqual(
+            page.inner_text('.chip[href$="nosql-backed-param"]').split()[-1], "0"
+        )
+        self.assertEqual(self.driver.count(".chip.none"), 1)
+
+    def test_choosing_a_tag_is_navigation_rather_than_state(self):
+        """The selection lives in the URL, so it can be sent to a colleague and
+        nothing is held in this browser."""
+        page = self.open("#/chains/context")
+        before = self.driver.heading()
+        page.click('a.chip[href="#/chains/context/search"]')
+        # Waited on the redraw rather than on the hash. The assignment happens
+        # first and `hashchange` is dispatched in a later task, so a test that
+        # waits on the URL reads the document in the gap and passes or fails on
+        # which the machine got to first.
+        self.driver.wait_for_render(lambda: self.driver.count(".chip.on") == 1)
+        self.assertEqual(page.evaluate("location.hash"), "#/chains/context/search")
+        self.assertEqual(before, "Tests by context")
+
+    def test_a_second_tag_adds_to_the_selection_and_a_third_click_removes_it(self):
+        page = self.open("#/chains/context/search")
+        page.click('a.chip[href="#/chains/context/search+rest-api"]')
+        self.driver.wait_for_render(lambda: self.driver.count(".chip.on") == 2)
+        # The href on the search chip is now the selection without it, so this
+        # takes search back out and leaves rest-api behind.
+        page.click('a.chip[href="#/chains/context/rest-api"]')
+        self.driver.wait_for_render(lambda: self.driver.count(".chip.on") == 1)
+        self.assertEqual(page.evaluate("location.hash"), "#/chains/context/rest-api")
+
+    def test_a_result_says_what_put_each_topic_in_front_of_the_reader(self):
+        text = self.text("#/chains/context/search")
+        self.assertShows(text, "Matched because the context is")
+        self.assertShows(text, "Free-text query surface")
+        # The implication is stated rather than applied silently: a reader who
+        # never typed "sql-backed-param" is owed the reason SQL injection is here.
+        self.assertShows(text, "Also counted as chosen")
+        self.assertShows(text, "sql-backed-param")
+        self.assertShows(text, "SQL injection")
+
+    def test_a_test_that_needs_no_predecessor_is_told_apart_from_one_that_does(self):
+        text = self.text("#/chains/context/sql-backed-param")
+        self.assertShows(text, "Injection point probe")
+        self.assertShows(text, "no earlier test declared")
+        self.assertShows(text, "still required")
+
+    def test_the_universal_topics_are_folded_rather_than_repeated(self):
+        page = self.open("#/chains/context/search")
+        self.assertEqual(self.driver.count("details.fold"), 1)
+        summary = page.inner_text("details.fold > summary")
+        self.assertIn("every context", summary)
+        self.assertIn(str(len(self.data["alwaysTopics"])), summary)
+
+    def test_a_result_opens_a_test_and_its_existing_chain(self):
+        """The context view hands off to the catalogue and adds no chain of its
+        own: what follows a test is the same derivation it always was."""
+        page = self.open("#/chains/context/sql-backed-param")
+        before = self.driver.heading()
+        page.click('a.row[href="#/unit/HRR-INJ-01-PROBE"]')
+        self.assertEqual(self.driver.wait_for_view(before), "Injection point probe")
+        self.assertShows(self.driver.text(), "Local attack chain")
+
+    def test_an_unknown_tag_in_the_url_leaves_the_rest_of_the_selection(self):
+        """A link may arrive from a colleague running a different build. The
+        useful answer to a tag this file does not carry is the rest."""
+        text = self.text("#/chains/context/search+not-a-real-tag")
+        self.assertShows(text, "Free-text query surface")
+        self.assertNotIn("not-a-real-tag", text)
+
+    def test_it_never_says_a_test_applies_to_anything(self):
+        """The language is the control. Every statement is about the catalogue's
+        own filing, and a page that said "applicable" would be claiming
+        something about an application it has never seen."""
+        text = self.text("#/chains/context/object-id-param").lower()
+        for claim in ("applies to your", "applicable to", "is reachable",
+                      "unlocked", "available on your target", "you have"):
+            self.assertNotIn(claim, text, claim)
+        self.assertIn("may apply", text)
+        self.assertIn("never a claim", text)
+
+    def test_choosing_a_context_writes_nothing_into_the_browser(self):
+        """The selection is a URL and nothing else. Asserted after driving the
+        view, because an empty store before the interaction proves nothing."""
+        page = self.open("#/chains/context/search+rest-api")
+        page.click('a.chip[href="#/chains/context/rest-api"]')
+        self.driver.wait_for_render(lambda: self.driver.count(".chip.on") == 1)
+        self.assertEqual(
+            page.evaluate("[localStorage.length, sessionStorage.length, document.cookie]"),
+            [0, 0, ""],
+        )
+
+    def test_the_capability_map_is_still_on_the_page_it_was_on(self):
+        """Kept rather than moved. It is where the catalogue's own gaps are
+        reported, and burying the honesty behind a friendlier view is the one
+        way this change could make the product worse."""
+        page = self.open("#/chains")
+        self.assertEqual(self.driver.count(".chainmap"), 1)
+        self.assertEqual(
+            page.evaluate("document.querySelector('nav a.on').textContent"),
+            "Attack Chains",
+        )
+
+    def test_no_link_is_nested_inside_another(self):
+        """Invisible to every assertion on text, and fatal to the layout.
+
+        An anchor inside an anchor is not nesting the parser accepts: it closes
+        the outer one, and the rest of that row becomes a sibling of it rather
+        than content inside it. The row visibly breaks apart while the page
+        still contains every word a text assertion looks for, which is how this
+        reached a screenshot rather than a failing test the first time.
+        """
+        for fragment in ("#/chains/context/sql-backed-param", "#/chains/context/search",
+                         "#/chains", "#/unit/HRR-INJ-01-PROBE", "#/topic/HRR-INJ-01",
+                         "#/case/WSTG-INPV-05", "#/status", "#/search/injection"):
+            page = self.open(fragment)
+            with self.subTest(fragment=fragment):
+                self.assertEqual(page.evaluate("document.querySelectorAll('a a').length"), 0)
+
+    def test_no_page_scrolls_sideways(self):
+        """The row that broke apart also overflowed. Checked as geometry rather
+        than inferred from the markup."""
+        for fragment in ("#/chains/context", "#/chains/context/search+rest-api",
+                         "#/chains/context/sql-backed-param"):
+            page = self.open(fragment)
+            with self.subTest(fragment=fragment):
+                self.assertFalse(page.evaluate(
+                    "document.documentElement.scrollWidth > "
+                    "document.documentElement.clientWidth"
+                ))
 
     def test_it_asks_the_network_for_nothing_at_any_point(self):
         """Not a substring check: every request the browser attempted, across
