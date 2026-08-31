@@ -33,9 +33,10 @@ Harrier exists for exactly those two.
 materially different tests in practice — a probe, an engine fingerprint, five
 inference and extraction techniques, a stacked-statement variant, a second-order
 variant, and a filter-evasion pass. Each has its own payloads, its own oracle,
-and its own separately recordable result. A checklist that ticks once for all ten can be complete while most of
-the work was never done, and nothing in it will say so. Harrier makes those
-tests explicit, individually named, and bounded against each other.
+and its own separately recordable result. A checklist that ticks once for all ten
+can be complete while most of the work was never done, and nothing in it will say
+so. Harrier makes those tests explicit, individually named, and bounded against
+each other.
 
 **A result is not the end of the test.** Establishing that a parameter reaches a
 SQL statement is not a finding on its own; it is a capability that makes several
@@ -89,7 +90,7 @@ Five words carry the model, and they are worth two minutes.
 |---|---|
 | **Test case** | The standard's unit of coverage. `WSTG-INPV-05`, "Testing for SQL Injection". Identifier and title come from a pinned copy of the standard. |
 | **Topic** | Harrier's subject boundary inside a test case — "SQL injection" — declaring the axis its tests are split on and notes marking what belongs to a neighbouring topic instead. One test case may be claimed by several topics; `WSTG-APIT-99` is claimed by four. |
-| **Test Unit** | The atomic thing a person performs and records one result for. `HRR-INJ-01-UNION`, "UNION-based extraction". It has an objective that can be wrong, a boundary against its siblings, and — where written to depth — an oracle, a sequence, payloads, false positives and a safety limit. It may also say where in a target to start looking, which is the one way into the catalogue that does not begin at the standard. |
+| **Test Unit** | The atomic thing a person performs and records one result for. `HRR-INJ-01-UNION`, "UNION-based extraction". It has an objective that can be wrong, a boundary against its siblings, and — where written to depth — an oracle, a sequence, payloads, false positives and a safety limit. It may also say where in a target to start looking, and the search box reads that field — so a test can be reached from a parameter name rather than from an identifier. |
 | **Capability** | What a success establishes, or what a test needs before it is possible at all. "A parameter reaches a SQL statement." Capabilities are the join keys: no Test Unit ever names another Test Unit. |
 | **Impact** | A business outcome. Terminal by construction — nothing may require one, and the validator enforces it. |
 
@@ -377,8 +378,9 @@ observe.
 - **No target or engagement data, ever.** No results are recorded, no run is
   imported or exported, and nothing is written to `localStorage`.
 - **Verified as behaviour, not as text.** The suite drives a real browser over
-  `file://` through the primary journeys — typing in search, clicking a node in
-  the graph, expanding a bounded view — while recording every request the page
+  `file://` through the primary journeys — typing in search, choosing a context,
+  clicking a node in the graph, expanding a bounded view — while recording every
+  request the page
   attempts and every console error. Both come back empty.
 
 ## Contributing
