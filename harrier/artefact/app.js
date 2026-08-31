@@ -707,9 +707,17 @@
                     the test that establishes it, which is the chain the rest of
                     this file is about.
 
-     A unit owing nothing of the second kind is one a tester can start on today.
-     That is the only "can I begin here" claim the data supports, and it is
-     about the catalogue rather than about the target. */
+     Neither list may be dropped when the page renders this. An engagement-tier
+     fact is not a step, and it is also not nothing: `access.user` and
+     `recon.entrypoints.mapped` are each established by a test in this
+     catalogue, so a unit requiring them has a condition a reader has to have
+     met, even though naming it says nothing about where to go next. Showing
+     only the second list reports such a unit as free; showing them merged
+     reports all but eight of the catalogue as blocked. Both are shown, apart.
+
+     A unit owing nothing of the second kind is one no chain step precedes --
+     which is a statement about the catalogue's own filing, and never a claim
+     that a target permits the test. */
   var entryCost = function (D, unitId) {
     var unit = get(D.units, unitId) || {};
     var requires = unit.requires || {};
@@ -1719,10 +1727,25 @@
       var unit = get(D.units, uid);
       if (!unit) return "";
       var cost = entryCost(D, uid);
-      var note = cost.entry
-        ? '<span class="need ok">no earlier test declared</span>'
-        : '<span class="need">still required: ' +
-          cost.earned.map(function (f) { return capLabel(f, "req"); }).join("") + "</span>";
+      /* Both lists are shown. Printing only the second said "no earlier test
+         declared" over a unit that requires `recon.entrypoints.mapped`, which
+         one test in the catalogue establishes -- a claim that is simply false,
+         and false on the 176 units the view is most likely to be read for.
+         Kept as two lines rather than merged into one, because merging them is
+         the other way to be useless: nearly every unit in the catalogue
+         declares an engagement condition, so one combined list puts the same
+         warning on all but eight of them and stops distinguishing anything. */
+      var note = cost.engagement.length
+        ? '<span class="need assumed">assumed held: ' +
+          cost.engagement.map(function (f) { return capLabel(f, "eng"); }).join("") +
+          "</span>"
+        : "";
+      note += cost.earned.length
+        ? '<span class="need">a chain step establishes first: ' +
+          cost.earned.map(function (f) { return capLabel(f, "req"); }).join("") + "</span>"
+        : cost.engagement.length
+          ? '<span class="need ok">no chain step has to precede it</span>'
+          : '<span class="need ok">declares no prerequisite</span>';
       /* The requirement line sits in the left column with the title, not in
          the right one with the depth pill. The right column is a short status
          and does not wrap; a capability label put there overflows the row and
@@ -1829,9 +1852,13 @@
     body += '<h3>What this list is not</h3>' +
       '<p class="muted">A tag is carried by the topic, not by the individual test, so ' +
       "every test in a matched topic is listed even where the topic spans contexts a " +
-      "single tag cannot separate. <b>Still required</b> is read from the capability " +
-      "vocabulary and says a test in the catalogue has to establish that first; it is " +
-      "never a claim that you do or do not have it. Outcomes — what a chain is for — " +
+      "single tag cannot separate. The two conditions under a test are read from the " +
+      "capability vocabulary and are different things. <b>Assumed held</b> is a " +
+      "general condition of the engagement — a session, a map of the entrypoints — " +
+      "which a broad test may well establish, and which tells you nothing about " +
+      "where to go next; <b>a chain step establishes first</b> is a capability " +
+      "another test has to produce, and that is the chain. Neither is ever a claim " +
+      "that you do or do not have it. Outcomes — what a chain is for — " +
       "carry no surface tag and are reached through the chain from a test here, not " +
       "from this page.</p>";
 

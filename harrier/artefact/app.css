@@ -323,8 +323,11 @@ a.chip:hover { border-color: var(--accent); color: var(--ink); text-decoration: 
 .why { color: var(--faint); font-size: .78rem; margin: .1rem 0 .5rem; }
 
 /* Read from the capability vocabulary, and about the catalogue rather than
-   about a target: green says no test has to come first, amber names the ones
-   that do. */
+   about a target. Three states, and the muted one is not decoration: an
+   engagement condition is neither a chain step nor nothing, and it is shown in
+   its own line so it cannot be read as either. */
 .row .who .need { display: block; margin-top: .3rem; font-size: .76rem; }
 .row .who .need .tag { margin: 0 .22rem .12rem 0; }
 .need.ok { color: var(--good); }
+.need.assumed { color: var(--faint); }
+.tag.eng { color: var(--dim); }

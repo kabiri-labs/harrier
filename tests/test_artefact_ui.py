@@ -961,6 +961,43 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         self.assertEqual(out["entry"], 176)
         self.assertEqual(out["total"], 374)
 
+    def test_an_engagement_condition_is_not_the_same_as_no_condition(self):
+        """An engagement-tier fact is not a chain step and is also not nothing.
+
+        `access.user` and `recon.entrypoints.mapped` are each established by a
+        test in this catalogue. A unit requiring one has a condition its reader
+        has to have met, so the classification may separate it from a chain step
+        but must not lose it -- and the page has to print both lists.
+        """
+        out = self.run_js("""
+            const out = {};
+            ["HRR-INJ-10-PROBE", "HRR-ACL-02-PEER"].forEach(function (id) {
+              const c = H.entryCost(D, id);
+              out[id] = { engagement: c.engagement, earned: c.earned, entry: c.entry };
+            });
+            return out;
+        """)
+        probe = out["HRR-INJ-10-PROBE"]
+        self.assertIn("recon.entrypoints.mapped", probe["engagement"])
+        # Producers exist for it, which is exactly why the old label was wrong.
+        self.assertTrue(self.data["producers"]["recon.entrypoints.mapped"])
+        self.assertTrue(probe["entry"], "no chain step precedes it")
+        self.assertNotEqual(probe["engagement"], [], "and it is not free of conditions")
+
+    def test_every_unit_the_view_can_show_carries_at_least_one_named_condition(self):
+        """Nothing in the catalogue declares an empty `requires`, so a rendered
+        unit that named no condition at all would mean the classification had
+        dropped one rather than that there was none to name."""
+        out = self.run_js("""
+            const bare = [];
+            Object.keys(D.units).forEach(function (id) {
+              const c = H.entryCost(D, id);
+              if (!c.engagement.length && !c.earned.length) bare.push(id);
+            });
+            return bare;
+        """)
+        self.assertEqual(out, [])
+
     def test_a_tag_cannot_carry_a_character_that_would_leave_an_attribute(self):
         """The selector builds an href by concatenating tags. The schema
         constrains a tag to `[a-z0-9-]` and the validator refuses anything else,
@@ -1604,8 +1641,33 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
     def test_a_test_that_needs_no_predecessor_is_told_apart_from_one_that_does(self):
         text = self.text("#/chains/context/sql-backed-param")
         self.assertShows(text, "Injection point probe")
-        self.assertShows(text, "no earlier test declared")
-        self.assertShows(text, "still required")
+        self.assertShows(text, "no chain step has to precede it")
+        self.assertShows(text, "a chain step establishes first")
+
+    def test_an_engagement_condition_is_printed_rather_than_dropped(self):
+        """The whole reason both lists are computed. Printing only the second
+        put "nothing precedes this" over units requiring a capability a test in
+        the catalogue establishes -- false, and false on the units the view is
+        most likely to be read for."""
+        page = self.open("#/chains/context/sql-backed-param")
+        text = self.driver.text()
+        self.assertShows(text, "assumed held")
+        self.assertShows(text, "Unauthenticated caller")
+        # Its own line, so it cannot be read as either of the other two states.
+        self.assertTrue(self.driver.count(".need.assumed") > 0)
+        row = page.inner_text('a.row[href="#/unit/HRR-INJ-01-PROBE"]')
+        self.assertIn("assumed held", row)
+        self.assertIn("no chain step has to precede it", row)
+
+    def test_the_page_never_claims_a_unit_declares_no_earlier_test(self):
+        """The wording that was wrong, asserted absent by name. Every unit in
+        the catalogue declares at least one condition, so this sentence could
+        never have been true of any of them."""
+        for fragment in ("#/chains/context/sql-backed-param",
+                         "#/chains/context/search",
+                         "#/chains/context/object-id-param"):
+            with self.subTest(fragment=fragment):
+                self.assertNotIn("no earlier test declared", self.text(fragment))
 
     def test_the_universal_topics_are_folded_rather_than_repeated(self):
         page = self.open("#/chains/context/search")
@@ -1639,7 +1701,9 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                       "unlocked", "available on your target", "you have"):
             self.assertNotIn(claim, text, claim)
         self.assertIn("may apply", text)
-        self.assertIn("never a claim", text)
+        # The page has to say what it is not, not merely avoid saying what it is.
+        self.assertIn("ever a claim that you do or do not have it", text)
+        self.assertIn("not of an application", self.text("#/chains/context").lower())
 
     def test_choosing_a_context_writes_nothing_into_the_browser(self):
         """The selection is a URL and nothing else. Asserted after driving the
