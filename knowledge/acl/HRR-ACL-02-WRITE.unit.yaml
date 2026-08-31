@@ -57,9 +57,11 @@ evidence:
   - "The write request, and the object read back in the owner's session before and after."
 
 done_when: >-
-  One update route is recorded as accepting or refusing a write across the
-  ownership boundary, with the read-back that decided it, and the original value
-  restored.
+  Update, delete and create are each recorded as accepting the write, refusing
+  it, or excluded from scope with the reason -- each accepted one carrying the
+  read-back that decided it and the restoration that followed. One update route
+  is where this starts and not where it finishes: a policy that refuses an update
+  routinely permits a create.
 
 safety: >-
   Every write is to an object the engagement created, is one reversible field,

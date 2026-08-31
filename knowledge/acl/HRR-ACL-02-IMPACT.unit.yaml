@@ -34,9 +34,10 @@ oracle:
   inconclusive: "A rate limit stopped the series before enough of it was answered to distinguish a scoped space from a slow one."
 
 sequence:
-  - "Try the list, search and export routes first: one request that returns many objects settles the question without walking anything."
-  - "Where none exists, request a short bounded series of adjacent identifiers -- a handful, not a sweep -- and record how many were served."
-  - "Stop at the first refusal or the agreed ceiling, whichever comes first."
+  - "Try the list, search and export routes first, but bound the request before sending it: set the page size to a small number and confirm from the owner's own session that the route honours it."
+  - "Where the route accepts no bound, or ignores the one it was given, do not send it -- record it as unbounded from its parameters and the owner's result, since the request that would prove it is the disclosure."
+  - "Where no such route exists, request a bounded series of adjacent identifiers, preferring identifiers already known to exist so an absence can be told from a refusal."
+  - "Carry the series to the agreed ceiling rather than stopping at the first miss, since one gap is a deleted record and a run of refusals is a control; record every identifier as served, refused or absent."
   - "Record the reachable proportion as a bounded estimate with the sample it came from, never as a total."
 
 first_false_positive: >-
@@ -47,6 +48,7 @@ first_false_positive: >-
 
 false_positives:
   - "A list route that appears unscoped and is scoped by a filter the client always sends, so removing the filter returns an error rather than everything."
+  - "A single absent identifier read as the space being scoped, where the gap is a deleted or never-allocated record and the identifiers on either side of it are served."
   - "Identifiers that were all created by the engagement itself, so the series proves the space is dense rather than that it belongs to others."
 
 preconditions:
@@ -58,15 +60,19 @@ evidence:
 
 done_when: >-
   The reachable proportion is recorded as a bounded estimate with the sample and
-  the ceiling it was taken under, or the space is recorded as scoped with the
-  routes that were tried.
+  the ceiling it was taken under -- or the space is recorded as scoped, with the
+  routes that were tried and the full series carried to the ceiling rather than
+  stopped at its first miss.
 
 safety: >-
   This is the unit that can turn an engagement into the breach it was hired to
   prevent. Enumeration touches real customers' records, so the ceiling is agreed
-  in writing before the first request, the series is a sample and never a sweep,
-  and no retrieved record is stored beyond the count and the identifier. Where a
-  route would return the whole space in one request, the finding is that it
+  in writing before the first request, it binds the bulk routes as strictly as
+  the adjacent series, and no retrieved record is stored beyond the count and the
+  identifier. A list or export route is only cheaper than walking the space when
+  it is bounded: unbounded, it is the single request that retrieves everything,
+  so the bound is established before it is sent and never discovered from the
+  response. Where a route would return the whole space, the finding is that it
   would -- not the response.
 
 payloads: payloads/access-control/identifiers.yaml
