@@ -1,0 +1,39 @@
+# Identifier shapes, and the transformations that say how large a space is.
+#
+# There is no injection here and nothing is escaped: an identifier is a value
+# the application issued, and the whole technique is deciding which other values
+# it would also answer for. That makes the safety line the important part of
+# this file rather than a footnote -- every entry below is a transformation of
+# an identifier the engagement was issued or observed, and the moment one
+# becomes a guess into a space of real records the tester is reading a
+# stranger's data to prove a point two test accounts already proved.
+id: access-control/identifiers
+title: Object identifier shapes and adjacency
+reviewed: "2026-08-31"
+variables: [ID, ID_PEER]
+safety: >-
+  Every entry is a transformation of an identifier the engagement was issued or
+  observed, never a guess into a space of real records. Enumeration beyond an
+  agreed ceiling belongs to the impact unit and to a written agreement, not to
+  this file.
+entries:
+  - name: the peer's own identifier
+    payload: "{{ID_PEER}}"
+    detect: "The baseline of the whole topic: an identifier the second account owns, replayed in the first account's session. No guessing at all."
+
+  - name: adjacent value
+    payload: "{{ID}}"
+    detect: "Increment or decrement the tester's own identifier by one. A served neighbour says the space is dense and walkable at that point, and says nothing about its size."
+    note: "Use the engagement's own records where two were created in sequence, so an adjacent value is one the engagement owns rather than a stranger's."
+
+  - name: re-encoded value
+    payload: "{{ID}}"
+    detect: "Decode base64, hex or URL encoding and compare two identifiers issued in sequence. An opaque-looking identifier that decodes to a counter is a walkable space wearing a disguise."
+
+  - name: composite part substitution
+    payload: "{{ID}}"
+    detect: "Where the identifier joins a tenant part to an object part, change one part at a time. Which part the check reads is the finding."
+
+  - name: type substitution
+    payload: "{{ID_PEER}}"
+    detect: "Send an identifier of one object type to a route expecting another. A handler that resolves it has skipped the type check as well as the ownership one."

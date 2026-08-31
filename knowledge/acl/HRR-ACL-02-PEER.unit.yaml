@@ -51,3 +51,5 @@ safety: >-
   customer's data, and enumeration belongs to the sibling unit that scopes it.
 
 tools: [burp-repeater]
+card: cards/access-control/object-ownership.md
+mitigation: mitigations/object-authorization.md
