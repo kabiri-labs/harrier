@@ -175,9 +175,41 @@ the claim that turns a real finding into a report the client's engineers can
 dismiss.
 
 Where a list or export route returns many objects for one request, prefer it
-over walking anything: one request settles the question and touches far less.
+over walking anything — **once you have bounded it**. That qualification is the
+whole of the difference between the cheapest observation in the topic and the
+most damaging one.
+
+A paginated route with the page size set to five is one request that touches five
+records and settles the question. The same route with no enforced limit is one
+request that retrieves the entire cross-account dataset, and no ceiling agreed
+for the adjacent-identifier series applies to it, because that series was never
+sent. The tester has performed the mass disclosure they were hired to find.
+
+So the bound is established *before* the request, not discovered from the
+response:
+
+- set the page size to a small number and confirm from the owner's own session
+  that the route honours it;
+- where the route accepts no bound, or accepts one and ignores it, do not send
+  it. It is recorded as unbounded from its parameters and from the owner's own
+  result — the request that would prove it is the disclosure.
+
 And where such a route *would* return the whole space, the finding is that it
 would. Not the response.
+
+### One gap is not a boundary
+
+The adjacent-identifier series has the opposite failure. Stopping at the first
+identifier that is not served produces a false negative, because a sequential
+space is full of ordinary holes: deleted records, rolled-back transactions,
+identifiers allocated and never used.
+
+One miss is a gap. A run of refusals is a control. So the series is carried to
+the agreed ceiling rather than abandoned at the first miss, and every identifier
+is recorded as served, refused or absent — three outcomes, not two. Where the
+engagement holds identifiers already known to exist, prefer those: they remove
+the ambiguity entirely, because an absence is then impossible and only a refusal
+can explain a non-response.
 
 ## Related units
 
