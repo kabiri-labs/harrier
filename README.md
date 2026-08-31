@@ -150,6 +150,10 @@ Download the built file from the [latest
 release](https://github.com/kabiri-labs/pentest-navgrid/releases/latest). Two assets:
 `pentest-navgrid-<version>.html`, and `pentest-navgrid-<version>.html.sha256` beside it.
 
+Releases before 0.20.0 carry the same two assets under the project's former
+name, `harrier-<version>.html`. Only the name changed; the file is built the
+same way and checked the same way.
+
 Open the `.html` from disk. It is one self-contained file — no server, no
 install, no network — and it is the whole product. The command line further down
 is for working on the catalogue and needs a source checkout.
