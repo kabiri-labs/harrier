@@ -10,7 +10,7 @@ objective: >-
 requires:
   all_of: [surface.sql.injectable]
   any_of: [access.anon, access.user]
-motivated_by: [recon.engine.identified]
+motivated_by: [recon.engine.identified, recon.query.structure]
 yields: [primitive.db.read]
 
 enter_when:
@@ -57,5 +57,6 @@ safety: >-
 payloads: payloads/sqli/union.yaml
 tools: [burp-repeater, sqlmap]
 card: cards/sqli/union-extraction.md
+mitigation: mitigations/parameterised-query.md
 dimensions:
   engine: [mysql, postgresql, mssql, oracle, sqlite]

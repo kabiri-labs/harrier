@@ -38,7 +38,7 @@ taxonomy useful. Cards are written on demand, indefinitely.
 | 6 | Published artefact | `done` | `harrier build` writes one self-contained HTML file with every card, payload and mitigation embedded. Versioning starts here, at 0.1.0. Its first navigation model -- a surface-anchored board driven by the facts a tester ticked -- was replaced in phase 6.5. |
 | 6.5 | Product pivot | `done` | Harrier becomes an execution companion to a standard rather than a workspace about a target. Standard-first navigation, atomic decomposition per WSTG test case, a derived local chain per unit, a progressively disclosed general graph, and the removal of every piece of engagement state. **Breaking, and deliberate.** See [`PIVOT.md`](PIVOT.md). |
 | 7 | Beyond WSTG | `not started` | The topics WSTG does not cover: JWT, OAuth/OIDC, GraphQL, WebSocket, request smuggling, cache poisoning and deception, prototype pollution, race conditions, dependency confusion, cloud metadata, LLM-integrated surfaces. Harrier Extensions exists to receive them. This is the clearest differentiation from restating WSTG. |
-| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. Since 0.10.0 a unit can be sketched rather than only outlined or written in full, so the step from breadth to usable depth is twenty minutes rather than two hours. 0.11.0 sketched the seventeen reconnaissance and configuration topics an engagement opens with. 0.14.0 authored the terminal outcome layer first, because a chain whose last step is an outline stops at a capability rather than at an outcome; 0.15.0 wrote the supporting layer for SQL injection before its units, because the validator rejects a unit referencing a card or a mitigation that does not exist yet. |
+| 8 | Depth on demand | `ongoing` | Cards written when a real engagement makes one worth writing. Never speculatively. Since 0.10.0 a unit can be sketched rather than only outlined or written in full, so the step from breadth to usable depth is twenty minutes rather than two hours. 0.11.0 sketched the seventeen reconnaissance and configuration topics an engagement opens with. 0.14.0 authored the terminal outcome layer first, because a chain whose last step is an outline stops at a capability rather than at an outcome; 0.15.0 wrote the supporting layer for SQL injection before its units, because the validator rejects a unit referencing a card or a mitigation that does not exist yet; 0.16.0 took the nine remaining `HRR-INJ-01` units to full depth, which makes SQL injection the first chain readable end to end from the standard's own test case to a stated business outcome. |
 
 Phases 2–5 are 1.0. Phase 6 is what makes it usable; phase 7 is what makes it
 better than the standard it is built on.
@@ -60,7 +60,7 @@ thing stopped being built.
 0.4.0 is the first version published for anyone outside the project to look at,
 and it is an alpha in the honest sense: the decomposition is broad and the depth
 behind it is not. Every resolvable WSTG identifier is claimed and 374 Test Units
-exist; 13 are written to full procedural depth, 40 are sketched, and the far half
+exist; 22 are written to full procedural depth, 40 are sketched, and the far half
 of the chain is barely charted.
 
 Both figures are in the README rather than at the bottom of it, and the suite
@@ -96,9 +96,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 321 |
+| Units — outlined | 312 |
 | Units — sketched | 40 |
-| Units — authored | 13 |
+| Units — authored | 22 |
 | Units — charted | 374 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -215,12 +215,12 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart what a defeated control permits** | The largest remaining gap. 53 of 185 capabilities are established by a test and used by none, and 39 of 59 of them are `control.*`; `primitive.*` is down to 1 of 32 since the outcome layer landed. A control is the state of a defence rather than a result, so the step that turns one into something — what a weak cookie, a permissive cache or an absent binding actually lets somebody do — has to be written before an edge can honestly be drawn from it. Until it is, 110 of 374 tests still end at the capability they established. |
+| **Chart what a defeated control permits** | The largest remaining gap. 50 of 185 capabilities are established by a test and used by none, and 37 of 59 of them are `control.*`; `primitive.*` is down to 1 of 32 since the outcome layer landed. The SQL injection chain gave two control facts their first consumer, and those are `motivated_by` hints rather than escalations — nothing yet says what a defeated control *permits*, which is what this item is for. A control is the state of a defence rather than a result, so the step that turns one into something — what a weak cookie, a permissive cache or an absent binding actually lets somebody do — has to be written before an edge can honestly be drawn from it. Until it is, 84 of 374 tests still end at the capability they established. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Harrier improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
 | Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
-| More units at full depth | Thirteen of 374, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
+| More units at full depth | Twenty-two of 374, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
 
 ## Governance and distribution

@@ -1,6 +1,6 @@
 id: HRR-INJ-01-ERROR
 topic: HRR-INJ-01
-status: outline
+status: authored
 role: variant
 title: "Error-based inference"
 objective: >-
@@ -9,5 +9,67 @@ objective: >-
 
 requires:
   all_of: [surface.sql.injectable]
-motivated_by: [recon.engine.identified]
-yields: [primitive.db.read]
+motivated_by: [recon.engine.identified, control.error.verbose]
+yields: [primitive.db.read, recon.query.structure]
+
+hypotheses:
+  - "The application returns the driver's exception text rather than a page it wrote itself."
+  - "A conversion the engine cannot perform puts the offending value into the message, which is how an error comes to carry a computed result."
+  - "Where the text is suppressed the error class still differs, so the message is not the only channel an error opens."
+
+triage:
+  - "A response that changes status or length for a malformed value while no visible text changes."
+  - "Error text naming a column, a table, a constraint or a line of SQL."
+  - "A debug banner, a stack trace, or a non-production configuration already recorded against this host."
+
+sink: >-
+  The exception message the driver produces, rendered into a response the
+  application never intended as an output channel.
+
+enter_when:
+  - "The parameter is confirmed injectable and at least one malformed value produced a response the baseline did not."
+
+oracle:
+  positive: "The response carries a value the database computed -- a version, a current user, a converted expression -- inside an error message, and the same request without the payload does not."
+  negative: "Every conversion, subquery and cast form for the identified engine returns the same generic message, carrying nothing the database produced."
+  inconclusive: "The error is written by an intermediary rather than by the application, so the statement's own behaviour was never observed."
+
+sequence:
+  - "Force a type conversion whose failure names the offending value, in the identified engine's form."
+  - "Place a computed expression rather than a literal inside it, so the message proves the database evaluated something."
+  - "Recover one value -- the version, or the connected user -- and stop."
+  - "Where the text is suppressed, record the error-class differential and hand the extraction to the boolean unit."
+
+first_false_positive: >-
+  The application echoing the submitted value inside its own error page. The
+  message contains the payload and nothing the database produced, and a literal
+  marker cannot tell those apart -- which is why the recovered value is always a
+  computed one.
+
+false_positives:
+  - "A filter's block page containing the request, which reproduces the payload in a body that never reached a database."
+  - "A framework validation message naming the field, which reads like a column name and is not one."
+
+preconditions:
+  - "The engine is identified, or the conversion forms are guesses across five grammars."
+
+evidence:
+  - "The request, and the response excerpt carrying the computed value."
+
+done_when: >-
+  One computed value is recovered from an error message, or every conversion
+  form for the identified engine is recorded as producing no database-derived
+  text.
+
+safety: >-
+  Recovery stops at one metadata value. An error channel that returns rows puts
+  the client's data into an error log as well as into the response, which is
+  somewhere neither party chose to send it. The capability is the finding and
+  the rows are not.
+
+payloads: payloads/sqli/error.yaml
+tools: [burp-repeater]
+card: cards/sqli/inference.md
+mitigation: mitigations/parameterised-query.md
+dimensions:
+  engine: [mysql, postgresql, mssql, oracle, sqlite]
