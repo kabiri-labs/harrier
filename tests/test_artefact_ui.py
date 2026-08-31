@@ -374,6 +374,35 @@ class TheGeneralGraph(unittest.TestCase):
             readme,
         )
 
+    def test_the_readme_counts_the_journey_chain_from_the_catalogue(self):
+        """It said four of five where the catalogue holds 3 of 4, and had said
+        it since before the outcome layer gave one of them a consumer.
+
+        The figure is about the walked chain rather than the whole graph, so it
+        is derived the way the sentence means it: the capabilities those four
+        tests establish, and how many of them nothing outside the chain declares
+        -- as a prerequisite or as a motivation, since either is a declared use.
+        """
+        walk = ["HRR-RES-01-PROBE", "HRR-RES-01-READ",
+                "HRR-RES-01-EXEC", "HRR-OUT-02-IMPACT"]
+        established = []
+        for uid in walk:
+            for fact in self.data["units"][uid].get("yields") or []:
+                if fact not in established:
+                    established.append(fact)
+
+        def used_elsewhere(fact):
+            declared = (self.data["requiredBy"].get(fact) or []) + \
+                (self.data["motivates"].get(fact) or [])
+            return [uid for uid in declared if uid not in walk]
+
+        unused = [f for f in established if not used_elsewhere(f)]
+        readme = " ".join((REPO_ROOT / "README.md").read_text(encoding="utf-8").split())
+        self.assertIn(
+            f"{len(unused)} of the {len(established)} capabilities that chain establishes",
+            readme,
+        )
+
     def test_the_readme_states_the_real_number_of_derived_edges(self):
         edges = sum(len(e["out"]) for e in self.data["chain"].values())
         readme = " ".join((REPO_ROOT / "README.md").read_text(encoding="utf-8").split())
@@ -1873,6 +1902,20 @@ class TheChainMapIsTheWholeCatalogueAtOnce(unittest.TestCase):
                 continue
             if order.index(edge["from"]) > order.index(edge["to"]):
                 self.assertIn((edge["from"], edge["to"]), reported)
+
+    def test_the_readme_reports_the_same_count_the_page_does(self):
+        """The page's copy of this figure was asserted and the README's was not,
+        so the two drifted: the page said 15 while the README still said
+        fourteen, and the screenshot beside that sentence showed 15.
+
+        Spelled as a numeral in the README for the same reason every other
+        figure there is -- a number written as a word is a number the suite
+        cannot check, which is exactly how this one went stale.
+        """
+        back = run_in_node("return H.chainBackEdges(D);", self.data)
+        total = sum(e["units"] for e in back)
+        readme = " ".join((REPO_ROOT / "README.md").read_text(encoding="utf-8").split())
+        self.assertIn(f"the {total} that run the other way", readme)
 
 
 class ATopicSeparatesItsStagesFromItsAlternatives(unittest.TestCase):
