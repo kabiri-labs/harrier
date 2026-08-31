@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Harrier 0.18.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Harrier 0.19.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 374 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that

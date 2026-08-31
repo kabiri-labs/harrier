@@ -726,6 +726,32 @@ class TheFamilyViewSummarisesTheWholeGraph(unittest.TestCase):
         )
 
 
+class TheReadmeNamesTheVersionItDescribes(unittest.TestCase):
+    """The badge and the notice above it are two places one number is written.
+
+    They went out of step the moment only one of them was bumped, and a reader
+    at the top of the file then sees two different current versions. Asserted
+    rather than remembered, for the reason every other figure in that document
+    is.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+
+    def test_the_badge_names_the_package_version(self):
+        self.assertIn(f"badge/version-{__version__}-blue", self.readme)
+
+    def test_the_alpha_notice_names_the_package_version(self):
+        self.assertIn(f"**Harrier {__version__} is an early public alpha.**", self.readme)
+
+    def test_no_earlier_version_is_left_describing_this_checkout(self):
+        """Historical mentions are fine and the roadmap is full of them. What
+        must not survive is another version presented as the current one."""
+        stale = re.findall(r"Harrier (\d+\.\d+\.\d+) is an early public alpha", self.readme)
+        self.assertEqual(stale, [__version__])
+
+
 class TheSurfaceIndexIsDerivedRatherThanWalkedInTheBrowser(unittest.TestCase):
     """The context selector's join key, closed here so the suite can hold it.
 
