@@ -997,7 +997,12 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         dead = len(self.data["deadEnds"])
         impacts = len(self.data["impacts"])
         self.assertShows(text, str(dead))
-        self.assertNotIn(str(dead + impacts) + " ", text)
+        # Anchored to the label the figure is published under. A bare number
+        # scan collides with every other figure on a page full of them: the
+        # control family is 59 capabilities, and 49 dead ends plus 10 impacts is
+        # also 59, which fails the check while the page says exactly the right
+        # thing.
+        self.assertNotIn(f"{dead + impacts} — impacts excluded", text)
 
     def test_the_status_page_partitions_every_test_by_where_its_chain_goes(self):
         text = self.text("#/status")
