@@ -961,6 +961,18 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         self.assertEqual(out["entry"], 176)
         self.assertEqual(out["total"], 374)
 
+    def test_a_tag_cannot_carry_a_character_that_would_leave_an_attribute(self):
+        """The selector builds an href by concatenating tags. The schema
+        constrains a tag to `[a-z0-9-]` and the validator refuses anything else,
+        so this is the assertion that the two agree -- and the page escapes the
+        attribute regardless, because the interesting case is the one where they
+        stop agreeing."""
+        out = self.run_js("""
+            return D.surfaces.map(function (s) { return s.tag; })
+              .filter(function (t) { return !/^[a-z0-9][a-z0-9-]*$/.test(t); });
+        """)
+        self.assertEqual(out, [])
+
     def test_a_context_establishes_no_capability(self):
         """The boundary this whole view sits behind. A surface tag describes a
         kind of thing, and no tag may be read as a fact in hand -- the two
