@@ -56,13 +56,16 @@ Navigation starts at the standard, not at Harrier's own taxonomy:
 Standard → Testing group → Test case → Harrier Test Units → Potential continuations
 ```
 
-There is one deliberate way in that does not start there, because a tester
-sometimes arrives holding evidence rather than a scope sheet. A unit may record
-the literal thing that makes it worth reaching for — *parameters named `file`,
+Three deliberate ways in do not start there, because a tester sometimes arrives
+holding evidence rather than a scope sheet. **Search**: a unit may record the
+literal thing that makes it worth reaching for — *parameters named `file`,
 `path`, `page`, `tpl`* — and the search box reads that field, so typing `tpl`
-finds the traversal probe whose title and objective never mention it. The
-[chain map](#what-it-looks-like) is the other: any capability a test establishes
-opens on the tests that declare it a prerequisite.
+finds the traversal probe whose title and objective never mention it.
+**[Context](#what-it-looks-like)**: choosing the kind of surface in front of you
+lists the tests the catalogue files under it, which is the way in that needs
+neither an identifier nor a capability name. **[The chain
+map](#what-it-looks-like)**: any capability a test establishes opens on the tests
+that declare it a prerequisite.
 
 WSTG is the first standard supported, and the structure is deliberately not
 specific to it. A newer WSTG revision, or another execution standard, enters at
@@ -136,7 +139,7 @@ column for the kind of thing it is, shaded by how far the chart reaches from it
 — green where a charted route arrives at an outcome, grey where it runs out.
 Each cell opens on the tests that establish it and the tests that declare it a
 prerequisite. The columns are ordered by where the catalogue's own edges run,
-and the fourteen that run the other way are named on the page:
+and the 15 that run the other way are named on the page:
 
 ![The chain map: every capability in a column for its family, shaded by how far the chart reaches from it](docs/assets/attack-chains.png)
 
@@ -241,8 +244,8 @@ HRR-RES-01-READ  Confirmed read outside the intended root
 
 ## A real journey
 
-The one topic written to full depth is path traversal, under `WSTG-ATHZ-01`.
-From the standard down:
+Path traversal, under `WSTG-ATHZ-01`, was the first topic written to full depth
+and is the shortest to read end to end. From the standard down:
 
 1. **Authorization Testing → `WSTG-ATHZ-01`**, "Testing Directory Traversal File
    Include". Harrier decomposes it into five Test Units.
@@ -266,10 +269,10 @@ not seen the host and cannot say what the code would reach on it; what it can sa
 is that reaching this far means the question is now worth asking, and which
 capability made it worth asking.
 
-Four of the five capabilities in that chain are still declared by nothing beyond
-it — the outcome layer covers what the catalogue's primitives obtain, not every
-control it records. Where a chain still stops early, the page says so rather than
-drawing an edge nobody wrote.
+3 of the 4 capabilities that chain establishes are still declared by nothing
+beyond it — the outcome layer covers what the catalogue's primitives obtain, not
+every control it records. Where a chain still stops early, the page says so
+rather than drawing an edge nobody wrote.
 
 ## What exists today, and what does not
 
