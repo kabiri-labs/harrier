@@ -65,7 +65,7 @@ jobs:
 
       - name: Read the version the artefact will state
         id: version
-        run: echo "value=$(python -c 'import harrier; print(harrier.__version__)')" >> "$GITHUB_OUTPUT"
+        run: echo "value=$(python -c 'import pentest_navgrid; print(pentest_navgrid.__version__)')" >> "$GITHUB_OUTPUT"
 
       # A release tagged v0.4.1 carrying a file that says 0.4.0 is worse than no
       # release: the tag and the artefact are the two things anybody quotes, and
@@ -87,7 +87,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.value }}
         run: |
           mkdir -p dist
-          python -m harrier build -o "dist/harrier-$VERSION.html"
+          python -m pentest_navgrid build -o "dist/pentest-navgrid-$VERSION.html"
 
       # The build is deterministic -- the suite asserts it -- so the digest is a
       # claim anybody can re-make from this commit rather than a number only
@@ -98,9 +98,9 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.value }}
         run: |
-          sha256sum "harrier-$VERSION.html" > "harrier-$VERSION.html.sha256"
-          cat "harrier-$VERSION.html.sha256"
-          echo "value=$(cut -d' ' -f1 "harrier-$VERSION.html.sha256")" >> "$GITHUB_OUTPUT"
+          sha256sum "pentest-navgrid-$VERSION.html" > "pentest-navgrid-$VERSION.html.sha256"
+          cat "pentest-navgrid-$VERSION.html.sha256"
+          echo "value=$(cut -d' ' -f1 "pentest-navgrid-$VERSION.html.sha256")" >> "$GITHUB_OUTPUT"
 
       # Built a second time in this checkout and compared. If two builds of one
       # commit differ, the digest published beside the file means nothing.
@@ -116,7 +116,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.value }}
           EXPECTED: ${{ steps.digest.outputs.value }}
         run: |
-          python -m harrier build -o "/tmp/again-$VERSION.html"
+          python -m pentest_navgrid build -o "/tmp/again-$VERSION.html"
           actual=$(sha256sum "/tmp/again-$VERSION.html" | cut -d' ' -f1)
           if [ "$actual" != "$EXPECTED" ]; then
             echo "::error::the build is not reproducible: $actual != $EXPECTED"
@@ -130,12 +130,12 @@ jobs:
           DIGEST: ${{ steps.digest.outputs.value }}
         run: |
           {
-            echo "### Harrier $VERSION"
+            echo "### Pentest NavGrid $VERSION"
             echo
             echo "| | |"
             echo "|---|---|"
-            echo "| file | \`harrier-$VERSION.html\` |"
-            echo "| size | $(stat -c%s "dist/harrier-$VERSION.html") bytes |"
+            echo "| file | \`pentest-navgrid-$VERSION.html\` |"
+            echo "| size | $(stat -c%s "dist/pentest-navgrid-$VERSION.html") bytes |"
             echo "| sha256 | \`$DIGEST\` |"
             echo "| commit | \`${{ github.sha }}\` |"
           } >> "$GITHUB_STEP_SUMMARY"
@@ -145,7 +145,7 @@ jobs:
       - name: Keep the artefact on the run
         uses: actions/upload-artifact@v4
         with:
-          name: harrier-${{ steps.version.outputs.value }}
+          name: pentest-navgrid-${{ steps.version.outputs.value }}
           path: dist/
           retention-days: 7
           if-no-files-found: error
@@ -163,7 +163,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: harrier-${{ needs.build.outputs.version }}
+          name: pentest-navgrid-${{ needs.build.outputs.version }}
           path: dist
 
       # `gh` ships on the runner, so no third-party action enters the supply
@@ -175,10 +175,10 @@ jobs:
           VERSION: ${{ needs.build.outputs.version }}
           DIGEST: ${{ needs.build.outputs.digest }}
         run: |
-          sha256sum -c "dist/harrier-$VERSION.html.sha256" 2>/dev/null \
-            || (cd dist && sha256sum -c "harrier-$VERSION.html.sha256")
+          sha256sum -c "dist/pentest-navgrid-$VERSION.html.sha256" 2>/dev/null \
+            || (cd dist && sha256sum -c "pentest-navgrid-$VERSION.html.sha256")
           gh release upload "$TAG" \
-            "dist/harrier-$VERSION.html" \
-            "dist/harrier-$VERSION.html.sha256" \
+            "dist/pentest-navgrid-$VERSION.html" \
+            "dist/pentest-navgrid-$VERSION.html.sha256" \
             --clobber --repo "${{ github.repository }}"
-          echo "attached harrier-$VERSION.html ($DIGEST) to $TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "attached pentest-navgrid-$VERSION.html ($DIGEST) to $TAG" >> "$GITHUB_STEP_SUMMARY"

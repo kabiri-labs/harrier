@@ -1,0 +1,19 @@
+id: PTN-INJ-02
+title: "LDAP injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [ldap-backed-param]
+
+see_also: [PTN-INJ-01]
+
+order:
+  - PTN-INJ-02-PROBE
+  - PTN-INJ-02-ERROR
+  - PTN-INJ-02-BOOL
+  - PTN-INJ-02-EVADE
+
+refs:
+  wstg: [WSTG-INPV-06]
+  cwe: [90]

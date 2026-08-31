@@ -1,6 +1,6 @@
 # UNION-based extraction
 
-Shared by `HRR-INJ-01-UNION` and `HRR-INJ-01-ERROR`: the arity and reflection
+Shared by `PTN-INJ-01-UNION` and `PTN-INJ-01-ERROR`: the arity and reflection
 reasoning is identical, so it is written once here rather than copied into both.
 
 ## Recall
@@ -94,10 +94,10 @@ field that HTML-escapes its content and mangles what you extract.
 
 | Symptom | Likely cause | Next move |
 |---|---|---|
-| Uniform error at every arity | Oracle without `FROM dual`, or a filtered keyword | Re-run with `FROM dual`; then go to `HRR-INJ-01-EVADE` |
-| Correct arity, no marker anywhere | Result set not rendered, or rendered from a second query | Fall through to `HRR-INJ-01-BOOL` |
+| Uniform error at every arity | Oracle without `FROM dual`, or a filtered keyword | Re-run with `FROM dual`; then go to `PTN-INJ-01-EVADE` |
+| Correct arity, no marker anywhere | Result set not rendered, or rendered from a second query | Fall through to `PTN-INJ-01-BOOL` |
 | Marker appears, computed value does not | Template reflection, not injection | Not a finding. Record it and re-probe |
-| Themed 200 page instead of an error | WAF interception | Compare content length and body markers; go to `HRR-INJ-01-EVADE` |
+| Themed 200 page instead of an error | WAF interception | Compare content length and body markers; go to `PTN-INJ-01-EVADE` |
 | Works at one arity, fails at another | Type mismatch on a strict engine | Replace `NULL` with type-appropriate placeholders |
 
 The middle row is worth dwelling on. A marker that reflects while `1337*7` does
@@ -118,10 +118,10 @@ there unless the engagement explicitly says otherwise.
 
 ## Related units
 
-- `HRR-INJ-01-PROBE` — establishes that a signal exists at all, and which kind.
-- `HRR-INJ-01-FPRINT` — supplies the `engine` dimension value this technique needs.
-- `HRR-INJ-01-ERROR` — the alternative in-band channel when nothing renders but
+- `PTN-INJ-01-PROBE` — establishes that a signal exists at all, and which kind.
+- `PTN-INJ-01-FPRINT` — supplies the `engine` dimension value this technique needs.
+- `PTN-INJ-01-ERROR` — the alternative in-band channel when nothing renders but
   errors do; it shares this card because the arity and reflection reasoning is
   the same.
-- `HRR-INJ-01-EVADE` — run this before concluding that a uniform negative means
+- `PTN-INJ-01-EVADE` — run this before concluding that a uniform negative means
   the parameter is safe.

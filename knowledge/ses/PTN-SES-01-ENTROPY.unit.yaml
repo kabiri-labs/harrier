@@ -1,0 +1,13 @@
+id: PTN-SES-01-ENTROPY
+topic: PTN-SES-01
+status: outline
+role: stage
+title: "Issued value unpredictability"
+objective: >-
+  Determine whether the issued value carries enough unpredictable material that
+  knowing many of them does not narrow the next one.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.predictable]
+closes: [control.session.predictable]

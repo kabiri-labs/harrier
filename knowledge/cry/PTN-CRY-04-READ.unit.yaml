@@ -1,0 +1,12 @@
+id: PTN-CRY-04-READ
+topic: PTN-CRY-04
+status: outline
+role: stage
+title: "Confirmed plaintext recovery"
+objective: >-
+  Determine whether the oracle recovers plaintext the application never
+  returned.
+
+requires:
+  all_of: [surface.crypto.oracle.padding]
+yields: [primitive.crypto.decrypt]

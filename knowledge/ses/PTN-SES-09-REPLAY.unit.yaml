@@ -1,0 +1,12 @@
+id: PTN-SES-09-REPLAY
+topic: PTN-SES-09
+status: outline
+role: variant
+title: "Acceptance from a different client"
+objective: >-
+  Determine whether a captured identifier is accepted when presented by a
+  client other than the one it was issued to.
+
+requires:
+  all_of: [artifact.session.captured]
+yields: [control.session.unbound]

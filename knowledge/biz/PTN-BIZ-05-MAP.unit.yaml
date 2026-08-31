@@ -1,0 +1,12 @@
+id: PTN-BIZ-05-MAP
+topic: PTN-BIZ-05
+status: outline
+role: stage
+kind: recon
+title: "The functions that carry a stated limit"
+objective: >-
+  Record which functions state or imply a limit, what each limit counts, and
+  over what period, since an unstated limit cannot be shown to have failed.
+
+requires:
+  all_of: [access.user]

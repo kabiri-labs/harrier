@@ -1,0 +1,13 @@
+id: PTN-CLT-03-EVADE
+topic: PTN-CLT-03
+status: outline
+role: stage
+kind: recon
+title: "Allow-list evasion"
+objective: >-
+  Determine whether a negative result is caused by a host allow-list that a
+  scheme, userinfo, backslash or prefix variant does not defeat.
+
+requires:
+  all_of: [surface.redirect.controlled]
+yields: [control.filter.identified]

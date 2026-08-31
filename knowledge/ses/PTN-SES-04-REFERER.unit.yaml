@@ -1,0 +1,12 @@
+id: PTN-SES-04-REFERER
+topic: PTN-SES-04
+status: outline
+role: stage
+title: "Identifier leaving in a referrer"
+objective: >-
+  Determine whether a page holding the identifier in its URL links to a third
+  party that will receive it in the referrer.
+
+requires:
+  all_of: [surface.session.inurl]
+yields: [surface.session.thirdparty]

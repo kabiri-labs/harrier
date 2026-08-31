@@ -1,0 +1,48 @@
+id: PTN-CFG-03-PROBE
+topic: PTN-CFG-03
+status: sketched
+role: stage
+title: "Whether an administrative interface answers from outside"
+objective: >-
+  Determine whether an administrative interface answers a caller who is not on
+  the network the operator intended to restrict it to.
+
+requires:
+  all_of: [recon.platform.identified]
+yields: [surface.admin.reachable]
+closes: [surface.admin.reachable]
+
+hypotheses:
+  - "The interface is restricted by network position rather than by authentication, and the tester's position may already be inside it."
+  - "An authentication realm names the product even when the content is withheld."
+  - "An interface blocked at the edge is often open behind it, because the block was added to the edge and not to the component."
+
+triage:
+  - "An authentication challenge whose realm names a product."
+  - "A redirect to a sign-in page that is not the application's own."
+  - "The same path answered from the origin, or from an alternate port, where the front refuses it."
+
+sink: >-
+  The component's own request routing, which binds its console to a path
+  independently of whatever the application in front of it decides.
+
+oracle:
+  positive: "An administrative interface answers a caller outside the network the operator meant to restrict it to -- serving its own page, or challenging with a realm that names the product."
+  negative: "Every candidate interface was requested from outside and each is absent or refused without naming itself."
+
+sequence:
+  - "Request each candidate from the position an outside caller holds, following redirects and recording where each lands."
+  - "Read the challenge as well as the page: an authentication realm that names the product is the interface answering, even when the content is withheld."
+  - "Where the target is fronted, repeat against the origin and against any alternate port the engagement grants, since an interface blocked at the edge is often open behind it."
+  - "Record what answered, from which position, and whether it served, challenged or refused."
+
+first_false_positive: >-
+  A generic login page with no product marker, reached at an administrative
+  path. It may be the application's own sign-in reached by a redirect, so an
+  interface is recorded on a marker that names the product rather than on the
+  path having answered.
+
+done_when: >-
+  Every candidate has been requested from outside, and from the origin where one
+  is reachable, with each recorded as served, challenged with a naming realm, or
+  refused.

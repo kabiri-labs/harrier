@@ -4,9 +4,9 @@ import collections
 import re
 import unittest
 
-from harrier import Repository
-from harrier.chain import Chain
-from harrier.validate import coverage, validate
+from pentest_navgrid import Repository
+from pentest_navgrid.chain import Chain
+from pentest_navgrid.validate import coverage, validate
 from tests.support import REPO_ROOT, messages
 
 
@@ -136,7 +136,7 @@ class UnitsBelongToTheAxisTheirTopicDeclares(unittest.TestCase):
     def test_every_unit_slug_is_drawn_from_a_declared_vocabulary(self):
         import yaml
 
-        from harrier import Repository, find_root
+        from pentest_navgrid import Repository, find_root
 
         repo = Repository.load(find_root(REPO_ROOT))
         axes = {a["name"]: set(a["slugs"]) for a in repo.vocab["axes"].data["axes"]}
@@ -157,7 +157,7 @@ class UnitsBelongToTheAxisTheirTopicDeclares(unittest.TestCase):
                 self.assertIn(slug, allowed)
 
     def test_no_two_units_share_an_objective(self):
-        from harrier import Repository, find_root
+        from pentest_navgrid import Repository, find_root
 
         repo = Repository.load(find_root(REPO_ROOT))
         seen = {}
@@ -226,7 +226,7 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         self.assertNotPublished(f"{dead + len(self.chain.impacts())} of {total} capabilities")
 
     def test_the_per_family_dead_end_figures_are_real(self):
-        from harrier.chain import family_of
+        from pentest_navgrid.chain import family_of
 
         dead = self.chain.dead_ends()
         for family in ("primitive", "control"):
@@ -252,7 +252,7 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         reach = self.chain.reach()
         rows = (
             ("WSTG identifiers pinned", f"{self.counts['wstg_pinned']}, across 12 testing groups"),
-            ("Claimed by a Harrier topic",
+            ("Claimed by a Pentest NavGrid topic",
              f"{self.counts['wstg_covered']} of {self.counts['wstg_coverable']} resolvable"),
             # Derived, not written down: the sibling test below reads the same
             # figure from the catalogue, and a literal here goes stale the first
@@ -314,7 +314,7 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
         self.assertEqual(sum(counts.values()), self.counts["topics"])
 
     def test_the_group_and_domain_counts_in_that_table_are_real(self):
-        from harrier import Repository
+        from pentest_navgrid import Repository
 
         repo = Repository.load(REPO_ROOT)
         groups = len(repo.standards["wstg"].data["groups"])

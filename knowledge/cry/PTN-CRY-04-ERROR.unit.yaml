@@ -1,0 +1,12 @@
+id: PTN-CRY-04-ERROR
+topic: PTN-CRY-04
+status: outline
+role: variant
+title: "Error-distinguished padding failure"
+objective: >-
+  Determine whether a padding failure produces a response distinguishable from
+  a decryption that succeeded and then failed validation.
+
+requires:
+  all_of: [surface.crypto.oracle]
+yields: [surface.crypto.oracle.padding]

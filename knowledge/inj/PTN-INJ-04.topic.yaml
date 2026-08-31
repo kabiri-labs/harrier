@@ -1,0 +1,18 @@
+id: PTN-INJ-04
+title: "Server-side include injection"
+domain: INJ
+
+surfaces:
+  any_of: [template-param, stored-then-rendered]
+
+see_also: [PTN-INJ-08]
+
+order:
+  - PTN-INJ-04-PROBE
+  - PTN-INJ-04-READ
+  - PTN-INJ-04-EXEC
+  - PTN-INJ-04-EVADE
+
+refs:
+  wstg: [WSTG-INPV-08]
+  cwe: [97]

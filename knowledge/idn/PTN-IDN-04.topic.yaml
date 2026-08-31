@@ -1,0 +1,14 @@
+id: PTN-IDN-04
+title: "Username policy"
+domain: IDN
+axis: property
+
+surfaces:
+  any_of: [registration, login-form]
+
+order:
+  - PTN-IDN-04-NAMING
+  - PTN-IDN-04-VALIDATION
+
+refs:
+  wstg: [WSTG-IDNT-05]

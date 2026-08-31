@@ -1,0 +1,18 @@
+id: PTN-CRY-04
+title: "Padding oracle"
+domain: CRY
+axis: technique
+
+surfaces:
+  any_of: [token-bearing, object-id-param, shared-secret-config]
+
+order:
+  - PTN-CRY-04-PROBE
+  - PTN-CRY-04-ERROR
+  - PTN-CRY-04-TIME
+  - PTN-CRY-04-READ
+  - PTN-CRY-04-WRITE
+
+refs:
+  wstg: [WSTG-CRYP-02]
+  cwe: [209]

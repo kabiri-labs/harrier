@@ -4,7 +4,7 @@ import io
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 
-from harrier.cli import EXIT_FAILED, EXIT_OK, EXIT_USAGE, main
+from pentest_navgrid.cli import EXIT_FAILED, EXIT_OK, EXIT_USAGE, main
 from tests.support import REPO_ROOT, Sandbox
 
 
@@ -38,7 +38,7 @@ class TheReadmeShowsWhatTheCommandsActuallyPrint(unittest.TestCase):
             found = self.readme.find(line, at)
             self.assertNotEqual(
                 found, -1,
-                f"the README does not show this line of `harrier "
+                f"the README does not show this line of `pentest-navgrid "
                 f"{' '.join(argv)}`, or shows it out of order:\n  {line}",
             )
             at = found + len(line)
@@ -47,7 +47,7 @@ class TheReadmeShowsWhatTheCommandsActuallyPrint(unittest.TestCase):
         self.assertTranscript(["checklist", "WSTG-ATHZ-01"])
 
     def test_the_chain_transcript_is_what_the_chain_prints(self):
-        self.assertTranscript(["chain", "HRR-RES-01-READ"])
+        self.assertTranscript(["chain", "PTN-RES-01-READ"])
 
 
 class CommandLine(unittest.TestCase):
@@ -68,7 +68,7 @@ class CommandLine(unittest.TestCase):
     def test_a_directory_that_is_not_a_repository_is_reported(self):
         status, _, err = run(["--root", "/", "validate"])
         self.assertEqual(status, EXIT_FAILED)
-        self.assertIn("no Harrier repository found", err)
+        self.assertIn("no Pentest NavGrid repository found", err)
 
     def test_coverage_prints_the_counts(self):
         status, out, _ = run(["--root", str(REPO_ROOT), "coverage"])
@@ -85,7 +85,7 @@ class FailureOutput(unittest.TestCase):
         self.box.add_topic(axis="vibes")
         status, _, err = run(["--root", str(self.box.root), "validate"])
         self.assertEqual(status, EXIT_FAILED)
-        self.assertIn("HRR-AUT-01.topic.yaml", err)
+        self.assertIn("PTN-AUT-01.topic.yaml", err)
         self.assertIn("unknown axis vibes", err)
 
     def test_every_problem_is_reported_in_one_pass(self):
@@ -141,7 +141,7 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
     """The pivot is the product's, not the artefact's.
 
     A command line that still asks what the tester holds and answers with what
-    is "available" leaves Harrier carrying two contradictory models: the page
+    is "available" leaves Pentest NavGrid carrying two contradictory models: the page
     saying it knows nothing about a target, and the tool a step away claiming to
     compute reachability for one. Whichever a reader meets first is the one they
     believe.
@@ -162,7 +162,7 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
     def test_no_output_claims_a_test_is_now_possible(self):
         text = (
             self.chain()
-            + self.chain("HRR-INJ-01-PROBE")
+            + self.chain("PTN-INJ-01-PROBE")
             + self.chain("--fact", "surface.sql.injectable")
         ).lower()
         for phrase in ("unlocks", "available", "you hold", "reachable", "ruled out"):
@@ -173,7 +173,7 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         # test, so it is filed under that heading rather than as an escalation.
         # What the edge travels through is named either way -- that is the part
         # a reader acts on.
-        out = self.chain("HRR-INJ-01-PROBE")
+        out = self.chain("PTN-INJ-01-PROBE")
         self.assertIn("alternative techniques for this test", out)
         self.assertIn("requires what this establishes:", out)
         self.assertIn("UNION-based extraction", out)
@@ -182,7 +182,7 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         """The two edges that leave this unit for another topic are the whole
         reason the tiers exist: before them, they sorted below ninety rows that
         every held session produces."""
-        out = self.chain("HRR-IDN-01-POLICY")
+        out = self.chain("PTN-IDN-01-POLICY")
         self.assertIn("potential continuations:", out)
         self.assertIn("generic prerequisite of", out)
         self.assertIn("-- not an escalation:", out)
@@ -192,15 +192,15 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         )
 
     def test_a_continuation_states_what_success_here_does_not_supply(self):
-        out = self.chain("HRR-ACL-02-MAP")
+        out = self.chain("PTN-ACL-02-MAP")
         self.assertIn("still required:", out)
 
     def test_a_continuation_with_nothing_further_owed_says_that_precisely(self):
-        out = self.chain("HRR-RES-01-READ")
+        out = self.chain("PTN-RES-01-READ")
         self.assertIn("no additional declared hard prerequisite", out)
 
     def test_a_motivation_is_labelled_as_one(self):
-        out = self.chain("HRR-INJ-01-FPRINT")
+        out = self.chain("PTN-INJ-01-FPRINT")
         self.assertIn("motivated by what this establishes:", out)
 
     def test_a_capability_nothing_uses_is_reported_as_where_a_chain_stops(self):
@@ -212,12 +212,12 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         self.assertIn("no test declares a use for this", out)
 
     def test_a_test_whose_result_leads_nowhere_says_so(self):
-        out = self.chain("HRR-INJ-11-TIME")
+        out = self.chain("PTN-INJ-11-TIME")
         self.assertIn("terminal:", out)
         self.assertIn("reportable outcome", out)
 
     def test_the_summary_partitions_the_tests_by_where_their_chain_goes(self):
-        from harrier.chain import Chain
+        from pentest_navgrid.chain import Chain
 
         out = self.chain()
         chain = Chain.load(REPO_ROOT)
@@ -235,7 +235,7 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
             self.assertRegex(out, label + r"\s+" + str(value))
 
     def test_the_summary_counts_impacts_apart_from_dead_ends(self):
-        from harrier.chain import Chain
+        from pentest_navgrid.chain import Chain
 
         chain = Chain.load(REPO_ROOT)
         out = self.chain()

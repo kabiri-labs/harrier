@@ -1,0 +1,40 @@
+id: PTN-PRT-04-EVADE
+topic: PTN-PRT-04
+status: sketched
+role: stage
+kind: recon
+title: "Encoding and traversal variant evasion"
+objective: >-
+  Determine whether a negative result is caused by one component decoding a
+  variant the other does not, rather than by the two agreeing.
+
+requires:
+  all_of: [recon.tiers.mapped]
+yields: [control.filter.identified]
+
+hypotheses:
+  - "A refusal has two opposite readings: the layers agreeing on what the path means, or the front layer rejecting a form the origin would have read differently."
+  - "Each layer's filter rejects a set of forms, and the set is what a later attempt has to survive."
+  - "A filter that rejects on sight never resolves the path, so its refusal says nothing about what the origin would have done."
+
+triage:
+  - "A refused form, varied one property at a time rather than replaced wholesale."
+  - "Which layer's refusal shape each response matches."
+  - "Encoding depth, which separator is encoded, and whether the payload rides in a path parameter."
+
+sequence:
+  - "Take a form that was refused, and vary one property of it at a time: the encoding depth, which separator is encoded, whether a dot segment is spelled with an extra character, whether a path parameter carries the payload."
+  - "For each variant, record which layer refused it, using the fingerprint of each layer's own refusal rather than the status alone."
+  - "Separate the two readings a refusal can have: both layers agreeing on what the path means, or the front layer rejecting a form the origin would have decoded differently."
+  - "Record the filter each layer applies as what it rejects, since that is the part a later attempt has to survive."
+
+first_false_positive: >-
+  A refusal read as the layers agreeing, when it came from a filter that
+  rejected the form on sight and never resolved it. The two are opposite
+  conclusions from the same status, which is why each refusal is attributed to
+  the layer whose refusal shape it matches.
+
+done_when: >-
+  Every variant is recorded with the layer that refused it and which of the two
+  readings it supports, and each layer's filter is written down as the forms it
+  rejects.

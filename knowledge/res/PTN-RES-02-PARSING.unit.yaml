@@ -1,0 +1,12 @@
+id: PTN-RES-02-PARSING
+topic: PTN-RES-02
+status: outline
+role: stage
+title: "Content processing side effects"
+objective: >-
+  Determine whether the server parses, converts or extracts the uploaded
+  content in a way an attacker-crafted file can influence.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [surface.upload.parsed]

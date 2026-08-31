@@ -1,0 +1,13 @@
+id: PTN-CLT-03-PROBE
+topic: PTN-CLT-03
+status: outline
+role: stage
+title: "Destination control probe"
+objective: >-
+  Determine whether the value the page navigates to can be changed to a
+  destination the application did not issue.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.redirect.controlled]

@@ -1,6 +1,6 @@
 # Object ownership, and how to tell a control from a coincidence
 
-Shared by all five `HRR-ACL-02` units. There is no payload axis here and nothing
+Shared by all five `PTN-ACL-02` units. There is no payload axis here and nothing
 is injected: every unit is a comparison between two principals, so the whole
 difficulty lives in the oracle and in the evidence. This card is that
 difficulty, written once.
@@ -213,11 +213,11 @@ can explain a non-response.
 
 ## Related units
 
-- `HRR-ACL-02-MAP` — the identifier inventory, and the sole producer of
+- `PTN-ACL-02-MAP` — the identifier inventory, and the sole producer of
   `artifact.objectid.known`.
-- `HRR-ACL-02-PEER` — another account of the same role; the baseline comparison.
-- `HRR-ACL-02-TENANT` — the same move across a tenant boundary, where the
+- `PTN-ACL-02-PEER` — another account of the same role; the baseline comparison.
+- `PTN-ACL-02-TENANT` — the same move across a tenant boundary, where the
   discriminator is whether the tenant comes from the session or the request.
-- `HRR-ACL-02-WRITE` — the read-back rule above is the whole of this unit's
+- `PTN-ACL-02-WRITE` — the read-back rule above is the whole of this unit's
   oracle.
-- `HRR-ACL-02-IMPACT` — scale, and the ceiling that keeps it a sample.
+- `PTN-ACL-02-IMPACT` — scale, and the ceiling that keeps it a sample.

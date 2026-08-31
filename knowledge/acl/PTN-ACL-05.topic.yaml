@@ -1,0 +1,24 @@
+id: PTN-ACL-05
+title: "Request method and verb handling"
+domain: ACL
+axis: technique
+
+surfaces:
+  any_of: [privileged-function, admin-panel, business-workflow, rest-api, graphql]
+
+order:
+  - PTN-ACL-05-DIFF
+  - PTN-ACL-05-EVADE
+
+boundaries:
+  - subject: "Which methods the server advertises"
+    home: PTN-CFG-04
+    note: >-
+      The oracle here is that a forbidden action succeeded, not that a method
+      is enabled.
+
+see_also: [PTN-CFG-04]
+
+refs:
+  wstg: [WSTG-INPV-03]
+  cwe: [650]

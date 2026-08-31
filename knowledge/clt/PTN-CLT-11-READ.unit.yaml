@@ -1,0 +1,12 @@
+id: PTN-CLT-11-READ
+topic: PTN-CLT-11
+status: outline
+role: stage
+title: "Confirmed disclosure through inclusion"
+objective: >-
+  Determine whether the including page obtains another user's data from the
+  included response.
+
+requires:
+  all_of: [surface.xssi.endpoint]
+yields: [primitive.data.read.victim]

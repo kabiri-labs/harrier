@@ -1,0 +1,51 @@
+id: PTN-CFG-09-POLICY
+topic: PTN-CFG-09
+status: sketched
+role: stage
+title: "What the store's own access policy grants"
+objective: >-
+  Determine what the object store grants to an anonymous caller and to any
+  authenticated caller, which the application's own permissions never see.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.objectstore.public]
+closes: [control.objectstore.public]
+
+hypotheses:
+  - "The store has its own access policy, and the application's permissions never see it."
+  - "Reading, listing and writing are granted separately, so refusing one says nothing about the others."
+  - "Content the application publishes anyway is public by design, and finding it public proves nothing."
+  - "Tooling signs requests from credentials in the environment without being asked, which turns an anonymous test into an authenticated one."
+
+triage:
+  - "The store and container the application's own delivery resolves to."
+  - "A listing request made explicitly without credentials."
+  - "A write under a name of the tester's own, since write is set separately from read."
+  - "Any token the engagement grants, read for its scope and its expiry rather than for its stated purpose."
+
+sink: >-
+  The store's own policy evaluation, which decides on the caller and the object
+  before the application that owns the data is involved at all.
+
+oracle:
+  positive: "The store grants an anonymous caller, or any authenticated caller of the provider, more than the application's own permissions allow: listing the container, reading objects, or writing to it."
+  negative: "Every operation was attempted without provider credentials and each is refused by the store itself."
+
+sequence:
+  - "Identify the store and container the application uses, from the addresses its own delivery resolves to."
+  - "Ask the store to list the container without provider credentials, and record what it answers."
+  - "Read one object the application already publishes, again without credentials, to establish that reads are anonymous rather than that listing is."
+  - "Write one object under a name of the tester's own, never over a name the store already holds, and remove it again where removal is granted -- a store can accept writes from a caller it refuses reads to, and the two permissions are set separately."
+  - "Where the engagement grants a token, record what its scope and expiry actually permit rather than what it was issued for."
+
+first_false_positive: >-
+  A request that succeeded because the tooling signed it with credentials found
+  in the environment. The store answered an authenticated caller, so every
+  request here is made explicitly unsigned and the absence of a signature is
+  checked, not assumed.
+
+done_when: >-
+  Listing, reading and writing have each been attempted against the container
+  without credentials, and each is recorded as granted or refused by the store,
+  with any granted token's scope and expiry written down.

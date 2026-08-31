@@ -1,0 +1,47 @@
+id: PTN-CFG-04-IMPACT
+topic: PTN-CFG-04
+status: sketched
+role: stage
+title: "Whether an accepted method does anything"
+objective: >-
+  Determine whether a method accepted but unused has an effect on the server
+  or on the response, since being answered and being acted on are different
+  results.
+
+requires:
+  all_of: [surface.method.extra]
+yields: [surface.method.effective]
+
+hypotheses:
+  - "A server can accept a method, answer politely, and act on nothing."
+  - "A method registered by the framework often reaches a handler the application never meant to expose."
+  - "Where the method echoes rather than writes, what comes back is whatever the request carried, including headers the caller did not set."
+
+triage:
+  - "A method whose handler would change state: one that creates, replaces or removes."
+  - "A method that reflects the request back rather than acting on it."
+  - "A resource the tester created, which is the only safe target for this."
+
+sink: >-
+  The handler the framework bound to that verb, which is code the application
+  routes to without the interface ever issuing the request.
+
+oracle:
+  positive: "A method the application does not use has an effect: it changes what a later request returns, is reflected back to the caller, or creates something retrievable."
+  negative: "Every accepted method was exercised against a resource the tester owns and none changed what a later request returns or reflected anything back."
+
+sequence:
+  - "Choose a target the tester created and can afford to lose, never a record belonging to the client or to another user."
+  - "Read the resource, exercise the accepted method against it, then read it again: the difference between the two reads is the whole answer."
+  - "Where the method echoes rather than writes, send a marker of the tester's own and look for it in the response body."
+  - "Record the before and after, and stop -- an effect once is the finding, and repeating it is only damage."
+
+first_false_positive: >-
+  A success status with no effect behind it. Many servers accept a method,
+  answer politely and act on nothing, which is why the result is read from what
+  changed on the second read rather than from the status of the first.
+
+done_when: >-
+  Every accepted method has been exercised once against a resource the tester
+  owns, with the reads before and after recorded, and each is marked as having
+  an effect or none.

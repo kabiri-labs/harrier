@@ -1,0 +1,28 @@
+id: PTN-CRY-01
+title: "Transport layer configuration"
+domain: CRY
+axis: property
+
+surfaces:
+  any_of: [tls-endpoint]
+
+boundaries:
+  - subject: "A header instructing the browser to insist on TLS"
+    home: PTN-CFG-05
+    note: >-
+      The cryptography a listener offers is here; a policy header telling a
+      client what to require is configuration.
+
+see_also: [PTN-CFG-05, PTN-CRY-02]
+
+order:
+  - PTN-CRY-01-MAP
+  - PTN-CRY-01-POLICY
+  - PTN-CRY-01-BINDING
+  - PTN-CRY-01-EXPIRY
+  - PTN-CRY-01-VALIDATION
+  - PTN-CRY-01-TRANSPORT
+
+refs:
+  wstg: [WSTG-CRYP-01]
+  cwe: [326]

@@ -1,0 +1,48 @@
+id: PTN-CFG-07-STORAGE
+topic: PTN-CFG-07
+status: sketched
+role: stage
+title: "Whether written files land where they are served"
+objective: >-
+  Determine whether files the application writes are placed in a location the
+  server publishes, which turns a storage decision into a disclosure.
+
+requires:
+  all_of: [surface.upload.accepts]
+yields: [control.storage.served]
+closes: [control.storage.served]
+
+hypotheses:
+  - "Files the application accepts are written where it is convenient to write them, which is often inside the tree the server publishes."
+  - "The application delivers an uploaded file through its own path, and the storage location is a different question from the delivery one."
+  - "A direct retrieval that still carries the application's session proves the delivery path and nothing about the storage."
+
+triage:
+  - "How the application hands an uploaded file back, and what that path reveals about where it was written."
+  - "Whether the naming of the stored file preserves anything the uploader chose."
+  - "The same location requested without the session the application issued."
+
+sink: >-
+  The storage path the application writes to, which the server may also publish
+  -- making the write a decision about delivery that nobody made deliberately.
+
+oracle:
+  positive: "A file the application accepted is retrievable from a location the server publishes, at a path a caller can reach without going through the application."
+  negative: "Every accepted file was searched for under the paths the server publishes and none is retrievable outside the application's own delivery."
+
+sequence:
+  - "Upload a file the tester owns, carrying a marker of the tester's own choosing, through the application's normal path."
+  - "Record how the application delivers it back, and take from that the storage location and naming the deployment uses."
+  - "Request the file directly at that location, without the session the application issued, and see whether the marker comes back."
+  - "Record whether the location is inside the served tree, and stop -- what the server would do with an executable file there is a different unit's question."
+
+first_false_positive: >-
+  A direct retrieval that succeeds because the request still carried the
+  application's session. The delivery path was authorised, not the storage
+  location, so the request that decides this is made without the session the
+  application issued.
+
+done_when: >-
+  One file the tester owns has been uploaded and requested directly without the
+  application's session, and the result is recorded as retrievable with its path
+  or as unreachable outside the application.

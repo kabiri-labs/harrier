@@ -1,0 +1,13 @@
+id: PTN-IDN-02-VALIDATION
+topic: PTN-IDN-02
+status: outline
+role: stage
+title: "Evidence required to provision an account"
+objective: >-
+  Determine what evidence a provisioning route demands, since an approval step
+  that is not enforced is not a control.
+
+requires:
+  all_of: [access.user]
+yields: [control.provisioning.unchecked]
+closes: [control.provisioning.unchecked]

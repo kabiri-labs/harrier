@@ -1,0 +1,12 @@
+id: PTN-CLT-02-MARKUP
+topic: PTN-CLT-02
+status: outline
+role: stage
+title: "Document-writing sink"
+objective: >-
+  Determine whether a source reaches a document write that inserts markup into
+  the page while it is still parsing.
+
+requires:
+  all_of: [surface.dom.flow]
+yields: [primitive.markup.inject]

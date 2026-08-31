@@ -1,0 +1,16 @@
+id: PTN-CFG-07
+title: "File and directory permissions"
+domain: CFG
+axis: property
+
+surfaces:
+  always: true
+
+order:
+  - PTN-CFG-07-POLICY
+  - PTN-CFG-07-SERVING
+  - PTN-CFG-07-STORAGE
+
+refs:
+  wstg: [WSTG-CONF-09]
+  cwe: [732]

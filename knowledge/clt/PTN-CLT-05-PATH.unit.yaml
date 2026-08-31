@@ -1,0 +1,12 @@
+id: PTN-CLT-05-PATH
+topic: PTN-CLT-05
+status: outline
+role: stage
+title: "Path-supplied resource location"
+objective: >-
+  Determine whether a resource location derived from a path segment is fetched
+  without the check the query-supplied one receives.
+
+requires:
+  all_of: [surface.resource.controlled]
+yields: [primitive.resource.load]

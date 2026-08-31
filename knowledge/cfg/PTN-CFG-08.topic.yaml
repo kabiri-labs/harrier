@@ -1,0 +1,15 @@
+id: PTN-CFG-08
+title: "Subdomain takeover"
+domain: CFG
+axis: phase
+
+surfaces:
+  any_of: [dns-delegated]
+
+order:
+  - PTN-CFG-08-MAP
+  - PTN-CFG-08-PROBE
+
+refs:
+  wstg: [WSTG-CONF-10]
+  cwe: [350]

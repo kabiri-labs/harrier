@@ -1,0 +1,13 @@
+id: PTN-INJ-03-OOB
+topic: PTN-INJ-03
+status: outline
+role: variant
+title: "Blind entity resolution"
+objective: >-
+  Determine whether external entity resolution is enabled at all, when no
+  parser error and no returned content say so, by observing that the declared
+  entity was dereferenced.
+
+requires:
+  all_of: [surface.xml.parsed]
+yields: [primitive.fetch.outbound]

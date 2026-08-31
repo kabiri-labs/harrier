@@ -1,0 +1,14 @@
+id: PTN-CRY-05-BRUTE
+topic: PTN-CRY-05
+status: outline
+role: variant
+title: "Symmetric key recovery"
+objective: >-
+  Determine whether a shared signing key is weak enough to recover offline from
+  a single captured token.
+
+requires:
+  all_of: [surface.token.structured]
+yields: [artifact.key.recovered]
+dimensions:
+  signature: [hmac]

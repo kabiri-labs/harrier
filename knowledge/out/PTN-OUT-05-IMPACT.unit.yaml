@@ -1,0 +1,17 @@
+id: PTN-OUT-05-IMPACT
+topic: PTN-OUT-05
+status: outline
+role: stage
+kind: inquiry
+title: "What the forged identity is trusted for"
+objective: >-
+  Establish what accepts the manufactured token, message or name: which
+  decisions are taken on the strength of it, and by whom, since a forgery is
+  worth exactly the trust somebody else places in it.
+
+requires:
+  any_of:
+    - primitive.crypto.forge
+    - primitive.mail.control
+    - primitive.subdomain.claimable
+yields: [impact.identity.forged]

@@ -17,7 +17,7 @@ source-available licence.
 **Repository visibility protects nothing here.** The catalogue is not held back
 from the published artefact -- it *is* the published artefact. `build.py` embeds
 the whole of it as plain JSON inside `template.html`, because a self-contained
-offline file cannot fetch what it needs later. Anyone holding `harrier.html`
+offline file cannot fetch what it needs later. Anyone holding `pentest-navgrid.html`
 holds every topic, every Test Unit, every capability and every edge, in a form
 that is one `JSON.parse` from a working copy. Closing the repository would
 withhold the build tooling and the test suite from readers while withholding the

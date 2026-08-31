@@ -1,0 +1,20 @@
+id: PTN-CLT-05
+title: "Client-side resource manipulation"
+domain: CLT
+axis: vector
+
+surfaces:
+  any_of: [dom-sink, redirect-param]
+
+see_also: [PTN-CLT-02]
+
+order:
+  - PTN-CLT-05-MAP
+  - PTN-CLT-05-QUERY
+  - PTN-CLT-05-PATH
+  - PTN-CLT-05-EXEC
+  - PTN-CLT-05-EVADE
+
+refs:
+  wstg: [WSTG-CLNT-06]
+  cwe: [829]

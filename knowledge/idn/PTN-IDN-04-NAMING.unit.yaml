@@ -1,0 +1,14 @@
+id: PTN-IDN-04-NAMING
+topic: PTN-IDN-04
+status: outline
+role: stage
+title: "The identifier space the application accepts"
+objective: >-
+  Determine which characters, lengths and forms are accepted in a username,
+  since an accepted form that is visually or semantically indistinguishable
+  from another is an impersonation primitive.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [control.username.confusable]

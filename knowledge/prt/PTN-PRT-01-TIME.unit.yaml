@@ -1,0 +1,13 @@
+id: PTN-PRT-01-TIME
+topic: PTN-PRT-01
+status: outline
+role: variant
+title: "Timing-based desync detection"
+objective: >-
+  Determine whether a request whose framing the two parsers read differently
+  leaves one of them waiting for a body that never arrives.
+
+requires:
+  all_of: [recon.tiers.mapped]
+motivated_by: [recon.intermediary.identified]
+yields: [surface.desync.confirmed]

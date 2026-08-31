@@ -1,6 +1,6 @@
 # Path resolution
 
-Shared by every unit of `HRR-RES-01`. The reasoning about where a filter sits
+Shared by every unit of `PTN-RES-01`. The reasoning about where a filter sits
 and what a negative result means is the same in all of them, so it is written
 once here.
 

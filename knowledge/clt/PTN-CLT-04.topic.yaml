@@ -1,0 +1,26 @@
+id: PTN-CLT-04
+title: "CSS injection"
+domain: CLT
+axis: technique
+
+surfaces:
+  any_of: [rich-text, template-param, stored-then-rendered]
+
+boundaries:
+  - subject: "A style context that reaches script execution"
+    home: PTN-CLT-01
+    note: >-
+      Exfiltration through selectors and requests is here; a style context
+      that lands executable script is cross-site scripting.
+
+see_also: [PTN-CLT-01]
+
+order:
+  - PTN-CLT-04-PROBE
+  - PTN-CLT-04-DIFF
+  - PTN-CLT-04-READ
+  - PTN-CLT-04-EVADE
+
+refs:
+  wstg: [WSTG-CLNT-05]
+  cwe: [79]

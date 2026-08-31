@@ -1,0 +1,54 @@
+id: PTN-RCN-01-FPRINT
+topic: PTN-RCN-01
+status: authored
+role: stage
+kind: recon
+title: "The product and version answering at the origin"
+objective: >-
+  Record which server, platform and application framework answer the request,
+  and at what version, since that is the input every version-specific decision
+  later reads.
+
+requires:
+  all_of: [recon.target.reachable]
+yields: [recon.platform.identified]
+
+hypotheses:
+  - "The product announces itself in a header it sets by default, and nobody changed the default."
+  - "Where the banner was changed, the parsing was not: how a product answers a malformed request is a property of its code rather than of its configuration."
+  - "The error pages the product authors -- not the ones the application authors -- carry its wording, its ordering and its status choices."
+  - "A caching or filtering layer in front answers first, and identifies itself rather than the origin."
+
+triage:
+  - "A header naming a server, a framework or a runtime, and the ordering of the header set as a whole."
+  - "The wording and layout of a response the application did not author: an unmatched path, an unsupported method, a malformed version."
+  - "The naming of the session cookie, and any cookie the platform sets without the application asking."
+  - "A redirect the platform issues rather than the application: its status choice and whether the location is absolute."
+
+enter_when:
+  - "Before any test whose payload or expectation depends on the platform."
+
+sequence:
+  - "Record the response headers of one ordinary request, including their order."
+  - "Request a path that cannot exist and record how the 404 is rendered."
+  - "Send one malformed request line and record how the parse failure is answered."
+  - "Reconcile the three against each other before writing a version down."
+
+first_false_positive: >-
+  A header naming an intermediary rather than the origin. A content delivery or
+  filtering layer answers with its own identity, and the product behind it is a
+  separate record -- which is why the tier map is a sibling unit rather than an
+  assumption here.
+
+preconditions:
+  - "The address answering is the one in scope, not a shared front end serving many tenants."
+
+evidence:
+  - "The raw response headers, in order, for each of the three requests."
+
+done_when: >-
+  A product and, where it could be established, a version is written down for
+  each tier that answered, or the tier is recorded as unidentified with the
+  signals that were tried.
+
+tools: [burp-repeater, curl]

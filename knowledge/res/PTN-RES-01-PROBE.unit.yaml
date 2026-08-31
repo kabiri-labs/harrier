@@ -1,0 +1,76 @@
+id: PTN-RES-01-PROBE
+topic: PTN-RES-01
+status: authored
+role: stage
+title: "Traversal sequence survival probe"
+objective: >-
+  Determine whether a traversal sequence in the parameter changes which resource
+  is returned relative to the unmodified request.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.path.traversable]
+
+hypotheses:
+  - "The application builds a filesystem path by joining its own root to something the caller sent."
+  - "The link is hidden rather than the file protected, so the parameter is trusted because nobody was expected to change it."
+  - "Normalisation happens after the join rather than before, which is what makes a relative sequence arithmetic rather than text."
+
+triage:
+  - "Parameters named for what they carry: file, path, page, tpl, template, view, doc, download, lang."
+  - "Endpoints that render or return a local asset: previews, exports, viewers, report generators."
+  - "An error naming a filesystem base path, an include path, or a directory the caller never mentioned."
+  - "A deployment mixing operating systems, where the filter was written for one of them."
+
+sink: >-
+  The path the application hands to the platform's file resolver, built by
+  joining a root it chose to a value the caller supplied.
+
+enter_when:
+  - "A parameter carries a filename, a path, an extension, or a value that appears in the response as a document."
+  - "The inventory recorded a parameter named for a file: file, path, page, template, doc, view, lang, download."
+
+oracle:
+  positive: "A sequence that resolves back to the same place returns the baseline response -- the sequence was resolved rather than matched, and the parameter names a location."
+  negative: "Every form of the sequence returns the same not-found response the baseline never gave, which is a parameter that names a key rather than a path."
+  inconclusive: "The endpoint returns one generic page for every input including the baseline, so nothing distinguishes resolution from rejection."
+
+sequence:
+  - "Capture the baseline: the unmodified request, its status, length and content type."
+  - "Send ./FILE. An identical response means the value reaches a path resolver."
+  - "Send DIR/../FILE, where DIR is a directory the application itself serves. A resolver walks the path before it reaches the .., so an invented name fails on a vulnerable sink too."
+  - "Record the parameter as resolving paths, and stop. Leaving the intended directory is the read unit's decision, not this one's."
+
+first_false_positive: >-
+  A 404 read as a refusal. A parameter that never reaches a filesystem returns
+  404 for a traversal payload just as a well-defended one does, and the two are
+  indistinguishable from that response alone. The no-op probes exist precisely
+  because they separate them without leaving the intended directory.
+
+false_positives:
+  - "A cache serving the baseline response for a modified request, which makes every payload look accepted."
+  - "A single-page application returning its shell for every path, so status and length never move."
+
+preconditions:
+  - "The parameter's ordinary behaviour has been observed at least once, or there is no baseline to compare against."
+  - "For the up-and-back probe, a directory that exists is known. Where none is, the same-directory probe is the whole of the available answer and the result is recorded as the weaker one it is."
+
+evidence:
+  - "The baseline request and response."
+  - "The no-op probe and its response, side by side with the baseline."
+
+done_when: >-
+  The parameter is recorded as resolving a path, not resolving one, or
+  indistinguishable -- with the no-op probe and the baseline that decided it.
+
+safety: >-
+  Every probe in this unit resolves inside the intended directory. Nothing here
+  reads a file the application would not have served anyway, which is why it is
+  the first unit and not the second.
+
+payloads: payloads/traversal/probe.yaml
+tools: [burp-repeater, curl]
+card: cards/traversal/path-resolution.md
+dimensions:
+  os: [unix, windows]

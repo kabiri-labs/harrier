@@ -1,0 +1,20 @@
+id: PTN-INJ-08
+title: "Operating system command injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [os-command]
+
+see_also: [PTN-INJ-04, PTN-INJ-07]
+
+order:
+  - PTN-INJ-08-PROBE
+  - PTN-INJ-08-VERIFY
+  - PTN-INJ-08-TIME
+  - PTN-INJ-08-OOB
+  - PTN-INJ-08-EVADE
+
+refs:
+  wstg: [WSTG-INPV-12]
+  cwe: [78]

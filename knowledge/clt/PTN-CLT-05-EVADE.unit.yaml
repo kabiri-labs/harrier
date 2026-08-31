@@ -1,0 +1,13 @@
+id: PTN-CLT-05-EVADE
+topic: PTN-CLT-05
+status: outline
+role: stage
+kind: recon
+title: "Location allow-list evasion"
+objective: >-
+  Determine whether a negative result is caused by an origin allow-list rather
+  than by the location never being attacker-influenceable.
+
+requires:
+  all_of: [surface.resource.controlled]
+yields: [control.filter.identified]

@@ -1,0 +1,13 @@
+id: PTN-SES-04-READ
+topic: PTN-SES-04
+status: outline
+role: stage
+title: "Confirmed capture by an unintended party"
+objective: >-
+  Determine whether a party the application never authorised obtains a usable
+  identifier through any of these routes.
+
+requires:
+  all_of: [surface.session.inurl]
+motivated_by: [surface.session.thirdparty]
+yields: [artifact.session.captured]

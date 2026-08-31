@@ -1,0 +1,12 @@
+id: PTN-BIZ-09-MAP
+topic: PTN-BIZ-09
+status: outline
+role: stage
+kind: recon
+title: "The declared cost controls"
+objective: >-
+  Record which cost controls the interface declares -- depth, complexity, page
+  size, batch size -- and the value of each.
+
+requires:
+  all_of: [recon.api.mapped]

@@ -1,0 +1,13 @@
+id: PTN-INJ-06-PROBE
+topic: PTN-INJ-06
+status: outline
+role: stage
+title: "Line-break survival probe"
+objective: >-
+  Determine whether a carriage return or line feed submitted in a header-bound
+  field survives into the generated message.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.mail.injectable]

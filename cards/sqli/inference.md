@@ -1,7 +1,7 @@
 # Inference: reading a database one bit at a time
 
-Shared by `HRR-INJ-01-ERROR`, `HRR-INJ-01-BOOL`, `HRR-INJ-01-TIME` and
-`HRR-INJ-01-OOB`: four different channels, one model. The model is written once
+Shared by `PTN-INJ-01-ERROR`, `PTN-INJ-01-BOOL`, `PTN-INJ-01-TIME` and
+`PTN-INJ-01-OOB`: four different channels, one model. The model is written once
 here because choosing between the four is the decision the card exists to
 support.
 
@@ -126,7 +126,7 @@ Two consequences:
    one that hits a statement timeout -- where the delay is absorbed rather than
    observed, and the channel has to be read some other way.)
 2. **This is a denial-of-service primitive at low request rates.** Not at flood
-   rates — at ten requests. That is why `HRR-INJ-01-TIME` is the one unit in the
+   rates — at ten requests. That is why `PTN-INJ-01-TIME` is the one unit in the
    topic whose `safety` names an availability limit, and why a timing sweep is
    agreed with the client rather than run because it is next in the list.
 
@@ -180,17 +180,17 @@ to reach for when the first three returned nothing, not the one to start with.
 
 The practical rule: a technique that would take four hours to read one value has
 not established a channel worth reporting as usable. It has established the
-capability, which is the finding, and `HRR-OUT-01-IMPACT` is where the question
+capability, which is the finding, and `PTN-OUT-01-IMPACT` is where the question
 of what that capability is worth actually gets asked.
 
 ## Related units
 
-- `HRR-INJ-01-ERROR` — the cheapest channel, and the only one that also
+- `PTN-INJ-01-ERROR` — the cheapest channel, and the only one that also
   discloses the statement's own structure.
-- `HRR-INJ-01-BOOL` — the fallback when errors are suppressed and nothing
+- `PTN-INJ-01-BOOL` — the fallback when errors are suppressed and nothing
   renders.
-- `HRR-INJ-01-TIME` — the last in-band channel, and the one with an availability
+- `PTN-INJ-01-TIME` — the last in-band channel, and the one with an availability
   cost.
-- `HRR-INJ-01-OOB` — the channel that works when nothing at all comes back.
-- `HRR-INJ-01-UNION` — not an inference technique: it returns chosen values
+- `PTN-INJ-01-OOB` — the channel that works when nothing at all comes back.
+- `PTN-INJ-01-UNION` — not an inference technique: it returns chosen values
   directly, which is why it is tried before any of these four.

@@ -1,6 +1,6 @@
 # Path resolution
 
-Applies to `HRR-RES-01`. Cross-references: ASVS V4.3, CWE-22, CWE-98.
+Applies to `PTN-RES-01`. Cross-references: ASVS V4.3, CWE-22, CWE-98.
 
 ## The fix that works
 

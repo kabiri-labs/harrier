@@ -1,0 +1,26 @@
+id: PTN-AUT-03
+title: "Anti-automation and lockout"
+domain: AUT
+axis: property
+
+surfaces:
+  any_of: [login-form, password-reset, mfa]
+
+order:
+  - PTN-AUT-03-RATE
+  - PTN-AUT-03-SCOPE
+  - PTN-AUT-03-REVOCATION
+  - PTN-AUT-03-IMPACT
+
+boundaries:
+  - subject: "Limits protecting a business function rather than a credential"
+    home: PTN-BIZ-05
+    note: >-
+      Lockout defends a secret. A cap on how often an action may be taken
+      defends a business rule, and the two fail differently.
+
+see_also: [PTN-BIZ-05]
+
+refs:
+  wstg: [WSTG-ATHN-03]
+  cwe: [307]

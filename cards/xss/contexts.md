@@ -1,6 +1,6 @@
 # Context decides everything
 
-Shared by `HRR-CLT-01-PROBE` and all eight context units. The topic's whole
+Shared by `PTN-CLT-01-PROBE` and all eight context units. The topic's whole
 argument is that these are not eight payload lists — they are eight different
 answers to *what has already been escaped by the time the value arrives*, and
 each has a different negative result.
@@ -68,7 +68,7 @@ browser hands the script block `&quot;` and the literal is untouched.
 So a page can be correctly encoded, demonstrably safe under the test everybody
 runs, and fully injectable in the block three lines further down. That is not an
 exotic case; it is the ordinary consequence of one encoder and several contexts,
-and it is why `HRR-CLT-01-JSSTR` names it as the first false positive.
+and it is why `PTN-CLT-01-JSSTR` names it as the first false positive.
 
 The same asymmetry runs the other way. A JavaScript-escaping helper that
 backslash-escapes quotes leaves `<` and `>` untouched, which is exactly what
@@ -129,7 +129,7 @@ The distinction the topic depends on:
    becomes part of the document. This is the control working.
 2. **Markup parsed.** The element the tester wrote is in the document tree, and
    no script of theirs runs — a policy blocked it, a sanitiser stripped the
-   handler, or the element never carried one. `HRR-CLT-01-MARKUP` exists for
+   handler, or the element never carried one. `PTN-CLT-01-MARKUP` exists for
    this, because what injected markup reaches without script is its own finding:
    a form whose destination the tester chose, a request the browser makes
    unprompted, a `<base>` that redirects every relative URL in the page.
@@ -140,7 +140,7 @@ one, and is the mistake a reviewer will catch. The discriminator is mechanical:
 look in the parsed document for the element, and in the console for the marker.
 Both, separately, every time.
 
-And `HRR-CLT-01-MARKUP`'s own first false positive is worth repeating here: it
+And `PTN-CLT-01-MARKUP`'s own first false positive is worth repeating here: it
 is not the consolation prize for a failed script payload. A unit that records
 only that a bracket survived has established nothing the probe did not.
 
@@ -165,15 +165,15 @@ person they never engaged. And the location of every stored payload is recorded
 when it is placed, because a payload nobody can find is one the client cannot
 remove.
 
-`HRR-OUT-06-IMPACT` is where the reach of that is established, and it is
+`PTN-OUT-06-IMPACT` is where the reach of that is established, and it is
 answered from how the application stores and serves the payload rather than by
 delivering anything to a real person.
 
 ## Related units
 
-- `HRR-CLT-01-PROBE` — which context, and which delimiters survived into it.
+- `PTN-CLT-01-PROBE` — which context, and which delimiters survived into it.
   Sole producer of `surface.reflection.unencoded`.
 - The eight context units — one per row of the table above.
-- `HRR-CLT-01-EVADE` — where a negative goes before it is believed.
-- `HRR-CLT-02` — the sibling topic for output the browser itself wrote, where
+- `PTN-CLT-01-EVADE` — where a negative goes before it is believed.
+- `PTN-CLT-02` — the sibling topic for output the browser itself wrote, where
   nothing the server returned was ever unsafe.

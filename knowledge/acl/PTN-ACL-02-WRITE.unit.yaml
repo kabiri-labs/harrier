@@ -1,0 +1,78 @@
+id: PTN-ACL-02-WRITE
+topic: PTN-ACL-02
+status: authored
+role: stage
+title: "Modification of an object the caller does not own"
+objective: >-
+  Determine whether an object the caller does not own can be changed, rather
+  than only read, by a request the caller composes.
+
+requires:
+  all_of: [artifact.objectid.known, access.user]
+yields: [primitive.data.write.other]
+
+hypotheses:
+  - "The read path and the write path were written at different times, so a check present on one is absent on the other."
+  - "Creation assigns ownership rather than checking it, so the check that refuses an update may not exist on create at all."
+  - "Deletion is a separate handler from update and frequently carries a separate policy."
+
+triage:
+  - "Update, delete and create routes for an object type whose read route was already tested."
+  - "A method override, a bulk endpoint or a batch route, which reach the same handler by a path the check may not cover."
+  - "Any route where the object identifier travels in the body rather than in the path, which is where a check keyed on the path misses it."
+
+sink: >-
+  The write the application performs, and whether the ownership predicate is
+  applied to the record being changed or only to the record being displayed.
+
+enter_when:
+  - "A read across the ownership boundary has been attempted, whatever its result, and a write route for the same object type exists."
+
+oracle:
+  positive: "A field of an object the caller does not own holds the value the caller sent, confirmed by reading it back as its rightful owner."
+  negative: "Every write route refuses the identifier, and the object read back as its owner is unchanged."
+  inconclusive: "The write is accepted with a success response and the object cannot be read back, so whether anything changed is unknown."
+
+sequence:
+  - "Change one field whose value is reversible and visible, in an object the engagement's second account owns."
+  - "Read the object back in the owner's session; the write's own response is not the evidence."
+  - "Restore the original value immediately, and record both requests."
+  - "Repeat for create and delete only where the engagement permits it, since neither is reversible in the same way."
+
+first_false_positive: >-
+  A success response for a write that changed nothing. Applications routinely
+  answer 200 to an update whose fields were all discarded by a filter, and the
+  only thing that separates that from a real write is reading the object back as
+  its owner.
+
+false_positives:
+  - "A field the object's owner is expected to be able to change through a share or a delegation the engagement set up earlier."
+  - "An optimistic interface showing the new value from the request rather than from the response."
+
+preconditions:
+  - "Written agreement covering writes to objects the caller does not own, naming the accounts and the object types."
+  - "An object of the second account that may be modified and restored."
+
+evidence:
+  - "The write request, and the object read back in the owner's session before and after."
+
+done_when: >-
+  Update, delete and create are each recorded as accepting the write, refusing
+  it, or excluded from scope with the reason -- each accepted one carrying the
+  read-back that decided it and the restoration that followed. One update route
+  is where this starts and not where it finishes: a policy that refuses an update
+  routinely permits a create.
+
+safety: >-
+  Every write is to an object the engagement created, is one reversible field,
+  and is restored in the same session it was made. Deletion is not demonstrated
+  on anything the engagement did not create. Where only a real record could
+  prove the point, the point is not proved: it is reported as an unverified
+  write path and put to the client.
+
+payloads: payloads/access-control/identifiers.yaml
+tools: [burp-repeater]
+card: cards/access-control/object-ownership.md
+mitigation: mitigations/object-authorization.md
+dimensions:
+  operation: [update, delete, create]

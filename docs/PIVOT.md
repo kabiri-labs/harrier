@@ -36,7 +36,7 @@ notebook — and that place is authoritative. A second, weaker record in a
 browser tab competes with it and loses.
 
 **It buried the content.** The board's entry point was a lane, so reaching a
-test meant agreeing with the board's ranking first. The two things Harrier
+test meant agreeing with the board's ranking first. The two things Pentest NavGrid
 actually has that WSTG does not — atomic decomposition and chain continuity —
 were reachable only through a stateful view that had to be configured before it
 said anything.
@@ -45,30 +45,30 @@ said anything.
 never transmitted, that is client data in an artefact whose entire security
 argument is that it holds none.
 
-## 3. What Harrier is now
+## 3. What Pentest NavGrid is now
 
 An interactive execution companion for web security testing standards. It
 decomposes large standard test cases into atomic, independently understandable
 Test Units, and shows what attack-chain paths may become relevant when each Test
 Unit succeeds.
 
-> WSTG tells you what to cover. Harrier shows you the real tests inside it and
+> WSTG tells you what to cover. Pentest NavGrid shows you the real tests inside it and
 > where each successful test can lead.
 
 The initial supported execution standard is OWASP WSTG, which provides the
 primary coverage and navigation structure:
 
 ```
-Standard → Testing group → WSTG test case → Harrier Test Units → Test Unit detail
+Standard → Testing group → WSTG test case → Pentest NavGrid Test Units → Test Unit detail
 ```
 
-Harrier adds two things at a granularity the standard does not reach:
+Pentest NavGrid adds two things at a granularity the standard does not reach:
 
 1. **Atomic decomposition.** A WSTG test case is often several independently
-   performable tests with different payloads, oracles and outcomes. Harrier
+   performable tests with different payloads, oracles and outcomes. Pentest NavGrid
    makes those Test Units explicit and separately addressable.
 2. **Attack-chain continuity.** A successful Test Unit establishes a capability
-   that can make other tests or impacts relevant. Harrier exposes those possible
+   that can make other tests or impacts relevant. Pentest NavGrid exposes those possible
    continuations so a test is not read as an isolated checklist item.
 
 ## 4. Retained
@@ -94,7 +94,7 @@ Harrier adds two things at a granularity the standard does not reach:
 - Build-time reading-order ranking (`order_hint`), which existed to sort a board
   that no longer exists.
 - Every phrase asserting reachability, availability or completion for a target.
-- `harrier chain --held`, `Chain.available` and `Chain.reachable_with`, and the
+- `pentest-navgrid chain --held`, `Chain.available` and `Chain.reachable_with`, and the
   `unlocks` wording in the command line. The pivot is the product's, not the
   artefact's: a tool one step away that still computed what was *possible now*
   would carry the rejected model in a place nothing on the page could correct.
@@ -135,7 +135,7 @@ lens**, not a second execution methodology. ASVS remains a control and
 remediation mapping; CWE remains a weakness classification; WSTG is the
 execution-navigation standard.
 
-Harrier is not a scanner, an exploit framework, a reporting platform, an
+Pentest NavGrid is not a scanner, an exploit framework, a reporting platform, an
 engagement tracker, or an automatic decision-maker.
 
 ## 7. Consequences and trade-offs
@@ -145,7 +145,7 @@ the pre-1.0 period precisely so it can be taken at all. Run files written by
 0.3.0 cannot be read by 0.4.0 and no migration is offered: the data they hold is
 target state, which the product no longer has a place for.
 
-**Harrier now answers a narrower question.** It will not tell a tester what to do
+**Pentest NavGrid now answers a narrower question.** It will not tell a tester what to do
 next on their engagement. It tells them what a standard test case actually
 contains, how to perform each piece, and where a success can lead. Deciding which
 of those applies today stays with the person, which is where the knowledge is.

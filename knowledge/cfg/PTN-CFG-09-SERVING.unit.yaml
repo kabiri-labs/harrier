@@ -1,0 +1,46 @@
+id: PTN-CFG-09-SERVING
+topic: PTN-CFG-09
+status: sketched
+role: stage
+title: "Whether objects are served without the application in front"
+objective: >-
+  Determine whether objects are retrievable directly from the store, bypassing
+  whatever authorization the application applies to the same content.
+
+requires:
+  all_of: [control.objectstore.public]
+yields: [primitive.check.bypassed]
+
+hypotheses:
+  - "The application authorises access to content that the store will hand to anybody who asks it directly."
+  - "A restriction applied by a delivery network in front of the store is not applied by the store."
+  - "The address the application delivers from names the store, which is how the direct route is found."
+
+triage:
+  - "An object the application authorises for one account and refuses to another."
+  - "The store's own address behind whatever delivery network fronts it."
+  - "The same request made without the application's session and without provider credentials."
+
+sink: >-
+  The store's object read path, which serves on its own policy and never
+  consults the authorization the application applies to the same content.
+
+oracle:
+  positive: "An object the application restricts is retrievable straight from the store, by a caller the application would have refused."
+  negative: "Every object tested is refused by the store to a caller the application does not authorise, whichever path the request takes."
+
+sequence:
+  - "Pick an object the application authorises for one account and refuses to another, and confirm that refusal through the application first."
+  - "Request the same object directly from the store, without the application's session and without provider credentials."
+  - "Where the store is fronted by a delivery network, repeat against the store's own address, since a restriction applied at the edge is not applied by the store."
+  - "Record which path served the object and which refused it."
+
+first_false_positive: >-
+  A direct retrieval of an object the application would have served anyway. The
+  store returned public content and no authorisation was bypassed, which is why
+  the object is one the application was first observed to refuse.
+
+done_when: >-
+  An object the application refuses has been requested directly from the store
+  and from any address in front of it, with each path recorded as serving or
+  refusing it.

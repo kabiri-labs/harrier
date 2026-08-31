@@ -1,0 +1,12 @@
+id: PTN-INJ-08-OOB
+topic: PTN-INJ-08
+status: outline
+role: variant
+title: "Out-of-band confirmation"
+objective: >-
+  Determine whether the host can be made to initiate a network interaction
+  carrying a token the tester chose.
+
+requires:
+  all_of: [surface.oscmd.injectable]
+yields: [primitive.exec.server, primitive.fetch.outbound]

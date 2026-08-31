@@ -1,0 +1,39 @@
+id: PTN-CFG-02-MAP
+topic: PTN-CFG-02
+status: sketched
+role: stage
+kind: recon
+title: "The naming the application's own files suggest"
+objective: >-
+  Record the naming conventions, extensions and directory shapes the
+  application's own served files reveal, since that is what makes a guess
+  about unlinked files informed rather than random.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+
+hypotheses:
+  - "How the deployment names its files predicts what it left beside them: an editor suffix, an archive, a copy taken before a change."
+  - "A build that ships a bundle often ships the map beside it, and the map names the source."
+  - "A guess is only worth making where the naming makes it likely, so the naming is the whole of this stage."
+
+triage:
+  - "Extensions and directory shapes the served files already use."
+  - "Version or build markers in asset names, which name the pipeline that produced them."
+  - "A source map reference, which names the source tree the bundle came from."
+  - "What the server answers for a path that does not exist, which every later guess is judged against."
+
+sequence:
+  - "From the entry point inventory, collect the naming the application's own files already show: the extensions in use, the directory shapes, the version or build markers in asset names, and the editor or deployment habits those imply."
+  - "Derive the candidates that naming makes likely -- the same names with a backup or editor suffix, the same directories with an archive or deployment name, the source of a bundle that ships a map."
+  - "Record a baseline for what this server returns for a path that does not exist, since every later guess is judged against it."
+
+first_false_positive: >-
+  A naming pattern read off third-party assets rather than the application's
+  own. A vendor bundle's conventions describe the vendor, and guessing from them
+  produces a candidate list about somebody else's build.
+
+done_when: >-
+  The naming conventions the served files reveal are written down, the candidate
+  list they imply is derived from them, and the server's answer for a
+  non-existent path is recorded as the baseline.

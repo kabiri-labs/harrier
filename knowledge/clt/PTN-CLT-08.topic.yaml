@@ -1,0 +1,19 @@
+id: PTN-CLT-08
+title: "Clickjacking and UI redress"
+domain: CLT
+axis: property
+
+surfaces:
+  any_of: [framed-ui, privileged-function, business-workflow]
+
+see_also: [PTN-CFG-05]
+
+order:
+  - PTN-CLT-08-POLICY
+  - PTN-CLT-08-PROBE
+  - PTN-CLT-08-WRITE
+  - PTN-CLT-08-EVADE
+
+refs:
+  wstg: [WSTG-CLNT-09]
+  cwe: [1021]

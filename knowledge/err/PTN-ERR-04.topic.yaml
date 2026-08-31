@@ -1,0 +1,24 @@
+id: PTN-ERR-04
+title: "Publicly indexed exposure"
+domain: ERR
+axis: phase
+
+surfaces:
+  always: true
+
+order:
+  - PTN-ERR-04-MAP
+  - PTN-ERR-04-PROBE
+
+boundaries:
+  - subject: "The same search used to enumerate the surface"
+    home: PTN-RCN-08
+    note: >-
+      Building a map is recon; finding something that should never have been
+      public is a disclosure finding.
+
+see_also: [PTN-RCN-08]
+
+refs:
+  wstg: [WSTG-INFO-01]
+  cwe: [200]

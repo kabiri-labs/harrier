@@ -1,0 +1,13 @@
+id: PTN-CLT-04-EVADE
+topic: PTN-CLT-04
+status: outline
+role: stage
+kind: recon
+title: "Style sanitiser evasion"
+objective: >-
+  Determine whether a negative result is caused by a declaration allow-list
+  rather than by the value never reaching a stylesheet.
+
+requires:
+  all_of: [surface.css.injectable]
+yields: [control.filter.identified]

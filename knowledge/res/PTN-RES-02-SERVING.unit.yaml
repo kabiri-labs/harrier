@@ -1,0 +1,13 @@
+id: PTN-RES-02-SERVING
+topic: PTN-RES-02
+status: outline
+role: stage
+title: "Stored object retrieval"
+objective: >-
+  Determine whether the stored object is served with a content type and
+  disposition that let it execute or render in a visitor's browser.
+
+requires:
+  all_of: [surface.upload.unrestricted]
+motivated_by: [surface.upload.pathcontrol, recon.platform.identified]
+yields: [primitive.exec.client]

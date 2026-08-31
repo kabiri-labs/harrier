@@ -1,0 +1,16 @@
+id: PTN-INJ-09
+title: "Format string injection"
+domain: INJ
+axis: technique
+
+surfaces:
+  any_of: [template-param, search]
+
+order:
+  - PTN-INJ-09-PROBE
+  - PTN-INJ-09-ERROR
+  - PTN-INJ-09-IMPACT
+
+refs:
+  wstg: [WSTG-INPV-13]
+  cwe: [134]

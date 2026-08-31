@@ -1,0 +1,13 @@
+id: PTN-SES-03-REPLAY
+topic: PTN-SES-03
+status: outline
+role: variant
+title: "Survival of a planted identifier across authentication"
+objective: >-
+  Determine whether an identifier that existed before sign-in remains valid
+  after it, rather than being replaced.
+
+requires:
+  all_of: [control.session.fixable, access.user]
+yields: [control.session.norotate]
+closes: [control.session.norotate]

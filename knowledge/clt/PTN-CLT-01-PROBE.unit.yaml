@@ -1,0 +1,61 @@
+id: PTN-CLT-01-PROBE
+topic: PTN-CLT-01
+status: authored
+role: stage
+kind: recon
+title: "Reflection point and survival probe"
+objective: >-
+  Record where a submitted value is returned in the response, which of the
+  context's delimiters survive unencoded, and which syntactic context the value
+  lands in.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon, access.user]
+yields: [surface.reflection.unencoded]
+
+hypotheses:
+  - "Encoding is applied by the template at the point of output, so one parameter can be safe in one place on the page and unencoded in another."
+  - "A value is encoded once for the context its author expected and arrives in a different one, which is why the context is read rather than assumed."
+  - "The value is stored and rendered somewhere other than the response to the request that submitted it, so the reflection is on a page nobody has loaded yet."
+
+triage:
+  - "Parameters echoed into the page: q, search, name, message, comment, redirect, ref, callback, lang, error, msg."
+  - "Error and confirmation banners, which render a value the developer treated as the application's own."
+  - "Any field stored once and rendered in several places, where one renderer encodes and another does not."
+  - "A JSON or JavaScript block in the page carrying a value the request supplied."
+
+enter_when:
+  - "Before any context unit of this topic, because the context decides which unit applies."
+
+sequence:
+  - "Submit a marker that is unique, alphanumeric and harmless, and find every place it is returned in the raw body."
+  - "For each occurrence, read the surrounding bytes and name the context: element content, attribute value, URL attribute, script string, script code, style, or SVG."
+  - "Submit the delimiter set for that context one character at a time and record which arrive unencoded."
+  - "Record one line per occurrence: the context, the surviving characters, and whether the delivery was reflected or stored."
+
+first_false_positive: >-
+  Reading the context from the rendered page rather than from the raw body. The
+  browser has already recovered from broken markup and re-serialised what it
+  built, so what is inspected is the browser's repair rather than what the
+  application sent.
+
+preconditions:
+  - "The parameter's ordinary response has been captured, so an occurrence of the marker can be told from the page's own content."
+
+evidence:
+  - "The raw response excerpt around each occurrence of the marker."
+  - "The per-character survival table for the context's delimiters."
+
+done_when: >-
+  Every occurrence of the marker is recorded with its context and its surviving
+  delimiters, or the parameter is recorded as not returned in any response that
+  was examined.
+
+payloads: payloads/xss/probe.yaml
+tools: [burp-repeater, browser-devtools]
+card: cards/xss/contexts.md
+mitigation: mitigations/output-encoding.md
+dimensions:
+  delivery: [reflected, stored]
+  browser: [chromium, firefox, webkit]

@@ -1,5 +1,5 @@
 version: 1
-generated_by: harrier index
+generated_by: pentest-navgrid index
 standard:
   source_ref: master
   source_commit: 2fab1ade827ee2336f14b7c695014191b7e2f3e1
@@ -7,10 +7,10 @@ cases:
 - id: WSTG-APIT-01
   title: API Reconnaissance
   topics:
-  - HRR-RCN-06
+  - PTN-RCN-06
   units:
-  - HRR-RCN-06-MAP
-  - HRR-RCN-06-PROBE
+  - PTN-RCN-06-MAP
+  - PTN-RCN-06-PROBE
   authored: 0
   sketched: 0
   outline: 2
@@ -18,13 +18,13 @@ cases:
 - id: WSTG-APIT-02
   title: API Broken Object Level Authorization
   topics:
-  - HRR-ACL-02
+  - PTN-ACL-02
   units:
-  - HRR-ACL-02-MAP
-  - HRR-ACL-02-PEER
-  - HRR-ACL-02-TENANT
-  - HRR-ACL-02-WRITE
-  - HRR-ACL-02-IMPACT
+  - PTN-ACL-02-MAP
+  - PTN-ACL-02-PEER
+  - PTN-ACL-02-TENANT
+  - PTN-ACL-02-WRITE
+  - PTN-ACL-02-IMPACT
   authored: 5
   sketched: 0
   outline: 0
@@ -32,24 +32,24 @@ cases:
 - id: WSTG-APIT-99
   title: Testing GraphQL
   topics:
-  - HRR-ACL-07
-  - HRR-BIZ-09
-  - HRR-INJ-12
-  - HRR-RCN-07
+  - PTN-ACL-07
+  - PTN-BIZ-09
+  - PTN-INJ-12
+  - PTN-RCN-07
   units:
-  - HRR-ACL-07-MAP
-  - HRR-ACL-07-PROBE
-  - HRR-ACL-07-EVADE
-  - HRR-BIZ-09-MAP
-  - HRR-BIZ-09-PROBE
-  - HRR-BIZ-09-EXHAUST
-  - HRR-INJ-12-MAP
-  - HRR-INJ-12-PROBE
-  - HRR-INJ-12-ERROR
-  - HRR-INJ-12-TIME
-  - HRR-INJ-12-OOB
-  - HRR-RCN-07-PROBE
-  - HRR-RCN-07-MAP
+  - PTN-ACL-07-MAP
+  - PTN-ACL-07-PROBE
+  - PTN-ACL-07-EVADE
+  - PTN-BIZ-09-MAP
+  - PTN-BIZ-09-PROBE
+  - PTN-BIZ-09-EXHAUST
+  - PTN-INJ-12-MAP
+  - PTN-INJ-12-PROBE
+  - PTN-INJ-12-ERROR
+  - PTN-INJ-12-TIME
+  - PTN-INJ-12-OOB
+  - PTN-RCN-07-PROBE
+  - PTN-RCN-07-MAP
   authored: 0
   sketched: 0
   outline: 13
@@ -57,14 +57,14 @@ cases:
 - id: WSTG-ATHN-01
   title: Testing for Credentials Transported over an Encrypted Channel
   topics:
-  - HRR-CRY-02
+  - PTN-CRY-02
   units:
-  - HRR-CRY-02-MAP
-  - HRR-CRY-02-LOGIN
-  - HRR-CRY-02-REGISTER
-  - HRR-CRY-02-RESET
-  - HRR-CRY-02-CHANGE
-  - HRR-CRY-02-EXPORT
+  - PTN-CRY-02-MAP
+  - PTN-CRY-02-LOGIN
+  - PTN-CRY-02-REGISTER
+  - PTN-CRY-02-RESET
+  - PTN-CRY-02-CHANGE
+  - PTN-CRY-02-EXPORT
   authored: 0
   sketched: 0
   outline: 6
@@ -72,11 +72,11 @@ cases:
 - id: WSTG-ATHN-02
   title: Testing for Default Credentials
   topics:
-  - HRR-AUT-02
+  - PTN-AUT-02
   units:
-  - HRR-AUT-02-MAP
-  - HRR-AUT-02-PROBE
-  - HRR-AUT-02-IMPACT
+  - PTN-AUT-02-MAP
+  - PTN-AUT-02-PROBE
+  - PTN-AUT-02-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -84,12 +84,12 @@ cases:
 - id: WSTG-ATHN-03
   title: Testing for Weak Lock Out Mechanism
   topics:
-  - HRR-AUT-03
+  - PTN-AUT-03
   units:
-  - HRR-AUT-03-RATE
-  - HRR-AUT-03-SCOPE
-  - HRR-AUT-03-REVOCATION
-  - HRR-AUT-03-IMPACT
+  - PTN-AUT-03-RATE
+  - PTN-AUT-03-SCOPE
+  - PTN-AUT-03-REVOCATION
+  - PTN-AUT-03-IMPACT
   authored: 0
   sketched: 0
   outline: 4
@@ -97,11 +97,11 @@ cases:
 - id: WSTG-ATHN-04
   title: Testing for Bypassing Authentication Schema
   topics:
-  - HRR-AUT-04
+  - PTN-AUT-04
   units:
-  - HRR-AUT-04-MAP
-  - HRR-AUT-04-DIFF
-  - HRR-AUT-04-REPLAY
+  - PTN-AUT-04-MAP
+  - PTN-AUT-04-DIFF
+  - PTN-AUT-04-REPLAY
   authored: 0
   sketched: 0
   outline: 3
@@ -109,11 +109,11 @@ cases:
 - id: WSTG-ATHN-05
   title: Testing for Vulnerable Remember Password
   topics:
-  - HRR-AUT-05
+  - PTN-AUT-05
   units:
-  - HRR-AUT-05-ENTROPY
-  - HRR-AUT-05-EXPIRY
-  - HRR-AUT-05-REVOCATION
+  - PTN-AUT-05-ENTROPY
+  - PTN-AUT-05-EXPIRY
+  - PTN-AUT-05-REVOCATION
   authored: 0
   sketched: 0
   outline: 3
@@ -121,13 +121,13 @@ cases:
 - id: WSTG-ATHN-06
   title: Testing for Browser Cache Weakness
   topics:
-  - HRR-CLT-10
+  - PTN-CLT-10
   units:
-  - HRR-CLT-10-MAP
-  - HRR-CLT-10-STORAGE
-  - HRR-CLT-10-FLAGS
-  - HRR-CLT-10-SCOPE
-  - HRR-CLT-10-REVOCATION
+  - PTN-CLT-10-MAP
+  - PTN-CLT-10-STORAGE
+  - PTN-CLT-10-FLAGS
+  - PTN-CLT-10-SCOPE
+  - PTN-CLT-10-REVOCATION
   authored: 0
   sketched: 0
   outline: 5
@@ -135,11 +135,11 @@ cases:
 - id: WSTG-ATHN-07
   title: Testing for Weak Password Policy
   topics:
-  - HRR-AUT-01
+  - PTN-AUT-01
   units:
-  - HRR-AUT-01-POLICY
-  - HRR-AUT-01-VALIDATION
-  - HRR-AUT-01-SIZE
+  - PTN-AUT-01-POLICY
+  - PTN-AUT-01-VALIDATION
+  - PTN-AUT-01-SIZE
   authored: 0
   sketched: 0
   outline: 3
@@ -147,11 +147,11 @@ cases:
 - id: WSTG-ATHN-08
   title: Testing for Weak Security Question Answer
   topics:
-  - HRR-AUT-06
+  - PTN-AUT-06
   units:
-  - HRR-AUT-06-POLICY
-  - HRR-AUT-06-VALIDATION
-  - HRR-AUT-06-RATE
+  - PTN-AUT-06-POLICY
+  - PTN-AUT-06-VALIDATION
+  - PTN-AUT-06-RATE
   authored: 0
   sketched: 0
   outline: 3
@@ -159,13 +159,13 @@ cases:
 - id: WSTG-ATHN-09
   title: Testing for Weak Password Change or Reset Functionalities
   topics:
-  - HRR-AUT-07
+  - PTN-AUT-07
   units:
-  - HRR-AUT-07-ENTROPY
-  - HRR-AUT-07-BINDING
-  - HRR-AUT-07-EXPIRY
-  - HRR-AUT-07-REVOCATION
-  - HRR-AUT-07-VALIDATION
+  - PTN-AUT-07-ENTROPY
+  - PTN-AUT-07-BINDING
+  - PTN-AUT-07-EXPIRY
+  - PTN-AUT-07-REVOCATION
+  - PTN-AUT-07-VALIDATION
   authored: 0
   sketched: 0
   outline: 5
@@ -173,11 +173,11 @@ cases:
 - id: WSTG-ATHN-10
   title: Testing for Weaker Authentication in Alternative Channel
   topics:
-  - HRR-AUT-08
+  - PTN-AUT-08
   units:
-  - HRR-AUT-08-MAP
-  - HRR-AUT-08-PROBE
-  - HRR-AUT-08-IMPACT
+  - PTN-AUT-08-MAP
+  - PTN-AUT-08-PROBE
+  - PTN-AUT-08-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -185,12 +185,12 @@ cases:
 - id: WSTG-ATHN-11
   title: Testing Multi-Factor Authentication (MFA)
   topics:
-  - HRR-AUT-09
+  - PTN-AUT-09
   units:
-  - HRR-AUT-09-POLICY
-  - HRR-AUT-09-VALIDATION
-  - HRR-AUT-09-ENTROPY
-  - HRR-AUT-09-BINDING
+  - PTN-AUT-09-POLICY
+  - PTN-AUT-09-VALIDATION
+  - PTN-AUT-09-ENTROPY
+  - PTN-AUT-09-BINDING
   authored: 0
   sketched: 0
   outline: 4
@@ -198,13 +198,13 @@ cases:
 - id: WSTG-ATHZ-01
   title: Testing Directory Traversal File Include
   topics:
-  - HRR-RES-01
+  - PTN-RES-01
   units:
-  - HRR-RES-01-PROBE
-  - HRR-RES-01-ERROR
-  - HRR-RES-01-READ
-  - HRR-RES-01-EXEC
-  - HRR-RES-01-EVADE
+  - PTN-RES-01-PROBE
+  - PTN-RES-01-ERROR
+  - PTN-RES-01-READ
+  - PTN-RES-01-EXEC
+  - PTN-RES-01-EVADE
   authored: 5
   sketched: 0
   outline: 0
@@ -212,11 +212,11 @@ cases:
 - id: WSTG-ATHZ-02
   title: Testing for Bypassing Authorization Schema
   topics:
-  - HRR-ACL-03
+  - PTN-ACL-03
   units:
-  - HRR-ACL-03-MAP
-  - HRR-ACL-03-ANON
-  - HRR-ACL-03-LOWPRIV
+  - PTN-ACL-03-MAP
+  - PTN-ACL-03-ANON
+  - PTN-ACL-03-LOWPRIV
   authored: 0
   sketched: 0
   outline: 3
@@ -224,12 +224,12 @@ cases:
 - id: WSTG-ATHZ-03
   title: Testing for Privilege Escalation
   topics:
-  - HRR-ACL-04
+  - PTN-ACL-04
   units:
-  - HRR-ACL-04-MAP
-  - HRR-ACL-04-DIFF
-  - HRR-ACL-04-REPLAY
-  - HRR-ACL-04-TOCTOU
+  - PTN-ACL-04-MAP
+  - PTN-ACL-04-DIFF
+  - PTN-ACL-04-REPLAY
+  - PTN-ACL-04-TOCTOU
   authored: 0
   sketched: 0
   outline: 4
@@ -237,13 +237,13 @@ cases:
 - id: WSTG-ATHZ-04
   title: Testing for Insecure Direct Object References
   topics:
-  - HRR-ACL-02
+  - PTN-ACL-02
   units:
-  - HRR-ACL-02-MAP
-  - HRR-ACL-02-PEER
-  - HRR-ACL-02-TENANT
-  - HRR-ACL-02-WRITE
-  - HRR-ACL-02-IMPACT
+  - PTN-ACL-02-MAP
+  - PTN-ACL-02-PEER
+  - PTN-ACL-02-TENANT
+  - PTN-ACL-02-WRITE
+  - PTN-ACL-02-IMPACT
   authored: 5
   sketched: 0
   outline: 0
@@ -251,12 +251,12 @@ cases:
 - id: WSTG-ATHZ-05
   title: Testing for OAuth Weaknesses
   topics:
-  - HRR-AUT-10
+  - PTN-AUT-10
   units:
-  - HRR-AUT-10-VALIDATION
-  - HRR-AUT-10-BINDING
-  - HRR-AUT-10-SCOPE
-  - HRR-AUT-10-REVOCATION
+  - PTN-AUT-10-VALIDATION
+  - PTN-AUT-10-BINDING
+  - PTN-AUT-10-SCOPE
+  - PTN-AUT-10-REVOCATION
   authored: 0
   sketched: 0
   outline: 4
@@ -264,11 +264,11 @@ cases:
 - id: WSTG-BUSL-01
   title: Test Business Logic Data Validation
   topics:
-  - HRR-BIZ-01
+  - PTN-BIZ-01
   units:
-  - HRR-BIZ-01-MAP
-  - HRR-BIZ-01-PROBE
-  - HRR-BIZ-01-IMPACT
+  - PTN-BIZ-01-MAP
+  - PTN-BIZ-01-PROBE
+  - PTN-BIZ-01-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -276,11 +276,11 @@ cases:
 - id: WSTG-BUSL-02
   title: Test Ability to Forge Requests
   topics:
-  - HRR-BIZ-02
+  - PTN-BIZ-02
   units:
-  - HRR-BIZ-02-MAP
-  - HRR-BIZ-02-PROBE
-  - HRR-BIZ-02-REPLAY
+  - PTN-BIZ-02-MAP
+  - PTN-BIZ-02-PROBE
+  - PTN-BIZ-02-REPLAY
   authored: 0
   sketched: 0
   outline: 3
@@ -288,11 +288,11 @@ cases:
 - id: WSTG-BUSL-03
   title: Test Integrity Checks
   topics:
-  - HRR-BIZ-03
+  - PTN-BIZ-03
   units:
-  - HRR-BIZ-03-MAP
-  - HRR-BIZ-03-PROBE
-  - HRR-BIZ-03-IMPACT
+  - PTN-BIZ-03-MAP
+  - PTN-BIZ-03-PROBE
+  - PTN-BIZ-03-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -300,11 +300,11 @@ cases:
 - id: WSTG-BUSL-04
   title: Test for Process Timing
   topics:
-  - HRR-BIZ-04
+  - PTN-BIZ-04
   units:
-  - HRR-BIZ-04-MAP
-  - HRR-BIZ-04-RACE
-  - HRR-BIZ-04-TOCTOU
+  - PTN-BIZ-04-MAP
+  - PTN-BIZ-04-RACE
+  - PTN-BIZ-04-TOCTOU
   authored: 0
   sketched: 0
   outline: 3
@@ -312,12 +312,12 @@ cases:
 - id: WSTG-BUSL-05
   title: Test Number of Times a Function Can Be Used Limits
   topics:
-  - HRR-BIZ-05
+  - PTN-BIZ-05
   units:
-  - HRR-BIZ-05-MAP
-  - HRR-BIZ-05-RATE
-  - HRR-BIZ-05-QUOTA
-  - HRR-BIZ-05-SCOPE
+  - PTN-BIZ-05-MAP
+  - PTN-BIZ-05-RATE
+  - PTN-BIZ-05-QUOTA
+  - PTN-BIZ-05-SCOPE
   authored: 0
   sketched: 0
   outline: 4
@@ -325,11 +325,11 @@ cases:
 - id: WSTG-BUSL-06
   title: Testing for the Circumvention of Work Flows
   topics:
-  - HRR-BIZ-06
+  - PTN-BIZ-06
   units:
-  - HRR-BIZ-06-MAP
-  - HRR-BIZ-06-PROBE
-  - HRR-BIZ-06-IMPACT
+  - PTN-BIZ-06-MAP
+  - PTN-BIZ-06-PROBE
+  - PTN-BIZ-06-IMPACT
   authored: 1
   sketched: 0
   outline: 2
@@ -337,10 +337,10 @@ cases:
 - id: WSTG-BUSL-07
   title: Test Defenses Against Application Misuse
   topics:
-  - HRR-BIZ-07
+  - PTN-BIZ-07
   units:
-  - HRR-BIZ-07-MAP
-  - HRR-BIZ-07-PROBE
+  - PTN-BIZ-07-MAP
+  - PTN-BIZ-07-PROBE
   authored: 0
   sketched: 0
   outline: 2
@@ -348,16 +348,16 @@ cases:
 - id: WSTG-BUSL-08
   title: Test Upload of Unexpected File Types
   topics:
-  - HRR-RES-02
+  - PTN-RES-02
   units:
-  - HRR-RES-02-PROBE
-  - HRR-RES-02-VALIDATION
-  - HRR-RES-02-NAMING
-  - HRR-RES-02-PARSING
-  - HRR-RES-02-SERVING
-  - HRR-RES-02-SIZE
-  - HRR-RES-02-RATE
-  - HRR-RES-02-QUOTA
+  - PTN-RES-02-PROBE
+  - PTN-RES-02-VALIDATION
+  - PTN-RES-02-NAMING
+  - PTN-RES-02-PARSING
+  - PTN-RES-02-SERVING
+  - PTN-RES-02-SIZE
+  - PTN-RES-02-RATE
+  - PTN-RES-02-QUOTA
   authored: 0
   sketched: 0
   outline: 8
@@ -365,16 +365,16 @@ cases:
 - id: WSTG-BUSL-09
   title: Test Upload of Malicious Files
   topics:
-  - HRR-RES-02
+  - PTN-RES-02
   units:
-  - HRR-RES-02-PROBE
-  - HRR-RES-02-VALIDATION
-  - HRR-RES-02-NAMING
-  - HRR-RES-02-PARSING
-  - HRR-RES-02-SERVING
-  - HRR-RES-02-SIZE
-  - HRR-RES-02-RATE
-  - HRR-RES-02-QUOTA
+  - PTN-RES-02-PROBE
+  - PTN-RES-02-VALIDATION
+  - PTN-RES-02-NAMING
+  - PTN-RES-02-PARSING
+  - PTN-RES-02-SERVING
+  - PTN-RES-02-SIZE
+  - PTN-RES-02-RATE
+  - PTN-RES-02-QUOTA
   authored: 0
   sketched: 0
   outline: 8
@@ -382,11 +382,11 @@ cases:
 - id: WSTG-BUSL-10
   title: Test Payment Functionality
   topics:
-  - HRR-BIZ-08
+  - PTN-BIZ-08
   units:
-  - HRR-BIZ-08-MAP
-  - HRR-BIZ-08-PROBE
-  - HRR-BIZ-08-IMPACT
+  - PTN-BIZ-08-MAP
+  - PTN-BIZ-08-PROBE
+  - PTN-BIZ-08-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -394,15 +394,15 @@ cases:
 - id: WSTG-CLNT-01
   title: Testing for DOM Based Cross Site Scripting
   topics:
-  - HRR-CLT-02
+  - PTN-CLT-02
   units:
-  - HRR-CLT-02-MAP
-  - HRR-CLT-02-HTMLBODY
-  - HRR-CLT-02-HTMLATTR
-  - HRR-CLT-02-HTMLURI
-  - HRR-CLT-02-JSCODE
-  - HRR-CLT-02-MARKUP
-  - HRR-CLT-02-EVADE
+  - PTN-CLT-02-MAP
+  - PTN-CLT-02-HTMLBODY
+  - PTN-CLT-02-HTMLATTR
+  - PTN-CLT-02-HTMLURI
+  - PTN-CLT-02-JSCODE
+  - PTN-CLT-02-MARKUP
+  - PTN-CLT-02-EVADE
   authored: 0
   sketched: 0
   outline: 7
@@ -410,15 +410,15 @@ cases:
 - id: WSTG-CLNT-02
   title: Testing for JavaScript Execution
   topics:
-  - HRR-CLT-02
+  - PTN-CLT-02
   units:
-  - HRR-CLT-02-MAP
-  - HRR-CLT-02-HTMLBODY
-  - HRR-CLT-02-HTMLATTR
-  - HRR-CLT-02-HTMLURI
-  - HRR-CLT-02-JSCODE
-  - HRR-CLT-02-MARKUP
-  - HRR-CLT-02-EVADE
+  - PTN-CLT-02-MAP
+  - PTN-CLT-02-HTMLBODY
+  - PTN-CLT-02-HTMLATTR
+  - PTN-CLT-02-HTMLURI
+  - PTN-CLT-02-JSCODE
+  - PTN-CLT-02-MARKUP
+  - PTN-CLT-02-EVADE
   authored: 0
   sketched: 0
   outline: 7
@@ -426,18 +426,18 @@ cases:
 - id: WSTG-CLNT-03
   title: Testing for HTML Injection
   topics:
-  - HRR-CLT-01
+  - PTN-CLT-01
   units:
-  - HRR-CLT-01-PROBE
-  - HRR-CLT-01-HTMLBODY
-  - HRR-CLT-01-HTMLATTR
-  - HRR-CLT-01-HTMLURI
-  - HRR-CLT-01-JSSTR
-  - HRR-CLT-01-JSCODE
-  - HRR-CLT-01-CSS
-  - HRR-CLT-01-SVG
-  - HRR-CLT-01-MARKUP
-  - HRR-CLT-01-EVADE
+  - PTN-CLT-01-PROBE
+  - PTN-CLT-01-HTMLBODY
+  - PTN-CLT-01-HTMLATTR
+  - PTN-CLT-01-HTMLURI
+  - PTN-CLT-01-JSSTR
+  - PTN-CLT-01-JSCODE
+  - PTN-CLT-01-CSS
+  - PTN-CLT-01-SVG
+  - PTN-CLT-01-MARKUP
+  - PTN-CLT-01-EVADE
   authored: 10
   sketched: 0
   outline: 0
@@ -445,13 +445,13 @@ cases:
 - id: WSTG-CLNT-04
   title: Testing for Client-Side URL Redirect
   topics:
-  - HRR-CLT-03
+  - PTN-CLT-03
   units:
-  - HRR-CLT-03-PROBE
-  - HRR-CLT-03-QUERY
-  - HRR-CLT-03-PATH
-  - HRR-CLT-03-REFERER
-  - HRR-CLT-03-EVADE
+  - PTN-CLT-03-PROBE
+  - PTN-CLT-03-QUERY
+  - PTN-CLT-03-PATH
+  - PTN-CLT-03-REFERER
+  - PTN-CLT-03-EVADE
   authored: 0
   sketched: 0
   outline: 5
@@ -459,12 +459,12 @@ cases:
 - id: WSTG-CLNT-05
   title: Testing for CSS Injection
   topics:
-  - HRR-CLT-04
+  - PTN-CLT-04
   units:
-  - HRR-CLT-04-PROBE
-  - HRR-CLT-04-DIFF
-  - HRR-CLT-04-READ
-  - HRR-CLT-04-EVADE
+  - PTN-CLT-04-PROBE
+  - PTN-CLT-04-DIFF
+  - PTN-CLT-04-READ
+  - PTN-CLT-04-EVADE
   authored: 0
   sketched: 0
   outline: 4
@@ -472,13 +472,13 @@ cases:
 - id: WSTG-CLNT-06
   title: Testing for Client-Side Resource Manipulation
   topics:
-  - HRR-CLT-05
+  - PTN-CLT-05
   units:
-  - HRR-CLT-05-MAP
-  - HRR-CLT-05-QUERY
-  - HRR-CLT-05-PATH
-  - HRR-CLT-05-EXEC
-  - HRR-CLT-05-EVADE
+  - PTN-CLT-05-MAP
+  - PTN-CLT-05-QUERY
+  - PTN-CLT-05-PATH
+  - PTN-CLT-05-EXEC
+  - PTN-CLT-05-EVADE
   authored: 0
   sketched: 0
   outline: 5
@@ -486,12 +486,12 @@ cases:
 - id: WSTG-CLNT-07
   title: Test Cross Origin Resource Sharing
   topics:
-  - HRR-CLT-06
+  - PTN-CLT-06
   units:
-  - HRR-CLT-06-POLICY
-  - HRR-CLT-06-SCOPE
-  - HRR-CLT-06-BINDING
-  - HRR-CLT-06-READ
+  - PTN-CLT-06-POLICY
+  - PTN-CLT-06-SCOPE
+  - PTN-CLT-06-BINDING
+  - PTN-CLT-06-READ
   authored: 0
   sketched: 0
   outline: 4
@@ -499,10 +499,10 @@ cases:
 - id: WSTG-CLNT-08
   title: Testing for Cross Site Flashing
   topics:
-  - HRR-CLT-07
+  - PTN-CLT-07
   units:
-  - HRR-CLT-07-MAP
-  - HRR-CLT-07-PROBE
+  - PTN-CLT-07-MAP
+  - PTN-CLT-07-PROBE
   authored: 0
   sketched: 0
   outline: 2
@@ -510,12 +510,12 @@ cases:
 - id: WSTG-CLNT-09
   title: Testing for Clickjacking
   topics:
-  - HRR-CLT-08
+  - PTN-CLT-08
   units:
-  - HRR-CLT-08-POLICY
-  - HRR-CLT-08-PROBE
-  - HRR-CLT-08-WRITE
-  - HRR-CLT-08-EVADE
+  - PTN-CLT-08-POLICY
+  - PTN-CLT-08-PROBE
+  - PTN-CLT-08-WRITE
+  - PTN-CLT-08-EVADE
   authored: 0
   sketched: 0
   outline: 4
@@ -523,18 +523,18 @@ cases:
 - id: WSTG-CLNT-10
   title: Testing WebSockets
   topics:
-  - HRR-INJ-11
-  - HRR-PRT-05
+  - PTN-INJ-11
+  - PTN-PRT-05
   units:
-  - HRR-INJ-11-MAP
-  - HRR-INJ-11-PROBE
-  - HRR-INJ-11-ERROR
-  - HRR-INJ-11-TIME
-  - HRR-INJ-11-EVADE
-  - HRR-PRT-05-POLICY
-  - HRR-PRT-05-VALIDATION
-  - HRR-PRT-05-BINDING
-  - HRR-PRT-05-TRANSPORT
+  - PTN-INJ-11-MAP
+  - PTN-INJ-11-PROBE
+  - PTN-INJ-11-ERROR
+  - PTN-INJ-11-TIME
+  - PTN-INJ-11-EVADE
+  - PTN-PRT-05-POLICY
+  - PTN-PRT-05-VALIDATION
+  - PTN-PRT-05-BINDING
+  - PTN-PRT-05-TRANSPORT
   authored: 0
   sketched: 0
   outline: 9
@@ -542,13 +542,13 @@ cases:
 - id: WSTG-CLNT-11
   title: Test Web Messaging
   topics:
-  - HRR-CLT-09
+  - PTN-CLT-09
   units:
-  - HRR-CLT-09-MAP
-  - HRR-CLT-09-VALIDATION
-  - HRR-CLT-09-SCOPE
-  - HRR-CLT-09-WRITE
-  - HRR-CLT-09-EXEC
+  - PTN-CLT-09-MAP
+  - PTN-CLT-09-VALIDATION
+  - PTN-CLT-09-SCOPE
+  - PTN-CLT-09-WRITE
+  - PTN-CLT-09-EXEC
   authored: 0
   sketched: 0
   outline: 5
@@ -556,13 +556,13 @@ cases:
 - id: WSTG-CLNT-12
   title: Test Browser Storage
   topics:
-  - HRR-CLT-10
+  - PTN-CLT-10
   units:
-  - HRR-CLT-10-MAP
-  - HRR-CLT-10-STORAGE
-  - HRR-CLT-10-FLAGS
-  - HRR-CLT-10-SCOPE
-  - HRR-CLT-10-REVOCATION
+  - PTN-CLT-10-MAP
+  - PTN-CLT-10-STORAGE
+  - PTN-CLT-10-FLAGS
+  - PTN-CLT-10-SCOPE
+  - PTN-CLT-10-REVOCATION
   authored: 0
   sketched: 0
   outline: 5
@@ -570,12 +570,12 @@ cases:
 - id: WSTG-CLNT-13
   title: Testing for Cross Site Script Inclusion
   topics:
-  - HRR-CLT-11
+  - PTN-CLT-11
   units:
-  - HRR-CLT-11-MAP
-  - HRR-CLT-11-PROBE
-  - HRR-CLT-11-ERROR
-  - HRR-CLT-11-READ
+  - PTN-CLT-11-MAP
+  - PTN-CLT-11-PROBE
+  - PTN-CLT-11-ERROR
+  - PTN-CLT-11-READ
   authored: 0
   sketched: 0
   outline: 4
@@ -583,11 +583,11 @@ cases:
 - id: WSTG-CLNT-14
   title: Testing for Reverse Tabnabbing
   topics:
-  - HRR-CLT-12
+  - PTN-CLT-12
   units:
-  - HRR-CLT-12-MAP
-  - HRR-CLT-12-BINDING
-  - HRR-CLT-12-WRITE
+  - PTN-CLT-12-MAP
+  - PTN-CLT-12-BINDING
+  - PTN-CLT-12-WRITE
   authored: 0
   sketched: 0
   outline: 3
@@ -595,11 +595,11 @@ cases:
 - id: WSTG-CONF-01
   title: Test Network Infrastructure Configuration
   topics:
-  - HRR-CFG-01
+  - PTN-CFG-01
   units:
-  - HRR-CFG-01-MAP
-  - HRR-CFG-01-SERVING
-  - HRR-CFG-01-POLICY
+  - PTN-CFG-01-MAP
+  - PTN-CFG-01-SERVING
+  - PTN-CFG-01-POLICY
   authored: 0
   sketched: 3
   outline: 0
@@ -607,11 +607,11 @@ cases:
 - id: WSTG-CONF-02
   title: Test Application Platform Configuration
   topics:
-  - HRR-CFG-01
+  - PTN-CFG-01
   units:
-  - HRR-CFG-01-MAP
-  - HRR-CFG-01-SERVING
-  - HRR-CFG-01-POLICY
+  - PTN-CFG-01-MAP
+  - PTN-CFG-01-SERVING
+  - PTN-CFG-01-POLICY
   authored: 0
   sketched: 3
   outline: 0
@@ -619,11 +619,11 @@ cases:
 - id: WSTG-CONF-03
   title: Test File Extensions Handling for Sensitive Information
   topics:
-  - HRR-CFG-02
+  - PTN-CFG-02
   units:
-  - HRR-CFG-02-MAP
-  - HRR-CFG-02-PROBE
-  - HRR-CFG-02-IMPACT
+  - PTN-CFG-02-MAP
+  - PTN-CFG-02-PROBE
+  - PTN-CFG-02-IMPACT
   authored: 0
   sketched: 3
   outline: 0
@@ -631,11 +631,11 @@ cases:
 - id: WSTG-CONF-04
   title: Review Old Backup and Unreferenced Files for Sensitive Information
   topics:
-  - HRR-CFG-02
+  - PTN-CFG-02
   units:
-  - HRR-CFG-02-MAP
-  - HRR-CFG-02-PROBE
-  - HRR-CFG-02-IMPACT
+  - PTN-CFG-02-MAP
+  - PTN-CFG-02-PROBE
+  - PTN-CFG-02-IMPACT
   authored: 0
   sketched: 3
   outline: 0
@@ -643,10 +643,10 @@ cases:
 - id: WSTG-CONF-05
   title: Enumerate Infrastructure and Application Admin Interfaces
   topics:
-  - HRR-CFG-03
+  - PTN-CFG-03
   units:
-  - HRR-CFG-03-MAP
-  - HRR-CFG-03-PROBE
+  - PTN-CFG-03-MAP
+  - PTN-CFG-03-PROBE
   authored: 0
   sketched: 2
   outline: 0
@@ -654,10 +654,10 @@ cases:
 - id: WSTG-CONF-06
   title: Test HTTP Methods
   topics:
-  - HRR-CFG-04
+  - PTN-CFG-04
   units:
-  - HRR-CFG-04-PROBE
-  - HRR-CFG-04-IMPACT
+  - PTN-CFG-04-PROBE
+  - PTN-CFG-04-IMPACT
   authored: 0
   sketched: 2
   outline: 0
@@ -665,11 +665,11 @@ cases:
 - id: WSTG-CONF-07
   title: Test HTTP Strict Transport Security
   topics:
-  - HRR-CFG-05
+  - PTN-CFG-05
   units:
-  - HRR-CFG-05-POLICY
-  - HRR-CFG-05-SCOPE
-  - HRR-CFG-05-VALIDATION
+  - PTN-CFG-05-POLICY
+  - PTN-CFG-05-SCOPE
+  - PTN-CFG-05-VALIDATION
   authored: 0
   sketched: 3
   outline: 0
@@ -677,9 +677,9 @@ cases:
 - id: WSTG-CONF-08
   title: Test RIA Cross Domain Policy
   topics:
-  - HRR-CFG-06
+  - PTN-CFG-06
   units:
-  - HRR-CFG-06-PROBE
+  - PTN-CFG-06-PROBE
   authored: 0
   sketched: 1
   outline: 0
@@ -687,11 +687,11 @@ cases:
 - id: WSTG-CONF-09
   title: Test File Permission
   topics:
-  - HRR-CFG-07
+  - PTN-CFG-07
   units:
-  - HRR-CFG-07-POLICY
-  - HRR-CFG-07-SERVING
-  - HRR-CFG-07-STORAGE
+  - PTN-CFG-07-POLICY
+  - PTN-CFG-07-SERVING
+  - PTN-CFG-07-STORAGE
   authored: 0
   sketched: 3
   outline: 0
@@ -699,10 +699,10 @@ cases:
 - id: WSTG-CONF-10
   title: Test for Subdomain Takeover
   topics:
-  - HRR-CFG-08
+  - PTN-CFG-08
   units:
-  - HRR-CFG-08-MAP
-  - HRR-CFG-08-PROBE
+  - PTN-CFG-08-MAP
+  - PTN-CFG-08-PROBE
   authored: 1
   sketched: 1
   outline: 0
@@ -710,11 +710,11 @@ cases:
 - id: WSTG-CONF-11
   title: Test Cloud Storage
   topics:
-  - HRR-CFG-09
+  - PTN-CFG-09
   units:
-  - HRR-CFG-09-POLICY
-  - HRR-CFG-09-NAMING
-  - HRR-CFG-09-SERVING
+  - PTN-CFG-09-POLICY
+  - PTN-CFG-09-NAMING
+  - PTN-CFG-09-SERVING
   authored: 0
   sketched: 3
   outline: 0
@@ -722,11 +722,11 @@ cases:
 - id: WSTG-CONF-12
   title: Testing for Content Security Policy
   topics:
-  - HRR-CFG-05
+  - PTN-CFG-05
   units:
-  - HRR-CFG-05-POLICY
-  - HRR-CFG-05-SCOPE
-  - HRR-CFG-05-VALIDATION
+  - PTN-CFG-05-POLICY
+  - PTN-CFG-05-SCOPE
+  - PTN-CFG-05-VALIDATION
   authored: 0
   sketched: 3
   outline: 0
@@ -734,13 +734,13 @@ cases:
 - id: WSTG-CONF-13
   title: Test Path Confusion
   topics:
-  - HRR-PRT-04
+  - PTN-PRT-04
   units:
-  - HRR-PRT-04-FPRINT
-  - HRR-PRT-04-DIFF
-  - HRR-PRT-04-READ
-  - HRR-PRT-04-WRITE
-  - HRR-PRT-04-EVADE
+  - PTN-PRT-04-FPRINT
+  - PTN-PRT-04-DIFF
+  - PTN-PRT-04-READ
+  - PTN-PRT-04-WRITE
+  - PTN-PRT-04-EVADE
   authored: 0
   sketched: 5
   outline: 0
@@ -748,11 +748,11 @@ cases:
 - id: WSTG-CONF-14
   title: Test Other HTTP Security Header Misconfigurations
   topics:
-  - HRR-CFG-05
+  - PTN-CFG-05
   units:
-  - HRR-CFG-05-POLICY
-  - HRR-CFG-05-SCOPE
-  - HRR-CFG-05-VALIDATION
+  - PTN-CFG-05-POLICY
+  - PTN-CFG-05-SCOPE
+  - PTN-CFG-05-VALIDATION
   authored: 0
   sketched: 3
   outline: 0
@@ -760,14 +760,14 @@ cases:
 - id: WSTG-CRYP-01
   title: Testing for Weak Transport Layer Security
   topics:
-  - HRR-CRY-01
+  - PTN-CRY-01
   units:
-  - HRR-CRY-01-MAP
-  - HRR-CRY-01-POLICY
-  - HRR-CRY-01-BINDING
-  - HRR-CRY-01-EXPIRY
-  - HRR-CRY-01-VALIDATION
-  - HRR-CRY-01-TRANSPORT
+  - PTN-CRY-01-MAP
+  - PTN-CRY-01-POLICY
+  - PTN-CRY-01-BINDING
+  - PTN-CRY-01-EXPIRY
+  - PTN-CRY-01-VALIDATION
+  - PTN-CRY-01-TRANSPORT
   authored: 0
   sketched: 0
   outline: 6
@@ -775,13 +775,13 @@ cases:
 - id: WSTG-CRYP-02
   title: Testing for Padding Oracle
   topics:
-  - HRR-CRY-04
+  - PTN-CRY-04
   units:
-  - HRR-CRY-04-PROBE
-  - HRR-CRY-04-ERROR
-  - HRR-CRY-04-TIME
-  - HRR-CRY-04-READ
-  - HRR-CRY-04-WRITE
+  - PTN-CRY-04-PROBE
+  - PTN-CRY-04-ERROR
+  - PTN-CRY-04-TIME
+  - PTN-CRY-04-READ
+  - PTN-CRY-04-WRITE
   authored: 0
   sketched: 0
   outline: 5
@@ -789,14 +789,14 @@ cases:
 - id: WSTG-CRYP-03
   title: Testing for Sensitive Information Sent Via Unencrypted Channels
   topics:
-  - HRR-CRY-02
+  - PTN-CRY-02
   units:
-  - HRR-CRY-02-MAP
-  - HRR-CRY-02-LOGIN
-  - HRR-CRY-02-REGISTER
-  - HRR-CRY-02-RESET
-  - HRR-CRY-02-CHANGE
-  - HRR-CRY-02-EXPORT
+  - PTN-CRY-02-MAP
+  - PTN-CRY-02-LOGIN
+  - PTN-CRY-02-REGISTER
+  - PTN-CRY-02-RESET
+  - PTN-CRY-02-CHANGE
+  - PTN-CRY-02-EXPORT
   authored: 0
   sketched: 0
   outline: 6
@@ -804,13 +804,13 @@ cases:
 - id: WSTG-CRYP-04
   title: Testing for Weak Cryptographic Primitives
   topics:
-  - HRR-CRY-03
+  - PTN-CRY-03
   units:
-  - HRR-CRY-03-MAP
-  - HRR-CRY-03-POLICY
-  - HRR-CRY-03-ENTROPY
-  - HRR-CRY-03-ROTATION
-  - HRR-CRY-03-STORAGE
+  - PTN-CRY-03-MAP
+  - PTN-CRY-03-POLICY
+  - PTN-CRY-03-ENTROPY
+  - PTN-CRY-03-ROTATION
+  - PTN-CRY-03-STORAGE
   authored: 0
   sketched: 0
   outline: 5
@@ -818,11 +818,11 @@ cases:
 - id: WSTG-ERRH-01
   title: Testing for Improper Error Handling
   topics:
-  - HRR-ERR-01
+  - PTN-ERR-01
   units:
-  - HRR-ERR-01-MAP
-  - HRR-ERR-01-ERROR
-  - HRR-ERR-01-DIFF
+  - PTN-ERR-01-MAP
+  - PTN-ERR-01-ERROR
+  - PTN-ERR-01-DIFF
   authored: 0
   sketched: 0
   outline: 3
@@ -830,10 +830,10 @@ cases:
 - id: WSTG-ERRH-02
   title: Testing for Stack Traces
   topics:
-  - HRR-ERR-02
+  - PTN-ERR-02
   units:
-  - HRR-ERR-02-ERROR
-  - HRR-ERR-02-PROBE
+  - PTN-ERR-02-ERROR
+  - PTN-ERR-02-PROBE
   authored: 0
   sketched: 0
   outline: 2
@@ -841,10 +841,10 @@ cases:
 - id: WSTG-IDNT-01
   title: Test Role Definitions
   topics:
-  - HRR-ACL-01
+  - PTN-ACL-01
   units:
-  - HRR-ACL-01-MAP
-  - HRR-ACL-01-VERIFY
+  - PTN-ACL-01-MAP
+  - PTN-ACL-01-VERIFY
   authored: 0
   sketched: 0
   outline: 2
@@ -852,11 +852,11 @@ cases:
 - id: WSTG-IDNT-02
   title: Test User Registration Process
   topics:
-  - HRR-IDN-01
+  - PTN-IDN-01
   units:
-  - HRR-IDN-01-POLICY
-  - HRR-IDN-01-VALIDATION
-  - HRR-IDN-01-RATE
+  - PTN-IDN-01-POLICY
+  - PTN-IDN-01-VALIDATION
+  - PTN-IDN-01-RATE
   authored: 0
   sketched: 0
   outline: 3
@@ -864,11 +864,11 @@ cases:
 - id: WSTG-IDNT-03
   title: Test Account Provisioning Process
   topics:
-  - HRR-IDN-02
+  - PTN-IDN-02
   units:
-  - HRR-IDN-02-MAP
-  - HRR-IDN-02-VALIDATION
-  - HRR-IDN-02-REVOCATION
+  - PTN-IDN-02-MAP
+  - PTN-IDN-02-VALIDATION
+  - PTN-IDN-02-REVOCATION
   authored: 0
   sketched: 0
   outline: 3
@@ -876,11 +876,11 @@ cases:
 - id: WSTG-IDNT-04
   title: Testing for Account Enumeration and Guessable User Account
   topics:
-  - HRR-IDN-03
+  - PTN-IDN-03
   units:
-  - HRR-IDN-03-DIFF
-  - HRR-IDN-03-TIME
-  - HRR-IDN-03-IMPACT
+  - PTN-IDN-03-DIFF
+  - PTN-IDN-03-TIME
+  - PTN-IDN-03-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -888,10 +888,10 @@ cases:
 - id: WSTG-IDNT-05
   title: Testing for Weak or Unenforced Username Policy
   topics:
-  - HRR-IDN-04
+  - PTN-IDN-04
   units:
-  - HRR-IDN-04-NAMING
-  - HRR-IDN-04-VALIDATION
+  - PTN-IDN-04-NAMING
+  - PTN-IDN-04-VALIDATION
   authored: 0
   sketched: 0
   outline: 2
@@ -899,13 +899,13 @@ cases:
 - id: WSTG-INFO-01
   title: Conduct Search Engine Discovery and Reconnaissance for Information Leakage
   topics:
-  - HRR-ERR-04
-  - HRR-RCN-08
+  - PTN-ERR-04
+  - PTN-RCN-08
   units:
-  - HRR-ERR-04-MAP
-  - HRR-ERR-04-PROBE
-  - HRR-RCN-08-MAP
-  - HRR-RCN-08-PROBE
+  - PTN-ERR-04-MAP
+  - PTN-ERR-04-PROBE
+  - PTN-RCN-08-MAP
+  - PTN-RCN-08-PROBE
   authored: 0
   sketched: 4
   outline: 0
@@ -913,10 +913,10 @@ cases:
 - id: WSTG-INFO-02
   title: Fingerprint Web Server
   topics:
-  - HRR-RCN-01
+  - PTN-RCN-01
   units:
-  - HRR-RCN-01-FPRINT
-  - HRR-RCN-01-VERIFY
+  - PTN-RCN-01-FPRINT
+  - PTN-RCN-01-VERIFY
   authored: 1
   sketched: 1
   outline: 0
@@ -924,13 +924,13 @@ cases:
 - id: WSTG-INFO-03
   title: Review Webserver Metafiles for Information Leakage
   topics:
-  - HRR-ERR-03
-  - HRR-RCN-08
+  - PTN-ERR-03
+  - PTN-RCN-08
   units:
-  - HRR-ERR-03-MAP
-  - HRR-ERR-03-PROBE
-  - HRR-RCN-08-MAP
-  - HRR-RCN-08-PROBE
+  - PTN-ERR-03-MAP
+  - PTN-ERR-03-PROBE
+  - PTN-RCN-08-MAP
+  - PTN-RCN-08-PROBE
   authored: 0
   sketched: 4
   outline: 0
@@ -938,10 +938,10 @@ cases:
 - id: WSTG-INFO-04
   title: Enumerate Applications on Webserver
   topics:
-  - HRR-RCN-02
+  - PTN-RCN-02
   units:
-  - HRR-RCN-02-MAP
-  - HRR-RCN-02-PROBE
+  - PTN-RCN-02-MAP
+  - PTN-RCN-02-PROBE
   authored: 0
   sketched: 2
   outline: 0
@@ -949,10 +949,10 @@ cases:
 - id: WSTG-INFO-05
   title: Review Webpage Content for Information Leakage
   topics:
-  - HRR-ERR-03
+  - PTN-ERR-03
   units:
-  - HRR-ERR-03-MAP
-  - HRR-ERR-03-PROBE
+  - PTN-ERR-03-MAP
+  - PTN-ERR-03-PROBE
   authored: 0
   sketched: 2
   outline: 0
@@ -960,10 +960,10 @@ cases:
 - id: WSTG-INFO-06
   title: Identify Application Entry Points
   topics:
-  - HRR-RCN-03
+  - PTN-RCN-03
   units:
-  - HRR-RCN-03-MAP
-  - HRR-RCN-03-PROBE
+  - PTN-RCN-03-MAP
+  - PTN-RCN-03-PROBE
   authored: 0
   sketched: 2
   outline: 0
@@ -971,11 +971,11 @@ cases:
 - id: WSTG-INFO-07
   title: Map Execution Paths Through Application
   topics:
-  - HRR-RCN-04
+  - PTN-RCN-04
   units:
-  - HRR-RCN-04-MAP
-  - HRR-RCN-04-FPRINT
-  - HRR-RCN-04-PROBE
+  - PTN-RCN-04-MAP
+  - PTN-RCN-04-FPRINT
+  - PTN-RCN-04-PROBE
   authored: 0
   sketched: 3
   outline: 0
@@ -983,10 +983,10 @@ cases:
 - id: WSTG-INFO-08
   title: Fingerprint Web Application Framework
   topics:
-  - HRR-RCN-01
+  - PTN-RCN-01
   units:
-  - HRR-RCN-01-FPRINT
-  - HRR-RCN-01-VERIFY
+  - PTN-RCN-01-FPRINT
+  - PTN-RCN-01-VERIFY
   authored: 1
   sketched: 1
   outline: 0
@@ -994,10 +994,10 @@ cases:
 - id: WSTG-INFO-09
   title: Fingerprint Web Application
   topics:
-  - HRR-RCN-01
+  - PTN-RCN-01
   units:
-  - HRR-RCN-01-FPRINT
-  - HRR-RCN-01-VERIFY
+  - PTN-RCN-01-FPRINT
+  - PTN-RCN-01-VERIFY
   authored: 1
   sketched: 1
   outline: 0
@@ -1005,11 +1005,11 @@ cases:
 - id: WSTG-INFO-10
   title: Map Application Architecture
   topics:
-  - HRR-RCN-04
+  - PTN-RCN-04
   units:
-  - HRR-RCN-04-MAP
-  - HRR-RCN-04-FPRINT
-  - HRR-RCN-04-PROBE
+  - PTN-RCN-04-MAP
+  - PTN-RCN-04-FPRINT
+  - PTN-RCN-04-PROBE
   authored: 0
   sketched: 3
   outline: 0
@@ -1017,18 +1017,18 @@ cases:
 - id: WSTG-INPV-01
   title: Testing for Reflected Cross Site Scripting
   topics:
-  - HRR-CLT-01
+  - PTN-CLT-01
   units:
-  - HRR-CLT-01-PROBE
-  - HRR-CLT-01-HTMLBODY
-  - HRR-CLT-01-HTMLATTR
-  - HRR-CLT-01-HTMLURI
-  - HRR-CLT-01-JSSTR
-  - HRR-CLT-01-JSCODE
-  - HRR-CLT-01-CSS
-  - HRR-CLT-01-SVG
-  - HRR-CLT-01-MARKUP
-  - HRR-CLT-01-EVADE
+  - PTN-CLT-01-PROBE
+  - PTN-CLT-01-HTMLBODY
+  - PTN-CLT-01-HTMLATTR
+  - PTN-CLT-01-HTMLURI
+  - PTN-CLT-01-JSSTR
+  - PTN-CLT-01-JSCODE
+  - PTN-CLT-01-CSS
+  - PTN-CLT-01-SVG
+  - PTN-CLT-01-MARKUP
+  - PTN-CLT-01-EVADE
   authored: 10
   sketched: 0
   outline: 0
@@ -1036,18 +1036,18 @@ cases:
 - id: WSTG-INPV-02
   title: Testing for Stored Cross Site Scripting
   topics:
-  - HRR-CLT-01
+  - PTN-CLT-01
   units:
-  - HRR-CLT-01-PROBE
-  - HRR-CLT-01-HTMLBODY
-  - HRR-CLT-01-HTMLATTR
-  - HRR-CLT-01-HTMLURI
-  - HRR-CLT-01-JSSTR
-  - HRR-CLT-01-JSCODE
-  - HRR-CLT-01-CSS
-  - HRR-CLT-01-SVG
-  - HRR-CLT-01-MARKUP
-  - HRR-CLT-01-EVADE
+  - PTN-CLT-01-PROBE
+  - PTN-CLT-01-HTMLBODY
+  - PTN-CLT-01-HTMLATTR
+  - PTN-CLT-01-HTMLURI
+  - PTN-CLT-01-JSSTR
+  - PTN-CLT-01-JSCODE
+  - PTN-CLT-01-CSS
+  - PTN-CLT-01-SVG
+  - PTN-CLT-01-MARKUP
+  - PTN-CLT-01-EVADE
   authored: 10
   sketched: 0
   outline: 0
@@ -1055,10 +1055,10 @@ cases:
 - id: WSTG-INPV-03
   title: Testing for HTTP Verb Tampering
   topics:
-  - HRR-ACL-05
+  - PTN-ACL-05
   units:
-  - HRR-ACL-05-DIFF
-  - HRR-ACL-05-EVADE
+  - PTN-ACL-05-DIFF
+  - PTN-ACL-05-EVADE
   authored: 0
   sketched: 0
   outline: 2
@@ -1066,12 +1066,12 @@ cases:
 - id: WSTG-INPV-04
   title: Testing for HTTP Parameter pollution
   topics:
-  - HRR-PRT-03
+  - PTN-PRT-03
   units:
-  - HRR-PRT-03-PROBE
-  - HRR-PRT-03-QUERY
-  - HRR-PRT-03-BODY
-  - HRR-PRT-03-HEADER
+  - PTN-PRT-03-PROBE
+  - PTN-PRT-03-QUERY
+  - PTN-PRT-03-BODY
+  - PTN-PRT-03-HEADER
   authored: 0
   sketched: 0
   outline: 4
@@ -1079,18 +1079,18 @@ cases:
 - id: WSTG-INPV-05
   title: Testing for SQL Injection
   topics:
-  - HRR-INJ-01
+  - PTN-INJ-01
   units:
-  - HRR-INJ-01-PROBE
-  - HRR-INJ-01-FPRINT
-  - HRR-INJ-01-ERROR
-  - HRR-INJ-01-BOOL
-  - HRR-INJ-01-TIME
-  - HRR-INJ-01-UNION
-  - HRR-INJ-01-OOB
-  - HRR-INJ-01-STACK
-  - HRR-INJ-01-SECOND
-  - HRR-INJ-01-EVADE
+  - PTN-INJ-01-PROBE
+  - PTN-INJ-01-FPRINT
+  - PTN-INJ-01-ERROR
+  - PTN-INJ-01-BOOL
+  - PTN-INJ-01-TIME
+  - PTN-INJ-01-UNION
+  - PTN-INJ-01-OOB
+  - PTN-INJ-01-STACK
+  - PTN-INJ-01-SECOND
+  - PTN-INJ-01-EVADE
   authored: 10
   sketched: 0
   outline: 0
@@ -1098,12 +1098,12 @@ cases:
 - id: WSTG-INPV-06
   title: Testing for LDAP Injection
   topics:
-  - HRR-INJ-02
+  - PTN-INJ-02
   units:
-  - HRR-INJ-02-PROBE
-  - HRR-INJ-02-ERROR
-  - HRR-INJ-02-BOOL
-  - HRR-INJ-02-EVADE
+  - PTN-INJ-02-PROBE
+  - PTN-INJ-02-ERROR
+  - PTN-INJ-02-BOOL
+  - PTN-INJ-02-EVADE
   authored: 0
   sketched: 0
   outline: 4
@@ -1111,14 +1111,14 @@ cases:
 - id: WSTG-INPV-07
   title: Testing for XML Injection
   topics:
-  - HRR-INJ-03
+  - PTN-INJ-03
   units:
-  - HRR-INJ-03-PROBE
-  - HRR-INJ-03-ERROR
-  - HRR-INJ-03-OOB
-  - HRR-INJ-03-READ
-  - HRR-INJ-03-EXHAUST
-  - HRR-INJ-03-EVADE
+  - PTN-INJ-03-PROBE
+  - PTN-INJ-03-ERROR
+  - PTN-INJ-03-OOB
+  - PTN-INJ-03-READ
+  - PTN-INJ-03-EXHAUST
+  - PTN-INJ-03-EVADE
   authored: 0
   sketched: 0
   outline: 6
@@ -1126,12 +1126,12 @@ cases:
 - id: WSTG-INPV-08
   title: Testing for SSI Injection
   topics:
-  - HRR-INJ-04
+  - PTN-INJ-04
   units:
-  - HRR-INJ-04-PROBE
-  - HRR-INJ-04-READ
-  - HRR-INJ-04-EXEC
-  - HRR-INJ-04-EVADE
+  - PTN-INJ-04-PROBE
+  - PTN-INJ-04-READ
+  - PTN-INJ-04-EXEC
+  - PTN-INJ-04-EVADE
   authored: 0
   sketched: 0
   outline: 4
@@ -1139,12 +1139,12 @@ cases:
 - id: WSTG-INPV-09
   title: Testing for XPath Injection
   topics:
-  - HRR-INJ-05
+  - PTN-INJ-05
   units:
-  - HRR-INJ-05-PROBE
-  - HRR-INJ-05-ERROR
-  - HRR-INJ-05-BOOL
-  - HRR-INJ-05-EVADE
+  - PTN-INJ-05-PROBE
+  - PTN-INJ-05-ERROR
+  - PTN-INJ-05-BOOL
+  - PTN-INJ-05-EVADE
   authored: 0
   sketched: 0
   outline: 4
@@ -1152,11 +1152,11 @@ cases:
 - id: WSTG-INPV-10
   title: Testing for IMAP SMTP Injection
   topics:
-  - HRR-INJ-06
+  - PTN-INJ-06
   units:
-  - HRR-INJ-06-PROBE
-  - HRR-INJ-06-IMPACT
-  - HRR-INJ-06-EVADE
+  - PTN-INJ-06-PROBE
+  - PTN-INJ-06-IMPACT
+  - PTN-INJ-06-EVADE
   authored: 0
   sketched: 0
   outline: 3
@@ -1164,13 +1164,13 @@ cases:
 - id: WSTG-INPV-11
   title: Testing for Code Injection
   topics:
-  - HRR-INJ-07
+  - PTN-INJ-07
   units:
-  - HRR-INJ-07-PROBE
-  - HRR-INJ-07-ERROR
-  - HRR-INJ-07-TIME
-  - HRR-INJ-07-OOB
-  - HRR-INJ-07-EVADE
+  - PTN-INJ-07-PROBE
+  - PTN-INJ-07-ERROR
+  - PTN-INJ-07-TIME
+  - PTN-INJ-07-OOB
+  - PTN-INJ-07-EVADE
   authored: 0
   sketched: 0
   outline: 5
@@ -1178,13 +1178,13 @@ cases:
 - id: WSTG-INPV-12
   title: Testing for Command Injection
   topics:
-  - HRR-INJ-08
+  - PTN-INJ-08
   units:
-  - HRR-INJ-08-PROBE
-  - HRR-INJ-08-VERIFY
-  - HRR-INJ-08-TIME
-  - HRR-INJ-08-OOB
-  - HRR-INJ-08-EVADE
+  - PTN-INJ-08-PROBE
+  - PTN-INJ-08-VERIFY
+  - PTN-INJ-08-TIME
+  - PTN-INJ-08-OOB
+  - PTN-INJ-08-EVADE
   authored: 0
   sketched: 0
   outline: 5
@@ -1192,11 +1192,11 @@ cases:
 - id: WSTG-INPV-13
   title: Testing for Format String Injection
   topics:
-  - HRR-INJ-09
+  - PTN-INJ-09
   units:
-  - HRR-INJ-09-PROBE
-  - HRR-INJ-09-ERROR
-  - HRR-INJ-09-IMPACT
+  - PTN-INJ-09-PROBE
+  - PTN-INJ-09-ERROR
+  - PTN-INJ-09-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -1212,13 +1212,13 @@ cases:
 - id: WSTG-INPV-15
   title: Testing for HTTP Splitting Smuggling
   topics:
-  - HRR-PRT-01
+  - PTN-PRT-01
   units:
-  - HRR-PRT-01-FPRINT
-  - HRR-PRT-01-TIME
-  - HRR-PRT-01-DIFF
-  - HRR-PRT-01-WRITE
-  - HRR-PRT-01-EVADE
+  - PTN-PRT-01-FPRINT
+  - PTN-PRT-01-TIME
+  - PTN-PRT-01-DIFF
+  - PTN-PRT-01-WRITE
+  - PTN-PRT-01-EVADE
   authored: 0
   sketched: 0
   outline: 5
@@ -1226,10 +1226,10 @@ cases:
 - id: WSTG-INPV-16
   title: Testing for HTTP Incoming Requests
   topics:
-  - HRR-RCN-05
+  - PTN-RCN-05
   units:
-  - HRR-RCN-05-MAP
-  - HRR-RCN-05-PROBE
+  - PTN-RCN-05-MAP
+  - PTN-RCN-05-PROBE
   authored: 0
   sketched: 0
   outline: 2
@@ -1237,12 +1237,12 @@ cases:
 - id: WSTG-INPV-17
   title: Testing for Host Header Injection
   topics:
-  - HRR-PRT-02
+  - PTN-PRT-02
   units:
-  - HRR-PRT-02-MAP
-  - HRR-PRT-02-HEADER
-  - HRR-PRT-02-WRITE
-  - HRR-PRT-02-EVADE
+  - PTN-PRT-02-MAP
+  - PTN-PRT-02-HEADER
+  - PTN-PRT-02-WRITE
+  - PTN-PRT-02-EVADE
   authored: 0
   sketched: 0
   outline: 4
@@ -1250,15 +1250,15 @@ cases:
 - id: WSTG-INPV-18
   title: Testing for Server-Side Template Injection
   topics:
-  - HRR-INJ-10
+  - PTN-INJ-10
   units:
-  - HRR-INJ-10-PROBE
-  - HRR-INJ-10-FPRINT
-  - HRR-INJ-10-ERROR
-  - HRR-INJ-10-OOB
-  - HRR-INJ-10-READ
-  - HRR-INJ-10-EXEC
-  - HRR-INJ-10-EVADE
+  - PTN-INJ-10-PROBE
+  - PTN-INJ-10-FPRINT
+  - PTN-INJ-10-ERROR
+  - PTN-INJ-10-OOB
+  - PTN-INJ-10-READ
+  - PTN-INJ-10-EXEC
+  - PTN-INJ-10-EVADE
   authored: 0
   sketched: 0
   outline: 7
@@ -1266,14 +1266,14 @@ cases:
 - id: WSTG-INPV-19
   title: Testing for Server-Side Request Forgery
   topics:
-  - HRR-RES-03
+  - PTN-RES-03
   units:
-  - HRR-RES-03-OOB
-  - HRR-RES-03-DIFF
-  - HRR-RES-03-TIME
-  - HRR-RES-03-PIVOT
-  - HRR-RES-03-READ
-  - HRR-RES-03-EVADE
+  - PTN-RES-03-OOB
+  - PTN-RES-03-DIFF
+  - PTN-RES-03-TIME
+  - PTN-RES-03-PIVOT
+  - PTN-RES-03-READ
+  - PTN-RES-03-EVADE
   authored: 0
   sketched: 0
   outline: 6
@@ -1281,11 +1281,11 @@ cases:
 - id: WSTG-INPV-20
   title: Testing for Mass Assignment
   topics:
-  - HRR-ACL-06
+  - PTN-ACL-06
   units:
-  - HRR-ACL-06-MAP
-  - HRR-ACL-06-WRITE
-  - HRR-ACL-06-IMPACT
+  - PTN-ACL-06-MAP
+  - PTN-ACL-06-WRITE
+  - PTN-ACL-06-IMPACT
   authored: 0
   sketched: 0
   outline: 3
@@ -1293,11 +1293,11 @@ cases:
 - id: WSTG-SESS-01
   title: Testing for Session Management Schema
   topics:
-  - HRR-SES-01
+  - PTN-SES-01
   units:
-  - HRR-SES-01-MAP
-  - HRR-SES-01-ENTROPY
-  - HRR-SES-01-BINDING
+  - PTN-SES-01-MAP
+  - PTN-SES-01-ENTROPY
+  - PTN-SES-01-BINDING
   authored: 0
   sketched: 0
   outline: 3
@@ -1305,11 +1305,11 @@ cases:
 - id: WSTG-SESS-02
   title: Testing for Cookies Attributes
   topics:
-  - HRR-SES-02
+  - PTN-SES-02
   units:
-  - HRR-SES-02-FLAGS
-  - HRR-SES-02-SCOPE
-  - HRR-SES-02-EXPIRY
+  - PTN-SES-02-FLAGS
+  - PTN-SES-02-SCOPE
+  - PTN-SES-02-EXPIRY
   authored: 0
   sketched: 0
   outline: 3
@@ -1317,11 +1317,11 @@ cases:
 - id: WSTG-SESS-03
   title: Testing for Session Fixation
   topics:
-  - HRR-SES-03
+  - PTN-SES-03
   units:
-  - HRR-SES-03-PROBE
-  - HRR-SES-03-REPLAY
-  - HRR-SES-03-READ
+  - PTN-SES-03-PROBE
+  - PTN-SES-03-REPLAY
+  - PTN-SES-03-READ
   authored: 0
   sketched: 0
   outline: 3
@@ -1329,12 +1329,12 @@ cases:
 - id: WSTG-SESS-04
   title: Testing for Exposed Session Variables
   topics:
-  - HRR-SES-04
+  - PTN-SES-04
   units:
-  - HRR-SES-04-QUERY
-  - HRR-SES-04-PATH
-  - HRR-SES-04-REFERER
-  - HRR-SES-04-READ
+  - PTN-SES-04-QUERY
+  - PTN-SES-04-PATH
+  - PTN-SES-04-REFERER
+  - PTN-SES-04-READ
   authored: 0
   sketched: 0
   outline: 4
@@ -1342,13 +1342,13 @@ cases:
 - id: WSTG-SESS-05
   title: Testing for Cross Site Request Forgery
   topics:
-  - HRR-SES-05
+  - PTN-SES-05
   units:
-  - HRR-SES-05-MAP
-  - HRR-SES-05-PROBE
-  - HRR-SES-05-REPLAY
-  - HRR-SES-05-WRITE
-  - HRR-SES-05-EVADE
+  - PTN-SES-05-MAP
+  - PTN-SES-05-PROBE
+  - PTN-SES-05-REPLAY
+  - PTN-SES-05-WRITE
+  - PTN-SES-05-EVADE
   authored: 0
   sketched: 0
   outline: 5
@@ -1356,11 +1356,11 @@ cases:
 - id: WSTG-SESS-06
   title: Testing for Logout Functionality
   topics:
-  - HRR-SES-06
+  - PTN-SES-06
   units:
-  - HRR-SES-06-PROBE
-  - HRR-SES-06-REVOCATION
-  - HRR-SES-06-SCOPE
+  - PTN-SES-06-PROBE
+  - PTN-SES-06-REVOCATION
+  - PTN-SES-06-SCOPE
   authored: 0
   sketched: 0
   outline: 3
@@ -1368,11 +1368,11 @@ cases:
 - id: WSTG-SESS-07
   title: Testing Session Timeout
   topics:
-  - HRR-SES-07
+  - PTN-SES-07
   units:
-  - HRR-SES-07-EXPIRY
-  - HRR-SES-07-IDLE
-  - HRR-SES-07-VALIDATION
+  - PTN-SES-07-EXPIRY
+  - PTN-SES-07-IDLE
+  - PTN-SES-07-VALIDATION
   authored: 0
   sketched: 0
   outline: 3
@@ -1380,11 +1380,11 @@ cases:
 - id: WSTG-SESS-08
   title: Testing for Session Puzzling
   topics:
-  - HRR-SES-08
+  - PTN-SES-08
   units:
-  - HRR-SES-08-MAP
-  - HRR-SES-08-SECOND
-  - HRR-SES-08-WRITE
+  - PTN-SES-08-MAP
+  - PTN-SES-08-SECOND
+  - PTN-SES-08-WRITE
   authored: 0
   sketched: 0
   outline: 3
@@ -1392,11 +1392,11 @@ cases:
 - id: WSTG-SESS-09
   title: Testing for Session Hijacking
   topics:
-  - HRR-SES-09
+  - PTN-SES-09
   units:
-  - HRR-SES-09-REPLAY
-  - HRR-SES-09-BRUTE
-  - HRR-SES-09-READ
+  - PTN-SES-09-REPLAY
+  - PTN-SES-09-BRUTE
+  - PTN-SES-09-READ
   authored: 0
   sketched: 0
   outline: 3
@@ -1404,18 +1404,18 @@ cases:
 - id: WSTG-SESS-10
   title: Testing JSON Web Tokens
   topics:
-  - HRR-CRY-05
-  - HRR-SES-10
+  - PTN-CRY-05
+  - PTN-SES-10
   units:
-  - HRR-CRY-05-PROBE
-  - HRR-CRY-05-FPRINT
-  - HRR-CRY-05-BRUTE
-  - HRR-CRY-05-REPLAY
-  - HRR-CRY-05-PIVOT
-  - HRR-SES-10-EXPIRY
-  - HRR-SES-10-SCOPE
-  - HRR-SES-10-BINDING
-  - HRR-SES-10-REVOCATION
+  - PTN-CRY-05-PROBE
+  - PTN-CRY-05-FPRINT
+  - PTN-CRY-05-BRUTE
+  - PTN-CRY-05-REPLAY
+  - PTN-CRY-05-PIVOT
+  - PTN-SES-10-EXPIRY
+  - PTN-SES-10-SCOPE
+  - PTN-SES-10-BINDING
+  - PTN-SES-10-REVOCATION
   authored: 0
   sketched: 0
   outline: 9
@@ -1423,11 +1423,11 @@ cases:
 - id: WSTG-SESS-11
   title: Testing for Concurrent Sessions
   topics:
-  - HRR-SES-11
+  - PTN-SES-11
   units:
-  - HRR-SES-11-POLICY
-  - HRR-SES-11-SCOPE
-  - HRR-SES-11-REVOCATION
+  - PTN-SES-11-POLICY
+  - PTN-SES-11-SCOPE
+  - PTN-SES-11-REVOCATION
   authored: 0
   sketched: 0
   outline: 3

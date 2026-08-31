@@ -1,0 +1,21 @@
+id: PTN-ACL-07
+title: "GraphQL field authorization"
+domain: ACL
+axis: phase
+
+surfaces:
+  any_of: [graphql]
+
+dimensions:
+  selection: [direct, alias, fragment, nested]
+
+order:
+  - PTN-ACL-07-MAP
+  - PTN-ACL-07-PROBE
+  - PTN-ACL-07-EVADE
+
+see_also: [PTN-ACL-02, PTN-RCN-07]
+
+refs:
+  wstg: [WSTG-APIT-99]
+  cwe: [285]

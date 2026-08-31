@@ -1,0 +1,16 @@
+id: PTN-SES-07
+title: "Session timeout"
+domain: SES
+axis: property
+
+surfaces:
+  any_of: [session-cookie, token-bearing]
+
+order:
+  - PTN-SES-07-EXPIRY
+  - PTN-SES-07-IDLE
+  - PTN-SES-07-VALIDATION
+
+refs:
+  wstg: [WSTG-SESS-07]
+  cwe: [613]

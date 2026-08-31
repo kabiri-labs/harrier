@@ -1,0 +1,39 @@
+id: PTN-RCN-04-PROBE
+topic: PTN-RCN-04
+status: sketched
+role: stage
+kind: recon
+title: "Whether the origin answers without the intermediary"
+objective: >-
+  Record whether the origin answers a request that does not pass through the
+  intermediary in front of it.
+
+requires:
+  all_of: [recon.tiers.mapped, recon.names.mapped]
+yields: [surface.origin.direct]
+closes: [surface.origin.direct]
+
+hypotheses:
+  - "The origin was reachable before the intermediary was put in front of it, and the address it answered on did not change."
+  - "A certificate served by an address, or a name that resolves past the front, points at the origin more reliably than any header does."
+  - "Another node of the same intermediary answers identically to the first, which looks exactly like reaching the origin."
+
+triage:
+  - "Addresses recorded during name mapping that the application does not resolve to today."
+  - "Certificates served by addresses in scope that name the application."
+  - "The intermediary's own markers in a response, whose absence is what distinguishes the origin from another node of the same product."
+
+sequence:
+  - "Find candidate origin addresses from what the engagement already grants: names that resolve past the intermediary, addresses recorded during name mapping, and the certificates those addresses serve."
+  - "Request the application from each candidate directly, naming the application's host in the request so the origin routes it as it would normally."
+  - "Compare the answer against the same request through the intermediary: content that matches while the intermediary's own headers are absent is the origin answering."
+
+first_false_positive: >-
+  Another node of the same intermediary answering. Its response is identical
+  because it is the same product, not because the origin was reached, which is
+  why the comparison is made on the intermediary's own markers being absent
+  rather than on the body matching.
+
+done_when: >-
+  Every candidate address is recorded as answering the application directly, as
+  refusing, or as another intermediary node, with the response that decided it.

@@ -1,0 +1,32 @@
+id: PTN-CRY-05
+title: "Signed token verification"
+domain: CRY
+axis: technique
+
+surfaces:
+  any_of: [token-bearing]
+
+boundaries:
+  - subject: "Claim lifetime, audience and issuer"
+    home: PTN-SES-10
+    note: >-
+      Whether the signature is checked at all is here; what the accepted
+      claims then say is a session property. The two fail independently.
+  - subject: "A key fetched from a URL in the token header"
+    home: PTN-RES-03
+    note: >-
+      Verification is here; the verifier reaching out to a location the token
+      named is server-side request forgery.
+
+see_also: [PTN-SES-10, PTN-AUT-10]
+
+order:
+  - PTN-CRY-05-PROBE
+  - PTN-CRY-05-FPRINT
+  - PTN-CRY-05-BRUTE
+  - PTN-CRY-05-REPLAY
+  - PTN-CRY-05-PIVOT
+
+refs:
+  wstg: [WSTG-SESS-10]
+  cwe: [347]

@@ -1,0 +1,64 @@
+id: PTN-RES-01-ERROR
+topic: PTN-RES-01
+status: authored
+role: variant
+title: "Error-based path disclosure"
+objective: >-
+  Determine whether a path that cannot resolve produces an error naming the
+  absolute path the application attempted to open.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [recon.approot.disclosed]
+
+hypotheses:
+  - "The platform's own error names the path it failed to open, which is the resolved path rather than the submitted one."
+  - "Where the resolved path is disclosed, the depth stops being a guess."
+  - "A friendly error page replaces the platform's error and discloses nothing, which is a configuration difference rather than an absence of the flaw."
+
+triage:
+  - "Errors that quote a path rather than a message."
+  - "The difference between the submitted value and the path the error names, which is the application's own root."
+  - "Whether the verbose error appears for some inputs and not others."
+
+sink: >-
+  The platform's file resolver, whose failure message names the path it was
+  given after the application finished building it.
+
+enter_when:
+  - "Before spending requests on depth: the disclosed root turns guessing into arithmetic."
+
+oracle:
+  positive: "The response names an absolute filesystem path the request did not contain."
+  negative: "Every unresolvable form returns a handled error carrying no path."
+  inconclusive: "Errors are returned as a generic page whose body is identical whatever the cause."
+
+sequence:
+  - "Ask for a name that cannot exist, keeping the parameter's ordinary shape."
+  - "Ask for a directory where the sink expects a file, which fails in a different layer and often speaks where the first is silent."
+  - "Ask for a name whose extension the sink does not handle."
+  - "Read the disclosed prefix off whichever one answered, and record the depth it implies."
+
+first_false_positive: >-
+  A path that is echoed from the request rather than resolved from it. If the
+  string appears because it was submitted, it discloses nothing -- the test is
+  whether the response names a prefix the request never carried.
+
+false_positives:
+  - "A framework debug page showing the developer's own machine path, left in a template rather than produced by this request."
+
+preconditions:
+  - "The parameter reaches a sink that opens something. A parameter that never resolves a path errors in a different layer entirely."
+
+evidence:
+  - "The request and the response carrying the absolute path."
+
+done_when: >-
+  The application root is written down, or all three failure shapes are recorded
+  as returning no path.
+
+safety: >-
+  Nothing is read. The unit asks for names that cannot resolve, which is why it
+  belongs before the read attempt rather than after it.
+
+tools: [burp-repeater]

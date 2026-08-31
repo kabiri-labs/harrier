@@ -1,0 +1,16 @@
+id: PTN-SES-01
+title: "Session establishment and token issue"
+domain: SES
+axis: property
+
+surfaces:
+  any_of: [session-cookie, token-bearing]
+
+order:
+  - PTN-SES-01-MAP
+  - PTN-SES-01-ENTROPY
+  - PTN-SES-01-BINDING
+
+refs:
+  wstg: [WSTG-SESS-01]
+  cwe: [330]

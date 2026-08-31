@@ -1,0 +1,12 @@
+id: PTN-INJ-02-ERROR
+topic: PTN-INJ-02
+status: outline
+role: variant
+title: "Error-based inference"
+objective: >-
+  Determine whether a malformed filter produces a directory error that names
+  the constructed filter or its failing position.
+
+requires:
+  all_of: [surface.ldap.injectable]
+yields: [recon.query.structure]

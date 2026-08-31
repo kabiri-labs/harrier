@@ -1,0 +1,14 @@
+id: PTN-BIZ-02-PROBE
+topic: PTN-BIZ-02
+status: outline
+role: stage
+kind: inquiry
+title: "Acceptance of a request the client never issues"
+objective: >-
+  Establish whether the server acts on a hand-built request that the
+  legitimate client would never construct in that form or at that point.
+
+requires:
+  all_of: [access.user, artifact.request.captured]
+yields: [control.request.forgeable]
+closes: [control.request.forgeable]

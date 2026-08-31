@@ -9,8 +9,8 @@ any content is written.
 ## 1. Identifier grammar
 
 ```
-HRR-<DOM>-<NN>            a topic     HRR-INJ-01
-HRR-<DOM>-<NN>-<SLUG>     a unit      HRR-INJ-01-UNION
+PTN-<DOM>-<NN>            a topic     PTN-INJ-01
+PTN-<DOM>-<NN>-<SLUG>     a unit      PTN-INJ-01-UNION
 ```
 
 - `HRR` — the project prefix. Deliberately not `WSTG`: the scope is web
@@ -207,15 +207,15 @@ others.
 ### Reflected and stored XSS — primary axis `context`
 
 ```
-HRR-CLT-01   Cross-site scripting via server-returned output
-  HRR-CLT-01-PROBE       phase    find reflection points and what survives
-  HRR-CLT-01-HTMLBODY    context  element content
-  HRR-CLT-01-HTMLATTR    context  attribute value, quoted and unquoted
-  HRR-CLT-01-JSSTR       context  inside a script string literal
-  HRR-CLT-01-HTMLURI     context  href / src / formaction sinks
-  HRR-CLT-01-CSS         context  style context
-  HRR-CLT-01-MARKUP      context  markup injection with script blocked
-  HRR-CLT-01-EVADE       phase    filter, encoder and WAF evasion
+PTN-CLT-01   Cross-site scripting via server-returned output
+  PTN-CLT-01-PROBE       phase    find reflection points and what survives
+  PTN-CLT-01-HTMLBODY    context  element content
+  PTN-CLT-01-HTMLATTR    context  attribute value, quoted and unquoted
+  PTN-CLT-01-JSSTR       context  inside a script string literal
+  PTN-CLT-01-HTMLURI     context  href / src / formaction sinks
+  PTN-CLT-01-CSS         context  style context
+  PTN-CLT-01-MARKUP      context  markup injection with script blocked
+  PTN-CLT-01-EVADE       phase    filter, encoder and WAF evasion
 
 dimensions:
   delivery: [reflected, stored]
@@ -225,7 +225,7 @@ dimensions:
 Eight units instead of eighteen cells, and nothing is lost: `delivery` changes
 where you paste the payload, not what the payload is or what proves it fired.
 
-DOM-based XSS is a separate topic (`HRR-CLT-02`) with the same primary axis and
+DOM-based XSS is a separate topic (`PTN-CLT-02`) with the same primary axis and
 overlapping slugs. That is correct and expected — the slug names the sink, the
 topic names who wrote to it. The boundary statement is one line: `CLT-01` is
 output the *server* produced; `CLT-02` is output the *browser* produced.
@@ -233,10 +233,10 @@ output the *server* produced; `CLT-02` is output the *browser* produced.
 ### SQL injection — primary axis `technique`
 
 ```
-HRR-INJ-01   SQL injection
-  HRR-INJ-01-PROBE  · -FPRINT   phase
-  HRR-INJ-01-ERROR  · -BOOL · -TIME · -UNION · -OOB · -STACK · -SECOND   technique
-  HRR-INJ-01-EVADE              phase
+PTN-INJ-01   SQL injection
+  PTN-INJ-01-PROBE  · -FPRINT   phase
+  PTN-INJ-01-ERROR  · -BOOL · -TIME · -UNION · -OOB · -STACK · -SECOND   technique
+  PTN-INJ-01-EVADE              phase
 
 dimensions:
   engine: [mysql, postgresql, mssql, oracle, sqlite]
@@ -247,8 +247,8 @@ Seven technique units instead of thirty-five technique-by-engine combinations.
 ### Session token handling — primary axis `property`
 
 ```
-HRR-SES-01   Session token issue and lifecycle
-  HRR-SES-01-ENTROPY · -SCOPE · -EXPIRY · -ROTATION · -FLAGS · -BINDING · -REVOCATION
+PTN-SES-01   Session token issue and lifecycle
+  PTN-SES-01-ENTROPY · -SCOPE · -EXPIRY · -ROTATION · -FLAGS · -BINDING · -REVOCATION
 ```
 
 Each is separately recordable — a token can have excellent entropy and no

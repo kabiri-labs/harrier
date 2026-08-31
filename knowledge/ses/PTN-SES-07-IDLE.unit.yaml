@@ -1,0 +1,12 @@
+id: PTN-SES-07-IDLE
+topic: PTN-SES-07
+status: outline
+role: stage
+title: "Inactivity limit"
+objective: >-
+  Determine whether a session left unused is ended after a bounded period of
+  inactivity.
+
+requires:
+  all_of: [recon.session.identified]
+yields: [control.session.unbounded]

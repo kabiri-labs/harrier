@@ -1,0 +1,23 @@
+id: PTN-CFG-06
+title: "Plugin cross-domain policy"
+domain: CFG
+axis: phase
+
+surfaces:
+  any_of: [plugin-policy]
+
+order:
+  - PTN-CFG-06-PROBE
+
+boundaries:
+  - subject: "Current cross-origin sharing"
+    home: PTN-CLT-06
+    note: >-
+      The plugins that read these policy files are retired. Recorded so the
+      coverage claim stays honest, not because it is likely to matter.
+
+see_also: [PTN-CLT-06, PTN-CLT-07]
+
+refs:
+  wstg: [WSTG-CONF-08]
+  cwe: [942]

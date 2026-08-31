@@ -1,0 +1,54 @@
+id: PTN-OUT-04-IMPACT
+topic: PTN-OUT-04
+status: authored
+role: stage
+kind: inquiry
+title: "Whether the altered records are read back"
+objective: >-
+  Establish whether the state a write can reach is state the application
+  later trusts -- a balance, a role, an audit row -- rather than a field
+  nothing consults again.
+
+requires:
+  any_of:
+    - primitive.db.write
+    - primitive.data.write.other
+yields: [impact.integrity.lost]
+
+enter_when:
+  - "A write to state the caller does not own has been confirmed, and what depends on that state is not yet established."
+
+questions:
+  - "What reads this record afterwards: a decision, a display, a balance, an entitlement, an audit trail, or nothing at all?"
+  - "Does anything downstream trust it without re-deriving it -- a report, a settlement, a scheduled job, another system?"
+  - "Is the change reversible from outside, and by whom, and does reversing it leave the record as it was?"
+  - "Does the application record who made the change, and would that record survive the change itself?"
+  - "What is the smallest field whose alteration would demonstrate the same reach, and was that the one used?"
+
+first_false_positive: >-
+  A write that succeeded into a field nothing consults again. Storage accepted
+  it and no decision depends on it, which is a finding about the control and not
+  about integrity -- and it is the most common outcome, because the fields that
+  are easy to write are frequently the ones nothing reads.
+
+preconditions:
+  - "Written agreement covering the write, naming the records that may be altered."
+  - "A restoration path for anything changed, established before the change is made."
+
+evidence:
+  - "The altered record read back through the route that consumes it, rather than through the route that wrote it."
+  - "The restoration, and the record's state after it."
+
+done_when: >-
+  One consumer of the altered state is named and the record is read back through
+  it, or every route examined is recorded as not reading the field -- and the
+  restoration is confirmed against the record's state before the change.
+
+safety: >-
+  The demonstration is one reversible field on a record the engagement created,
+  restored in the same session. Nothing here alters a financial, audit or
+  entitlement record belonging to a real party, however cleanly it would prove
+  the point: an integrity finding is not worth manufacturing the integrity
+  failure it describes.
+
+card: cards/outcome/proportionate-demonstration.md

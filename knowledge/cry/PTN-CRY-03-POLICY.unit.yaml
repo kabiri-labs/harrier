@@ -1,0 +1,12 @@
+id: PTN-CRY-03-POLICY
+topic: PTN-CRY-03
+status: outline
+role: stage
+title: "Algorithm and mode selection"
+objective: >-
+  Determine whether a chosen algorithm or mode is unsound for the purpose it
+  serves, such as an unauthenticated mode for data an attacker can alter.
+
+requires:
+  all_of: [surface.appcrypto]
+yields: [control.crypto.unsound]

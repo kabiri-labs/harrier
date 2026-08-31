@@ -1,0 +1,50 @@
+id: PTN-CFG-05-VALIDATION
+topic: PTN-CFG-05
+status: sketched
+role: stage
+title: "Whether each declared policy is effective as written"
+objective: >-
+  Determine whether each declared policy is one a browser will honour, since a
+  directive that is misspelled, superseded or unsupported is a policy in the
+  response and not in the browser.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [control.headers.permissive]
+
+hypotheses:
+  - "A directive that is misspelled is ignored silently, and the policy still looks present."
+  - "A nonce in the header protects nothing unless every inline block the policy covers carries it."
+  - "Adding a second declaration to widen a policy narrows it instead, because each declaration is enforced in full."
+  - "A policy in the document and a policy in the header both apply, rather than one replacing the other."
+
+triage:
+  - "Directive names and values checked against the specification rather than against what they appear to say."
+  - "The same header declared more than once on one response."
+  - "A nonce or hash in the policy, checked against the blocks the served document actually carries."
+  - "What the browser itself reports about the policy it applied."
+
+sink: >-
+  The browser's own policy parser, which is the only reader whose interpretation
+  counts -- and which silently drops what it does not understand.
+
+oracle:
+  positive: "A declared policy is one a browser will not honour as written: a misspelled or unsupported directive, a nonce declared in the header that no inline block carries, a directive whose form the browser rejects, or a second declaration of the same header that does not do what its author expected of it."
+  negative: "Every declared directive is spelled as its specification requires, appears once, and is one the browsers in scope enforce."
+
+sequence:
+  - "Check each directive name and value against the specification the header belongs to, rather than against what it appears to say."
+  - "Where a header is declared more than once, or in both a header and the document, read the duplicates by the combination rule that header defines rather than assuming one wins: content policies are each enforced in full, so a second one can only narrow what the first allowed and never widen it, and a header added to relax an existing policy does nothing of the sort."
+  - "Where the policy relies on a nonce or a hash, confirm the served document actually carries it on every block the policy covers."
+  - "Load the page in a browser in scope and read what it reports about the policy it applied."
+
+first_false_positive: >-
+  A directive the tester does not recognise but the browsers in scope do. The
+  finding here is a policy the browser will not honour, so the specification and
+  the browser's own report decide it, not familiarity.
+
+done_when: >-
+  Every declared directive is recorded as honoured or as unsupported by the
+  browsers in scope, every duplicated header is recorded with what the
+  combination of its declarations actually permits, and each carries the
+  specification or the browser report that decided it.

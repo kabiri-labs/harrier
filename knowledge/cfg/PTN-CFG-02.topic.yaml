@@ -1,0 +1,18 @@
+id: PTN-CFG-02
+title: "Exposed files and backup artefacts"
+domain: CFG
+axis: phase
+
+surfaces:
+  always: true
+
+order:
+  - PTN-CFG-02-MAP
+  - PTN-CFG-02-PROBE
+  - PTN-CFG-02-IMPACT
+
+see_also: [PTN-ERR-03]
+
+refs:
+  wstg: [WSTG-CONF-03, WSTG-CONF-04]
+  cwe: [530, 548]

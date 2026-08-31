@@ -1,0 +1,24 @@
+id: PTN-PRT-03
+title: "Parameter pollution"
+domain: PRT
+axis: vector
+
+surfaces:
+  always: true
+
+boundaries:
+  - subject: "Using duplicated parameters to defeat a filter"
+    home: PTN-INJ-01
+    note: >-
+      Two parsers disagreeing is the mechanism here; using that disagreement
+      to land a payload is an evasion step of the injection topic it serves.
+
+order:
+  - PTN-PRT-03-PROBE
+  - PTN-PRT-03-QUERY
+  - PTN-PRT-03-BODY
+  - PTN-PRT-03-HEADER
+
+refs:
+  wstg: [WSTG-INPV-04]
+  cwe: [235]

@@ -1,0 +1,33 @@
+id: PTN-RES-01
+title: "Path traversal and file inclusion"
+domain: RES
+axis: technique
+
+surfaces:
+  any_of: [path-param, file-download, template-param]
+
+boundaries:
+  - subject: "Two components disagreeing about the path"
+    home: PTN-PRT-04
+    note: >-
+      Resolving a path the attacker wrote is here; a proxy and an origin
+      reading the same path differently is a protocol concern.
+  - subject: "An identifier that names a record rather than a file"
+    home: PTN-ACL-02
+    note: >-
+      Published under authorization and usually found there. Filed by
+      mechanism: the server resolves a path, which is the same mechanism as
+      inclusion and upload.
+
+see_also: [PTN-ACL-02, PTN-PRT-04]
+
+order:
+  - PTN-RES-01-PROBE
+  - PTN-RES-01-ERROR
+  - PTN-RES-01-READ
+  - PTN-RES-01-EXEC
+  - PTN-RES-01-EVADE
+
+refs:
+  wstg: [WSTG-ATHZ-01]
+  cwe: [22, 98]

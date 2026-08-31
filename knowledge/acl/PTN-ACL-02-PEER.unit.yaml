@@ -1,0 +1,55 @@
+id: PTN-ACL-02-PEER
+topic: PTN-ACL-02
+status: authored
+role: stage
+title: "An object belonging to another account of the same role"
+objective: >-
+  Determine whether an object owned by a different account of the same role is
+  served to a caller who does not own it.
+
+requires:
+  all_of: [access.user, access.peer, artifact.objectid.known]
+yields: [primitive.data.read.peer]
+closes: [primitive.data.read.peer]
+
+enter_when:
+  - "Two accounts of the same role are held, and an identifier from one is in hand."
+
+oracle:
+  positive: "The response carries the other account's record rather than an authorization error or an empty result."
+  negative: "Every identifier from the second account, on every endpoint that accepts one, is refused."
+  inconclusive: "The endpoint answers identically for a refused object and a missing one, so refusal cannot be distinguished from absence."
+
+sequence:
+  - "Sign in as the second account and capture a request naming one of its objects."
+  - "Replay that request in the first account's session, changing nothing else."
+  - "Compare the response with the same request made by its rightful owner."
+  - "Repeat on one endpoint of each kind -- read, list, export -- rather than one endpoint many times."
+
+first_false_positive: >-
+  A response that returns a record whose fields are all empty. The endpoint
+  authorized the caller and found nothing, which is a different result from
+  serving another account's data, and the two look alike in a status code.
+
+false_positives:
+  - "Objects that are deliberately shared between accounts, where being served is the intended behaviour."
+  - "A cached response belonging to the earlier session, when the two sessions were used in one browser profile."
+
+preconditions:
+  - "Two accounts of the same role exist and both are authorised for testing."
+
+evidence:
+  - "The owner's request and response, and the same request in the other session."
+
+done_when: >-
+  One endpoint of each kind has been tried with an identifier the caller does not
+  own, and each is recorded as served, refused, or indistinguishable.
+
+safety: >-
+  Read-only. The identifiers used belong to accounts the engagement created or
+  was given; an identifier guessed into a real customer's record is that
+  customer's data, and enumeration belongs to the sibling unit that scopes it.
+
+tools: [burp-repeater]
+card: cards/access-control/object-ownership.md
+mitigation: mitigations/object-authorization.md

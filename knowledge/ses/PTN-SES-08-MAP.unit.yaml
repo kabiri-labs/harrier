@@ -1,0 +1,12 @@
+id: PTN-SES-08-MAP
+topic: PTN-SES-08
+status: outline
+role: stage
+kind: recon
+title: "Server-side session variable inventory"
+objective: >-
+  Establish which values the server keeps in session state and which flows
+  write each of them.
+
+requires:
+  all_of: [access.user]

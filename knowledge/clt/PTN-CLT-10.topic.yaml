@@ -1,0 +1,20 @@
+id: PTN-CLT-10
+title: "Client-side storage and cache"
+domain: CLT
+axis: property
+
+surfaces:
+  any_of: [client-storage]
+
+see_also: [PTN-AUT-05, PTN-SES-04]
+
+order:
+  - PTN-CLT-10-MAP
+  - PTN-CLT-10-STORAGE
+  - PTN-CLT-10-FLAGS
+  - PTN-CLT-10-SCOPE
+  - PTN-CLT-10-REVOCATION
+
+refs:
+  wstg: [WSTG-CLNT-12, WSTG-ATHN-06]
+  cwe: [922, 525]

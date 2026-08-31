@@ -1,0 +1,18 @@
+id: PTN-BIZ-01
+title: "Business rule validation"
+domain: BIZ
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment, export-report]
+
+order:
+  - PTN-BIZ-01-MAP
+  - PTN-BIZ-01-PROBE
+  - PTN-BIZ-01-IMPACT
+
+see_also: [PTN-BIZ-03]
+
+refs:
+  wstg: [WSTG-BUSL-01]
+  cwe: [20, 602]

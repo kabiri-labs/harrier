@@ -1,0 +1,17 @@
+id: PTN-ACL-06
+title: "Field-level binding and mass assignment"
+domain: ACL
+
+surfaces:
+  any_of: [rest-api, graphql, registration, business-workflow]
+
+order:
+  - PTN-ACL-06-MAP
+  - PTN-ACL-06-WRITE
+  - PTN-ACL-06-IMPACT
+
+see_also: [PTN-ACL-02, PTN-BIZ-03]
+
+refs:
+  wstg: [WSTG-INPV-20]
+  cwe: [915]

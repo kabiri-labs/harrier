@@ -1,0 +1,77 @@
+id: PTN-CLT-01-HTMLATTR
+topic: PTN-CLT-01
+status: authored
+role: stage
+title: "Attribute value context"
+objective: >-
+  Determine whether a value returned inside an attribute can break out of the
+  attribute, or introduce an event handler, so that script runs.
+
+requires:
+  all_of: [surface.reflection.unencoded]
+motivated_by: [control.headers.permissive]
+yields: [primitive.exec.client]
+
+hypotheses:
+  - "The template encodes the angle brackets an element needs and not the quote an attribute needs, because the encoder was chosen for element content."
+  - "The value is written into an unquoted attribute, where a space alone introduces a second attribute and no quote is required at all."
+  - "The element the value lands in never fires the event the handler was written for, so a live handler and an encoded one look identical."
+
+triage:
+  - "A marker returned inside a tag rather than between two, with an unencoded quote beside it."
+  - "value, title, alt, placeholder and data- attributes carrying a submitted string."
+  - "An attribute written without quotes, where the template concatenated the value straight into the tag."
+
+sink: >-
+  The attribute the parser assigns, where a delimiter the tester wrote ends the
+  value early or adds a second attribute beside it.
+
+enter_when:
+  - "The probe recorded this parameter reaching this context with at least one of the context's delimiters unencoded."
+
+oracle:
+  positive: "Script runs from an event handler the tester introduced, either by closing the quoted value or by appending to an unquoted one."
+  negative: "The quote characters and the space are encoded in every form tried, so the value cannot extend past the attribute the template opened."
+  inconclusive: "The attribute is written into an element the page never displays or never fires an event on, so a handler could be present and never invoked."
+
+sequence:
+  - "Read from the raw body whether the attribute is single-quoted, double-quoted or unquoted; the three take three different escapes."
+  - "For a quoted value, send the matching quote alone and confirm from the body that it ended the value."
+  - "Introduce an event handler that fires without interaction rather than one that needs a click, so a negative is a negative rather than an unfired handler."
+  - "Where the attribute is unquoted, place the payload after the value already there -- a space alone introduces the attribute, but only once the existing value has been terminated."
+
+first_false_positive: >-
+  A handler that never fired because nothing in the page triggers it. An
+  unfired handler and an encoded one look identical from the running page, which
+  is why the event is chosen for firing on load rather than on interaction.
+
+false_positives:
+  - "A payload that fires in the tester's own developer console rather than in the page, which proves the console evaluates script and nothing about the application."
+  - "A browser's built-in filtering or a strict policy suppressing execution while the injection is entirely present in the markup -- a negative in one browser and a positive in another."
+
+preconditions:
+  - "The probe's marker was located in the response, and the context around it was read from the raw body rather than from the rendered page."
+  - "For stored delivery, a record the engagement is permitted to create, and a way to reach the page that renders it."
+
+evidence:
+  - "The raw response excerpt showing the marker in context, before and after the payload."
+  - "The rendered result: the console entry, the network request or the DOM node the payload produced."
+
+done_when: >-
+  The attribute's quoting is recorded, and the value is recorded as escaping the
+  attribute, introducing a handler that fired, or leaving the attribute intact --
+  with the raw body excerpt that decided which.
+
+safety: >-
+  Where the delivery is stored, the handler fires for every visitor to the page
+  that renders it and not for the tester. Use the console form rather than a
+  dialog, place it in a record the engagement created, and record its exact
+  location so the client can remove it before the engagement closes.
+
+payloads: payloads/xss/htmlattr.yaml
+tools: [burp-repeater, browser-devtools]
+card: cards/xss/contexts.md
+mitigation: mitigations/output-encoding.md
+dimensions:
+  delivery: [reflected, stored]
+  browser: [chromium, firefox, webkit]

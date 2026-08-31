@@ -1,0 +1,15 @@
+id: PTN-RCN-07-MAP
+topic: PTN-RCN-07
+status: outline
+role: stage
+kind: recon
+title: "The schema as types, fields and operations"
+objective: >-
+  Record the types, fields, arguments and mutations the schema exposes, from
+  introspection where it answers and from the client's own documents where it
+  does not.
+
+requires:
+  all_of: [recon.api.mapped]
+motivated_by: [surface.graphql.introspectable]
+yields: [recon.schema.known]

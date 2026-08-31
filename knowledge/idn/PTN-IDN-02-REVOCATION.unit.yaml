@@ -1,0 +1,12 @@
+id: PTN-IDN-02-REVOCATION
+topic: PTN-IDN-02
+status: outline
+role: stage
+title: "Whether deprovisioning ends every path of access"
+objective: >-
+  Determine whether retiring an account ends its existing sessions, tokens and
+  keys rather than only preventing a fresh sign-in.
+
+requires:
+  all_of: [access.user]
+yields: [control.session.persists]

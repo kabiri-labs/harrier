@@ -1,0 +1,28 @@
+id: PTN-CLT-02
+title: "DOM-based cross-site scripting"
+domain: CLT
+axis: context
+
+surfaces:
+  any_of: [dom-sink]
+
+boundaries:
+  - subject: "Output the server produced"
+    home: PTN-CLT-01
+    note: >-
+      The slug names the sink; the topic names who wrote to it.
+
+see_also: [PTN-CLT-01, PTN-CLT-05, PTN-CLT-09]
+
+order:
+  - PTN-CLT-02-MAP
+  - PTN-CLT-02-HTMLBODY
+  - PTN-CLT-02-HTMLATTR
+  - PTN-CLT-02-HTMLURI
+  - PTN-CLT-02-JSCODE
+  - PTN-CLT-02-MARKUP
+  - PTN-CLT-02-EVADE
+
+refs:
+  wstg: [WSTG-CLNT-01, WSTG-CLNT-02]
+  cwe: [79]

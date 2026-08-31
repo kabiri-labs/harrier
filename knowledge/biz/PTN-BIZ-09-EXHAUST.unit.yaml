@@ -1,0 +1,13 @@
+id: PTN-BIZ-09-EXHAUST
+topic: PTN-BIZ-09
+status: outline
+role: stage
+title: "Work forced by the shape of one request"
+objective: >-
+  Determine whether a single accepted request can be shaped to cost the server
+  work out of proportion to its size.
+
+requires:
+  all_of: [recon.api.mapped]
+motivated_by: [control.limit.absent]
+yields: [impact.availability.degraded]

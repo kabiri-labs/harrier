@@ -87,4 +87,4 @@ entries:
 
   - name: inert hostile control
     payload: "<<sqli-control-not-sql>>"
-    detect: "Looks hostile but contains no SQL syntax. If this is blocked identically to the quote, the block is a filter and not a query error -- go to HRR-INJ-01-EVADE."
+    detect: "Looks hostile but contains no SQL syntax. If this is blocked identically to the quote, the block is a filter and not a query error -- go to PTN-INJ-01-EVADE."

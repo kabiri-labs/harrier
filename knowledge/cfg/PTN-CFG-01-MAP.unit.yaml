@@ -1,0 +1,38 @@
+id: PTN-CFG-01-MAP
+topic: PTN-CFG-01
+status: sketched
+role: stage
+kind: recon
+title: "The services and ports reachable for the target"
+objective: >-
+  Record which services answer on the target's addresses and what each is,
+  since the application is only one of the things a host serves.
+
+requires:
+  all_of: [recon.names.mapped]
+
+hypotheses:
+  - "A host serves more than the application, and the rest was deployed by somebody who was not thinking about the application."
+  - "Services on non-standard ports are the ones nobody reviews, because the review looked at the standard ones."
+  - "A filtering device can answer on behalf of a host, which makes every port look open and none of them real."
+
+triage:
+  - "Ports outside the standard pair, especially in the ranges management interfaces default to."
+  - "A service whose response does not match what its port number implies."
+  - "Uniform banners across an implausible number of ports, which is a device answering rather than a host."
+
+sequence:
+  - "Sweep the granted addresses across the full port range rather than a common-ports list, at a rate the engagement permits."
+  - "For every port that answers, establish what the service is from its own response rather than from the port number."
+  - "Confirm each open port a second time before recording it, since a dropped packet and a closed port look alike from one probe."
+  - "Record each service with its address, port, what identified it, and whether it is the application or something beside it."
+
+first_false_positive: >-
+  A filtering device answering on behalf of the host. Every port appears open,
+  the banners are uniform, and none of it is the target's service -- which is
+  why a port is recorded on what answered rather than on the port responding.
+
+done_when: >-
+  Every granted address has been swept across the full port range, each
+  answering port is recorded with the service that identified itself, and every
+  open state has been confirmed twice.

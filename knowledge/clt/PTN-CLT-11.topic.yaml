@@ -1,0 +1,19 @@
+id: PTN-CLT-11
+title: "Cross-site script inclusion"
+domain: CLT
+axis: technique
+
+surfaces:
+  any_of: [rest-api, export-report]
+
+see_also: [PTN-CLT-06]
+
+order:
+  - PTN-CLT-11-MAP
+  - PTN-CLT-11-PROBE
+  - PTN-CLT-11-ERROR
+  - PTN-CLT-11-READ
+
+refs:
+  wstg: [WSTG-CLNT-13]
+  cwe: [1385]

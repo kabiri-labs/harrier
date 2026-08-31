@@ -1,0 +1,13 @@
+id: PTN-BIZ-01-IMPACT
+topic: PTN-BIZ-01
+status: outline
+role: stage
+kind: inquiry
+title: "What breaking a rule is worth"
+objective: >-
+  Establish what a request that breaks a rule actually obtains, since a
+  workflow will accept many meaningless deviations and a few that carry value.
+
+requires:
+  all_of: [control.rule.clientonly]
+yields: [impact.entitlement.gained]

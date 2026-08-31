@@ -1,0 +1,14 @@
+id: PTN-BIZ-08-IMPACT
+topic: PTN-BIZ-08
+status: outline
+role: stage
+kind: inquiry
+title: "Whether the discrepancy survives settlement"
+objective: >-
+  Establish whether an accepted discrepancy is still present once the
+  transaction settles, since a later reconciliation step often corrects what
+  the checkout accepted.
+
+requires:
+  all_of: [control.price.clientset]
+yields: [impact.money.lost]

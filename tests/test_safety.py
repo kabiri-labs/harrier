@@ -17,7 +17,7 @@ class TheLoaderNeverExecutesDocumentContent(unittest.TestCase):
         # and only one of them is greppable.
         import yaml
 
-        from harrier import SAFE_LOADER
+        from pentest_navgrid import SAFE_LOADER
 
         self.assertTrue(
             issubclass(SAFE_LOADER, yaml.SafeLoader)
@@ -28,7 +28,7 @@ class TheLoaderNeverExecutesDocumentContent(unittest.TestCase):
 
     def test_the_package_names_no_other_loader(self):
         allowed = ("SAFE_LOADER", "SafeLoader", "CSafeLoader", "safe_load")
-        for path in (REPO_ROOT / "harrier").rglob("*.py"):
+        for path in (REPO_ROOT / "pentest_navgrid").rglob("*.py"):
             for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
                 if "Loader" not in line and "yaml." not in line:
                     continue

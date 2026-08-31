@@ -1,0 +1,18 @@
+id: PTN-BIZ-06
+title: "Workflow sequencing"
+domain: BIZ
+kind: inquiry
+
+surfaces:
+  any_of: [business-workflow, payment]
+
+order:
+  - PTN-BIZ-06-MAP
+  - PTN-BIZ-06-PROBE
+  - PTN-BIZ-06-IMPACT
+
+see_also: [PTN-BIZ-04]
+
+refs:
+  wstg: [WSTG-BUSL-06]
+  cwe: [841]

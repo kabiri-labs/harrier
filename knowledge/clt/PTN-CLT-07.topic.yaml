@@ -1,0 +1,23 @@
+id: PTN-CLT-07
+title: "Cross-site flashing"
+domain: CLT
+
+surfaces:
+  any_of: [plugin-policy]
+
+boundaries:
+  - subject: "Current browser-native equivalents"
+    home: PTN-CLT-01
+    note: >-
+      The plugin runtime is retired. Recorded so the coverage claim stays
+      honest, not because it is likely to matter.
+
+see_also: [PTN-CFG-06]
+
+order:
+  - PTN-CLT-07-MAP
+  - PTN-CLT-07-PROBE
+
+refs:
+  wstg: [WSTG-CLNT-08]
+  cwe: [79]

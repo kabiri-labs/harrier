@@ -1,6 +1,6 @@
 # Parameterised queries
 
-Applies to `HRR-INJ-01`. Cross-references: ASVS V1.2, CWE-89.
+Applies to `PTN-INJ-01`. Cross-references: ASVS V1.2, CWE-89.
 
 ## The fix that works
 
@@ -32,7 +32,7 @@ for syntax, so these four cannot be bound and need a different control:
 | | The control |
 |---|---|
 | Table and column names | An allow-list mapping a request token to an identifier the code contains. Never the request value itself, quoted or otherwise. |
-| `ORDER BY` column and direction | The same allow-list. The sort column is the identifier position `HRR-INJ-01-PROBE` exists to find, precisely because no quote is involved and a quote-based probe comes back clean. |
+| `ORDER BY` column and direction | The same allow-list. The sort column is the identifier position `PTN-INJ-01-PROBE` exists to find, precisely because no quote is involved and a quote-based probe comes back clean. |
 | `LIMIT` and `OFFSET` | Bindable on most engines; where the driver refuses, cast to an integer in code and range-check it. Do not concatenate the string. |
 | A dynamic `IN` list | Generate one placeholder per element and bind each. Joining the elements into one string re-introduces exactly what binding removed. |
 
@@ -51,7 +51,7 @@ Against each capability the topic charts:
 
 - **Read** — an account granted `SELECT` on the tables the feature uses reads
   those tables and no others. It is the difference between one feature's rows
-  and the whole store, which is precisely the question `HRR-OUT-01-IMPACT` asks.
+  and the whole store, which is precisely the question `PTN-OUT-01-IMPACT` asks.
 - **Write** — an account with no `INSERT`, `UPDATE` or `DELETE` on tables the
   feature only reads cannot reach `primitive.db.write` at all, and the
   integrity outcome behind it disappears with it.
@@ -75,7 +75,7 @@ no quote is needed, and nothing for an identifier position, where a quote is
 wrong. The value that defeats it is not an exotic one; it is an ordinary integer
 in a place the helper never expected.
 
-**A blacklist of keywords or characters.** `HRR-INJ-01-EVADE` exists because
+**A blacklist of keywords or characters.** `PTN-INJ-01-EVADE` exists because
 every such list has a case variation, a comment interruption, an encoding layer,
 a whitespace substitute or an operator synonym that passes it. A control whose
 failure mode is "somebody wrote it differently" is not a control.

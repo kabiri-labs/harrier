@@ -1,0 +1,13 @@
+id: PTN-CLT-05-MAP
+topic: PTN-CLT-05
+status: outline
+role: stage
+kind: recon
+title: "Script-driven resource inventory"
+objective: >-
+  Establish which resources the loaded script fetches at runtime and which of
+  their locations derive from attacker-influenceable input.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.resource.controlled]

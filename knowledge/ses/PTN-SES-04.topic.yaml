@@ -1,0 +1,26 @@
+id: PTN-SES-04
+title: "Session identifier exposure"
+domain: SES
+axis: vector
+
+surfaces:
+  any_of: [session-cookie, token-bearing]
+
+boundaries:
+  - subject: "The identifier reaching browser storage"
+    home: PTN-CLT-10
+    note: >-
+      Exposure through the request or the response is here; what the browser
+      then persists is client-side.
+
+see_also: [PTN-CLT-10]
+
+order:
+  - PTN-SES-04-QUERY
+  - PTN-SES-04-PATH
+  - PTN-SES-04-REFERER
+  - PTN-SES-04-READ
+
+refs:
+  wstg: [WSTG-SESS-04]
+  cwe: [598]

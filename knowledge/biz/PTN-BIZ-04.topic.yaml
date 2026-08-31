@@ -1,0 +1,18 @@
+id: PTN-BIZ-04
+title: "Process timing and race conditions"
+domain: BIZ
+axis: technique
+
+surfaces:
+  any_of: [business-workflow, payment, file-upload]
+
+order:
+  - PTN-BIZ-04-MAP
+  - PTN-BIZ-04-RACE
+  - PTN-BIZ-04-TOCTOU
+
+see_also: [PTN-BIZ-06]
+
+refs:
+  wstg: [WSTG-BUSL-04]
+  cwe: [367, 362]

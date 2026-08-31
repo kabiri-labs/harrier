@@ -1,0 +1,15 @@
+id: PTN-INJ-06
+title: "Mail header and command injection"
+domain: INJ
+
+surfaces:
+  any_of: [mail-ingest]
+
+order:
+  - PTN-INJ-06-PROBE
+  - PTN-INJ-06-IMPACT
+  - PTN-INJ-06-EVADE
+
+refs:
+  wstg: [WSTG-INPV-10]
+  cwe: [93]

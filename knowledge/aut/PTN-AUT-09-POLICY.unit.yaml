@@ -1,0 +1,14 @@
+id: PTN-AUT-09-POLICY
+topic: PTN-AUT-09
+status: outline
+role: stage
+title: "Which accounts and actions the second factor is demanded for"
+objective: >-
+  Determine which accounts and which sensitive actions actually demand the
+  second factor, since a factor that is offered but not required protects only
+  those who opted in.
+
+requires:
+  all_of: [access.user]
+yields: [control.mfa.optional]
+closes: [control.mfa.optional]

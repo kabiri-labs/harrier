@@ -1,0 +1,18 @@
+id: PTN-CRY-03
+title: "Cryptographic primitive selection"
+domain: CRY
+axis: property
+
+surfaces:
+  any_of: [shared-secret-config, token-bearing, payment]
+
+order:
+  - PTN-CRY-03-MAP
+  - PTN-CRY-03-POLICY
+  - PTN-CRY-03-ENTROPY
+  - PTN-CRY-03-ROTATION
+  - PTN-CRY-03-STORAGE
+
+refs:
+  wstg: [WSTG-CRYP-04]
+  cwe: [327, 330]

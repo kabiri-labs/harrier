@@ -8,8 +8,8 @@ defects read perfectly well in a diff.
 pip install PyYAML jsonschema
 
 python -m unittest discover -s tests -t .   # the suite
-python -m harrier validate                  # the repository
-python -m harrier coverage                  # the counts the roadmap publishes
+python -m pentest_navgrid validate                  # the repository
+python -m pentest_navgrid coverage                  # the counts the roadmap publishes
 ```
 
 CI runs exactly those first two commands, in that order, with nothing extra.
@@ -23,7 +23,7 @@ fixing a batch wants the whole list, and a first-failure validator quietly
 trains people to fix one thing and re-run — which is how the second and third
 problems in a file go unnoticed. Every message names the file that caused it.
 
-**1 — Schema conformance.** Ten schemas under `harrier/schema/`, selected by
+**1 — Schema conformance.** Ten schemas under `pentest_navgrid/schema/`, selected by
 where the file sits. A document in the wrong directory is itself a finding.
 
 **2 — Vocabularies.** Duplicate domain codes, duplicate axis names, surface tags
@@ -115,7 +115,7 @@ depth counts that disagree with the units beside them. The schema constrains the
 *shape* of an identifier, which a renamed topic satisfies perfectly on its way to
 pointing at nothing.
 
-Staleness is a separate question and has its own answer: `harrier index --check`
+Staleness is a separate question and has its own answer: `pentest-navgrid index --check`
 compares the committed bytes against a fresh derivation, and the suite asserts
 the same thing.
 

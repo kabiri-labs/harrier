@@ -1,0 +1,16 @@
+id: PTN-RCN-04
+title: "Execution path and architecture mapping"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  always: true
+
+order:
+  - PTN-RCN-04-MAP
+  - PTN-RCN-04-FPRINT
+  - PTN-RCN-04-PROBE
+
+refs:
+  wstg: [WSTG-INFO-07, WSTG-INFO-10]

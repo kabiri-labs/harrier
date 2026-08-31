@@ -1,0 +1,12 @@
+id: PTN-CRY-05-PIVOT
+topic: PTN-CRY-05
+status: outline
+role: stage
+title: "Verifier-initiated key retrieval"
+objective: >-
+  Determine whether a key-locating header causes the verifier to fetch material
+  from a location the token named.
+
+requires:
+  all_of: [surface.token.structured]
+yields: [primitive.fetch.outbound]

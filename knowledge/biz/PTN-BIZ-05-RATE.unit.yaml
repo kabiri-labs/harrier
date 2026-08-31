@@ -1,0 +1,13 @@
+id: PTN-BIZ-05-RATE
+topic: PTN-BIZ-05
+status: outline
+role: stage
+kind: inquiry
+title: "Enforcement of how often the function may be exercised"
+objective: >-
+  Establish whether the cap on how frequently a function may be invoked is
+  enforced by the server.
+
+requires:
+  all_of: [access.user]
+yields: [control.limit.absent]

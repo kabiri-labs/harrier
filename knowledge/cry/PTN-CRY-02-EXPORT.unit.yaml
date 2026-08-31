@@ -1,0 +1,13 @@
+id: PTN-CRY-02-EXPORT
+topic: PTN-CRY-02
+status: outline
+role: stage
+title: "Bulk retrieval channel"
+objective: >-
+  Determine whether a report or export containing personal data is retrievable
+  over an unencrypted channel.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+motivated_by: [control.transport.plaintext]
+yields: [control.transport.plaintext]

@@ -1,0 +1,13 @@
+id: PTN-AUT-04-DIFF
+topic: PTN-AUT-04
+status: outline
+role: variant
+title: "Whether the caller supplies the value the decision is read from"
+objective: >-
+  Determine whether the authentication outcome is read from a value the caller
+  supplies, by comparing two responses that differ only in that value.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+  any_of: [access.anon]
+yields: [access.principal.other]

@@ -1,0 +1,12 @@
+id: PTN-INJ-10-ERROR
+topic: PTN-INJ-10
+status: outline
+role: variant
+title: "Error-based inference"
+objective: >-
+  Determine whether an invalid expression produces an engine error naming the
+  template, the context, or the failing construct.
+
+requires:
+  all_of: [surface.template.injectable]
+yields: [recon.query.structure]

@@ -1,0 +1,50 @@
+id: PTN-CFG-06-PROBE
+topic: PTN-CFG-06
+status: sketched
+role: stage
+title: "Whether a plugin policy file is served and what it grants"
+objective: >-
+  Determine whether a cross-domain policy file is served and which origins it
+  grants, so a control retired from browsers but still deployed is recorded
+  rather than assumed gone.
+
+requires:
+  all_of: [recon.names.mapped]
+yields: [control.plugin.policy.permissive]
+closes: [control.plugin.policy.permissive]
+
+hypotheses:
+  - "A policy file outlives the plugin that read it, because withdrawing a file is nobody's task once the plugin is gone."
+  - "A grant written when the file mattered was written broadly, since narrowing it required knowing who needed it."
+  - "A permissive policy and a usable one are different findings, and a target shipping no plugin content has only the first."
+
+triage:
+  - "The policy locations -- crossdomain.xml, clientaccesspolicy.xml, and the socket policy port -- requested on every recorded name including the ones serving only static content."
+  - "A wildcard domain, a wildcard header set, or a socket policy naming arbitrary ports."
+  - "Whether anything the target ships still reads these files at all."
+
+sink: >-
+  A plugin runtime that would read the policy and grant on it -- retired from
+  current browsers, which is exactly what separates the grant from a route.
+
+oracle:
+  positive: "A cross-domain policy file is served and grants wider than the target's own origins: a wildcard domain, a wildcard header set, or a socket policy opening arbitrary ports. The grant is the result whether or not anything here still reads it -- what this unit establishes is the state of the control, not a route somebody can take today."
+  negative: "Every policy location was requested on every recorded name, and none is served or none grants beyond the target's own origins."
+
+sequence:
+  - "Request each policy location on every recorded name, including the ones that serve only static content."
+  - "Where one is served, read what it grants: which domains, which headers, which ports, and whether the grant is bounded at all."
+  - "Record whether anything on the target still consumes these policies, since a grant nothing reads is a stale file rather than a live control."
+
+first_false_positive: >-
+  Reading the grant as something a caller can use. The plugins that honoured
+  these files are retired, so on a target shipping no plugin content the finding
+  is a permissive policy nobody withdrew -- which is what the record says --
+  rather than an open cross-origin route, which is what a reader will assume
+  unless the report says which of the two it is.
+
+done_when: >-
+  Every policy location has been requested on every recorded name, and each
+  served file is recorded with the domains, headers and ports it grants, and
+  with whether anything here still reads it -- the two written down separately,
+  because a permissive policy and a usable one are different reports.

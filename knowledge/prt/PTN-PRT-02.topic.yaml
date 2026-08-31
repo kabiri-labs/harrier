@@ -1,0 +1,26 @@
+id: PTN-PRT-02
+title: "Host and forwarding header trust"
+domain: PRT
+axis: vector
+
+surfaces:
+  any_of: [reverse-proxy, password-reset]
+
+boundaries:
+  - subject: "The reset flow's own logic"
+    home: PTN-AUT-07
+    note: >-
+      A link built from a request-controlled host is a transport-layer trust
+      failure, whatever flow composes it.
+
+see_also: [PTN-AUT-07]
+
+order:
+  - PTN-PRT-02-MAP
+  - PTN-PRT-02-HEADER
+  - PTN-PRT-02-WRITE
+  - PTN-PRT-02-EVADE
+
+refs:
+  wstg: [WSTG-INPV-17]
+  cwe: [644]

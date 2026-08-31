@@ -1,0 +1,13 @@
+id: PTN-ACL-01-VERIFY
+topic: PTN-ACL-01
+status: outline
+role: stage
+kind: recon
+title: "Reconciliation of the documented model with the observed one"
+objective: >-
+  Record where the interface each role is actually served differs from the
+  permission model as documented, so the matrix later tests read from is
+  observed rather than assumed.
+
+requires:
+  all_of: [recon.roles.mapped]

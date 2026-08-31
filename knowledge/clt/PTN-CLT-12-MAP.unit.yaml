@@ -1,0 +1,13 @@
+id: PTN-CLT-12-MAP
+topic: PTN-CLT-12
+status: outline
+role: stage
+kind: recon
+title: "New-context link inventory"
+objective: >-
+  Establish which links and script calls open a document in a new browsing
+  context, and which of their destinations are attacker-influenceable.
+
+requires:
+  all_of: [recon.entrypoints.mapped]
+yields: [surface.newcontext.link]

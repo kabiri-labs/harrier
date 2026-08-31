@@ -1,0 +1,26 @@
+id: PTN-AUT-10
+title: "OAuth 2.0 and OpenID Connect"
+domain: AUT
+axis: property
+
+surfaces:
+  any_of: [sso-oidc]
+
+order:
+  - PTN-AUT-10-VALIDATION
+  - PTN-AUT-10-BINDING
+  - PTN-AUT-10-SCOPE
+  - PTN-AUT-10-REVOCATION
+
+boundaries:
+  - subject: "Verifying the signature on an issued token"
+    home: PTN-CRY-05
+    note: >-
+      Flow and consent handling is here; whether the token's signature is
+      checked at all is a cryptography finding.
+
+see_also: [PTN-CRY-05, PTN-SES-10]
+
+refs:
+  wstg: [WSTG-ATHZ-05]
+  cwe: [1275]

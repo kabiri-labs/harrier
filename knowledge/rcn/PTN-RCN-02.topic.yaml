@@ -1,0 +1,24 @@
+id: PTN-RCN-02
+title: "Application and virtual host enumeration"
+domain: RCN
+axis: phase
+kind: recon
+
+surfaces:
+  always: true
+
+order:
+  - PTN-RCN-02-MAP
+  - PTN-RCN-02-PROBE
+
+boundaries:
+  - subject: "Administrative interfaces found while enumerating"
+    home: PTN-CFG-03
+    note: >-
+      Finding them is recon; whether they should be reachable at all is a
+      configuration finding.
+
+see_also: [PTN-CFG-03, PTN-RCN-08]
+
+refs:
+  wstg: [WSTG-INFO-04]

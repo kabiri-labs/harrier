@@ -1,0 +1,16 @@
+id: PTN-CFG-01
+title: "Network and platform configuration"
+domain: CFG
+axis: property
+
+surfaces:
+  always: true
+
+order:
+  - PTN-CFG-01-MAP
+  - PTN-CFG-01-SERVING
+  - PTN-CFG-01-POLICY
+
+refs:
+  wstg: [WSTG-CONF-01, WSTG-CONF-02]
+  cwe: [1188]

@@ -1,0 +1,73 @@
+id: PTN-INJ-01-SECOND
+topic: PTN-INJ-01
+status: authored
+role: variant
+title: "Second-order injection"
+objective: >-
+  Determine whether a payload stored by one request is interpreted as SQL when
+  a later request reads it back.
+
+requires:
+  all_of: [surface.sql.injectable]
+yields: [primitive.db.read]
+
+hypotheses:
+  - "The value is escaped on the way in and concatenated on the way out, because whoever wrote the second statement assumed a stored value was already the application's own."
+  - "The interpreting request is not the storing one, so the response to the store says nothing and the signal appears somewhere the tester has to go and find."
+  - "The store and the read-back are separated by a scheduled job rather than by a click, so the observation window is minutes rather than milliseconds."
+
+triage:
+  - "Fields stored once and rendered in many places: a display name, an address, a description, a filename."
+  - "Bulk imports, admin listings, exports and scheduled reports, which read stored values through statements nobody tested."
+  - "An error appearing on a page the tester did not just submit to."
+
+sink: >-
+  The second statement, built later out of a value the application had already
+  stored and had come to treat as its own.
+
+enter_when:
+  - "A value the tester controls is stored, and at least one later request or job reads it back."
+
+oracle:
+  positive: "A page or job that reads the stored value produces the error, the differential or the computed result, while the request that stored it produced nothing at all."
+  negative: "Every identified read-back route has been visited with the payload in place, and none behaves differently from the same route holding an ordinary value."
+  inconclusive: "The reading job could not be triggered inside the engagement window, so no read-back was ever observed."
+
+sequence:
+  - "Store a payload that is inert on the way in -- correctly escaped, valid as data -- and record exactly where it was placed."
+  - "Enumerate every route that reads that value back, exports, admin views and scheduled jobs included."
+  - "Visit each route and compare against the same route holding an ordinary value."
+  - "Record which read-back interpreted it, because the finding belongs to that statement rather than to the field."
+
+first_false_positive: >-
+  The storing request's own response read as the result. A second-order finding
+  is silent at the point of injection by definition, so a difference there is an
+  ordinary first-order signal belonging to another unit.
+
+false_positives:
+  - "A rendering failure caused by the payload as text -- broken markup, a truncated field -- read as evidence of interpretation."
+  - "A queue replaying an earlier payload, so the observed effect belongs to a request the tester is no longer looking at."
+
+preconditions:
+  - "A stored value the tester can place and later locate, in a record the engagement is permitted to create."
+  - "At least one known route that reads the field back; without one there is nothing to observe."
+
+evidence:
+  - "The storing request and its ordinary response."
+  - "The reading request or job output in which the value was interpreted."
+
+done_when: >-
+  Every identified read-back route has been visited with the payload in place,
+  and each is recorded as interpreting it or not.
+
+safety: >-
+  The payload persists after the engagement and may be read by a job nobody
+  mentioned. Keep it inert as data, record exactly where it was placed, and
+  either remove it or hand the client the list before the engagement closes.
+
+payloads: payloads/sqli/second-order.yaml
+tools: [burp-repeater]
+card: cards/sqli/injection-points.md
+mitigation: mitigations/parameterised-query.md
+dimensions:
+  engine: [mysql, postgresql, mssql, oracle, sqlite]

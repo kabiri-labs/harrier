@@ -1,0 +1,12 @@
+id: PTN-INJ-12-OOB
+topic: PTN-INJ-12
+status: outline
+role: variant
+title: "Out-of-band confirmation"
+objective: >-
+  Determine whether a resolver can be made to initiate a network interaction
+  carrying a token the tester chose.
+
+requires:
+  all_of: [surface.graphql.injectable]
+yields: [primitive.fetch.outbound]

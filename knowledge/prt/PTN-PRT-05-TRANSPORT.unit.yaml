@@ -1,0 +1,12 @@
+id: PTN-PRT-05-TRANSPORT
+topic: PTN-PRT-05
+status: outline
+role: stage
+title: "Encrypted transport enforcement"
+objective: >-
+  Determine whether an unencrypted socket connection is accepted where an
+  encrypted one is available.
+
+requires:
+  all_of: [recon.channels.mapped]
+yields: [control.transport.plaintext]
