@@ -1,0 +1,13 @@
+id: PTN-CRY-05-WRITE
+topic: PTN-CRY-05
+status: outline
+role: stage
+title: "Acceptance of a token the tester minted"
+objective: >-
+  Determine whether the server accepts a token the tester produced, carrying
+  claims the tester chose, which is what a recovered key or an unchecked
+  signature is worth rather than what either one proves on its own.
+
+requires:
+  any_of: [artifact.key.recovered, control.signature.unverified]
+yields: [primitive.crypto.forge]

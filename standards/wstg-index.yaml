@@ -230,9 +230,10 @@ cases:
   - PTN-ACL-04-DIFF
   - PTN-ACL-04-REPLAY
   - PTN-ACL-04-TOCTOU
+  - PTN-ACL-04-IMPACT
   authored: 0
   sketched: 0
-  outline: 4
+  outline: 5
   resolvable: true
 - id: WSTG-ATHZ-04
   title: Testing for Insecure Direct Object References
@@ -1361,9 +1362,10 @@ cases:
   - PTN-SES-06-PROBE
   - PTN-SES-06-REVOCATION
   - PTN-SES-06-SCOPE
+  - PTN-SES-06-IMPACT
   authored: 0
   sketched: 0
-  outline: 3
+  outline: 4
   resolvable: true
 - id: WSTG-SESS-07
   title: Testing Session Timeout
@@ -1412,13 +1414,14 @@ cases:
   - PTN-CRY-05-BRUTE
   - PTN-CRY-05-REPLAY
   - PTN-CRY-05-PIVOT
+  - PTN-CRY-05-WRITE
   - PTN-SES-10-EXPIRY
   - PTN-SES-10-SCOPE
   - PTN-SES-10-BINDING
   - PTN-SES-10-REVOCATION
   authored: 0
   sketched: 0
-  outline: 9
+  outline: 10
   resolvable: true
 - id: WSTG-SESS-11
   title: Testing for Concurrent Sessions

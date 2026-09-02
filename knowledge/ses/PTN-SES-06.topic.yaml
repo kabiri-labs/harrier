@@ -10,6 +10,7 @@ order:
   - PTN-SES-06-PROBE
   - PTN-SES-06-REVOCATION
   - PTN-SES-06-SCOPE
+  - PTN-SES-06-IMPACT
 
 boundaries:
   - subject: "Clearing what the browser kept"

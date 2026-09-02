@@ -26,6 +26,7 @@ order:
   - PTN-CRY-05-BRUTE
   - PTN-CRY-05-REPLAY
   - PTN-CRY-05-PIVOT
+  - PTN-CRY-05-WRITE
 
 refs:
   wstg: [WSTG-SESS-10]

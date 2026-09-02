@@ -1515,10 +1515,8 @@ unconsumed:
       - control.request.forgeable
       - control.request.replayable
       - control.reset.weak
-      - control.session.persists
       - control.session.unbound
       - control.session.unbounded
-      - control.signature.unverified
       - control.storage.served
       - control.tls.certificate.invalid
       - control.tls.weak
@@ -1533,8 +1531,6 @@ unconsumed:
       chains that stop one step after the interesting part. Each is a gap in the
       catalogue rather than in the model, and closes when the consuming unit exists.
     facts:
-      - access.role.elevated
-      - artifact.key.recovered
       - primitive.blind.oracle
 
   - cause: recon-no-later-test-is-conditioned-on

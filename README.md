@@ -7,15 +7,15 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Pentest NavGrid 0.21.0 is an early public alpha.** The WSTG decomposition is broad —
-> every resolvable identifier is claimed, and 374 Test Units exist. The depth
+> **Pentest NavGrid 0.22.0 is an early public alpha.** The WSTG decomposition is broad —
+> every resolvable identifier is claimed, and 377 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
 > means in numbers](#what-exists-today-and-what-does-not) is below, not buried at
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.21.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.22.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -289,10 +289,10 @@ stale in this file without the suite failing.
 | WSTG identifiers pinned | 109, across 12 testing groups |
 | Claimed by a Pentest NavGrid topic | 108 of 108 resolvable |
 | Topics | 106, across 14 domains |
-| Test Units | 374 |
+| Test Units | 377 |
 | Written to full procedural depth | **36** |
 | Sketched | 40 |
-| Outline only | 298 |
+| Outline only | 301 |
 
 Three chains are now written end to end rather than one: SQL injection under
 `WSTG-INPV-05`, cross-site scripting under `WSTG-INPV-01`, `WSTG-INPV-02` and
@@ -302,16 +302,16 @@ the standard's own test case through its Test Units to a stated business outcome
 | Chain | |
 |---|---|
 | Capabilities | 185 |
-| Derived unit-to-unit edges | 701 |
-| — of them escalations between capabilities | 345 |
+| Derived unit-to-unit edges | 716 |
+| — of them escalations between capabilities | 360 |
 | — another technique for the same test | 124 |
 | — a general prerequisite, not a step | 232 |
-| Tests with a potential continuation | 240 |
+| Tests with a potential continuation | 255 |
 | Tests that establish an impact | 14 |
-| Tests that stop short | 81 |
+| Tests that stop short | 69 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 49 of 185 |
-| Capabilities with a charted route to an impact | 90 of 175 |
+| Capabilities used by no test, impacts excluded | 45 of 185 |
+| Capabilities with a charted route to an impact | 98 of 175 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.
@@ -327,11 +327,11 @@ unit adds when it is worth entering, what must hold first, what is recorded, and
 how far to take it. What each tier requires is checked by the validator rather
 than claimed, and nothing is invented to fill the gap.
 
-**The largest known gap is now the controls.** `primitive → impact` is written:
-one capability of thirty-two is still declared as a use by nothing, and 90 of
-175 capabilities have a charted route to an impact. `control → impact` is not,
-and 36 of 59 `control.*` facts are established by a test and consumed by
-nothing. A control is the state of a defence rather than a result, so the step
+**The largest known gap is still the controls.** `primitive → impact` is
+written: 1 of 32 `primitive.*` capabilities is still declared as a use by
+nothing, and 98 of 175 capabilities have a charted route to an impact.
+`control → impact` is barely started: 34 of 59 `control.*` facts are
+established by a test and consumed by nothing. A control is the state of a defence rather than a result, so the step
 that turns one into an outcome has to be written before an edge can be drawn
 from it.
 
@@ -340,15 +340,18 @@ chains, and that is not progress against this gap. The new edges say *worth
 reaching for sooner*, not *now possible*: a verbose error makes error-based
 inference the first channel to try, a characterised filter decides whether a
 statement separator can reach the driver, and permissive headers make an
-execution test worth reaching for before a markup one. Nothing yet says what a
-defeated control **permits**, which is the whole of what is missing.
+execution test worth reaching for before a markup one. What closes this gap is
+the other shape — a test that **requires** the defeated control and establishes
+what it permits, as `PTN-SES-06-IMPACT` does with an identifier that outlived
+sign-out and `PTN-CRY-05-WRITE` does with a signature nothing checks. 34
+controls still have neither.
 
 Recorded is now enforced rather than observed. Every chain-tier capability no
 test declares a use for is listed in `vocab/facts.yaml` under the cause it
 belongs to, and the validator rejects two things: a dead end that is not listed,
 so a new one cannot arrive silently, and an entry for a capability something has
 since started consuming, so the list can only shrink by the gap being closed.
-41 are open, in 3 causes.
+37 are open, in 3 causes.
 
 This is recorded rather than filled in. Generating plausible edges would make the
 matrix look complete and every route on it untrustworthy — an edge nobody thought
