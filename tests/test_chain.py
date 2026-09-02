@@ -586,3 +586,102 @@ class AnOutcomeTopicIsHeldToTheSameRules(SandboxCase):
             lambda unit: unit.update(requires={"all_of": ["impact.code.executed"]}) or unit,
         )
         self.assertRejected("impact")
+
+
+class EveryEscalationGoesSomewhereOrSaysWhyNot(SandboxCase):
+    """The mirror of the producer gate.
+
+    A chain-tier fact is currency, so one nothing requires is where the chart
+    stops earlier than the mechanism does. Before the register that state passed
+    every check: the producer gate asks where a capability comes from, and
+    nothing asked where it goes. The register does not forbid a dead end -- a
+    growing catalogue honestly has them -- it forbids an unrecorded one, and it
+    forbids an entry outliving the gap it describes."""
+
+    REGISTERED = "control.debug.enabled"
+
+    def _register(self, box):
+        return box.read("vocab/facts.yaml")["unconsumed"]
+
+    def test_an_unregistered_dead_end_is_rejected(self):
+        def drop(vocab):
+            for entry in vocab["unconsumed"]:
+                if self.REGISTERED in entry["facts"]:
+                    entry["facts"].remove(self.REGISTERED)
+
+        self.box.edit("vocab/facts.yaml", drop)
+        self.assertRejected(f"{self.REGISTERED} is chain-tier and 1 unit(s) establish it")
+
+    def test_an_entry_for_a_gap_that_has_closed_is_rejected(self):
+        # The half that keeps the register a list of open gaps rather than of
+        # suppressions. PTN-ERR-02-PROBE establishes it, so the use is declared
+        # from somewhere else -- a unit requiring its own result is rejected
+        # several rules earlier.
+        self.box.edit(
+            "knowledge/err/PTN-ERR-03-PROBE.unit.yaml",
+            lambda u: u.update(motivated_by=[self.REGISTERED]),
+        )
+        self.assertRejected(f"the unconsumed register still lists {self.REGISTERED}")
+
+    def test_registering_a_fact_outside_the_vocabulary_is_rejected(self):
+        def invent(vocab):
+            vocab["unconsumed"][0]["facts"].append("control.invented.here")
+
+        self.box.edit("vocab/facts.yaml", invent)
+        self.assertRejected("the unconsumed register names unknown fact control.invented.here")
+
+    def test_registering_a_fact_of_another_tier_is_rejected(self):
+        def wrong_tier(vocab):
+            vocab["unconsumed"][0]["facts"].append("surface.sql.injectable")
+
+        self.box.edit("vocab/facts.yaml", wrong_tier)
+        self.assertRejected("which is topic-tier")
+
+    def test_one_dead_end_under_two_causes_is_rejected(self):
+        def twice(vocab):
+            vocab["unconsumed"][1]["facts"].append(self.REGISTERED)
+
+        self.box.edit("vocab/facts.yaml", twice)
+        self.assertRejected(f"{self.REGISTERED} appears in the unconsumed register under both")
+
+    def test_two_entries_may_not_share_a_cause(self):
+        def clash(vocab):
+            vocab["unconsumed"][1]["cause"] = vocab["unconsumed"][0]["cause"]
+
+        self.box.edit("vocab/facts.yaml", clash)
+        self.assertRejected("duplicate cause")
+
+
+class TheRegisterDescribesThisCatalogue(unittest.TestCase):
+    """Read against the real files rather than a mutation, because the claim is
+    about what is actually recorded: the register is the count of open gaps that
+    the roadmap and the artefact report, so it has to equal them."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chain = Chain.load(REPO_ROOT)
+        import yaml
+
+        cls.register = yaml.safe_load(
+            (REPO_ROOT / "vocab" / "facts.yaml").read_text(encoding="utf-8")
+        )["unconsumed"]
+
+    def _listed(self):
+        return {f for entry in self.register for f in entry["facts"]}
+
+    def test_it_names_exactly_the_chain_tier_dead_ends(self):
+        dead = {
+            fid
+            for fid in self.chain.dead_ends()
+            if self.chain.facts[fid]["tier"] == "chain"
+        }
+        self.assertEqual(self._listed(), dead)
+
+    def test_no_impact_is_registered(self):
+        """An impact is unconsumed by construction. Registering one would record
+        a chain reaching its outcome as a chain that failed to continue."""
+        self.assertFalse(self._listed() & set(self.chain.impacts()))
+
+    def test_every_registered_fact_is_established_by_something(self):
+        for fid in sorted(self._listed()):
+            self.assertTrue(self.chain.producers.get(fid), fid)
