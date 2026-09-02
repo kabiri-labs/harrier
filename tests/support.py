@@ -115,31 +115,70 @@ class Sandbox:
             encoding="utf-8",
         )
 
+    #: The cause the fixture files its recomputed dead ends under. Named so a
+    #: failure reading `vocab/facts.yaml` in a sandbox is obviously the
+    #: fixture's bookkeeping rather than the catalogue's own register.
+    FIXTURE_CAUSE = "fixture-recomputed-after-pruning"
+
     def _prune_facts(self) -> None:
-        """Drop facts nothing references any more.
+        """Drop facts nothing references any more, and re-derive the register.
 
         Removing units can leave a fact with no producer and no consumer, which
         the validator rejects -- correctly, but as a second broken thing the
         test never asked for. A mutation test must break exactly one rule, so
         the fixture repairs what it disturbed on its way past.
+
+        The unconsumed register is disturbed the same way and twice over: a
+        pruned fact leaves an entry naming something that no longer exists, and
+        a deleted unit can strand a fact whose only consumer it was. Both are
+        rejected, and neither is what the test is about, so the register is
+        recomputed from whatever the fixture now holds rather than patched.
+
+        This means a sandbox reached through `add_unit` or `add_topic` cannot
+        test the register itself -- the fixture would satisfy the gate on its
+        way past. The register's own tests edit `vocab/facts.yaml` directly for
+        that reason, and this method is not on that path.
         """
         path = self.path("vocab/facts.yaml")
         if not path.is_file():
             return
         referenced: set[str] = set()
+        produced: set[str] = set()
+        used: set[str] = set()
         for unit in self.root.glob("knowledge/*/*.unit.yaml"):
             data = yaml.safe_load(unit.read_text(encoding="utf-8")) or {}
             requires = data.get("requires") or {}
-            for names in (
-                requires.get("all_of"),
-                requires.get("any_of"),
-                data.get("motivated_by"),
-                data.get("yields"),
-                data.get("closes"),
-            ):
+            hard = [*(requires.get("all_of") or []), *(requires.get("any_of") or [])]
+            produced.update(data.get("yields") or [])
+            used.update(hard)
+            used.update(data.get("motivated_by") or [])
+            for names in (hard, data.get("motivated_by"), data.get("yields"), data.get("closes")):
                 referenced.update(names or [])
         vocab = yaml.safe_load(path.read_text(encoding="utf-8"))
         vocab["facts"] = [f for f in vocab["facts"] if f["id"] in referenced]
+
+        dead = sorted(
+            fact["id"]
+            for fact in vocab["facts"]
+            if fact.get("tier") == "chain"
+            and not fact["id"].startswith("impact.")
+            and fact["id"] in produced
+            and fact["id"] not in used
+        )
+        if dead:
+            vocab["unconsumed"] = [
+                {
+                    "cause": self.FIXTURE_CAUSE,
+                    "reason": (
+                        "Recomputed by the test fixture after units were removed, so that "
+                        "pruning the catalogue breaks exactly the one rule the test is about "
+                        "and not the consumer gate as well."
+                    ),
+                    "facts": dead,
+                }
+            ]
+        else:
+            vocab.pop("unconsumed", None)
         path.write_text(yaml.safe_dump(vocab, sort_keys=False), encoding="utf-8")
 
     def add_topic(self, base: str | None = None, **overrides: Any) -> str:

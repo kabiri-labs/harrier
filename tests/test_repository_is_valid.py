@@ -236,6 +236,21 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
                 f"{len(stopped)} of {len(in_family)} `{family}.*`"
             )
 
+    def test_the_open_register_figures_are_real(self):
+        """The register is a claim about how many gaps are open and how many
+        causes account for them. Both are read from the file rather than from
+        the sentence, because a count kept by hand is the one that goes stale
+        first -- and this one is published as the measure of the largest gap."""
+        import yaml
+
+        register = yaml.safe_load(
+            (REPO_ROOT / "vocab" / "facts.yaml").read_text(encoding="utf-8")
+        )["unconsumed"]
+        listed = {f for entry in register for f in entry["facts"]}
+        self.assertPublished(
+            f"{len(listed)} are open, in {len(register)} causes", where=("README.md",)
+        )
+
     def test_the_derived_edge_count_is_real(self):
         edges = sum(len(e["out"]) for e in self.chain.index().values())
         self.assertPublished(f"{edges} unit-to-unit edges across {len(self.chain.nodes)} units")

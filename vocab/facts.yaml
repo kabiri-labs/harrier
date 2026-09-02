@@ -1454,3 +1454,96 @@ facts:
       A transaction settles at a figure the business did not set, or an amount
       owed is not collected. Separate from entitlement because it is a loss on
       a ledger, and a report says so differently.
+
+# The unconsumed register -- the mirror of the producer gate.
+#
+# A chain-tier fact is currency: an edge through it is the escalation a tester
+# means by "attack chain". One that no unit requires or is motivated by is a
+# place the chart stops earlier than the mechanism does -- and until this
+# register existed the catalogue passed every check while it did, because the
+# producer gate asks where a capability comes from and nothing asked where it
+# goes.
+#
+# Listing rather than forbidding, because forbidding would be a lie: a growing
+# catalogue honestly has capabilities that lead nowhere *yet*. What is not
+# honest is for that to be invisible. So each is recorded under the cause it
+# belongs to, and adding one is a deliberate entry rather than a silent pass.
+#
+# The half that stops this becoming a list of suppressions: an entry for a fact
+# something has since started consuming is *rejected*. The register can only
+# shrink by the gap being closed, never by the entry being forgotten.
+#
+# Impacts are excluded for the reason `Chain.dead_ends` excludes them -- every
+# impact is unconsumed by construction, and counting them would describe
+# arriving at an outcome as failing to continue to one.
+unconsumed:
+  - cause: defence-state-is-not-a-capability
+    reason: >-
+      A `control.*` fact records the state of a defence -- absent, weak, permissive,
+      not enforced. Nothing requires one because a state is not a capability: the
+      catalogue has no unit that reads "given this defence is missing, do X", so
+      every one of these is produced by the test that found it and consumed by
+      nobody. The fix is not vocabulary. It is the inversion the model is missing --
+      the unit that exploits a defence declaring the control fact as its condition,
+      so that EVADE requires the filter it defeats instead of announcing it -- and
+      that is chain work across the units, not an edit here.
+    facts:
+      - control.binding.absent
+      - control.cache.permissive
+      - control.channel.bypass
+      - control.config.nonproduction
+      - control.content.internal
+      - control.content.withdrawn
+      - control.cookie.weak
+      - control.credential.weak
+      - control.crypto.keyexposed
+      - control.debug.enabled
+      - control.handshake.origin.unchecked
+      - control.mfa.bypassable
+      - control.mfa.optional
+      - control.misuse.undetected
+      - control.oauth.flow
+      - control.objectstore.enumerable
+      - control.permissions.excessive
+      - control.persistent.weak
+      - control.platform.extra
+      - control.plugin.policy.permissive
+      - control.provisioning.unchecked
+      - control.reauth.absent
+      - control.recovery.guessable
+      - control.registration.unverified
+      - control.request.forgeable
+      - control.request.replayable
+      - control.reset.weak
+      - control.session.persists
+      - control.session.unbound
+      - control.session.unbounded
+      - control.signature.unverified
+      - control.storage.served
+      - control.tls.certificate.invalid
+      - control.tls.weak
+      - control.token.audience
+      - control.username.confusable
+
+  - cause: capability-held-and-nothing-acts-on-it
+    reason: >-
+      A capability genuinely in hand, and the unit that would act on it is not
+      written. A held role that nothing acts with, a recovered key that nothing
+      forges with, and an inference channel that nothing reads through are three
+      chains that stop one step after the interesting part. Each is a gap in the
+      catalogue rather than in the model, and closes when the consuming unit exists.
+    facts:
+      - access.role.elevated
+      - artifact.key.recovered
+      - primitive.blind.oracle
+
+  - cause: recon-no-later-test-is-conditioned-on
+    reason: >-
+      Reconnaissance that no later test is conditioned on. Both are real findings a
+      report carries, but neither has been connected to the test that should be
+      chosen *because* of it -- which is what the recon family is for. They are here
+      rather than re-tiered because the connection is the thing that is missing, and
+      re-tiering would record the omission as a decision.
+    facts:
+      - recon.metafiles.read
+      - recon.platform.confirmed

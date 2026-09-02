@@ -116,6 +116,15 @@ The denominators differ by one: `WSTG-INPV-14` is mapped to no domain because it
 describes second-order delivery rather than a test, so nothing can cover it and
 the validator does not ask anything to.
 
+0.21.0 closes the half of the chain gate that was missing. The producer gate has
+asked where a capability comes from since phase 5; nothing asked where it goes,
+so a chain-tier capability no test declares a use for passed every check while
+being exactly the place the chart stops earlier than the mechanism does. Those
+are now registered in `vocab/facts.yaml` under the cause they belong to -- 41
+open, in 3 causes -- and the validator rejects an unlisted dead end as well as
+an entry for a gap that has since closed. It fills nothing; it makes the gap a
+number that can only move by being worked on.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.

@@ -162,12 +162,22 @@ empty.
   outrun use.
 - No fact id is declared twice.
 - Every fact declares a `tier`, and it is one of the three.
+- **The producer gate.** Every fact something requires has at least one unit
+  establishing it, unless it is `given` or `granted` — neither is earned by a
+  test. It became a gate when the chain pass finished, as phase 5 said it would.
+- **The consumer gate.** Every chain-tier fact something establishes is required
+  or motivated by at least one unit, or is registered under `unconsumed` in
+  `vocab/facts.yaml` with the cause it belongs to. Impacts are excluded: one is
+  terminal by construction.
+- A registered fact that a unit has since started declaring a use for is
+  rejected. The register names the gaps that are open, and an entry outliving
+  its gap turns it into a list of suppressions.
 
-One rule is deliberately **not** enforced yet: that every non-`given` fact has at
-least one unit producing it. While the catalogue is partly charted, that rule
-would reject a fact whose producer is simply a unit that has not been charted
-yet. It becomes a gate when the chain pass finishes — recorded in `ROADMAP.md`
-rather than left to be remembered.
+The two gates are deliberately not symmetrical in what they permit. A fact with
+no producer is a hole and is refused outright, because from the outside it reads
+exactly like a route nobody has taken yet. A fact with no consumer is where the
+chart honestly stops, so it is recorded rather than refused — what is refused is
+recording nothing.
 
 ## 6. Reading the graph
 
@@ -246,7 +256,9 @@ that count would inflate it and would describe arriving as failing to arrive.
 
 This is currently the common case rather than the rare one. 49 of 185
 capabilities are established by a test and used by none, including 1 of 32
-`primitive.*` and 36 of 59 `control.*`. Of 374 tests, 240 have a potential
+`primitive.*` and 36 of 59 `control.*`. The chain-tier ones among them are
+registered under `unconsumed` with the cause they belong to, so the count moves
+only when a gap is worked on. Of 374 tests, 240 have a potential
 continuation, 14 establish an impact, 81 stop short, and 39 declare no
 capability at all — a partition, and the four sum to the catalogue. Phase 5
 charted reconnaissance through to primitives and stopped there; primitive to
