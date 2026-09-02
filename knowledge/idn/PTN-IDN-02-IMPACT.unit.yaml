@@ -1,0 +1,12 @@
+id: PTN-IDN-02-IMPACT
+topic: PTN-IDN-02
+status: outline
+role: stage
+title: "A role the provisioning request never justified"
+objective: >-
+  Determine whether an account provisioned through the unchecked path holds
+  entitlements the request supplied no evidence for, rather than the minimum
+  the flow was meant to grant.
+requires:
+  all_of: [control.provisioning.unchecked]
+yields: [access.role.elevated]

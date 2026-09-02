@@ -1,0 +1,12 @@
+id: PTN-AUT-09-IMPACT
+topic: PTN-AUT-09
+status: outline
+role: stage
+title: "Whether sign-in completes without the second factor"
+objective: >-
+  Determine whether an account whose second factor the tester does not hold is
+  signed into anyway, either because the step is skippable or because it was
+  never required of that account.
+requires:
+  any_of: [control.mfa.bypassable, control.mfa.optional]
+yields: [access.principal.other]

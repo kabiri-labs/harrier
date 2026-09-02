@@ -1477,69 +1477,57 @@ facts:
 # impact is unconsumed by construction, and counting them would describe
 # arriving at an outcome as failing to continue to one.
 unconsumed:
-  - cause: defence-state-is-not-a-capability
+  - cause: records-a-finding-and-permits-nothing
     reason: >-
-      A `control.*` fact records the state of a defence -- absent, weak, permissive,
-      not enforced. Nothing requires one because a state is not a capability: the
-      catalogue has no unit that reads "given this defence is missing, do X", so
-      every one of these is produced by the test that found it and consumed by
-      nobody. The fix is not vocabulary. It is the inversion the model is missing --
-      the unit that exploits a defence declaring the control fact as its condition,
-      so that EVADE requires the filter it defeats instead of announcing it -- and
-      that is chain work across the units, not an edit here.
+      A finding in its own right, and a dead end for good rather than for now. Each
+      of these records that a defence is absent, weak or never enforced -- and none
+      of them, alone, permits anything a test could go on to perform. Absent misuse
+      detection removes a cost rather than granting a capability; a weak transport
+      suite or an invalid certificate is reachable only from a network position the
+      engagement grants rather than a test earns; a cookie missing its attributes
+      captures nothing without a script sink or that same position, both of which
+      this model already carries as separate capabilities; absent re-authentication
+      needs a session the attacker can already drive. Writing a consuming unit for
+      any of these would draw an edge the evidence does not support, which is the
+      one thing a chain must not do. They are reported and they stop here.
     facts:
-      - control.binding.absent
-      - control.cache.permissive
-      - control.channel.bypass
-      - control.config.nonproduction
-      - control.content.internal
-      - control.content.withdrawn
       - control.cookie.weak
-      - control.credential.weak
-      - control.crypto.keyexposed
-      - control.debug.enabled
-      - control.handshake.origin.unchecked
-      - control.mfa.bypassable
-      - control.mfa.optional
       - control.misuse.undetected
-      - control.oauth.flow
-      - control.objectstore.enumerable
       - control.permissions.excessive
-      - control.persistent.weak
-      - control.platform.extra
       - control.plugin.policy.permissive
-      - control.provisioning.unchecked
       - control.reauth.absent
-      - control.recovery.guessable
       - control.registration.unverified
-      - control.request.forgeable
-      - control.request.replayable
-      - control.reset.weak
-      - control.session.unbound
-      - control.session.unbounded
-      - control.storage.served
       - control.tls.certificate.invalid
       - control.tls.weak
-      - control.token.audience
       - control.username.confusable
 
-  - cause: capability-held-and-nothing-acts-on-it
+  - cause: no-capability-in-the-vocabulary-fits
     reason: >-
-      A capability genuinely in hand, and the unit that would act on it is not
-      written. A held role that nothing acts with, a recovered key that nothing
-      forges with, and an inference channel that nothing reads through are three
-      chains that stop one step after the interesting part. Each is a gap in the
-      catalogue rather than in the model, and closes when the consuming unit exists.
+      The capability exists and nothing in the vocabulary can express it. Each of
+      these is a stored object -- a file written where it is served, content
+      withdrawn but still retrievable, an authenticated response held in a shared
+      cache -- returned to somebody who should not have it. The read primitives are
+      `primitive.fs.read`, which claims files can be read at will, and
+      `primitive.doc.read`, which is about the document behind a query and has one
+      producer in NoSQL injection. Neither says "one stored object is readable", so
+      the honest consumer cannot be written until the vocabulary carries that
+      capability. This is a gap in the model rather than in the content, which is
+      why it is recorded apart from the entries waiting on a unit.
+    facts:
+      - control.cache.permissive
+      - control.content.withdrawn
+      - control.storage.served
+
+  - cause: a-carrier-rather-than-a-destination
+    reason: >-
+      A carrier rather than a destination, and unconsumed on purpose. Every other
+      inference unit in the catalogue yields the read it obtains --
+      `PTN-INJ-01-BOOL` and `PTN-INJ-01-TIME` establish a database read,
+      `PTN-INJ-02-BOOL` a directory read, `PTN-INJ-07-TIME` server-side execution.
+      The three units that stop here establish that a conditional signal exists
+      without establishing what is being inferred from, which the fact's own
+      description says it is not evidence of. Writing a consumer would assert that
+      holding the channel is holding the value, and the suite pins this entry so
+      that both a new orphan and a use written for this one fail.
     facts:
       - primitive.blind.oracle
-
-  - cause: recon-no-later-test-is-conditioned-on
-    reason: >-
-      Reconnaissance that no later test is conditioned on. Both are real findings a
-      report carries, but neither has been connected to the test that should be
-      chosen *because* of it -- which is what the recon family is for. They are here
-      rather than re-tiered because the connection is the thing that is missing, and
-      re-tiering would record the omission as a decision.
-    facts:
-      - recon.metafiles.read
-      - recon.platform.confirmed

@@ -9,4 +9,5 @@ objective: >-
 
 requires:
   all_of: [recon.platform.identified]
+motivated_by: [recon.platform.confirmed]
 yields: [access.principal.other]

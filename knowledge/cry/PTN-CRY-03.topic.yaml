@@ -12,6 +12,7 @@ order:
   - PTN-CRY-03-ENTROPY
   - PTN-CRY-03-ROTATION
   - PTN-CRY-03-STORAGE
+  - PTN-CRY-03-IMPACT
 
 refs:
   wstg: [WSTG-CRYP-04]

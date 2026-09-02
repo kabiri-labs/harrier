@@ -11,6 +11,7 @@ order:
   - PTN-AUT-10-BINDING
   - PTN-AUT-10-SCOPE
   - PTN-AUT-10-REVOCATION
+  - PTN-AUT-10-IMPACT
 
 boundaries:
   - subject: "Verifying the signature on an issued token"

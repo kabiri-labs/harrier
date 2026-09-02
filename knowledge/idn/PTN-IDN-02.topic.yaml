@@ -10,6 +10,7 @@ order:
   - PTN-IDN-02-MAP
   - PTN-IDN-02-VALIDATION
   - PTN-IDN-02-REVOCATION
+  - PTN-IDN-02-IMPACT
 
 boundaries:
   - subject: "Whether a provisioned role can exceed its grant"

@@ -111,8 +111,8 @@ class SelfMotivationCannotSatisfyTheConsumerGate(SandboxCase):
     lose the entry for exactly the dead end it exists to record."""
 
     #: One producer, so its own motivation is the only one there could be.
-    SOLE = "control.debug.enabled"
-    PRODUCER = "knowledge/err/PTN-ERR-02-PROBE.unit.yaml"
+    SOLE = "control.misuse.undetected"
+    PRODUCER = "knowledge/biz/PTN-BIZ-07-PROBE.unit.yaml"
 
     def _self_motivate(self):
         self.box.edit(self.PRODUCER, lambda u: u.update(motivated_by=[self.SOLE]))
@@ -705,7 +705,7 @@ class EveryEscalationGoesSomewhereOrSaysWhyNot(SandboxCase):
     growing catalogue honestly has them -- it forbids an unrecorded one, and it
     forbids an entry outliving the gap it describes."""
 
-    REGISTERED = "control.debug.enabled"
+    REGISTERED = "control.misuse.undetected"
 
     def _register(self, box):
         return box.read("vocab/facts.yaml")["unconsumed"]

@@ -10,6 +10,7 @@ order:
   - PTN-AUT-01-POLICY
   - PTN-AUT-01-VALIDATION
   - PTN-AUT-01-SIZE
+  - PTN-AUT-01-IMPACT
 
 refs:
   wstg: [WSTG-ATHN-07]

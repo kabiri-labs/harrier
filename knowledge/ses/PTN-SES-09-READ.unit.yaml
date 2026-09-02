@@ -9,4 +9,5 @@ objective: >-
 
 requires:
   all_of: [artifact.session.captured]
+motivated_by: [control.session.unbound, control.session.unbounded]
 yields: [primitive.data.read.victim]

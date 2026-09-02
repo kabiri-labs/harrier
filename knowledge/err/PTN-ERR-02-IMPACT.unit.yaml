@@ -1,0 +1,12 @@
+id: PTN-ERR-02-IMPACT
+topic: PTN-ERR-02
+status: outline
+role: stage
+title: "What the non-production surface actually serves"
+objective: >-
+  Determine what a debug endpoint, a non-production setting or a component the
+  platform ships unasked returns to a caller: configuration, state, an
+  interactive console, or nothing the interface does not already show.
+requires:
+  any_of: [control.debug.enabled, control.config.nonproduction, control.platform.extra]
+yields: [control.content.internal]

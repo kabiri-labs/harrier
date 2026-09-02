@@ -1,0 +1,12 @@
+id: PTN-ERR-03-IMPACT
+topic: PTN-ERR-03
+status: outline
+role: stage
+title: "Whether a value found in delivered content authenticates"
+objective: >-
+  Determine whether an internal value the delivered content carried -- a
+  credential, a token, a key -- is accepted by the service it belongs to, which
+  is what separates a disclosure from an access.
+requires:
+  all_of: [control.content.internal]
+yields: [access.principal.other]

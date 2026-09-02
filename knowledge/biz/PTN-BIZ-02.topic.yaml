@@ -11,6 +11,7 @@ order:
   - PTN-BIZ-02-MAP
   - PTN-BIZ-02-PROBE
   - PTN-BIZ-02-REPLAY
+  - PTN-BIZ-02-IMPACT
 
 boundaries:
   - subject: "Ambient authority making a cross-site request succeed"

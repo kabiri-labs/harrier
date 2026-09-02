@@ -114,9 +114,10 @@ cases:
   - PTN-AUT-05-ENTROPY
   - PTN-AUT-05-EXPIRY
   - PTN-AUT-05-REVOCATION
+  - PTN-AUT-05-IMPACT
   authored: 0
   sketched: 0
-  outline: 3
+  outline: 4
   resolvable: true
 - id: WSTG-ATHN-06
   title: Testing for Browser Cache Weakness
@@ -140,9 +141,10 @@ cases:
   - PTN-AUT-01-POLICY
   - PTN-AUT-01-VALIDATION
   - PTN-AUT-01-SIZE
+  - PTN-AUT-01-IMPACT
   authored: 0
   sketched: 0
-  outline: 3
+  outline: 4
   resolvable: true
 - id: WSTG-ATHN-08
   title: Testing for Weak Security Question Answer
@@ -152,9 +154,10 @@ cases:
   - PTN-AUT-06-POLICY
   - PTN-AUT-06-VALIDATION
   - PTN-AUT-06-RATE
+  - PTN-AUT-06-IMPACT
   authored: 0
   sketched: 0
-  outline: 3
+  outline: 4
   resolvable: true
 - id: WSTG-ATHN-09
   title: Testing for Weak Password Change or Reset Functionalities
@@ -166,9 +169,10 @@ cases:
   - PTN-AUT-07-EXPIRY
   - PTN-AUT-07-REVOCATION
   - PTN-AUT-07-VALIDATION
+  - PTN-AUT-07-IMPACT
   authored: 0
   sketched: 0
-  outline: 5
+  outline: 6
   resolvable: true
 - id: WSTG-ATHN-10
   title: Testing for Weaker Authentication in Alternative Channel
@@ -178,9 +182,10 @@ cases:
   - PTN-AUT-08-MAP
   - PTN-AUT-08-PROBE
   - PTN-AUT-08-IMPACT
+  - PTN-AUT-08-WRITE
   authored: 0
   sketched: 0
-  outline: 3
+  outline: 4
   resolvable: true
 - id: WSTG-ATHN-11
   title: Testing Multi-Factor Authentication (MFA)
@@ -191,9 +196,10 @@ cases:
   - PTN-AUT-09-VALIDATION
   - PTN-AUT-09-ENTROPY
   - PTN-AUT-09-BINDING
+  - PTN-AUT-09-IMPACT
   authored: 0
   sketched: 0
-  outline: 4
+  outline: 5
   resolvable: true
 - id: WSTG-ATHZ-01
   title: Testing Directory Traversal File Include
@@ -258,9 +264,10 @@ cases:
   - PTN-AUT-10-BINDING
   - PTN-AUT-10-SCOPE
   - PTN-AUT-10-REVOCATION
+  - PTN-AUT-10-IMPACT
   authored: 0
   sketched: 0
-  outline: 4
+  outline: 5
   resolvable: true
 - id: WSTG-BUSL-01
   title: Test Business Logic Data Validation
@@ -282,9 +289,10 @@ cases:
   - PTN-BIZ-02-MAP
   - PTN-BIZ-02-PROBE
   - PTN-BIZ-02-REPLAY
+  - PTN-BIZ-02-IMPACT
   authored: 0
   sketched: 0
-  outline: 3
+  outline: 4
   resolvable: true
 - id: WSTG-BUSL-03
   title: Test Integrity Checks
@@ -536,9 +544,10 @@ cases:
   - PTN-PRT-05-VALIDATION
   - PTN-PRT-05-BINDING
   - PTN-PRT-05-TRANSPORT
+  - PTN-PRT-05-IMPACT
   authored: 0
   sketched: 0
-  outline: 9
+  outline: 10
   resolvable: true
 - id: WSTG-CLNT-11
   title: Test Web Messaging
@@ -812,9 +821,10 @@ cases:
   - PTN-CRY-03-ENTROPY
   - PTN-CRY-03-ROTATION
   - PTN-CRY-03-STORAGE
+  - PTN-CRY-03-IMPACT
   authored: 0
   sketched: 0
-  outline: 5
+  outline: 6
   resolvable: true
 - id: WSTG-ERRH-01
   title: Testing for Improper Error Handling
@@ -835,9 +845,10 @@ cases:
   units:
   - PTN-ERR-02-ERROR
   - PTN-ERR-02-PROBE
+  - PTN-ERR-02-IMPACT
   authored: 0
   sketched: 0
-  outline: 2
+  outline: 3
   resolvable: true
 - id: WSTG-IDNT-01
   title: Test Role Definitions
@@ -870,9 +881,10 @@ cases:
   - PTN-IDN-02-MAP
   - PTN-IDN-02-VALIDATION
   - PTN-IDN-02-REVOCATION
+  - PTN-IDN-02-IMPACT
   authored: 0
   sketched: 0
-  outline: 3
+  outline: 4
   resolvable: true
 - id: WSTG-IDNT-04
   title: Testing for Account Enumeration and Guessable User Account
@@ -930,11 +942,12 @@ cases:
   units:
   - PTN-ERR-03-MAP
   - PTN-ERR-03-PROBE
+  - PTN-ERR-03-IMPACT
   - PTN-RCN-08-MAP
   - PTN-RCN-08-PROBE
   authored: 0
   sketched: 4
-  outline: 0
+  outline: 1
   resolvable: true
 - id: WSTG-INFO-04
   title: Enumerate Applications on Webserver
@@ -954,9 +967,10 @@ cases:
   units:
   - PTN-ERR-03-MAP
   - PTN-ERR-03-PROBE
+  - PTN-ERR-03-IMPACT
   authored: 0
   sketched: 2
-  outline: 0
+  outline: 1
   resolvable: true
 - id: WSTG-INFO-06
   title: Identify Application Entry Points
@@ -1419,9 +1433,10 @@ cases:
   - PTN-SES-10-SCOPE
   - PTN-SES-10-BINDING
   - PTN-SES-10-REVOCATION
+  - PTN-SES-10-IMPACT
   authored: 0
   sketched: 0
-  outline: 10
+  outline: 11
   resolvable: true
 - id: WSTG-SESS-11
   title: Testing for Concurrent Sessions

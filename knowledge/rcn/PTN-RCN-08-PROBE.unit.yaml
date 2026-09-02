@@ -10,6 +10,7 @@ objective: >-
 
 requires:
   all_of: [recon.names.mapped]
+motivated_by: [recon.metafiles.read]
 yields: [recon.paths.indexed]
 
 hypotheses:

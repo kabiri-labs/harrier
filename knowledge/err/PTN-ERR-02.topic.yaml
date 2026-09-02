@@ -9,6 +9,7 @@ surfaces:
 order:
   - PTN-ERR-02-ERROR
   - PTN-ERR-02-PROBE
+  - PTN-ERR-02-IMPACT
 
 boundaries:
   - subject: "Identifying the platform and its version"

@@ -1,0 +1,12 @@
+id: PTN-AUT-08-WRITE
+topic: PTN-AUT-08
+status: outline
+role: stage
+title: "An action completed through the weaker channel"
+objective: >-
+  Determine whether a session established under the secondary channel's lesser
+  requirements performs an action the primary channel would have demanded more
+  evidence for.
+requires:
+  all_of: [control.channel.bypass]
+yields: [primitive.check.bypassed]
