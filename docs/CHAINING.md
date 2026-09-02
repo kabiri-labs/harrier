@@ -165,10 +165,16 @@ empty.
 - **The producer gate.** Every fact something requires has at least one unit
   establishing it, unless it is `given` or `granted` — neither is earned by a
   test. It became a gate when the chain pass finished, as phase 5 said it would.
-- **The consumer gate.** Every chain-tier fact something establishes is required
-  or motivated by at least one unit, or is registered under `unconsumed` in
+- **The consumer gate.** Every chain-tier fact something establishes has a
+  derived edge travelling through it, or is registered under `unconsumed` in
   `vocab/facts.yaml` with the cause it belongs to. Impacts are excluded: one is
   terminal by construction.
+- The gate counts edges, not mentions. A unit naming a capability it establishes
+  itself adds no route -- the derivation drops that edge as self-referential --
+  so a sole producer motivated by its own result does not clear the gate. A
+  sibling naming another unit's result does: several units testing one property
+  across several surfaces, each motivated by whichever found it first, are
+  joined to each other even though every one of them also establishes it.
 - A registered fact that a unit has since started declaring a use for is
   rejected. The register names the gaps that are open, and an entry outliving
   its gap turns it into a list of suppressions.
