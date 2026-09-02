@@ -101,6 +101,113 @@ class ImpactsEndChains(SandboxCase):
         self.assertRejected("an impact is where a chain ends")
 
 
+class SelfMotivationCannotSatisfyTheConsumerGate(SandboxCase):
+    """The one way the gate could be quietly defeated.
+
+    `chain_index` drops an edge whose consumer is the producing unit, so a unit
+    that declares a use for a capability it establishes itself adds no route.
+    Asking only whether *something* names the fact would let that declaration
+    clear the gate while the chart still stops there -- and the register would
+    lose the entry for exactly the dead end it exists to record."""
+
+    #: One producer, so its own motivation is the only one there could be.
+    SOLE = "control.debug.enabled"
+    PRODUCER = "knowledge/err/PTN-ERR-02-PROBE.unit.yaml"
+
+    def _self_motivate(self):
+        self.box.edit(self.PRODUCER, lambda u: u.update(motivated_by=[self.SOLE]))
+
+    def test_a_sole_producer_naming_its_own_result_does_not_clear_the_gate(self):
+        def unregister(vocab):
+            for entry in vocab["unconsumed"]:
+                if self.SOLE in entry["facts"]:
+                    entry["facts"].remove(self.SOLE)
+
+        self._self_motivate()
+        self.box.edit("vocab/facts.yaml", unregister)
+        self.assertRejected(f"{self.SOLE} is chain-tier and 1 unit(s) establish it")
+
+    def test_the_entry_stays_valid_while_the_only_use_is_the_producer_s_own(self):
+        """The other half: the register must not be told its entry is stale for
+        a use that establishes no route."""
+        self._self_motivate()
+        self.assertAccepted()
+
+
+class ASiblingNamingAnothersResultIsARealEdge(unittest.TestCase):
+    """The case the rule above must not catch.
+
+    Five `PTN-CRY-02` units test one property across five surfaces. Each
+    establishes `control.transport.plaintext` and each is motivated by it, so
+    every one is joined to the other six producers -- 30 edges the derivation
+    draws and a naive self-edge rule would delete. The capability is not a dead
+    end, and the suite says so against the real catalogue rather than a
+    fixture."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chain = Chain.load(REPO_ROOT)
+
+    FACT = "control.transport.plaintext"
+
+    def test_the_capability_has_several_producers_that_motivate_each_other(self):
+        producers = set(self.chain.producers.get(self.FACT, []))
+        movers = set(self.chain.motivates.get(self.FACT, []))
+        self.assertGreater(len(producers), 1)
+        self.assertTrue(movers)
+        self.assertTrue(movers <= producers, "the case under test is producers motivating each other")
+
+    def test_it_is_not_a_dead_end_and_edges_really_travel_through_it(self):
+        self.assertTrue(self.chain.leads_from(self.FACT))
+        self.assertNotIn(self.FACT, self.chain.dead_ends())
+        index = self.chain.index()
+        travelled = [
+            (uid, edge["unit"])
+            for uid, entry in index.items()
+            for edge in entry["out"]
+            if self.FACT in edge.get("via", []) + edge.get("hint", [])
+        ]
+        self.assertTrue(travelled, "no derived edge travels through it")
+        for producer, consumer in travelled:
+            self.assertNotEqual(producer, consumer, "a self-edge was counted as a route")
+
+    def test_a_root_the_engagement_supplies_is_never_a_dead_end(self):
+        """`access.anon` has no producer, so nothing established it and there is
+        no continuation to be missing. Counting a root would inflate the figure
+        the README publishes by the size of the given set."""
+        for fid in sorted(self.chain.given()):
+            self.assertNotIn(fid, self.chain.dead_ends())
+
+
+class AMalformedRegisterEntryIsReportedRatherThanRaised(SandboxCase):
+    """Every pass collects problems rather than raising on the first one, and a
+    contributor fixing a batch wants the whole list. Reading a key the schema
+    pass has just reported as missing would hand them a traceback instead --
+    and a traceback about `cause` says nothing about the field they omitted."""
+
+    @staticmethod
+    def _drop(field):
+        def mutate(vocab):
+            vocab["unconsumed"][0].pop(field)
+
+        return mutate
+
+    def test_an_entry_without_a_cause_still_returns_the_schema_problem(self):
+        self.box.edit("vocab/facts.yaml", self._drop("cause"))
+        problems = validate(self.box.root)
+        self.assertIn("'cause' is a required property", messages(problems))
+
+    def test_an_entry_without_facts_still_returns_the_schema_problem(self):
+        self.box.edit("vocab/facts.yaml", self._drop("facts"))
+        problems = validate(self.box.root)
+        self.assertIn("'facts' is a required property", messages(problems))
+
+    def test_a_facts_field_of_the_wrong_type_does_not_raise(self):
+        self.box.edit("vocab/facts.yaml", lambda v: v["unconsumed"][0].update(facts="all of them"))
+        problems = validate(self.box.root)
+        self.assertTrue(problems, "a string where a list belongs must be reported")
+
+
 class ANegativeResultClosesOnlyWhatItCouldOpen(SandboxCase):
     def test_closing_a_fact_it_does_not_yield_is_rejected(self):
         self.box.edit(
