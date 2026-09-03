@@ -87,6 +87,37 @@ class TheLocalGraphModel(unittest.TestCase):
                         "this capability is the case the grouping exists for")
         self.assertGreater(result["firstStepChoices"], 1)
 
+    def test_widening_the_search_never_loses_a_shape_a_narrower_one_found(self):
+        """Grouping a truncated search is the wrong order, and a fixed multiple
+        of the display count only makes it less likely rather than settling it:
+        walks that all collapse to one shape can fill the limit while a walk of
+        a different shape sits just past it.
+
+        Asserted as the property the view needs -- widening the search is
+        monotone in shapes -- rather than by pinning today's numbers, which
+        would pass on a catalogue where the case is simply absent.
+        """
+        result = self.run_js("""
+            const bad = [];
+            Object.keys(D.facts).forEach(function (f) {
+              if (H.familyOf(f) === "impact") return;
+              const narrow = H.collapseRoutes(H.pathsToImpact(D, f, {maxPaths: 12, maxDepth: 5}));
+              if (!narrow.length) return;
+              const wide = H.collapseRoutes(H.pathsToImpact(D, f, {maxPaths: 96, maxDepth: 5}));
+              const seen = {};
+              wide.forEach(function (g) {
+                seen[[g.start].concat(g.steps.map(function (s) { return s.to; })).join(">")] = 1;
+              });
+              narrow.forEach(function (g) {
+                const k = [g.start].concat(g.steps.map(function (s) { return s.to; })).join(">");
+                if (!seen[k]) bad.push([f, k]);
+              });
+              if (wide.length < narrow.length) bad.push([f, "fewer shapes when searched wider"]);
+            });
+            return bad.slice(0, 10);
+        """)
+        self.assertEqual(result, [])
+
     def test_grouping_never_drops_a_step_or_a_condition(self):
         """The collapse is a reading of the walk, not a second walk. Every card
         must keep the shape it came from and the conditions each step still
