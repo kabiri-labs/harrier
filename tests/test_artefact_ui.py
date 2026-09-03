@@ -1741,6 +1741,26 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         escalation = self.text("#/unit/PTN-CLT-01-HTMLBODY")
         self.assertShows(escalation, "Escalates to")
 
+    def test_a_mixed_column_names_the_relation_on_the_edge_not_the_subtitle(self):
+        """The subtitle is wrapped to one line and carries the condition count.
+
+        Prefixing the relation onto it pushed that count off the end -- "This is
+        a general prerequisite of — 2 further conditions" rendered as "This is a
+        general prerequisite…", losing the figure the node exists to carry. The
+        arrow says the relation instead, and the subtitle keeps its number.
+        """
+        self.open("#/unit/PTN-IDN-01-POLICY/all")
+        self.driver.page.wait_for_timeout(200)
+        labels = self.driver.page.eval_on_selector_all(
+            "svg text", "els => els.map(e => e.textContent)"
+        )
+        self.assertTrue([x for x in labels if x in ("escalates to", "also needs")],
+                        "a mixed column must name each relation on its edge")
+        truncated = [x for x in labels if x.endswith("\u2026")]
+        for phrase in ("This is a general prerequisite", "Escalates to", "Another technique"):
+            self.assertFalse([x for x in truncated if x.startswith(phrase)],
+                             f"a relation is being truncated into the subtitle: {phrase}")
+
     def test_an_unknown_tag_in_the_url_leaves_the_rest_of_the_selection(self):
         """A link may arrive from a colleague running a different build. The
         useful answer to a tag this file does not carry is the rest."""
