@@ -68,7 +68,7 @@ thing stopped being built.
 
 0.4.0 is the first version published for anyone outside the project to look at,
 and it is an alpha in the honest sense: the decomposition is broad and the depth
-behind it is not. Every resolvable WSTG identifier is claimed and 394 Test Units
+behind it is not. Every resolvable WSTG identifier is claimed and 393 Test Units
 exist; 36 are written to full procedural depth, 40 are sketched, and the far half
 of the chain is barely charted.
 
@@ -105,10 +105,10 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 318 |
+| Units — outlined | 317 |
 | Units — sketched | 40 |
 | Units — authored | 36 |
-| Units — charted | 394 |
+| Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -161,7 +161,7 @@ The other 14 were the finding. Ten permit nothing on their own and never will;
 one is a carrier rather than a destination; and three were blocked on a
 vocabulary that could not say "one stored object is readable". 0.24.0 closed
 that third group by saying it -- `primitive.stored.read`, with the three tests
-that establish it -- which emptied its cause entirely and left 11 entries in 2.
+that establish it -- which emptied its cause entirely and left 12 entries in 2.
 That a cause could be closed by naming a capability rather than by writing
 around it is the argument for having separated the three reasons at all.
 
@@ -187,7 +187,7 @@ declaring requirements against facts nothing yet establishes.
 
 The pass ended with a gate rather than a count: every fact that is not `given`
 has at least one unit producing it, and the validator enforces it from here on.
-187 facts, 394 units, and no condition in the graph without a route to it.
+187 facts, 393 units, and no condition in the graph without a route to it.
 
 The gate is one-directional, and the asymmetry is worth stating plainly. Every
 capability has a producer; many have no *consumer*. 78 of 177 are declared as a
@@ -264,7 +264,7 @@ against real material rather than an empty tree:
 | `mitigations/object-authorization.md` | CWE-639 and CWE-566, for `PTN-ACL-02`: authorize the object rather than the route, enforce at the data-access layer, and why an unguessable identifier is exposure surface rather than a control. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 106 topics across 14 domains, and 394 units across all fourteen domains. |
+| `knowledge/` | 106 topics across 14 domains, and 393 units across all fourteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags, describing where a topic applies. |
 | `vocab/facts.yaml` | 185 capabilities in seven families — the join keys the chain is derived from. |
 | `pentest_navgrid/` | Nine schemas, seven validation passes, the derived chain, and the builder plus the artefact's own template, stylesheet and script. See [`VALIDATION.md`](VALIDATION.md). |
@@ -280,14 +280,14 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart what a defeated control permits** | Done in 0.23.0 and 0.24.0, and what is left is not the same work. 19 of 187 capabilities are established by a test and used by none, 10 of 59 of them `control.*`, and `primitive.*` is at 1 of 33. The shape that closed it was written 15 times: a test that requires the defeated control and establishes what it permits. Of the 11 remaining, 10 permit nothing on their own and are dead ends for good and 1 is the blind oracle, which carries a value rather than being one — recorded under two causes so the register stops reading as a to-do list. 26 of 394 tests now end at the capability they established, down from 81. |
+| **Chart what a defeated control permits** | Done in 0.23.0 and 0.24.0, and what is left is not the same work. 20 of 187 capabilities are established by a test and used by none, 11 of 59 of them `control.*`, and `primitive.*` is at 1 of 33. The shape that closed it was written 15 times: a test that requires the defeated control and establishes what it permits. Of the 12 remaining, 11 permit nothing on their own and are dead ends for good and 1 is the blind oracle, which carries a value rather than being one — recorded under two causes so the register stops reading as a to-do list. 26 of 393 tests now end at the capability they established, down from 81. |
 | **`PTN-CLT-02` — DOM cross-site scripting** | The sibling of the chain 0.18.0 wrote, and the natural next one. A second instance of a shape already proven, which is why it waited. |
 | **`PTN-RES-03` — server-side request forgery** | A fourth chain shape: `primitive.fetch.internal` to `impact.network.reached`, through `PTN-OUT-03`. The first candidate once the three phase-1 chains have been used in anger. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Pentest NavGrid improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
 | Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
-| More units at full depth | Thirty-six of 394, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
+| More units at full depth | Thirty-six of 393, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
 
 ## Governance and distribution

@@ -988,7 +988,7 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         # A figure rather than a range: it is what the view's usefulness rests
         # on, and it must move visibly when the catalogue moves.
         self.assertEqual(out["entry"], 176)
-        self.assertEqual(out["total"], 394)
+        self.assertEqual(out["total"], 393)
 
     def test_an_engagement_condition_is_not_the_same_as_no_condition(self):
         """An engagement-tier fact is not a chain step and is also not nothing.

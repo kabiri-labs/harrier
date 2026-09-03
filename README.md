@@ -8,7 +8,7 @@ It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
 > **Pentest NavGrid 0.24.0 is an early public alpha.** The WSTG decomposition is broad —
-> every resolvable identifier is claimed, and 394 Test Units exist. The depth
+> every resolvable identifier is claimed, and 393 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
 > means in numbers](#what-exists-today-and-what-does-not) is below, not buried at
@@ -289,10 +289,10 @@ stale in this file without the suite failing.
 | WSTG identifiers pinned | 109, across 12 testing groups |
 | Claimed by a Pentest NavGrid topic | 108 of 108 resolvable |
 | Topics | 106, across 14 domains |
-| Test Units | 394 |
+| Test Units | 393 |
 | Written to full procedural depth | **36** |
 | Sketched | 40 |
-| Outline only | 318 |
+| Outline only | 317 |
 
 Three chains are now written end to end rather than one: SQL injection under
 `WSTG-INPV-05`, cross-site scripting under `WSTG-INPV-01`, `WSTG-INPV-02` and
@@ -302,16 +302,16 @@ the standard's own test case through its Test Units to a stated business outcome
 | Chain | |
 |---|---|
 | Capabilities | 187 |
-| Derived unit-to-unit edges | 777 |
-| — of them escalations between capabilities | 421 |
+| Derived unit-to-unit edges | 776 |
+| — of them escalations between capabilities | 420 |
 | — another technique for the same test | 124 |
 | — a general prerequisite, not a step | 232 |
-| Tests with a potential continuation | 315 |
+| Tests with a potential continuation | 314 |
 | Tests that establish an impact | 14 |
 | Tests that stop short | 26 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 19 of 187 |
-| Capabilities with a charted route to an impact | 124 of 177 |
+| Capabilities used by no test, impacts excluded | 20 of 187 |
+| Capabilities with a charted route to an impact | 123 of 177 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.
@@ -329,9 +329,9 @@ than claimed, and nothing is invented to fill the gap.
 
 **The controls are no longer the largest gap.** `primitive → impact` is
 written: 1 of 33 `primitive.*` capabilities is declared as a use by nothing --
-the blind oracle, deliberately -- and 124 of 177 capabilities have a charted
+the blind oracle, deliberately -- and 123 of 177 capabilities have a charted
 route to an impact.
-`control → impact` is most of the way there: 10 of 59 `control.*` facts are
+`control → impact` is most of the way there: 11 of 59 `control.*` facts are
 established by a test and consumed by nothing, down from 36.
 
 What closed it was one shape, written 15 times — a test that **requires** the
@@ -341,7 +341,7 @@ skippable second factor and a reset token that outlives its use each end at the
 same place: a session belonging to somebody else, which the catalogue already
 carried a route from.
 
-What is left is not more of the same work. 10 of the 11 are controls that permit
+What is left is not more of the same work. 11 of the 12 are controls that permit
 nothing on their own and are dead ends for good — absent misuse detection
 removes a cost rather than granting a capability, and a cookie missing its
 attributes captures nothing without a script sink or a network position, both
@@ -364,7 +364,7 @@ test declares a use for is listed in `vocab/facts.yaml` under the cause it
 belongs to, and the validator rejects two things: a dead end that is not listed,
 so a new one cannot arrive silently, and an entry for a capability something has
 since started consuming, so the list can only shrink by the gap being closed.
-11 are open, in 2 causes.
+12 are open, in 2 causes.
 
 This is recorded rather than filled in. Generating plausible edges would make the
 matrix look complete and every route on it untrustworthy — an edge nobody thought

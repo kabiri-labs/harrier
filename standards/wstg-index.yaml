@@ -920,12 +920,11 @@ cases:
   units:
   - PTN-ERR-04-MAP
   - PTN-ERR-04-PROBE
-  - PTN-ERR-04-READ
   - PTN-RCN-08-MAP
   - PTN-RCN-08-PROBE
   authored: 0
   sketched: 4
-  outline: 1
+  outline: 0
   resolvable: true
 - id: WSTG-INFO-02
   title: Fingerprint Web Server
