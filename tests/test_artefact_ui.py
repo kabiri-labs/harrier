@@ -738,6 +738,285 @@ class TheGeneralGraph(unittest.TestCase):
 
 
 @unittest.skipUnless(node_available(), "node is not installed")
+class RoutesToAnImpactAreTheSameGraphWalkedBackwards(unittest.TestCase):
+    """Standing at an outcome, the question is what reaches it.
+
+    The page linking to an impact promised "the routes charted to it" and the
+    impact said a chain ends here, because the only search the artefact had ran
+    forwards. `routesToImpact` walks the same relation the other way. Two
+    searches describing one graph have to agree about it, and these are the
+    assertions that say they do."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+
+    def run_js(self, body):
+        return run_in_node(body, self.data)
+
+    KEY = """
+        const key = function (start, steps) {
+          return start + "|" + steps.map(function (s) {
+            return s.from + ">" + s.unit + ">" + s.to + "!" +
+              (s.also.all_of || []).slice().sort().join(",") + "/" +
+              (s.also.any_of || []).slice().sort().join(",");
+          }).join("|");
+        };
+    """
+
+    def test_a_route_to_an_impact_is_a_route_from_its_start(self):
+        """The backward walk cannot apply the forward search's rule that a walk
+        may not arrive on a capability an earlier unit already established:
+        backwards, the units before a step are the ones not yet chosen. It
+        settles that in a pass over the finished walk and drops what breaks it.
+
+        This is what says the dropping is complete rather than approximate.
+        Every route drawn at an impact must be a walk the forward search returns
+        from the same start -- the same steps, the same units, and the same
+        outstanding conditions, which is the part a reader acts on."""
+        result = self.run_js(self.KEY + """
+            const forward = {};
+            const walksFrom = function (start) {
+              if (!forward[start]) {
+                forward[start] = {};
+                H.pathsToImpact(D, start, {maxPaths: 100000, maxDepth: 5, maxExplore: 2000000})
+                  .forEach(function (w) { forward[start][key(w.start, w.steps)] = 1; });
+              }
+              return forward[start];
+            };
+            const bad = [];
+            let checked = 0;
+            Object.keys(D.facts).sort().forEach(function (f) {
+              if (H.familyOf(f) !== "impact") return;
+              H.routesToImpact(D, f, {maxPaths: 8, maxDepth: 5}).forEach(function (r) {
+                checked++;
+                if (!walksFrom(r.start)[key(r.start, r.steps)]) bad.push([f, r.start]);
+              });
+            });
+            return {checked: checked, bad: bad.slice(0, 10)};
+        """)
+        self.assertGreater(result["checked"], 0, "no route to any impact was drawn")
+        self.assertEqual(result["bad"], [], "a route drawn backwards is not a forward walk")
+
+    def test_a_drawn_route_begins_where_an_engagement_does(self):
+        """A backward walk is reported when it reaches a capability nothing
+        establishes -- what an engagement supplies rather than what a test
+        earns. Reporting at any earlier point would draw the one-step
+        restatement of the tests already listed above it on the same page and
+        call it a chain."""
+        result = self.run_js("""
+            const out = {reported: 0, earned: [], impactsWithNoRoute: []};
+            Object.keys(D.facts).sort().forEach(function (f) {
+              if (H.familyOf(f) !== "impact") return;
+              const routes = H.routesToImpact(D, f, {maxPaths: 8, maxDepth: 5});
+              if (!routes.length) out.impactsWithNoRoute.push(f);
+              routes.forEach(function (r) {
+                out.reported++;
+                if ((D.producers[r.start] || []).length) out.earned.push([f, r.start]);
+                if (r.impact !== f) out.earned.push([f, "arrives elsewhere"]);
+              });
+            });
+            return out;
+        """)
+        self.assertGreater(result["reported"], 0)
+        self.assertEqual(result["earned"], [])
+        self.assertEqual(
+            result["impactsWithNoRoute"], [],
+            "an outcome this catalogue charts no way to is a gap in the catalogue, "
+            "and this test is where it should be noticed",
+        )
+
+    def test_the_list_of_starts_names_every_start_the_drawings_use(self):
+        """The page draws a few routes and lists every capability a route to
+        this outcome can begin at. They are two computations -- an enumeration
+        and a reachability sweep -- and a reader takes them for one thing. So
+        the drawing may never begin somewhere the list omits, and the distance,
+        which is a lower bound, may never exceed a route actually drawn from
+        there."""
+        result = self.run_js("""
+            const bad = [];
+            Object.keys(D.facts).sort().forEach(function (f) {
+              if (H.familyOf(f) !== "impact") return;
+              const dist = H.reachesImpact(D, f);
+              H.routesToImpact(D, f, {maxPaths: 8, maxDepth: 5}).forEach(function (r) {
+                if (!(r.start in dist)) bad.push([f, r.start, "drawn but unlisted"]);
+                else if (dist[r.start] > r.steps.length) {
+                  bad.push([f, r.start, dist[r.start] + " > " + r.steps.length]);
+                }
+              });
+            });
+            return bad.slice(0, 10);
+        """)
+        self.assertEqual(result, [])
+
+    def test_the_distance_is_the_shortest_there_is(self):
+        """A breadth-first sweep of the reverse relation, so the first time a
+        capability is seen is its shortest distance. Asserted against the
+        relation itself: a capability one step from the outcome is a condition
+        of a test that establishes it, and no capability may be listed further
+        away than a neighbour of it already listed."""
+        result = self.run_js("""
+            const bad = [];
+            Object.keys(D.facts).sort().forEach(function (f) {
+              if (H.familyOf(f) !== "impact") return;
+              const dist = H.reachesImpact(D, f);
+              Object.keys(dist).forEach(function (cap) {
+                // Every capability this one could reach in one step, and what
+                // the sweep says about them.
+                (D.requiredBy[cap] || []).forEach(function (uid) {
+                  const unit = D.units[uid];
+                  if (!unit) return;
+                  (unit.yields || []).forEach(function (made) {
+                    const onward = made === f ? 0 : dist[made];
+                    if (onward === undefined) return;
+                    if (dist[cap] > onward + 1) bad.push([f, cap, dist[cap], made, onward]);
+                  });
+                });
+              });
+            });
+            return bad.slice(0, 10);
+        """)
+        self.assertEqual(result, [])
+
+    def test_a_capability_that_reaches_no_outcome_is_named_by_none_of_them(self):
+        """The negative reading, and the one a coverage claim rests on.
+
+        `access.host` is granted by an engagement rather than earned, and no
+        test consumes it on a way to an outcome. A sweep that reported it anyway
+        would put a capability on a page it does not reach, which is the failure
+        this whole view exists to avoid -- and it would do it silently, because
+        a reader has no way to check a reachability claim by eye."""
+        result = self.run_js("""
+            const out = {listed: [], unreachable: []};
+            Object.keys(D.facts).sort().forEach(function (f) {
+              if (H.familyOf(f) === "impact") return;
+              let anywhere = false;
+              Object.keys(D.facts).forEach(function (i) {
+                if (H.familyOf(i) !== "impact") return;
+                if (f in H.reachesImpact(D, i)) anywhere = true;
+              });
+              if (!anywhere) out.unreachable.push(f);
+              else if (f === "access.host") out.listed.push(f);
+            });
+            return out;
+        """)
+        self.assertEqual(
+            result["listed"], [],
+            "access.host reaches no impact and must appear on no impact's list",
+        )
+        self.assertIn("access.host", result["unreachable"])
+
+    def test_an_outcome_nothing_establishes_draws_nothing(self):
+        """An impact with no producer is not an error -- the vocabulary may name
+        an outcome before a test reaches it -- and the view must say so rather
+        than fail or draw an empty card. Held on a fixture, because the
+        catalogue has no such impact today and the case would otherwise go
+        untested until the day one appears."""
+        orphan = {
+            "facts": {"a.start": {}, "impact.reached": {}, "impact.unreached": {}},
+            "given": [],
+            "units": {
+                "PTN-A-01-Z": {"id": "PTN-A-01-Z", "requires": {"all_of": ["a.start"]},
+                               "yields": ["impact.reached"]},
+            },
+            "producers": {"impact.reached": ["PTN-A-01-Z"]},
+            "requiredBy": {"a.start": ["PTN-A-01-Z"]},
+        }
+        result = run_in_node("""
+            return {
+              reached: H.routesToImpact(D, "impact.reached", {maxPaths: 9, maxDepth: 5}),
+              unreached: H.routesToImpact(D, "impact.unreached", {maxPaths: 9, maxDepth: 5}),
+              reach: H.reachesImpact(D, "impact.unreached"),
+              absent: H.routesToImpact(D, "impact.nosuchthing", {maxPaths: 9, maxDepth: 5})
+            };
+        """, orphan)
+        self.assertEqual(
+            [s["unit"] for s in result["reached"][0]["steps"]], ["PTN-A-01-Z"]
+        )
+        self.assertEqual(result["reached"][0]["start"], "a.start")
+        self.assertEqual(result["unreached"], [])
+        self.assertEqual(result["reach"], {})
+        self.assertEqual(result["absent"], [])
+
+    def test_the_figures_the_readme_publishes_are_the_sweep(self):
+        """The README says how many capabilities reach two of the outcomes, and
+        a figure in prose is a claim like any other. Read from the artefact's
+        own function rather than recomputed here: a second implementation
+        agreeing with itself proves nothing about what the page draws."""
+        counts = self.run_js("""
+            const out = {};
+            Object.keys(D.facts).forEach(function (f) {
+              if (H.familyOf(f) !== "impact") return;
+              out[f] = Object.keys(H.reachesImpact(D, f)).length;
+            });
+            return out;
+        """)
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn(
+            f"{counts['impact.data.disclosed']} begin a charted route to a data "
+            f"disclosure, {counts['impact.account.denied']} to a chosen user",
+            readme,
+        )
+
+    def test_a_route_never_uses_one_test_twice(self):
+        """The same rule the forward search keeps, kept walking the other way:
+        a route that performs a test it has already performed is a cycle drawn
+        as a chain."""
+        result = self.run_js("""
+            const bad = [];
+            Object.keys(D.facts).sort().forEach(function (f) {
+              if (H.familyOf(f) !== "impact") return;
+              H.routesToImpact(D, f, {maxPaths: 8, maxDepth: 5}).forEach(function (r) {
+                const seen = {};
+                r.steps.forEach(function (s) {
+                  if (seen[s.unit]) bad.push([f, s.unit]);
+                  seen[s.unit] = 1;
+                });
+              });
+            });
+            return bad.slice(0, 10);
+        """)
+        self.assertEqual(result, [])
+
+    def test_a_cycle_in_the_reverse_relation_terminates(self):
+        """Two tests each establishing what the other requires. The walk stops
+        because the path's own history stops it, not because a global visited
+        set does -- the same reason the forward search can report two routes
+        through one capability."""
+        loop = {
+            "facts": {"a.root": {}, "a.one": {}, "a.two": {}, "impact.done": {}},
+            "given": [],
+            "units": {
+                "PTN-A-01-P": {"id": "PTN-A-01-P", "requires": {"all_of": ["a.two"]},
+                               "yields": ["a.one"]},
+                "PTN-A-01-Q": {"id": "PTN-A-01-Q", "requires": {"all_of": ["a.one"]},
+                               "yields": ["a.two"]},
+                "PTN-A-01-R": {"id": "PTN-A-01-R", "requires": {"all_of": ["a.root"]},
+                               "yields": ["a.one"]},
+                "PTN-A-01-Z": {"id": "PTN-A-01-Z", "requires": {"all_of": ["a.two"]},
+                               "yields": ["impact.done"]},
+            },
+            "producers": {
+                "a.one": ["PTN-A-01-P", "PTN-A-01-R"],
+                "a.two": ["PTN-A-01-Q"],
+                "impact.done": ["PTN-A-01-Z"],
+            },
+            "requiredBy": {
+                "a.root": ["PTN-A-01-R"],
+                "a.one": ["PTN-A-01-Q"],
+                "a.two": ["PTN-A-01-P", "PTN-A-01-Z"],
+            },
+        }
+        routes = run_in_node(
+            "return H.routesToImpact(D, 'impact.done', {maxPaths: 9, maxDepth: 9});", loop
+        )
+        self.assertEqual(
+            [tuple(s["unit"] for s in r["steps"]) for r in routes],
+            [("PTN-A-01-R", "PTN-A-01-Q", "PTN-A-01-Z")],
+        )
+
+
+@unittest.skipUnless(node_available(), "node is not installed")
 class TheLayoutIsDeterministic(unittest.TestCase):
     """No layout library, so the geometry is this project's and is testable."""
 
@@ -1323,7 +1602,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         """Every impact is unconsumed by construction, so folding impacts into
         the stops-short count inflates it by the set listed directly above and
         describes arriving as failing to arrive."""
-        self.assertShows(self.text("#/chains"), "Where chains are meant to end")
+        self.assertShows(self.text("#/chains"), "Where chains end")
         text = self.text("#/status")
         self.assertShows(text, "impacts excluded")
         dead = len(self.data["deadEnds"])
@@ -1386,6 +1665,63 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         owed = page.locator(".rstep.unit").first
         self.assertGreater(page.locator(".rstep.unit").count(), 1)
         self.assertTrue(owed.inner_text())
+
+    def test_an_impact_shows_the_routes_charted_to_it(self):
+        """The defect this view exists for. The chains page sent a reader to an
+        impact "to see the routes charted to it" and the impact said a chain
+        ends here and stopped, because the only search the artefact had ran
+        forwards and forwards from an outcome there is nothing."""
+        page = self.open("#/capability/impact.data.disclosed")
+        text = self.driver.text()
+        self.assertShows(text, "Routes charted to here")
+        self.assertNotIn("A chain ends here", text)
+        self.assertGreater(page.locator(".route").count(), 0)
+        # Drawn in reading order: the route starts on a capability and every
+        # step names a test, whichever direction the search that found it walked.
+        self.assertGreater(page.locator(".rstep.unit").count(), 0)
+        self.assertTrue(page.locator(".rstep.start").first.inner_text())
+
+    def test_an_impact_lists_every_capability_a_route_to_it_begins_at(self):
+        """The count in the heading and the rows below it are one claim printed
+        twice. A heading saying forty-eight above nine rows would be read as the
+        catalogue's figure rather than as a rendering fault."""
+        page = self.open("#/capability/impact.data.disclosed")
+        heading = [h for h in page.locator("main h3").all_inner_texts()
+                   if "route to here can begin" in h.lower()]
+        self.assertEqual(len(heading), 1, "the list of starts is not on the page")
+        counted = int(heading[0].rsplit("·", 1)[1].strip())
+        self.assertGreater(counted, 0)
+        rows = page.locator("main .rows").last.locator("a.row")
+        self.assertEqual(rows.count(), counted)
+        # Nearest first, and the distance is printed rather than implied.
+        self.assertRegex(rows.first.inner_text(), r"\d+ steps?")
+
+    def test_an_outcome_no_route_reaches_is_not_listed_as_a_destination(self):
+        """`access.host` is granted rather than earned and reaches no outcome,
+        so it appears on no impact's list of starts. Checked in the rendered
+        page because that is where the claim is made."""
+        page = self.open("#/capability/impact.data.disclosed")
+        rows = page.locator("main .rows").last.locator("a.row").all_inner_texts()
+        self.assertTrue(rows)
+        self.assertNotIn("access.host", "\n".join(rows))
+
+    def test_the_chains_page_leads_with_the_destinations(self):
+        """A page named for chains opened on a picture of every capability in
+        the file -- a glossary, shaded by coverage. Both belong here; the order
+        is the claim."""
+        text = self.text("#/chains")
+        ends = text.lower().index("where chains end")
+        chart = text.lower().index("the chart, at the scale of the whole catalogue")
+        self.assertLess(ends, chart)
+
+    def test_following_a_destination_from_the_chains_page_reaches_a_route(self):
+        """End to end, the way a reader meets it: the promise on one page and
+        what the next page actually draws."""
+        page = self.open("#/chains")
+        page.click('main .rows a.row[href^="#/capability/impact."]')
+        self.driver.wait_for_view("Attack chains")
+        self.assertShows(self.driver.text(), "Routes charted to here")
+        self.assertGreater(page.locator(".route").count(), 0)
 
     def test_a_search_result_for_a_payload_or_a_tool_reaches_its_own_page(self):
         """Both used to land on Standards: the router had no branch for either,
@@ -1531,15 +1867,32 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         made it the scrollport, so they slid away at every width; the second
         stuck them to the top of the viewport, where the site header already
         is. What the offset has to track is the header's real height, which
-        changes as it wraps."""
+        changes as it wraps.
+
+        Scrolled to the map rather than to a fixed pixel. A hard-coded offset
+        measures whatever the page happens to have above the map, so it stops
+        testing stickiness the moment anything is added or removed there --
+        which is how it read a heading sitting at its natural position as a
+        heading that had come unstuck."""
         page = self.open("#/chains")
         for width in (1280, 700):
             with self.subTest(width=width):
                 page.set_viewport_size({"width": width, "height": 800})
                 self.open("#/chains")
-                page.evaluate("window.scrollTo(0, 1500)")
+                # Far enough into the map that its columns are being read, and
+                # its headings can only still be at the top of the viewport by
+                # sticking there.
+                page.evaluate("""() => {
+                  const map = document.querySelector('.chainmap');
+                  window.scrollTo(0, window.scrollY + map.getBoundingClientRect().top + 600);
+                }""")
                 self.driver.wait_for_render(
-                    lambda: page.evaluate("window.scrollY") > 1000
+                    lambda: page.evaluate("""() => {
+                      const bar = document.querySelector('header')
+                                    .getBoundingClientRect().bottom;
+                      return document.querySelector('.chainmap')
+                               .getBoundingClientRect().top < bar - 400;
+                    }""")
                 )
                 # The offset is delivered by a resize observer, which runs after
                 # layout rather than during it, so between the render and that

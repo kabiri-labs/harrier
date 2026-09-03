@@ -120,6 +120,15 @@ catalogue say follows from X". It may not accumulate several X, remember them,
 order the answer by what the tool thinks matters, or describe any of it as
 reachable, available or unlocked. The first is a query. The rest is the board.
 
+0.25.0 asks the same question in the other direction: standing at an outcome,
+which capabilities begin a charted route to it. Checked against the line above
+rather than assumed to pass it. One outcome at a time, nothing accumulated and
+nothing stored; the order is the graph's own distance rather than a judgement
+about what matters, which is the order the routes list has always used; and the
+wording says what this file charts rather than what is reachable, available or
+unlocked -- a route is charted from a capability, not available to a tester. The
+direction reversed. The question did not.
+
 ## 6. Non-goals
 
 Deliberately outside this product, not merely unbuilt: target or engagement

@@ -188,13 +188,56 @@ with what each step still owes, and the alternatives sit at the step they are
 alternatives for. Walks that leave different conditions outstanding stay
 separate, because they are not interchangeable.
 
-The search runs wider than it displays -- twelve, grouped, four shown -- since
-grouping a truncated search would be the wrong order. That is not a nicety:
+The search runs wider than it displays, since grouping a truncated search would
+be the wrong order. A fixed multiple of the display count does not settle that
+either -- it only makes it less likely -- so the search widens until it holds
+four shapes or comes back short of the limit it was given, which is the signal
+that it ran out of walks rather than out of allowance. That is not a nicety:
 `surface.sql.injectable` filled all four old slots with one shape, so the route
 through a stacked statement to a database write and on to lost integrity was
 never drawn. Two capabilities now show an outcome the view had been hiding.
 
 180 cards where there were 205, over the same 123 capabilities.
+
+0.25.0 makes the page named for chains show them. It carried a picture of every
+capability in the file, shaded by how far the chart reached from each -- a
+glossary and a coverage measure, both worth having and neither a chain -- and
+told a reader to open an impact "to see the routes charted to it". Opening one
+said a chain ends here and stopped, because the only search the artefact had ran
+forwards, and forwards from an outcome there is nothing. The claim was the wider
+of the two.
+
+`routesToImpact` walks the same relation backwards, and only backwards: finding
+four routes to `impact.account.denied` by forward search and filtering on the
+destination would mean enumerating nearly every walk in the graph, since about
+one in two hundred arrives there. A walk is reported when it reaches a
+capability nothing establishes -- what an engagement supplies rather than what a
+test earns -- so what is drawn is a chain rather than the one-step restatement
+of the tests listed above it. Both directions return the same step shape, so the
+widening, the grouping from 0.24.2 and the drawing are one piece of code; a test
+asserts that every route the backward search reports is a walk the forward
+search reports from the same start.
+
+Two things cannot be carried backwards and are settled in one pass over the
+finished walk: what a step still owes, which depends on everything established
+before it, and the forward rule that a walk may not arrive on a capability an
+earlier unit already established. A walk breaking the second is dropped rather
+than drawn, because the two directions describe one graph.
+
+Beside the drawings, every capability from which a route to that outcome begins,
+nearest first -- a reachability sweep of the graph rather than an enumeration of
+its walks, which is a set and a distance in one pass where the routes to
+`impact.data.disclosed` are several hundred walks to answer a question about 48
+capabilities. The distance is a
+lower bound and says so: a route travels through one of a test's conditions and
+leaves the rest outstanding. The list is not cut off at five steps; the drawings
+are, and the page says which is which.
+
+The destinations now stand above the map on the chains page rather than below
+it, each row carrying how many capabilities begin a charted route to it. The
+wording is deliberate and is checked against the line in `PIVOT.md` that this
+product exists on the right side of: a route is charted from a capability, never
+available to a tester.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
