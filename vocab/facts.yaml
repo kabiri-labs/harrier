@@ -318,13 +318,15 @@ facts:
     label: A stored object is readable
     tier: chain
     description: >
-      One object the application holds -- a written file, an archived page, a
-      cached response -- is returned to a caller it was never meant for.
-      Deliberately narrower than `primitive.fs.read`, which claims files can be
-      read at will, and separate from `primitive.doc.read`, which is about the
-      document behind a query: this is one item readable because of where it was
-      put or how it was kept, not because a path or a query is under the
-      tester's control.
+      One object is returned to a caller it was never meant for -- a file the
+      application wrote, a page an index or archive kept, a response a cache
+      held. Who holds the copy is deliberately not part of it: an intermediary
+      or a third party serving what the application withdrew is the same
+      finding as the application serving it. Narrower than `primitive.fs.read`,
+      which claims files can be read at will, and separate from
+      `primitive.doc.read`, which is about the document behind a query: this is
+      one item readable because of where it was put or how it was kept, not
+      because a path or a query is under the tester's control.
 
   - id: primitive.fs.read
     label: Arbitrary file read
@@ -1515,6 +1517,7 @@ unconsumed:
       one thing a chain must not do. They are reported and they stop here.
     facts:
       - control.cookie.weak
+      - control.content.withdrawn
       - control.misuse.undetected
       - control.permissions.excessive
       - control.plugin.policy.permissive

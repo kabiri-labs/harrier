@@ -9,7 +9,7 @@ objective: >-
 
 requires:
   all_of: [recon.paths.indexed]
-yields: [control.content.withdrawn]
+yields: [control.content.withdrawn, primitive.stored.read]
 closes: [control.content.withdrawn]
 
 hypotheses:
