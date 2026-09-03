@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Pentest NavGrid 0.24.2 is an early public alpha.** The WSTG decomposition is broad —
+> **Pentest NavGrid 0.25.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 393 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.24.2-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.25.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -134,6 +134,21 @@ a capability another test establishes:
 The selection is a URL and nothing else. Nothing is stored, and a tag names a
 *kind* of surface rather than one you are looking at — the file still holds no
 target, and "may apply" is the strongest thing it says.
+
+Where a successful test leads. The view opens on the outcomes a chain is meant
+to end at, and each one draws the routes charted to it — every step a test that
+requires the capability above it and establishes the one below, beginning at
+what an engagement supplies rather than at what a test earns. A step declaring a
+condition the route does not supply says so on the step, because a route drawn
+as an unbroken line would read as executable when one of its tests is not:
+
+![An impact page drawing the routes charted to it, each step a test with the capability it requires above it and the one it establishes below](docs/assets/routes-to-an-impact.png)
+
+Under the drawings, every capability from which a route to that outcome begins,
+nearest first: 48 begin a charted route to a data disclosure, 4 to a chosen user
+being locked out. The step count is a lower bound and says so — a route travels
+through one of a test's conditions and leaves the rest outstanding. It is a
+statement about what this file charts, never about a target.
 
 The same view carries the capability map. Every capability in the file, in a
 column for the kind of thing it is, shaded by how far the chart reaches from it
