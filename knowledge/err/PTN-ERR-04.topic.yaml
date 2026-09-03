@@ -9,6 +9,7 @@ surfaces:
 order:
   - PTN-ERR-04-MAP
   - PTN-ERR-04-PROBE
+  - PTN-ERR-04-READ
 
 boundaries:
   - subject: "The same search used to enumerate the surface"

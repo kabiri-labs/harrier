@@ -1,0 +1,12 @@
+id: PTN-CLT-10-READ
+topic: PTN-CLT-10
+status: outline
+role: stage
+title: "A personal response served from a shared cache"
+objective: >-
+  Determine whether a response carrying one user's data is returned from a
+  cache to a caller who never authenticated, which is what the storable
+  directives cost rather than what they are.
+requires:
+  all_of: [control.cache.permissive]
+yields: [primitive.stored.read]
