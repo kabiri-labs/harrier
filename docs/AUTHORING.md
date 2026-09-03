@@ -16,6 +16,32 @@ that do not exist are invisible, which is the worse of the two failures. A unit
 with nothing but a good objective is already useful — it tells a tester the test
 exists, what it is for, and that they have not done it.
 
+And a second one, which nothing below enforces because nothing could:
+
+> **Check a claim against the mechanism behind it, not against today's data.**
+
+A description is not a specification. Reading a capability's description and
+finding it consistent with the edge you want to draw is not the check — the check
+is whether the description is narrow enough to carry that edge.
+`control.content.internal` says "host names, paths, identifiers **or**
+credentials", and a unit consuming it to establish another user's session derived
+account takeover from a disclosed file path. Every word of the description was
+satisfied. The claim was still wrong.
+
+The same failure has a second form, in prose rather than in YAML: a sentence in a
+document, a pull request or a page that is wider than the code, the derivation or
+the vocabulary underneath it. "Twelve walks, grouped, four shown" described an
+ordering the code did not perform. "48 capabilities reach it" borrowed the one
+word [`PIVOT.md`](PIVOT.md) forbids, in a product whose earlier version was
+removed for speaking that way. Both sentences were true of the catalogue on the
+day they were written, which is exactly why running anything caught neither.
+
+So the question is not "is this consistent with what I see today". It is "what
+would have to change for this to become false, and would anything notice". Where
+the answer is nothing, the claim is narrowed, or it is bound to something that
+fails when it goes stale — a figure read from the repository, a property asserted
+rather than a number pinned, a validator pass — before it is written down.
+
 ---
 
 ## 1. A topic file
