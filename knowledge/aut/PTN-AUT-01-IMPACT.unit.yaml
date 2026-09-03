@@ -1,0 +1,12 @@
+id: PTN-AUT-01-IMPACT
+topic: PTN-AUT-01
+status: outline
+role: stage
+title: "Whether a credential the policy permits opens an account"
+objective: >-
+  Determine whether a credential the published policy accepts is one an
+  attacker reaches within the attempts the application allows, which is the
+  difference between a policy that reads badly and one that costs an account.
+requires:
+  all_of: [control.credential.weak]
+yields: [access.principal.other]

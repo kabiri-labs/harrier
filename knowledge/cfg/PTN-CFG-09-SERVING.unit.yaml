@@ -9,6 +9,7 @@ objective: >-
 
 requires:
   all_of: [control.objectstore.public]
+motivated_by: [control.objectstore.enumerable]
 yields: [primitive.check.bypassed]
 
 hypotheses:

@@ -68,7 +68,7 @@ thing stopped being built.
 
 0.4.0 is the first version published for anyone outside the project to look at,
 and it is an alpha in the honest sense: the decomposition is broad and the depth
-behind it is not. Every resolvable WSTG identifier is claimed and 374 Test Units
+behind it is not. Every resolvable WSTG identifier is claimed and 391 Test Units
 exist; 36 are written to full procedural depth, 40 are sketched, and the far half
 of the chain is barely charted.
 
@@ -105,10 +105,10 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 298 |
+| Units — outlined | 315 |
 | Units — sketched | 40 |
 | Units — authored | 36 |
-| Units — charted | 374 |
+| Units — charted | 391 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
 finished. *Covered* means a topic exists that claims it, which phase 2 finished.
@@ -120,10 +120,48 @@ the validator does not ask anything to.
 asked where a capability comes from since phase 5; nothing asked where it goes,
 so a chain-tier capability no test declares a use for passed every check while
 being exactly the place the chart stops earlier than the mechanism does. Those
-are now registered in `vocab/facts.yaml` under the cause they belong to -- 41
-open, in 3 causes -- and the validator rejects an unlisted dead end as well as
+are now registered in `vocab/facts.yaml` under the cause they belong to -- 12
+open, in 2 causes -- and the validator rejects an unlisted dead end as well as
 an entry for a gap that has since closed. It fills nothing; it makes the gap a
 number that can only move by being worked on.
+
+0.22.0 starts closing what that register records, and starts at the end rather
+than the middle. Three topics established a capability and stopped: `PTN-CRY-05`
+recovered a signing key and never minted a token, `PTN-ACL-04` obtained a role
+above the granted one and never used it, and five `*-REVOCATION` units proved an
+identifier outlives sign-out with nothing acting through it. Three outline units
+-- `PTN-CRY-05-WRITE`, `PTN-ACL-04-IMPACT`, `PTN-SES-06-IMPACT` -- close 4 of the
+register's entries between them and route each topic into the outcome layer that
+already existed. The register is the measure: 41 open before, 37 after, and the
+gate refused the fourth entry until it was removed, which is the ratchet working
+rather than a courtesy.
+
+0.23.0 finishes what 0.22.0 started, and finishes it by finding that most of the
+register was not a backlog. 14 units close 23 of the 37 open entries, almost all
+of them one shape: a test that requires the defeated control and establishes
+what it permits. Seven end at a session belonging to somebody else -- a
+credential the policy allows, a guessable recovery answer, a skippable second
+factor, a reset token that outlives its use -- which the catalogue already had a
+route from. The chart runs deeper than it did, and 29 tests stop short where 81 did.
+
+Four of the units in that pass were wrong and an automated review caught all
+four, each the same mistake: a fact was read against its description without
+asking whether the description was narrow enough to carry the claim.
+`control.content.internal` says "host names, paths, identifiers or
+credentials", and a unit consuming it to establish another user's session
+derived account takeover from a disclosed path. That one is now two results --
+whether the detail is authentication material, and whether the material
+authenticates -- joined by `artifact.credential.found`, the one capability this
+work added. An audience test that repeated the test that produced its own
+condition was removed; a key that a disclosure *would* hand over is no longer
+read as a key in hand; and an unchecked handshake origin is required rather
+than merely one of two sufficient conditions.
+
+The other 14 are the finding. Ten permit nothing on their own and never will;
+three are blocked on a vocabulary that cannot say "one stored object is
+readable"; one is a carrier rather than a destination. All three are recorded
+as what they are, under causes of their own, so the number stops reading as
+work outstanding.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
@@ -147,7 +185,7 @@ declaring requirements against facts nothing yet establishes.
 
 The pass ended with a gate rather than a count: every fact that is not `given`
 has at least one unit producing it, and the validator enforces it from here on.
-185 facts, 374 units, and no condition in the graph without a route to it.
+185 facts, 391 units, and no condition in the graph without a route to it.
 
 The gate is one-directional, and the asymmetry is worth stating plainly. Every
 capability has a producer; many have no *consumer*. 78 of 177 are declared as a
@@ -224,7 +262,7 @@ against real material rather than an empty tree:
 | `mitigations/object-authorization.md` | CWE-639 and CWE-566, for `PTN-ACL-02`: authorize the object rather than the route, enforce at the data-access layer, and why an unguessable identifier is exposure surface rather than a control. |
 | `standards/asvs.yaml` | ASVS 5.0.0: 17 chapters, 80 sections, 345 requirement identifiers. Identifiers and structural names only — the text is CC BY-SA. |
 | `standards/cwe.yaml` | CWE 4.20: 969 weaknesses, 422 categories, 59 views, with abstraction and status. |
-| `knowledge/` | 106 topics across 14 domains, and 374 units across all fourteen domains. |
+| `knowledge/` | 106 topics across 14 domains, and 391 units across all fourteen domains. |
 | `vocab/surfaces.yaml` | 52 attack-surface tags, describing where a topic applies. |
 | `vocab/facts.yaml` | 185 capabilities in seven families — the join keys the chain is derived from. |
 | `pentest_navgrid/` | Nine schemas, seven validation passes, the derived chain, and the builder plus the artefact's own template, stylesheet and script. See [`VALIDATION.md`](VALIDATION.md). |
@@ -240,14 +278,14 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart what a defeated control permits** | The largest remaining gap. 49 of 185 capabilities are established by a test and used by none, and 36 of 59 of them are `control.*`; `primitive.*` is down to 1 of 32 since the outcome layer landed. The three phase-1 chains gave three control facts their first consumer, and those are `motivated_by` hints rather than escalations — nothing yet says what a defeated control *permits*, which is what this item is for. A control is the state of a defence rather than a result, so the step that turns one into something — what a weak cookie, a permissive cache or an absent binding actually lets somebody do — has to be written before an edge can honestly be drawn from it. Until it is, 81 of 374 tests still end at the capability they established. |
+| **Chart what a defeated control permits** | Largely done in 0.23.0, and what is left is not the same work. 22 of 186 capabilities are established by a test and used by none, 13 of 59 of them `control.*`, and `primitive.*` is at 1 of 32. The shape that closed it was written 15 times: a test that requires the defeated control and establishes what it permits. Of the 14 remaining, 10 permit nothing on their own and are dead ends for good, 3 are blocked on a vocabulary with no capability for one stored object being readable, and 1 is the blind oracle, which carries a value rather than being one — recorded under three separate causes so the register stops reading as a to-do list. 29 of 391 tests now end at the capability they established, down from 81. |
 | **`PTN-CLT-02` — DOM cross-site scripting** | The sibling of the chain 0.18.0 wrote, and the natural next one. A second instance of a shape already proven, which is why it waited. |
 | **`PTN-RES-03` — server-side request forgery** | A fourth chain shape: `primitive.fetch.internal` to `impact.network.reached`, through `PTN-OUT-03`. The first candidate once the three phase-1 chains have been used in anger. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Pentest NavGrid improves as much as it improves WSTG's. |
 | OWASP Top 10 as a risk lens | A classification of risk, not an execution methodology. If it arrives it is a lens over the existing catalogue and never a second way to navigate to a test. |
 | ASVS as a remediation lens | The mapping already exists in `refs.asvs`; a view that reads a finding's controls from it does not. |
 | Better graph exploration | Saved focus, comparison of two routes, filtering a path by domain. The current general graph is deliberately the smallest thing that is honest. |
-| More units at full depth | Thirty-six of 374, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
+| More units at full depth | Thirty-six of 391, with 40 sketched. Governed by the standing rule above: written when an engagement makes one worth writing. |
 | Optional external integrations | Export to a report template, or a checklist import. Anything of the kind must not become a route by which target data enters the artefact. |
 
 ## Governance and distribution

@@ -988,7 +988,7 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         # A figure rather than a range: it is what the view's usefulness rests
         # on, and it must move visibly when the catalogue moves.
         self.assertEqual(out["entry"], 176)
-        self.assertEqual(out["total"], 374)
+        self.assertEqual(out["total"], 391)
 
     def test_an_engagement_condition_is_not_the_same_as_no_condition(self):
         """An engagement-tier fact is not a chain step and is also not nothing.
@@ -1883,10 +1883,21 @@ class TheChainMapIsTheWholeCatalogueAtOnce(unittest.TestCase):
     def test_the_columns_report_the_gap_rather_than_hiding_it(self):
         """The reason the picture is worth having: control is where the chart
         runs out, and a reader should be able to see that without reading a
-        paragraph about it."""
+        paragraph about it.
+
+        The inequality this asserted until 0.23.0 -- more control capabilities
+        unused than routed -- stopped being true when 24 of them gained the test
+        that says what defeating the control permits. What did not change is
+        which family the gap is in, so that is what is asserted now: control
+        still holds more unused capabilities than any other family, and the
+        assertion moves with the catalogue instead of being re-pinned each time
+        the figure does.
+        """
         control = [c for c in self.map if c["name"] == "control"][0]
         primitive = [c for c in self.map if c["name"] == "primitive"][0]
-        self.assertGreater(control["tally"]["unused"], control["tally"]["routed"])
+        worst = max(self.map, key=lambda col: col["tally"]["unused"])
+        self.assertEqual(worst["name"], "control")
+        self.assertGreater(control["tally"]["unused"], 0)
         self.assertGreater(primitive["tally"]["routed"], primitive["tally"]["unused"])
 
     def test_the_edges_running_against_the_order_are_reported(self):

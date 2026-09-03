@@ -1,0 +1,12 @@
+id: PTN-BIZ-02-IMPACT
+topic: PTN-BIZ-02
+status: outline
+role: stage
+title: "A state change completed on the victim's behalf"
+objective: >-
+  Determine whether a request the victim did not choose to send -- forged, or a
+  captured one sent again -- completes an action the victim was entitled to
+  perform, rather than being refused at the point it changes state.
+requires:
+  any_of: [control.request.forgeable, control.request.replayable]
+yields: [primitive.action.victim]

@@ -1,0 +1,14 @@
+id: PTN-ACL-04-IMPACT
+topic: PTN-ACL-04
+status: outline
+role: stage
+kind: test
+title: "What the elevated role actually executes"
+objective: >-
+  Determine whether a function the granted role is refused runs when called
+  with the elevated session, which is the difference between holding a role
+  the application printed and holding one it enforces.
+
+requires:
+  all_of: [access.role.elevated]
+yields: [primitive.privileged.action]

@@ -1,0 +1,14 @@
+id: PTN-SES-06-IMPACT
+topic: PTN-SES-06
+status: outline
+role: stage
+kind: test
+title: "What the identifier still reaches after sign-out"
+objective: >-
+  Determine whether an identifier the server declined to terminate still
+  performs an action the account is entitled to, which is what makes a
+  surviving session a finding rather than an observation about a cookie.
+
+requires:
+  all_of: [control.session.persists]
+yields: [primitive.privileged.action]

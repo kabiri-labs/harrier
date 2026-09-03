@@ -10,6 +10,7 @@ order:
   - PTN-AUT-05-ENTROPY
   - PTN-AUT-05-EXPIRY
   - PTN-AUT-05-REVOCATION
+  - PTN-AUT-05-IMPACT
 
 boundaries:
   - subject: "Where the persistent secret is stored in the browser"

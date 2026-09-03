@@ -1,0 +1,12 @@
+id: PTN-AUT-05-IMPACT
+topic: PTN-AUT-05
+status: outline
+role: stage
+title: "Whether the persistent token signs in as its owner"
+objective: >-
+  Determine whether a remember-me token that is guessable, forgeable or
+  outlives the revocation that should end it actually establishes a session as
+  the account it was issued for.
+requires:
+  all_of: [control.persistent.weak]
+yields: [access.principal.other]

@@ -9,6 +9,7 @@ order:
   - PTN-AUT-08-MAP
   - PTN-AUT-08-PROBE
   - PTN-AUT-08-IMPACT
+  - PTN-AUT-08-WRITE
 
 refs:
   wstg: [WSTG-ATHN-10]

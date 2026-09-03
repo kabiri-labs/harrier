@@ -12,6 +12,7 @@ order:
   - PTN-AUT-07-EXPIRY
   - PTN-AUT-07-REVOCATION
   - PTN-AUT-07-VALIDATION
+  - PTN-AUT-07-IMPACT
 
 boundaries:
   - subject: "A reset link built from a request-controlled host"

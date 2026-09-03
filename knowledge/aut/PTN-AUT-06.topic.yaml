@@ -10,6 +10,7 @@ order:
   - PTN-AUT-06-POLICY
   - PTN-AUT-06-VALIDATION
   - PTN-AUT-06-RATE
+  - PTN-AUT-06-IMPACT
 
 refs:
   wstg: [WSTG-ATHN-08]

@@ -1,0 +1,12 @@
+id: PTN-AUT-10-IMPACT
+topic: PTN-AUT-10
+status: outline
+role: stage
+title: "Whether the flow defect yields another user's session"
+objective: >-
+  Determine whether a code, token or assertion obtained through the flow's
+  defect is accepted by the relying party as a different user, rather than
+  being rejected at redemption.
+requires:
+  all_of: [control.oauth.flow]
+yields: [access.principal.other]

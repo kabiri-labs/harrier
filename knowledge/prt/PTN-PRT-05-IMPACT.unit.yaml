@@ -1,0 +1,13 @@
+id: PTN-PRT-05-IMPACT
+topic: PTN-PRT-05
+status: outline
+role: stage
+title: "A socket opened from a document the attacker controls"
+objective: >-
+  Determine whether a page the attacker controls opens a socket that carries
+  the visitor's session and returns data to that page, which is what an
+  unchecked handshake origin costs rather than what it is.
+requires:
+  all_of: [control.handshake.origin.unchecked]
+motivated_by: [control.binding.absent]
+yields: [primitive.data.read.victim]

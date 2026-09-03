@@ -1,0 +1,13 @@
+id: PTN-ERR-03-READ
+topic: PTN-ERR-03
+status: outline
+role: stage
+title: "Whether the internal detail is authentication material"
+objective: >-
+  Determine whether what the delivered content carried is something that
+  authenticates -- a credential, a token, a key -- rather than a host name, a
+  path or an identifier, which are the same finding to the disclosure and
+  different things to hold.
+requires:
+  all_of: [control.content.internal]
+yields: [artifact.credential.found]

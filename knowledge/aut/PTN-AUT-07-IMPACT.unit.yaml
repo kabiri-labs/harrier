@@ -1,0 +1,11 @@
+id: PTN-AUT-07-IMPACT
+topic: PTN-AUT-07
+status: outline
+role: stage
+title: "Whether the reset artefact sets another account's credential"
+objective: >-
+  Determine whether a reset token that is predictable, long-lived or accepted
+  after use sets the credential of an account the tester does not own.
+requires:
+  all_of: [control.reset.weak]
+yields: [access.principal.other]

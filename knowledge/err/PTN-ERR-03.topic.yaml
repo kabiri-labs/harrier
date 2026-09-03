@@ -8,6 +8,8 @@ surfaces:
 order:
   - PTN-ERR-03-MAP
   - PTN-ERR-03-PROBE
+  - PTN-ERR-03-READ
+  - PTN-ERR-03-IMPACT
 
 boundaries:
   - subject: "Products and versions named by response metadata"
