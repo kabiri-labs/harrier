@@ -1147,8 +1147,11 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertGreaterEqual(page.locator(".gnode").count(), 5)
         self.assertGreaterEqual(page.locator(".gedge").count(), 4)
         text = self.driver.text()
+        # The last heading names the relation the column holds. Every one of
+        # this probe's nine outgoing edges is another context to try the same
+        # test in, so the column is alternatives -- which is what it now says.
         for heading in ("Prerequisite", "This test", "Establishes",
-                        "Potential continuation"):
+                        "Another technique for this test"):
             self.assertShows(text, heading)
         # Direction is drawn, not implied.
         self.assertGreater(page.locator("path.gedge[marker-end]").count(), 0)
@@ -1163,7 +1166,9 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         # the rest, which is the ordinary case and the one the old model got
         # wrong by calling it "unlocked".
         text = self.text("#/unit/PTN-RCN-07-MAP")
-        self.assertShows(text, "Potential continuation")
+        # All five of this map's outgoing edges are escalations, so the column
+        # is headed as one.
+        self.assertShows(text, "Escalates to")
         self.assertShows(text, "Established here")
         self.assertShows(text, "Still required")
 
@@ -1612,7 +1617,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
     def test_the_conditional_wording_the_model_depends_on_is_present(self):
         text = self.text("#/unit/PTN-INJ-01-PROBE")
         self.assertShows(text, "may become relevant")
-        self.assertShows(text, "Potential continuation")
+        self.assertShows(text, "Another technique for this test")
 
     # --- the context journey ---------------------------------------------
 
@@ -1713,6 +1718,28 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         page.click('a.row[href="#/unit/PTN-INJ-01-PROBE"]')
         self.assertEqual(self.driver.wait_for_view(before), "Injection point probe")
         self.assertShows(self.driver.text(), "Local attack chain")
+
+    def test_the_graph_column_is_headed_by_the_relation_it_holds(self):
+        """The picture must not call an alternative an escalation.
+
+        `PTN-CLT-01-PROBE` establishes a reflection point, and every one of the
+        nine tests that follow is another context to try it in -- alternatives
+        to each other, not steps past it. The list under the graph has grouped
+        them correctly since the tiers landed; the graph headed the same column
+        "Potential continuation" regardless, which is the one thing the tier
+        vocabulary exists to prevent: three different relations printing under
+        one word.
+
+        Asserted against the wording the list already uses, so the two views of
+        one derivation cannot drift into two vocabularies.
+        """
+        alternatives = self.text("#/unit/PTN-CLT-01-PROBE")
+        self.assertShows(alternatives, "Another technique for this test")
+        self.assertNotIn("Potential continuation", alternatives)
+
+        # The same graph, on a test whose outgoing edge really is an escalation.
+        escalation = self.text("#/unit/PTN-CLT-01-HTMLBODY")
+        self.assertShows(escalation, "Escalates to")
 
     def test_an_unknown_tag_in_the_url_leaves_the_rest_of_the_selection(self):
         """A link may arrive from a colleague running a different build. The
