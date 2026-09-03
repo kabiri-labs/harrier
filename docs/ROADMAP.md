@@ -165,6 +165,20 @@ that establish it -- which emptied its cause entirely and left 12 entries in 2.
 That a cause could be closed by naming a capability rather than by writing
 around it is the argument for having separated the three reasons at all.
 
+0.24.1 fixes a place where the picture and the list disagreed about the same
+derivation. The tier vocabulary exists so that three different relations stop
+printing under one heading, and the list beside the graph has grouped them by
+tier since it landed -- but the graph headed its last column "Potential
+continuation" whatever it held. For `PTN-INJ-01-PROBE`, whose nine outgoing
+edges are nine contexts to try the same test in, that called nine alternatives
+an escalation. The column is now headed by the relation it holds, in the
+wording the list already uses, so the two views cannot drift into two
+vocabularies.
+
+Nothing about the derivation changed, and the count is unaffected: edges have
+always been sorted with escalations first, so no escalation was ever hidden
+behind an alternative. What was wrong was the word above them.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.
