@@ -301,17 +301,17 @@ the standard's own test case through its Test Units to a stated business outcome
 
 | Chain | |
 |---|---|
-| Capabilities | 185 |
-| Derived unit-to-unit edges | 770 |
-| — of them escalations between capabilities | 414 |
+| Capabilities | 186 |
+| Derived unit-to-unit edges | 771 |
+| — of them escalations between capabilities | 415 |
 | — another technique for the same test | 124 |
 | — a general prerequisite, not a step | 232 |
 | Tests with a potential continuation | 309 |
 | Tests that establish an impact | 14 |
 | Tests that stop short | 29 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 21 of 185 |
-| Capabilities with a charted route to an impact | 121 of 175 |
+| Capabilities used by no test, impacts excluded | 22 of 186 |
+| Capabilities with a charted route to an impact | 119 of 176 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.
@@ -329,9 +329,9 @@ than claimed, and nothing is invented to fill the gap.
 
 **The controls are no longer the largest gap.** `primitive → impact` is
 written: 1 of 32 `primitive.*` capabilities is declared as a use by nothing --
-the blind oracle, deliberately -- and 121 of 175 capabilities have a charted
+the blind oracle, deliberately -- and 119 of 176 capabilities have a charted
 route to an impact.
-`control → impact` is most of the way there: 12 of 59 `control.*` facts are
+`control → impact` is most of the way there: 13 of 59 `control.*` facts are
 established by a test and consumed by nothing, down from 36.
 
 What closed it was one shape, written 15 times — a test that **requires** the
@@ -341,7 +341,7 @@ skippable second factor and a reset token that outlives its use each end at the
 same place: a session belonging to somebody else, which the catalogue already
 carried a route from.
 
-What is left is not more of the same work. 9 of the 13 are controls that permit
+What is left is not more of the same work. 10 of the 14 are controls that permit
 nothing on their own and are dead ends for good — absent misuse detection
 removes a cost rather than granting a capability, and a cookie missing its
 attributes captures nothing without a script sink or a network position, both
@@ -358,7 +358,7 @@ test declares a use for is listed in `vocab/facts.yaml` under the cause it
 belongs to, and the validator rejects two things: a dead end that is not listed,
 so a new one cannot arrive silently, and an entry for a capability something has
 since started consuming, so the list can only shrink by the gap being closed.
-13 are open, in 3 causes.
+14 are open, in 3 causes.
 
 This is recorded rather than filled in. Generating plausible edges would make the
 matrix look complete and every route on it untrustworthy — an edge nobody thought

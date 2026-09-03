@@ -9,5 +9,5 @@ objective: >-
 
 requires:
   all_of: [recon.session.identified]
-yields: [control.token.audience]
+yields: [control.token.audience, primitive.check.bypassed]
 closes: [control.token.audience]

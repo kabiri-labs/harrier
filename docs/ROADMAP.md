@@ -137,14 +137,27 @@ gate refused the fourth entry until it was removed, which is the ratchet working
 rather than a courtesy.
 
 0.23.0 finishes what 0.22.0 started, and finishes it by finding that most of the
-register was not a backlog. 14 units close 24 of the 37 open entries, almost all
+register was not a backlog. 14 units close 23 of the 37 open entries, almost all
 of them one shape: a test that requires the defeated control and establishes
 what it permits. Seven end at a session belonging to somebody else -- a
 credential the policy allows, a guessable recovery answer, a skippable second
 factor, a reset token that outlives its use -- which the catalogue already had a
 route from. The chart runs deeper than it did, and 29 tests stop short where 81 did.
 
-The other 13 are the finding. Nine permit nothing on their own and never will;
+Four of the units in that pass were wrong and an automated review caught all
+four, each the same mistake: a fact was read against its description without
+asking whether the description was narrow enough to carry the claim.
+`control.content.internal` says "host names, paths, identifiers or
+credentials", and a unit consuming it to establish another user's session
+derived account takeover from a disclosed path. That one is now two results --
+whether the detail is authentication material, and whether the material
+authenticates -- joined by `artifact.credential.found`, the one capability this
+work added. An audience test that repeated the test that produced its own
+condition was removed; a key that a disclosure *would* hand over is no longer
+read as a key in hand; and an unchecked handshake origin is required rather
+than merely one of two sufficient conditions.
+
+The other 14 are the finding. Ten permit nothing on their own and never will;
 three are blocked on a vocabulary that cannot say "one stored object is
 readable"; one is a carrier rather than a destination. All three are recorded
 as what they are, under causes of their own, so the number stops reading as
@@ -265,7 +278,7 @@ Recorded so they are decisions rather than omissions. None is being built.
 
 | Item | Note |
 |---|---|
-| **Chart what a defeated control permits** | Largely done in 0.23.0, and what is left is not the same work. 21 of 185 capabilities are established by a test and used by none, 12 of 59 of them `control.*`, and `primitive.*` is at 1 of 32. The shape that closed it was written 15 times: a test that requires the defeated control and establishes what it permits. Of the 13 remaining, 9 permit nothing on their own and are dead ends for good, 3 are blocked on a vocabulary with no capability for one stored object being readable, and 1 is the blind oracle, which carries a value rather than being one — recorded under three separate causes so the register stops reading as a to-do list. 29 of 391 tests now end at the capability they established, down from 81. |
+| **Chart what a defeated control permits** | Largely done in 0.23.0, and what is left is not the same work. 22 of 186 capabilities are established by a test and used by none, 13 of 59 of them `control.*`, and `primitive.*` is at 1 of 32. The shape that closed it was written 15 times: a test that requires the defeated control and establishes what it permits. Of the 14 remaining, 10 permit nothing on their own and are dead ends for good, 3 are blocked on a vocabulary with no capability for one stored object being readable, and 1 is the blind oracle, which carries a value rather than being one — recorded under three separate causes so the register stops reading as a to-do list. 29 of 391 tests now end at the capability they established, down from 81. |
 | **`PTN-CLT-02` — DOM cross-site scripting** | The sibling of the chain 0.18.0 wrote, and the natural next one. A second instance of a shape already proven, which is why it waited. |
 | **`PTN-RES-03` — server-side request forgery** | A fourth chain shape: `primitive.fetch.internal` to `impact.network.reached`, through `PTN-OUT-03`. The first candidate once the three phase-1 chains have been used in anger. |
 | A second execution standard | The navigation is standard-first and the artefact's structure allows one. Nothing is added until there is a standard whose decomposition Pentest NavGrid improves as much as it improves WSTG's. |

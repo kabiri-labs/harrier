@@ -8,5 +8,6 @@ objective: >-
   the visitor's session and returns data to that page, which is what an
   unchecked handshake origin costs rather than what it is.
 requires:
-  any_of: [control.binding.absent, control.handshake.origin.unchecked]
+  all_of: [control.handshake.origin.unchecked]
+motivated_by: [control.binding.absent]
 yields: [primitive.data.read.victim]

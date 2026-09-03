@@ -954,6 +954,17 @@ facts:
       An altered payload, or a token signed under another algorithm or key, is
       accepted as valid.
 
+  - id: artifact.credential.found
+    label: Authentication material is in hand
+    tier: chain
+    description: >
+      A credential, token or key the application or one of its integrations
+      relies on has been obtained and is held by the tester. Deliberately
+      narrower than the disclosure that produced it: content carrying a host
+      name and content carrying an API key are the same finding to
+      `control.content.internal` and different things to act with, and only
+      this one is something a later test can present.
+
   - id: artifact.key.recovered
     label: A signing key is recovered
     tier: chain
@@ -1498,6 +1509,7 @@ unconsumed:
       - control.reauth.absent
       - control.registration.unverified
       - control.tls.certificate.invalid
+      - control.token.audience
       - control.tls.weak
       - control.username.confusable
 

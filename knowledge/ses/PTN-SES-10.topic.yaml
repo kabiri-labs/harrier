@@ -21,7 +21,6 @@ order:
   - PTN-SES-10-SCOPE
   - PTN-SES-10-BINDING
   - PTN-SES-10-REVOCATION
-  - PTN-SES-10-IMPACT
 
 refs:
   wstg: [WSTG-SESS-10]

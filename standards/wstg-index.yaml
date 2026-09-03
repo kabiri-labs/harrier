@@ -942,12 +942,13 @@ cases:
   units:
   - PTN-ERR-03-MAP
   - PTN-ERR-03-PROBE
+  - PTN-ERR-03-READ
   - PTN-ERR-03-IMPACT
   - PTN-RCN-08-MAP
   - PTN-RCN-08-PROBE
   authored: 0
   sketched: 4
-  outline: 1
+  outline: 2
   resolvable: true
 - id: WSTG-INFO-04
   title: Enumerate Applications on Webserver
@@ -967,10 +968,11 @@ cases:
   units:
   - PTN-ERR-03-MAP
   - PTN-ERR-03-PROBE
+  - PTN-ERR-03-READ
   - PTN-ERR-03-IMPACT
   authored: 0
   sketched: 2
-  outline: 1
+  outline: 2
   resolvable: true
 - id: WSTG-INFO-06
   title: Identify Application Entry Points
@@ -1433,10 +1435,9 @@ cases:
   - PTN-SES-10-SCOPE
   - PTN-SES-10-BINDING
   - PTN-SES-10-REVOCATION
-  - PTN-SES-10-IMPACT
   authored: 0
   sketched: 0
-  outline: 11
+  outline: 10
   resolvable: true
 - id: WSTG-SESS-11
   title: Testing for Concurrent Sessions

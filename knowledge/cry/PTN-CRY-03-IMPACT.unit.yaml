@@ -4,9 +4,10 @@ status: outline
 role: stage
 title: "What the exposed key opens"
 objective: >-
-  Determine whether the key recovered from where it was stored is the one in
-  use, by presenting something it alone could have produced and having the
+  Determine whether the key material in hand is the one the application is
+  using, by presenting something it alone could have produced and having the
   application accept it.
 requires:
-  all_of: [control.crypto.keyexposed]
+  all_of: [artifact.credential.found]
+motivated_by: [control.crypto.keyexposed]
 yields: [artifact.key.recovered]
