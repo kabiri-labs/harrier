@@ -63,6 +63,75 @@ class TheLocalGraphModel(unittest.TestCase):
         """)
         self.assertEqual(result, {}, "tierTotals disagrees with the derivation")
 
+    def test_routes_through_the_same_capabilities_are_one_route_with_a_choice(self):
+        """Four cards that differ only in which technique carries a step read as
+        four ways in. There is one way, with four techniques for its first step,
+        and a tester acts on the count."""
+        result = self.run_js("""
+            const raw = H.pathsToImpact(D, "surface.sql.injectable", {maxPaths: 12, maxDepth: 5});
+            const grouped = H.collapseRoutes(raw);
+            const shapes = {};
+            grouped.forEach(function (g) {
+              shapes[[g.start].concat(g.steps.map(function (s) { return s.to; })).join(">")] = 1;
+            });
+            return {
+              raw: raw.length,
+              grouped: grouped.length,
+              distinctShapes: Object.keys(shapes).length,
+              firstStepChoices: grouped[0].steps[0].units.length
+            };
+        """)
+        self.assertEqual(result["grouped"], result["distinctShapes"],
+                         "grouping must leave exactly one card per capability sequence")
+        self.assertLess(result["grouped"], result["raw"],
+                        "this capability is the case the grouping exists for")
+        self.assertGreater(result["firstStepChoices"], 1)
+
+    def test_grouping_never_drops_a_step_or_a_condition(self):
+        """The collapse is a reading of the walk, not a second walk. Every card
+        must keep the shape it came from and the conditions each step still
+        owes -- a route drawn shorter or cleaner than it is would be the one
+        failure this view cannot afford."""
+        result = self.run_js("""
+            const bad = [];
+            Object.keys(D.facts).forEach(function (f) {
+              if (H.familyOf(f) === "impact") return;
+              const raw = H.pathsToImpact(D, f, {maxPaths: 12, maxDepth: 5});
+              if (!raw.length) return;
+              const grouped = H.collapseRoutes(raw);
+              // The same key the grouping uses: capabilities and what each step
+              // still owes. Matching on capabilities alone would look for a walk
+              // in a group it was deliberately kept out of.
+              const owed = function (a) {
+                a = a || {all_of: [], any_of: []};
+                return (a.all_of || []).slice().sort().join(",") + "/" +
+                  (a.any_of || []).slice().sort().join(",");
+              };
+              const key = function (start, steps) {
+                return [start].concat(steps.map(function (s) {
+                  return s.to + "!" + owed(s.also);
+                })).join(">");
+              };
+              grouped.forEach(function (g) {
+                const shape = key(g.start, g.steps);
+                raw.forEach(function (r) {
+                  if (key(r.start, r.steps) !== shape) return;
+                  if (r.steps.length !== g.steps.length) bad.push([f, "length"]);
+                  r.steps.forEach(function (step, i) {
+                    if (g.steps[i].units.indexOf(step.unit) < 0) bad.push([f, "lost unit"]);
+                    const a = g.steps[i].also || {all_of: [], any_of: []};
+                    if (a.all_of.length + a.any_of.length
+                        < step.also.all_of.length + step.also.any_of.length) {
+                      bad.push([f, "lost condition"]);
+                    }
+                  });
+                });
+              });
+            });
+            return bad.slice(0, 10);
+        """)
+        self.assertEqual(result, [])
+
     def test_the_totals_survive_the_preview_being_smaller_than_the_tier(self):
         result = self.run_js("""
             const g = H.localGraph(D, "PTN-IDN-01-POLICY", 3);

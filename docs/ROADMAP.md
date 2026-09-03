@@ -179,6 +179,23 @@ Nothing about the derivation changed, and the count is unaffected: edges have
 always been sorted with escalations first, so no escalation was ever hidden
 behind an alternative. What was wrong was the word above them.
 
+0.24.2 stops the routes view counting one route as several. `pathsToImpact` is
+right to enumerate walks that differ anywhere as different walks -- its
+signature is the whole shape -- but a reader given four cards that differ only
+in which technique carries a step reads four ways in where there is one way
+with four techniques. Cards are now grouped on the capability sequence together
+with what each step still owes, and the alternatives sit at the step they are
+alternatives for. Walks that leave different conditions outstanding stay
+separate, because they are not interchangeable.
+
+The search runs wider than it displays -- twelve, grouped, four shown -- since
+grouping a truncated search would be the wrong order. That is not a nicety:
+`surface.sql.injectable` filled all four old slots with one shape, so the route
+through a stacked statement to a database write and on to lost integrity was
+never drawn. Two capabilities now show an outcome the view had been hiding.
+
+180 cards where there were 205, over the same 123 capabilities.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.
