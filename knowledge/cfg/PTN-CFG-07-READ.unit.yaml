@@ -1,0 +1,12 @@
+id: PTN-CFG-07-READ
+topic: PTN-CFG-07
+status: outline
+role: stage
+title: "Retrieval of a file the application wrote"
+objective: >-
+  Determine whether a file the application places in a served location is
+  returned to a caller who was never meant to have it, which is what turns a
+  storage decision into a disclosure rather than a note about one.
+requires:
+  all_of: [control.storage.served]
+yields: [primitive.stored.read]

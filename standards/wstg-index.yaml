@@ -129,9 +129,10 @@ cases:
   - PTN-CLT-10-FLAGS
   - PTN-CLT-10-SCOPE
   - PTN-CLT-10-REVOCATION
+  - PTN-CLT-10-READ
   authored: 0
   sketched: 0
-  outline: 5
+  outline: 6
   resolvable: true
 - id: WSTG-ATHN-07
   title: Testing for Weak Password Policy
@@ -573,9 +574,10 @@ cases:
   - PTN-CLT-10-FLAGS
   - PTN-CLT-10-SCOPE
   - PTN-CLT-10-REVOCATION
+  - PTN-CLT-10-READ
   authored: 0
   sketched: 0
-  outline: 5
+  outline: 6
   resolvable: true
 - id: WSTG-CLNT-13
   title: Testing for Cross Site Script Inclusion
@@ -702,9 +704,10 @@ cases:
   - PTN-CFG-07-POLICY
   - PTN-CFG-07-SERVING
   - PTN-CFG-07-STORAGE
+  - PTN-CFG-07-READ
   authored: 0
   sketched: 3
-  outline: 0
+  outline: 1
   resolvable: true
 - id: WSTG-CONF-10
   title: Test for Subdomain Takeover
@@ -917,11 +920,12 @@ cases:
   units:
   - PTN-ERR-04-MAP
   - PTN-ERR-04-PROBE
+  - PTN-ERR-04-READ
   - PTN-RCN-08-MAP
   - PTN-RCN-08-PROBE
   authored: 0
   sketched: 4
-  outline: 0
+  outline: 1
   resolvable: true
 - id: WSTG-INFO-02
   title: Fingerprint Web Server

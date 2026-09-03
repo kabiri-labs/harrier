@@ -10,6 +10,7 @@ order:
   - PTN-CFG-07-POLICY
   - PTN-CFG-07-SERVING
   - PTN-CFG-07-STORAGE
+  - PTN-CFG-07-READ
 
 refs:
   wstg: [WSTG-CONF-09]

@@ -37,9 +37,9 @@ The edge means: *if A succeeds, B may become relevant.* It does not mean B is
 now possible. B may need three other things as well, and one of them may be
 something no test can supply.
 
-**Why not name the next test directly.** The derivation currently yields 771
-unit-to-unit edges across 391 units, and that is with the far half of the chain
-barely charted. Written down they would be 771 hand-maintained links, each
+**Why not name the next test directly.** The derivation currently yields 777
+unit-to-unit edges across 394 units, and that is with the far half of the chain
+barely charted. Written down they would be 777 hand-maintained links, each
 needing to be inserted into the `next` list of every unit that could precede it
 — so the cost of adding a unit grows with the size of the catalogue, and the
 edges nobody updated look exactly like edges that were checked and found not to
@@ -260,12 +260,12 @@ validator rejects anything requiring one, and it is shown as where a chain is
 reportable result where the chart simply does not go on. Folding impacts into
 that count would inflate it and would describe arriving as failing to arrive.
 
-It is no longer the common case. 22 of 186
-capabilities are established by a test and used by none, including 1 of 32
-`primitive.*` and 13 of 59 `control.*`. The chain-tier ones among them are
+It is no longer the common case. 19 of 187
+capabilities are established by a test and used by none, including 1 of 33
+`primitive.*` and 10 of 59 `control.*`. The chain-tier ones among them are
 registered under `unconsumed` with the cause they belong to, so the count moves
-only when a gap is worked on. Of 391 tests, 309 have a potential
-continuation, 14 establish an impact, 29 stop short, and 39 declare no
+only when a gap is worked on. Of 394 tests, 315 have a potential
+continuation, 14 establish an impact, 26 stop short, and 39 declare no
 capability at all — a partition, and the four sum to the catalogue. Phase 5
 charted reconnaissance through to primitives and stopped there; primitive to
 impact is largely unwritten. `pentest-navgrid chain` reports the split and the artefact

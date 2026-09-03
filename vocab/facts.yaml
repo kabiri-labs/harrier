@@ -314,6 +314,18 @@ facts:
       after normalising. A negative result means something different on each
       side of this fact.
 
+  - id: primitive.stored.read
+    label: A stored object is readable
+    tier: chain
+    description: >
+      One object the application holds -- a written file, an archived page, a
+      cached response -- is returned to a caller it was never meant for.
+      Deliberately narrower than `primitive.fs.read`, which claims files can be
+      read at will, and separate from `primitive.doc.read`, which is about the
+      document behind a query: this is one item readable because of where it was
+      put or how it was kept, not because a path or a query is under the
+      tester's control.
+
   - id: primitive.fs.read
     label: Arbitrary file read
     tier: chain
@@ -1512,23 +1524,6 @@ unconsumed:
       - control.token.audience
       - control.tls.weak
       - control.username.confusable
-
-  - cause: no-capability-in-the-vocabulary-fits
-    reason: >-
-      The capability exists and nothing in the vocabulary can express it. Each of
-      these is a stored object -- a file written where it is served, content
-      withdrawn but still retrievable, an authenticated response held in a shared
-      cache -- returned to somebody who should not have it. The read primitives are
-      `primitive.fs.read`, which claims files can be read at will, and
-      `primitive.doc.read`, which is about the document behind a query and has one
-      producer in NoSQL injection. Neither says "one stored object is readable", so
-      the honest consumer cannot be written until the vocabulary carries that
-      capability. This is a gap in the model rather than in the content, which is
-      why it is recorded apart from the entries waiting on a unit.
-    facts:
-      - control.cache.permissive
-      - control.content.withdrawn
-      - control.storage.served
 
   - cause: a-carrier-rather-than-a-destination
     reason: >-
