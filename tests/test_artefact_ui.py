@@ -1199,6 +1199,204 @@ class SearchRetrievesEverythingTheFileCarries(unittest.TestCase):
 
 
 @unittest.skipUnless(node_available(), "node is not installed")
+class ShorthandReachesTheCatalogueItNames(unittest.TestCase):
+    """Titles here name mechanisms; testers type vulnerability classes.
+
+    The validator already refuses an alias that resolves to nothing, but it
+    resolves against its own reading of which fields are searchable. These run
+    the artefact's real search, which is the only thing that can tell the two
+    apart -- and the only thing that would notice if a field were dropped from
+    one and not the other.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+
+    def test_every_alias_the_vocabulary_carries_answers(self):
+        empty = run_in_node("""
+            return D.aliases.filter(function (a) {
+              return H.searchAll(D, a.term).length === 0;
+            }).map(function (a) { return a.term; });
+        """, self.data)
+        self.assertEqual(empty, [], "an alias that answers nothing is the defect it was added to fix")
+
+    def test_every_expansion_reaches_something_the_bare_term_does_not(self):
+        """The validator's second rule, re-asked of the code that implements it.
+        An alias that only ever returns what the typed term already returned
+        tells the reader their term was expanded and shows them nothing for it."""
+        idle = run_in_node("""
+            return D.aliases.filter(function (a) {
+              const viaCount = H.searchAll(D, a.term).reduce(function (n, g) {
+                return n + g.items.filter(function (i) { return i.via; }).length;
+              }, 0);
+              return viaCount === 0;
+            }).map(function (a) { return a.term; });
+        """, self.data)
+        self.assertEqual(idle, [])
+
+    def test_the_shorthand_for_object_level_access_control_reaches_it(self):
+        hits = run_in_node("""
+            const out = {};
+            ["idor", "bola"].forEach(function (t) {
+              out[t] = [];
+              H.searchAll(D, t).forEach(function (g) {
+                g.items.forEach(function (i) { out[t].push(i.sub); });
+              });
+            });
+            return out;
+        """, self.data)
+        for term in ("idor", "bola"):
+            with self.subTest(term=term):
+                self.assertIn("PTN-ACL-02", hits[term])
+
+    def test_the_shorthand_the_readme_names_matches_no_title(self):
+        """The README says `IDOR`, `SSRF` and `SSTI` match no title at all, and
+        that sentence is the reason the file exists. If a topic were renamed to
+        carry one of them, the sentence would be wrong -- and the validator
+        would reject the alias for it the same day, which is the pair of checks
+        this depends on rather than a count that goes stale."""
+        titles = [t["title"].lower() for t in self.data["topics"].values()]
+        titles += [u["title"].lower() for u in self.data["units"].values()]
+        for term in ("idor", "ssrf", "ssti"):
+            with self.subTest(term=term):
+                self.assertEqual([t for t in titles if term in t], [])
+
+    def test_an_expanded_hit_says_which_phrase_found_it(self):
+        """A result the reader did not ask for has to say so. This is the same
+        split the context page makes between a tag chosen and a tag implied, and
+        for the same reason: silence would read as a direct answer."""
+        rows = run_in_node("""
+            const out = [];
+            H.searchAll(D, "ssrf").forEach(function (g) {
+              g.items.forEach(function (i) { out.push([i.sub, i.via]); });
+            });
+            return out;
+        """, self.data)
+        self.assertTrue(rows)
+        for sub, via in rows:
+            with self.subTest(sub=sub):
+                self.assertEqual(via, "server-side request forgery")
+
+    def test_a_term_with_no_alias_reports_no_expansion(self):
+        vias = run_in_node("""
+            const out = [];
+            ["union", "session", "traversal"].forEach(function (t) {
+              H.searchAll(D, t).forEach(function (g) {
+                g.items.forEach(function (i) { if (i.via) out.push([t, i.sub, i.via]); });
+              });
+            });
+            return out;
+        """, self.data)
+        self.assertEqual(vias, [])
+
+    def test_an_alias_finds_nothing_the_expansion_itself_would_not(self):
+        """The safety property. An alias is a spelling: it may reach what the
+        phrase reaches and nothing else, so no alias can quietly become an
+        editorial claim that one thing is related to another."""
+        extra = run_in_node("""
+            const extra = [];
+            D.aliases.forEach(function (a) {
+              const reachable = {};
+              a.expands.forEach(function (phrase) {
+                H.searchAll(D, phrase).forEach(function (g) {
+                  g.items.forEach(function (i) { reachable[g.kind + " " + i.sub + " " + i.title] = true; });
+                });
+              });
+              H.searchAll(D, a.term).forEach(function (g) {
+                g.items.forEach(function (i) {
+                  if (!i.via) return;
+                  const key = g.kind + " " + i.sub + " " + i.title;
+                  if (!H.own(reachable, key)) extra.push([a.term, key]);
+                });
+              });
+            });
+            return extra;
+        """, self.data)
+        self.assertEqual(extra, [])
+
+
+@unittest.skipUnless(node_available(), "node is not installed")
+class SearchOrderIsLexicalAndNothingElse(unittest.TestCase):
+    """Ordering a search box is where a catalogue starts having opinions about
+    its own content. Every rule here is about the letters typed and where they
+    landed -- never about which test is worth more, which is the reader's to
+    decide and the line `PIVOT.md` draws.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = catalogue(REPO_ROOT)
+
+    def first(self, term, kind):
+        return run_in_node("""
+            const g = H.searchAll(D, %r).filter(function (g) { return g.kind === %r; })[0];
+            return g ? g.items[0].sub : null;
+        """ % (term, kind), self.data)
+
+    def test_an_identifier_typed_in_full_comes_first(self):
+        self.assertEqual(self.first("PTN-INJ-01-PROBE", "Tests"), "PTN-INJ-01-PROBE")
+        self.assertEqual(self.first("WSTG-INPV-05", "Test cases"), "WSTG-INPV-05")
+
+    def test_a_whole_title_outranks_the_same_words_further_down_a_page(self):
+        rows = run_in_node("""
+            const g = H.searchAll(D, "sql injection").filter(function (g) { return g.kind === "Topics"; })[0];
+            return g ? g.items.map(function (i) { return [i.sub, i.rank]; }) : [];
+        """, self.data)
+        self.assertEqual(rows[0][0], "PTN-INJ-01")
+        self.assertEqual(rows[0][1], 1, "an exact title is rank 1")
+
+    def test_a_term_standing_as_a_word_outranks_the_same_letters_buried_in_one(self):
+        """`rce` is a substring of `resource` and `force`, which is how four
+        letters reached most of the catalogue and neither of the two topics that
+        name the thing. Nothing is excluded by this -- the buried matches are
+        still found, and still shown."""
+        rows = run_in_node("""
+            const g = H.searchAll(D, "rce").filter(function (g) { return g.kind === "Topics"; })[0];
+            return g.items.map(function (i) { return [i.sub, i.whole]; });
+        """, self.data)
+        self.assertTrue(rows[0][1], "the first row matched inside a longer word")
+        self.assertIn(rows[0][0], ("PTN-INJ-08", "PTN-OUT-02"))
+        self.assertTrue(any(not whole for _, whole in rows), "the buried matches are still there")
+
+    def test_a_kind_whose_matches_are_all_buried_is_listed_last(self):
+        order = run_in_node("""
+            return H.searchAll(D, "rce").map(function (g) { return [g.kind, g.whole]; });
+        """, self.data)
+        whole = [i for i, (_, w) in enumerate(order) if w]
+        buried = [i for i, (_, w) in enumerate(order) if not w]
+        self.assertTrue(whole and buried, "this term needs both kinds to be a test of the order")
+        self.assertLess(max(whole), min(buried))
+
+    def test_the_kinds_keep_one_order_rather_than_the_order_matches_arrived_in(self):
+        """Groups used to be created as matches were found, so an alias hit
+        could push the topic a reader was looking for below three kinds of
+        supporting prose."""
+        order = run_in_node("""
+            return H.searchAll(D, "xss").map(function (g) { return g.kind; });
+        """, self.data)
+        canonical = ["Test cases", "Tests", "Topics", "Capabilities", "Payloads",
+                     "Cards", "Mitigations", "Tools"]
+        whole = run_in_node("""
+            return H.searchAll(D, "xss").filter(function (g) { return g.whole; })
+              .map(function (g) { return g.kind; });
+        """, self.data)
+        self.assertEqual(whole, [k for k in canonical if k in whole])
+        self.assertEqual(order[0], "Topics")
+
+    def test_the_same_query_answers_the_same_way_every_time(self):
+        runs = run_in_node("""
+            const shape = function () {
+              return H.searchAll(D, "injection").map(function (g) {
+                return g.kind + ":" + g.items.map(function (i) { return i.sub; }).join(",");
+              }).join("|");
+            };
+            return [shape(), shape(), shape()];
+        """, self.data)
+        self.assertEqual(len(set(runs)), 1)
+
+
+@unittest.skipUnless(node_available(), "node is not installed")
 class TheMarkdownRendererStaysSafe(unittest.TestCase):
     """Cards and mitigations are contributor-written Markdown, and this is the
     one place they become markup."""
@@ -1722,6 +1920,59 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.driver.wait_for_view("Attack chains")
         self.assertShows(self.driver.text(), "Routes charted to here")
         self.assertGreater(page.locator(".route").count(), 0)
+
+    def test_typing_the_shorthand_for_a_class_of_bug_reaches_the_topic(self):
+        """The end-to-end version of the whole change: four letters typed into
+        the real file, and the topic they name on the page."""
+        for term, topic in (("idor", "PTN-ACL-02"), ("ssrf", "PTN-RES-03"),
+                            ("ssti", "PTN-INJ-10"), ("lfi", "PTN-RES-01")):
+            with self.subTest(term=term):
+                text = self.text("#/search/" + term)
+                self.assertGreater(self.driver.count('a.card[href="#/topic/%s"]' % topic), 0,
+                                   f"{term} did not reach {topic}")
+                self.assertShows(text, "Also searched")
+
+    def test_the_page_says_which_phrase_was_searched_instead(self):
+        text = self.text("#/search/idor")
+        self.assertShows(text, "No entry here is named idor")
+        self.assertShows(text, "object-level access control")
+
+    def test_an_expanded_result_carries_the_expansion_that_found_it(self):
+        self.open("#/search/idor")
+        card = self.driver.text('a.card[href="#/topic/PTN-ACL-02"]')
+        self.assertIn("object-level access control", card.lower())
+
+    def test_following_an_expanded_result_reaches_the_topic_it_named(self):
+        page = self.open("#/search/bola")
+        before = self.driver.heading()
+        page.locator('a.card[href="#/topic/PTN-ACL-02"]').first.click()
+        self.driver.wait_for_view(before)
+        self.assertEqual(self.driver.hash(), "#/topic/PTN-ACL-02")
+        self.assertShows(self.driver.text(), "Object-level access control")
+
+    def test_a_term_that_only_matches_inside_longer_words_says_so(self):
+        """`rce` is in `resource` and `force`. The count in the heading is real;
+        what it counts is coincidence, and the reader cannot see that from the
+        cards themselves."""
+        text = self.text("#/search/rce")
+        self.assertShows(text, "inside a longer word rather than standing as one")
+
+    def test_results_past_the_first_forty_are_readable_rather_than_withheld(self):
+        """A count of what is not shown is not the same as being able to read
+        it, and a substring cannot be made narrower."""
+        page = self.open("#/search/path")
+        self.assertGreater(page.locator("details.fold").count(), 0,
+                           "no kind overflowed, so this term no longer tests anything")
+        fold = page.locator("details.fold").first
+        summary = fold.locator("summary").inner_text()
+        hidden = fold.locator("a.card").count()
+        # The number in the summary is the number of cards behind it, asserted
+        # against each other rather than against a figure that goes stale the
+        # next time a unit is written.
+        self.assertEqual(summary.strip(), f"Show the other {hidden}")
+        self.assertFalse(fold.locator("a.card").first.is_visible())
+        fold.locator("summary").click()
+        self.assertTrue(fold.locator("a.card").first.is_visible())
 
     def test_a_search_result_for_a_payload_or_a_tool_reaches_its_own_page(self):
         """Both used to land on Standards: the router had no branch for either,
