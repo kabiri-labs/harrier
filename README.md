@@ -135,7 +135,7 @@ group says what choosing from it means — a processor is a hypothesis until a
 test confirms it, and an observed behaviour is something the tester has seen
 rather than something this file asserts:
 
-![The attack-surface vocabulary in seven groups — channel, entry point, business function, security context, environment, processor, observed behaviour — each with what it names and how many topics declare each tag](docs/assets/context-selector.png)
+![The attack-surface vocabulary in seven groups — channel, entry point, business function, security context, environment, processor, observed behaviour — each with what it names and how many topics each tag reaches](docs/assets/context-selector.png)
 
 The groups organise the vocabulary; they do not change what a selection does.
 Choosing one from each does not narrow to where they overlap — every tag adds

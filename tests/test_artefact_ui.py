@@ -1703,6 +1703,34 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         """)
         self.assertEqual(out, [])
 
+    def test_a_topic_says_whether_its_own_tag_or_a_test_in_it_reached_it(self):
+        """A topic can be here because one of its tests declares a tag the
+        subject does not. Six pairs do that today, and a card telling the reader
+        the topic matched would be attributing to a subject a surface only one
+        of its tests claims."""
+        out = self.run_js("""
+            const out = [];
+            D.surfaces.forEach(function (s) {
+              H.contextTopics(D, [s.tag]).topics.forEach(function (r) {
+                if (!r.byTopic) out.push([s.tag, r.topic]);
+              });
+            });
+            return out;
+        """)
+        self.assertIn(["export-report", "PTN-CRY-02"], out)
+        # And the flag is the topic's own clause, not a guess from the units.
+        for tag, tid in out:
+            with self.subTest(tag=tag, topic=tid):
+                self.assertNotIn(tag, self.data["topics"][tid]["surfaces"]["any_of"])
+
+    def test_a_topic_whose_own_tag_matched_says_so(self):
+        out = self.run_js("""
+            return H.contextTopics(D, ["multi-tenant"]).topics.map(function (r) {
+              return [r.topic, r.byTopic];
+            });
+        """)
+        self.assertIn(["PTN-ACL-02", True], out)
+
     def test_a_topic_is_listed_once_even_when_two_tags_reach_it(self):
         out = self.run_js("""
             const seen = {}, dup = [];
@@ -2679,6 +2707,41 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertEqual(bad, [])
         # A selector that stopped matching would make this pass by reading none.
         self.assertGreater(read, 20, "no reason lines were examined at all")
+
+    def test_no_label_says_a_topic_declared_a_tag_it_does_not(self):
+        """The wording this round removed, swept over every tag rather than the
+        one that showed it. `export-report` reaches `PTN-CRY-02` because a test
+        in it is about a bulk export; the subject is about assets in transit and
+        declares no such tag, and the page used to head that result "topics
+        declare a tag you chose"."""
+        checked = 0
+        for surface in self.data["surfaces"]:
+            if not surface["units"]:
+                continue
+            text = self.text("#/chains/context/" + surface["tag"]).lower()
+            checked += 1
+            with self.subTest(tag=surface["tag"]):
+                self.assertNotIn("declare a tag you chose", text)
+                self.assertNotIn("declares a tag you chose", text)
+                self.assertIn("your selection reaches", text)
+        self.assertGreater(checked, 5, "no tag with a unit-level declaration was read")
+
+    def test_a_card_reached_only_through_a_test_says_which_route(self):
+        page = self.open("#/chains/context/export-report")
+        card = page.locator('.card:has-text("Sensitive data over unprotected transport")').first
+        text = " ".join(card.inner_text().split())
+        self.assertIn("This topic declares none of these", text)
+        self.assertIn("Reached because a test in it declares", text)
+        self.assertNotIn("Matched because the context is", text)
+
+    def test_the_selector_no_longer_calls_its_count_a_declaration(self):
+        """The count became a union in this same change and the sentence beside
+        it did not: three tags show a number larger than the topics declaring
+        them."""
+        text = self.text("#/chains/context")
+        self.assertNotIn("how many topics in this catalogue declare it", text)
+        self.assertShows(text, "how many topics it reaches")
+        self.assertShows(text, "through a test that declares one")
 
     def test_an_association_is_never_printed_as_something_that_follows(self):
         """The sentence this change exists to remove. It said an edge was "true
