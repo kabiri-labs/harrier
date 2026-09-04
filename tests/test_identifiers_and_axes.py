@@ -191,16 +191,19 @@ class CrossReferencesRunBothWays(SandboxCase):
         self.assertAccepted()
 
 
-class SurfaceEmissionsMustHoldForEverySurface(SandboxCase):
-    """An emitted tag is a claim about every surface carrying the emitting one."""
+class AParentMustHoldForEverySurface(SandboxCase):
+    """A parent is a claim about every surface carrying the child."""
 
-    def test_cross_window_does_not_imply_a_dom_sink(self):
+    def test_cross_window_does_not_claim_a_dom_sink(self):
         # A postMessage handler that logs the user out or updates state writes
-        # into no sink at all. Emitting dom-sink would make surface-first
-        # navigation offer DOM-XSS for a surface where nothing writes anywhere.
+        # into no sink at all, so a parent of dom-sink would be false of many
+        # surfaces carrying this. Nor is it an association: the two are separate
+        # observations, and applying both tags when both were seen says more
+        # than a relation between them could.
         surfaces = self.box.read("vocab/surfaces.yaml")["surfaces"]
         cross_window = next(s for s in surfaces if s["tag"] == "cross-window")
-        self.assertNotIn("dom-sink", cross_window.get("emits") or [])
+        self.assertNotIn("dom-sink", cross_window.get("parents") or [])
+        self.assertNotIn("dom-sink", cross_window.get("often") or [])
 
     def test_reverse_tabnabbing_selects_cross_window(self):
         # An ordinary application-authored target=_blank link is the common case

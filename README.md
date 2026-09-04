@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Pentest NavGrid 0.26.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Pentest NavGrid 0.27.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 393 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.26.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.27.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -139,6 +139,16 @@ a capability another test establishes:
 The selection is a URL and nothing else. Nothing is stored, and a tag names a
 *kind* of surface rather than one you are looking at — the file still holds no
 target, and "may apply" is the strongest thing it says.
+
+A tag also says what kind of thing it names — a channel, an entry point, a
+business function, a security context, an environment, a processor, or something
+the tester has observed — because one flat list of all seven is how an interface
+came to sit beside a guess about what interprets a value. Two relations follow
+from that split and are reported differently: what a described surface *always
+also is*, and what it is *often found with*. The second is offered because it is
+useful for finding tests, never as something the selection established. Why that
+distinction exists, and what it cost to get wrong, is in
+[`docs/DISCOVERY.md`](docs/DISCOVERY.md).
 
 Where a successful test leads. The view opens on the outcomes a chain is meant
 to end at, and each one draws the routes charted to it — every step a test that

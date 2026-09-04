@@ -336,6 +336,45 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class NumberedCrossReferencesResolve(unittest.TestCase):
+    """Several files point a reader at a document section by number.
+
+    Inserting a section renumbers every one below it. This catches the half of
+    that which is mechanical: a pointer at a number no section carries.
+
+    It does not catch the other half, and saying so is the point of writing this
+    down. When a new section 5 pushed volatile content to 6, the stale pointer
+    at 5 still named a section that existed -- a different one. Nothing here can
+    tell which section a sentence meant, and a check that guessed from shared
+    words would need a suppression for every reference whose prose does not
+    repeat its target's title, which two of them do not. Referencing by name
+    rather than by number is the fix for that half; this is not it.
+    """
+
+    REFERENCE = re.compile(r"docs/([A-Z_]+)\.md section ([0-9]+[a-z]?)")
+
+    def sections(self, name):
+        text = (REPO_ROOT / "docs" / f"{name}.md").read_text(encoding="utf-8")
+        return set(re.findall(r"^#{2,3} ([0-9]+[a-z]?)\.", text, re.MULTILINE))
+
+    def test_every_numbered_reference_names_a_section_that_exists(self):
+        roots = ("vocab", "standards", "toolbox", "knowledge", "docs", "cards",
+                 "mitigations", "payloads")
+        found = 0
+        for root in roots:
+            for path in sorted((REPO_ROOT / root).rglob("*")):
+                if not path.is_file() or path.suffix not in (".yaml", ".md"):
+                    continue
+                text = path.read_text(encoding="utf-8")
+                for document, number in self.REFERENCE.findall(text):
+                    found += 1
+                    with self.subTest(source=str(path.relative_to(REPO_ROOT)),
+                                      target=f"{document} {number}"):
+                        self.assertIn(number, self.sections(document))
+        # A regex that stopped matching would make this pass by checking nothing.
+        self.assertGreater(found, 5, "no numbered references found at all")
+
+
 class TheAuthoringExamplesAreValidDocuments(unittest.TestCase):
     """The examples in AUTHORING.md are what a contributor copies.
 

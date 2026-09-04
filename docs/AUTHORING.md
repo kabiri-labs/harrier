@@ -328,7 +328,58 @@ DOM XSS units share one remediation text about contextual output encoding. Copie
 per unit, it would be ten copies diverging from the moment the second was
 written.
 
-## 5. Volatile content carries a date
+## 5. A new surface tag
+
+Every tag declares a `dimension`, and the seven are not interchangeable:
+
+| Dimension | What it names | Example |
+|---|---|---|
+| `channel` | The interface the interaction happens over | `rest-api` |
+| `entry_point` | Where a controlled value enters or selects something | `object-id-param` |
+| `business_function` | What the operation is for | `payment` |
+| `security_context` | The identity, privilege, tenancy or browsing context it runs in | `multi-tenant` |
+| `environment` | A deployment or platform property | `cache-fronted` |
+| `processor` | The component that interprets a controlled value — a hypothesis until observed | `sql-backed-param` |
+| `observed_behavior` | Something the tester has actually seen | `stored-then-rendered` |
+
+Choose it from what the tag's **description** says, not from what its name
+suggests. `rest-api` is labelled "Structured machine-facing API" and its
+description is about programmatic interfaces rather than about REST, which is
+why GraphQL is one of them and why the tag is a `channel` rather than a
+protocol. A tag whose description spans two dimensions is two tags.
+
+### Which relation a new edge is
+
+Two relations exist and they claim different things. Getting this wrong is not a
+style question: the page prints one of them as fact.
+
+> **`parents` must be true of every surface carrying the tag, and stay inside
+> one dimension. Everything else is `often`.**
+
+A parent is a coarser way of saying the same kind of thing. Every GraphQL
+endpoint is a machine-facing API — not usually, always — so a topic filed under
+the parent is an answer for the child and the page says so plainly. The relation
+is closed transitively, so it must also be true through every step.
+
+`often` records what such a surface commonly carries as well. It may cross
+dimensions, which is most of what it is for, and it is reported as association
+wherever it appears. A search box often reaches a relational store; `/search`
+may query no database at all.
+
+The test is not "is this usually true". It is **what would have to be the case
+for this to be false, and does that thing exist**. If you can name one — a
+write-only upload with no download, a login form that returns a bearer token and
+sets no cookie, a SOAP endpoint that parses XML and accepts no file — it is
+`often`. Every one of those was once written as an implication here, and the
+selection page printed each as something true of every surface carrying the
+first.
+
+Two relations that both cross a boundary are rejected rather than reconciled: a
+deployment property does not imply an input location, and an edge that wants to
+say so is describing two different observations that belong on the surface
+separately. Apply both tags when both were seen.
+
+## 6. Volatile content carries a date
 
 Payload files, tool entries and engine- or browser-specific notes carry a
 `reviewed:` date. Durable content — mechanism, oracle, ordering, false positives
@@ -336,7 +387,7 @@ Payload files, tool entries and engine- or browser-specific notes carry a
 
 An undated volatile file is treated as unreviewed, not as current.
 
-## 6. Licensing
+## 7. Licensing
 
 Contributions are licensed under [Apache-2.0](../LICENSE).
 
@@ -348,7 +399,7 @@ official titles only. Everything under `knowledge/`, `cards/`, `payloads/` and
 Where published research informed a payload file, credit it in that file's
 `credits` field.
 
-## 7. Content safety
+## 8. Content safety
 
 This is material for authorised testing, and the repository's own correctness is
 part of its threat model.
