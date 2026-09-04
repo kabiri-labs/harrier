@@ -1603,6 +1603,35 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         self.assertEqual(out["tenant"]["often"], [])
         self.assertNotIn("stored-then-rendered", out["search"]["often"])
 
+    def test_a_selection_is_the_union_of_its_tags_and_not_their_intersection(self):
+        """Asserted directly rather than left to the wording. The selector is
+        grouped by dimension as of 0.28.0, which looks like a control where you
+        pick one from each and get the overlap -- so what the code does has to
+        be pinned separately from what the page says it does.
+
+        Intersecting was measured before it was built and is unusable at topic
+        level; see `docs/DISCOVERY.md`. If it is ever made to work, this test is
+        the one that must be rewritten deliberately rather than deleted.
+        """
+        out = self.run_js("""
+            const pairs = [["rest-api", "object-id-param"],
+                           ["search", "sql-backed-param"],
+                           ["payment", "multi-tenant"]];
+            return pairs.map(function (pair) {
+              const names = function (sel) {
+                return H.contextTopics(D, sel).topics.map(function (t) { return t.topic; });
+              };
+              const together = names(pair).sort();
+              const apart = {};
+              names([pair[0]]).concat(names([pair[1]])).forEach(function (t) { apart[t] = true; });
+              return [pair.join("+"), together, Object.keys(apart).sort()];
+            });
+        """)
+        for label, together, apart in out:
+            with self.subTest(selection=label):
+                self.assertEqual(together, apart)
+                self.assertTrue(together, "this pair reaches nothing, so it proves nothing")
+
     def test_a_topic_is_listed_once_even_when_two_tags_reach_it(self):
         out = self.run_js("""
             const seen = {}, dup = [];
@@ -2442,6 +2471,57 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
             page.inner_text('.chip[href$="nosql-backed-param"]').split()[-1], "0"
         )
         self.assertEqual(self.driver.count(".chip.none"), 1)
+
+    def test_the_selector_is_grouped_by_what_each_tag_names(self):
+        """52 tags in one grid asked a reader to hold the whole list to discover
+        that `payment` and `sql-backed-param` are not the same kind of answer."""
+        page = self.open("#/chains/context")
+        headings = [h.strip().lower() for h in page.locator(".dimension h4").all_inner_texts()]
+        self.assertEqual(headings, [
+            "channel", "entry point", "business function", "security context",
+            "environment", "processor", "observed behaviour",
+        ])
+
+    def test_every_tag_is_in_exactly_one_group_and_none_is_lost(self):
+        page = self.open("#/chains/context")
+        placed = []
+        for group in range(page.locator(".dimension").count()):
+            block = page.locator(".dimension").nth(group)
+            placed += [c.split()[0] for c in block.locator(".chip").all_inner_texts()]
+        self.assertEqual(sorted(placed), sorted(s["tag"] for s in self.data["surfaces"]))
+        self.assertEqual(len(placed), len(set(placed)), "a tag appears in two groups")
+
+    def test_each_group_says_what_choosing_from_it_means(self):
+        """The caveat belongs where it is read. A reader picking from `processor`
+        is choosing a hypothesis, and a document saying so elsewhere is a
+        document they are not looking at."""
+        page = self.open("#/chains/context")
+        notes = {}
+        for group in range(page.locator(".dimension").count()):
+            block = page.locator(".dimension").nth(group)
+            notes[block.locator("h4").inner_text().strip().lower()] = \
+                block.locator("p.muted").inner_text()
+        self.assertEqual(len(notes), 7)
+        for heading, note in notes.items():
+            with self.subTest(group=heading):
+                self.assertTrue(note.strip(), heading)
+        self.assertIn("hypothesis until a test confirms it", notes["processor"])
+        self.assertIn("the tester has actually seen", notes["observed behaviour"])
+
+    def test_the_page_says_the_grouping_is_not_a_filter(self):
+        """Seven labelled rows look like a control where you pick one from each
+        and get the intersection. This page unions, and a layout implying a
+        semantics the code does not have is the same defect as prose that does."""
+        text = self.text("#/chains/context")
+        self.assertShows(text, "not how the selection works")
+        self.assertShows(text, "does not narrow to where they overlap")
+
+    def test_choosing_from_a_group_still_selects(self):
+        page = self.open("#/chains/context")
+        page.click('.dimension a.chip[href="#/chains/context/graphql"]')
+        self.driver.wait_for_render(lambda: self.driver.count(".chip.on") == 1)
+        self.assertEqual(page.evaluate("location.hash"), "#/chains/context/graphql")
+        self.assertShows(self.driver.text(), "Object-level access control")
 
     def test_choosing_a_tag_is_navigation_rather_than_state(self):
         """The selection lives in the URL, so it can be sent to a colleague and
