@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Pentest NavGrid 0.29.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Pentest NavGrid 0.30.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 393 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.29.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.30.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -119,13 +119,15 @@ choose between, because those are opposite instructions:
 
 ![A WSTG test case decomposed into its Test Units, split into stages and alternatives](docs/assets/decomposition.png)
 
-A Test Unit. The chain strip under the objective answers *where can this lead*
-before the procedure begins, rather than several screens after it. Below it, the
-orientation a tester actually starts from — what the test assumes, where in a
-target to begin looking, and where a controlled input comes to rest — comes
-before the procedure rather than being folded into it:
+A Test Unit, written for the read it mostly gets. The chain strip under the
+objective answers *where can this lead* before the procedure begins, and the
+procedure itself comes next: the oracle and the steps are reachable without
+scrolling on every unit written to depth, and the mistake that most often
+imitates a positive follows them. The orientation a first reader starts from is
+one screen below rather than folded away, because a reader who wants it is
+reading the whole unit and one who wants the oracle is mid-test:
 
-![A Test Unit page showing its objective, chain strip and orientation blocks](docs/assets/test-unit.png)
+![A Test Unit page: objective, chain strip, then the procedure under a heading naming it — oracle, sequence and first false positive — with the orientation below](docs/assets/test-unit.png)
 
 The Attack Chains view, entered from what is in front of you. A tester
 mid-engagement is not holding a WSTG identifier or a capability name; they are
