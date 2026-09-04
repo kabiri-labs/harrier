@@ -775,15 +775,69 @@ class TheSurfaceIndexIsDerivedRatherThanWalkedInTheBrowser(unittest.TestCase):
             self.assertTrue(entry["label"], entry["tag"])
             self.assertTrue(entry["hint"], entry["tag"])
 
-    def test_the_closure_is_transitive_and_excludes_the_tag_itself(self):
-        declared = {s["tag"]: set(s.get("emits") or ()) for s in self.vocab}
+    def test_the_parent_closure_is_transitive_and_excludes_the_tag_itself(self):
+        declared = {s["tag"]: set(s.get("parents") or ()) for s in self.vocab}
         for entry in self.data["surfaces"]:
-            implied = set(entry["implies"])
-            self.assertNotIn(entry["tag"], implied, "a tag implies itself")
-            self.assertTrue(declared[entry["tag"]] <= implied, entry["tag"])
+            above = set(entry["parents"])
+            self.assertNotIn(entry["tag"], above, "a tag is its own parent")
+            self.assertTrue(declared[entry["tag"]] <= above, entry["tag"])
             # Every step of the way out is in the answer, not only the first.
-            for tag in list(implied):
-                self.assertTrue(declared[tag] - {entry["tag"]} <= implied, tag)
+            for tag in list(above):
+                self.assertTrue(declared[tag] - {entry["tag"]} <= above, tag)
+
+    def test_associations_are_not_closed_transitively(self):
+        """A search box is often backed by SQL and a SQL parameter is often an
+        object identifier. Chaining those would end at a claim nobody wrote, so
+        the relation is carried one step and no further."""
+        declared = {s["tag"]: set(s.get("often") or ()) for s in self.vocab}
+        by_tag = {s["tag"]: s for s in self.data["surfaces"]}
+        chained = []
+        for tag, direct in declared.items():
+            for near in direct:
+                for far in declared.get(near, ()):
+                    if far not in direct and far != tag and far in by_tag:
+                        chained.append((tag, near, far))
+        self.assertTrue(chained, "no association chains, so this proves nothing")
+        for tag, near, far in chained:
+            with self.subTest(chain=f"{tag} -> {near} -> {far}"):
+                self.assertNotIn(far, by_tag[tag]["often"])
+
+    def test_an_association_is_inherited_down_the_parent_relation(self):
+        """Different from chaining, and sound: whatever is often true of
+        machine-facing APIs is often true of the GraphQL endpoints that are
+        ones."""
+        surfaces, _ = surface_index(
+            [
+                {"tag": "child", "dimension": "channel", "label": "C",
+                 "discovery_hint": "h", "parents": ["parent"]},
+                {"tag": "parent", "dimension": "channel", "label": "P",
+                 "discovery_hint": "h", "often": ["elsewhere"]},
+                {"tag": "elsewhere", "dimension": "entry_point", "label": "E",
+                 "discovery_hint": "h"},
+            ],
+            {},
+        )
+        by_tag = {s["tag"]: s for s in surfaces}
+        self.assertEqual(by_tag["child"]["parents"], ["parent"])
+        self.assertEqual(by_tag["child"]["often"], ["elsewhere"])
+
+    def test_a_relation_is_reported_once_and_under_the_stronger_name(self):
+        """A tag reachable as a parent is not also offered as an association.
+        Two names for one edge is how a reader ends up believing the weaker
+        wording about a relation the file states as certain."""
+        for entry in self.data["surfaces"]:
+            with self.subTest(tag=entry["tag"]):
+                self.assertFalse(set(entry["parents"]) & set(entry["often"]))
+                self.assertNotIn(entry["tag"], entry["often"])
+
+    def test_every_tag_carries_the_kind_of_thing_it_names(self):
+        """Selecting two tags cannot narrow anything without this, and
+        implication crossed from a deployment property to an input location
+        while nothing recorded that they were different kinds of claim."""
+        declared = {s["tag"]: s["dimension"] for s in self.vocab}
+        for entry in self.data["surfaces"]:
+            with self.subTest(tag=entry["tag"]):
+                self.assertEqual(entry["dimension"], declared[entry["tag"]])
 
     def test_a_topic_is_indexed_only_under_the_tags_it_declares(self):
         """Listing a topic under a tag it never declared would make the tag look
@@ -820,9 +874,11 @@ class TheSurfaceIndexIsDerivedRatherThanWalkedInTheBrowser(unittest.TestCase):
         tested rather than the repository's current contents."""
         surfaces, always = surface_index(
             [
-                {"tag": "a", "label": "A", "discovery_hint": "h", "emits": ["b"]},
-                {"tag": "b", "label": "B", "discovery_hint": "h", "emits": ["c"]},
-                {"tag": "c", "label": "C", "discovery_hint": "h"},
+                {"tag": "a", "dimension": "channel", "label": "A",
+                 "discovery_hint": "h", "parents": ["b"]},
+                {"tag": "b", "dimension": "channel", "label": "B",
+                 "discovery_hint": "h", "parents": ["c"]},
+                {"tag": "c", "dimension": "channel", "label": "C", "discovery_hint": "h"},
             ],
             {
                 "T1": {"surfaces": {"any_of": ["a"]}},
@@ -832,23 +888,25 @@ class TheSurfaceIndexIsDerivedRatherThanWalkedInTheBrowser(unittest.TestCase):
             },
         )
         by_tag = {s["tag"]: s for s in surfaces}
-        self.assertEqual(by_tag["a"]["implies"], ["b", "c"])
-        self.assertEqual(by_tag["c"]["implies"], [])
+        self.assertEqual(by_tag["a"]["parents"], ["b", "c"])
+        self.assertEqual(by_tag["c"]["parents"], [])
         self.assertEqual(by_tag["a"]["topics"], ["T1"])
         self.assertEqual(by_tag["b"]["topics"], [])
         self.assertEqual(always, ["T3"])
 
     def test_a_cycle_in_the_vocabulary_terminates(self):
-        """The validator refuses a tag that emits itself; it does not refuse two
-        that emit each other. The closure must not be what discovers that."""
+        """The validator refuses a cycle in the parent relation. The closure must
+        not be what discovers one that got past it."""
         surfaces, _ = surface_index(
             [
-                {"tag": "a", "label": "A", "discovery_hint": "h", "emits": ["b"]},
-                {"tag": "b", "label": "B", "discovery_hint": "h", "emits": ["a"]},
+                {"tag": "a", "dimension": "channel", "label": "A",
+                 "discovery_hint": "h", "parents": ["b"]},
+                {"tag": "b", "dimension": "channel", "label": "B",
+                 "discovery_hint": "h", "parents": ["a"]},
             ],
             {},
         )
-        self.assertEqual({s["tag"]: s["implies"] for s in surfaces}, {"a": ["b"], "b": ["a"]})
+        self.assertEqual({s["tag"]: s["parents"] for s in surfaces}, {"a": ["b"], "b": ["a"]})
 
 
 class TheIndexesNameOnlyThingsThatTravelWithTheFile(unittest.TestCase):

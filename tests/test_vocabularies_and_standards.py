@@ -100,17 +100,21 @@ class VocabulariesAreInternallyConsistent(SandboxCase):
         self.box.edit("vocab/domains.yaml", duplicate)
         self.assertRejected("duplicate domain code")
 
-    def test_a_surface_emitting_an_unknown_tag_is_rejected(self):
-        def dangle(data):
-            data["surfaces"][0]["emits"] = ["no-such-surface"]
-        self.box.edit("vocab/surfaces.yaml", dangle)
-        self.assertRejected("emits unknown tag no-such-surface")
+    def test_the_relation_that_carried_two_meanings_cannot_come_back(self):
+        """`emits` claimed something true of every surface carrying the tag and
+        was used for 19 edges where that was false. It is gone, and a file still
+        carrying one has to fail rather than be read as either of the two
+        relations that replaced it -- silently ignoring the key would drop the
+        edge and silently accepting it would restore the claim.
 
-    def test_a_surface_emitting_itself_is_rejected(self):
-        def loop(data):
-            data["surfaces"][0]["emits"] = [data["surfaces"][0]["tag"]]
-        self.box.edit("vocab/surfaces.yaml", loop)
-        self.assertRejected("emits itself")
+        What it asserted is now checked per relation in
+        `AParentClaimsMoreThanAnAssociation`: unknown target, self-reference,
+        cycles, and the dimension boundary a parent may not cross.
+        """
+        def revive(data):
+            data["surfaces"][0]["emits"] = ["no-such-surface"]
+        self.box.edit("vocab/surfaces.yaml", revive)
+        self.assertRejected("'emits' was unexpected")
 
     def test_removing_the_universal_axis_is_rejected(self):
         # Without one, recurring steps such as PROBE have nowhere to live and
@@ -128,6 +132,144 @@ class VocabulariesAreInternallyConsistent(SandboxCase):
             )
         self.box.edit("vocab/dimensions.yaml", duplicate)
         self.assertRejected("duplicate value in dimension engine")
+
+
+class EveryTagSaysWhatKindOfThingItIs(SandboxCase):
+    """One flat list of 52 tags mixed six kinds of statement, which is why
+    selecting two of them could not narrow anything and why implication was able
+    to cross from a deployment property to an input location.
+
+    The dimension is what makes those comparable or not. It is declared per tag
+    rather than inferred from the name, because the name is the thing that
+    misleads: `rest-api` describes a machine-facing API, which is why GraphQL is
+    one.
+    """
+
+    DIMENSIONS = {
+        "channel", "entry_point", "business_function", "security_context",
+        "environment", "processor", "observed_behavior",
+    }
+
+    def test_every_tag_declares_one(self):
+        surfaces = self.box.read("vocab/surfaces.yaml")["surfaces"]
+        for surface in surfaces:
+            with self.subTest(tag=surface["tag"]):
+                self.assertIn(surface.get("dimension"), self.DIMENSIONS)
+
+    def test_a_dimension_outside_the_seven_is_rejected(self):
+        def invent(data):
+            data["surfaces"][0]["dimension"] = "vibes"
+        self.box.edit("vocab/surfaces.yaml", invent)
+        self.assertRejected("'vibes' is not one of")
+
+    def test_a_tag_with_no_dimension_is_rejected(self):
+        def strip(data):
+            data["surfaces"][0].pop("dimension")
+        self.box.edit("vocab/surfaces.yaml", strip)
+        self.assertRejected("dimension")
+
+
+class AParentClaimsMoreThanAnAssociation(SandboxCase):
+    """The two relations replace one that carried both meanings, and the page
+    printed the stronger one. 19 of the 20 edges in the file broke the rule the
+    file itself stated.
+    """
+
+    def test_a_parent_in_another_dimension_is_rejected(self):
+        # How `multi-tenant` came to imply an object identifier in a request: a
+        # deployment property is not a coarser way of naming an input location,
+        # so there is no claim left that could be true of every surface.
+        def cross(data):
+            for surface in data["surfaces"]:
+                if surface["tag"] == "multi-tenant":
+                    surface["parents"] = ["object-id-param"]
+        self.box.edit("vocab/surfaces.yaml", cross)
+        self.assertRejected("a parent is a coarser way of saying the same kind of thing")
+
+    def test_a_parent_naming_an_unknown_tag_is_rejected(self):
+        def dangle(data):
+            data["surfaces"][0]["parents"] = ["no-such-surface"]
+        self.box.edit("vocab/surfaces.yaml", dangle)
+        self.assertRejected("names unknown parent no-such-surface")
+
+    def test_a_tag_that_is_its_own_parent_is_rejected(self):
+        def loop(data):
+            data["surfaces"][0]["parents"] = [data["surfaces"][0]["tag"]]
+        self.box.edit("vocab/surfaces.yaml", loop)
+        self.assertRejected("is its own parent")
+
+    def test_a_cycle_in_the_parent_relation_is_rejected(self):
+        # The relation is closed transitively at build time. A cycle is not a
+        # slow walk, it is a closure that does not terminate.
+        def cycle(data):
+            by_tag = {s["tag"]: s for s in data["surfaces"]}
+            by_tag["graphql"]["parents"] = ["rest-api"]
+            by_tag["rest-api"]["parents"] = ["graphql"]
+        self.box.edit("vocab/surfaces.yaml", cycle)
+        self.assertRejected("is its own ancestor")
+
+    def test_an_association_may_cross_dimensions(self):
+        # Most of what it is for: a business function commonly reaching a
+        # processor is exactly the useful, non-universal statement the split
+        # exists to make sayable.
+        surfaces = self.box.read("vocab/surfaces.yaml")["surfaces"]
+        dimension = {s["tag"]: s["dimension"] for s in surfaces}
+        crossing = [
+            (s["tag"], t)
+            for s in surfaces
+            for t in (s.get("often") or [])
+            if dimension[t] != s["dimension"]
+        ]
+        self.assertTrue(crossing, "no association crosses a dimension, so this proves nothing")
+        self.assertAccepted()
+
+    def test_an_association_naming_an_unknown_tag_is_rejected(self):
+        def dangle(data):
+            data["surfaces"][0]["often"] = ["no-such-surface"]
+        self.box.edit("vocab/surfaces.yaml", dangle)
+        self.assertRejected("names unknown tag no-such-surface in often")
+
+    def test_a_tag_naming_itself_as_an_association_is_rejected(self):
+        def loop(data):
+            data["surfaces"][0]["often"] = [data["surfaces"][0]["tag"]]
+        self.box.edit("vocab/surfaces.yaml", loop)
+        self.assertRejected("names itself in often")
+
+    def test_one_edge_may_not_be_both_relations_at_once(self):
+        def both(data):
+            for surface in data["surfaces"]:
+                if surface["tag"] == "graphql":
+                    surface["often"] = ["rest-api"]
+        self.box.edit("vocab/surfaces.yaml", both)
+        self.assertRejected("as both a parent and an association")
+
+    def test_the_edges_the_record_says_are_gone_are_gone(self):
+        """Three were deleted rather than relabelled, because relabelling would
+        not have made them coherent. `docs/DISCOVERY.md` names all three and
+        says why; this is what stops one being restored by a future edit that
+        has not read it."""
+        surfaces = self.box.read("vocab/surfaces.yaml")["surfaces"]
+        edges = {
+            (s["tag"], t)
+            for s in surfaces
+            for t in (s.get("parents") or []) + (s.get("often") or [])
+        }
+        for edge in (("login-form", "session-cookie"),
+                     ("multi-tenant", "object-id-param"),
+                     ("search", "stored-then-rendered")):
+            with self.subTest(edge=" -> ".join(edge)):
+                self.assertNotIn(edge, edges)
+
+    def test_the_one_surviving_implication_is_still_one(self):
+        """`graphql` is a machine-facing API by `rest-api`'s own description,
+        which is the only edge in the file that is true of every surface
+        carrying the child. If a second is ever added it should be, but it
+        should be a decision rather than a slip."""
+        surfaces = self.box.read("vocab/surfaces.yaml")["surfaces"]
+        parents = {
+            (s["tag"], t) for s in surfaces for t in (s.get("parents") or [])
+        }
+        self.assertEqual(parents, {("graphql", "rest-api")})
 
 
 class SearchAliasesMustEarnTheirPlace(SandboxCase):

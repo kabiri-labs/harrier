@@ -1449,16 +1449,47 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
     def run_js(self, body):
         return run_in_node(body, self.data)
 
-    def test_choosing_a_tag_brings_the_tags_it_implies(self):
-        """A tester who said "search box" has already said "parameter reaching a
-        query". Making them say it twice is how a tag goes unselected and its
-        tests unread."""
+    def test_a_selection_brings_what_it_always_also_is(self):
+        """A GraphQL endpoint is a machine-facing API by `rest-api`'s own
+        description -- always, not usually -- so a reader who said the first has
+        said the second, and the topics filed under it are answers rather than
+        suggestions."""
         out = self.run_js("""
-            const r = H.contextClosure(D, ["search"]);
-            return { selected: r.selected, implied: r.implied };
+            return H.contextClosure(D, ["graphql"]);
+        """)
+        self.assertEqual(out["selected"], ["graphql"])
+        self.assertEqual(out["parents"], ["rest-api"])
+
+    def test_a_selection_reports_what_it_is_often_found_with_separately(self):
+        """The relation that used to be called implication. A search box often
+        reaches a relational store and may query no database at all, so it can
+        be offered and cannot be counted as chosen."""
+        out = self.run_js("""
+            return H.contextClosure(D, ["search"]);
         """)
         self.assertEqual(out["selected"], ["search"])
-        self.assertEqual(out["implied"], ["sql-backed-param", "stored-then-rendered"])
+        self.assertEqual(out["parents"], [])
+        self.assertEqual(out["often"], ["sql-backed-param"])
+
+    def test_the_two_relations_are_never_merged(self):
+        """The whole point of the split. A tag reached by both is reported under
+        the stronger one only, so the page never has to decide which wording to
+        use for a tag that arrived twice."""
+        out = self.run_js("""
+            const bad = [];
+            D.surfaces.forEach(function (s) {
+              const r = H.contextClosure(D, [s.tag]);
+              r.parents.forEach(function (t) {
+                if (r.often.indexOf(t) >= 0) bad.push([s.tag, t]);
+                if (r.selected.indexOf(t) >= 0) bad.push([s.tag, t]);
+              });
+              r.often.forEach(function (t) {
+                if (r.selected.indexOf(t) >= 0) bad.push([s.tag, t]);
+              });
+            });
+            return bad;
+        """)
+        self.assertEqual(out, [])
 
     def test_a_tag_chosen_outright_is_never_reported_as_inferred(self):
         """Telling a reader the catalogue worked something out when they said it
@@ -1467,7 +1498,8 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
             return H.contextClosure(D, ["search", "sql-backed-param"]);
         """)
         self.assertIn("sql-backed-param", out["selected"])
-        self.assertNotIn("sql-backed-param", out["implied"])
+        self.assertNotIn("sql-backed-param", out["often"])
+        self.assertNotIn("sql-backed-param", out["parents"])
 
     def test_an_unknown_tag_is_ignored_rather_than_invented(self):
         out = self.run_js("""
@@ -1485,22 +1517,53 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
             return hit || null;
         """)
         self.assertEqual(out["via"], ["object-id-param", "rest-api"])
-        self.assertFalse(out["implied"])
+        self.assertFalse(out["often"])
 
-    def test_a_topic_reached_only_through_an_implication_is_marked_as_weaker(self):
+    def test_a_topic_reached_only_through_an_association_is_marked_as_weaker(self):
         out = self.run_js("""
             const r = H.contextTopics(D, ["search"]);
             const rows = {};
-            r.topics.forEach(function (t) { rows[t.topic] = t.implied; });
+            r.topics.forEach(function (t) { rows[t.topic] = t.often; });
             return rows;
         """)
         self.assertFalse(out["PTN-CLT-01"], "declares search itself")
         self.assertFalse(out["PTN-IDN-03"], "declares search itself")
-        # SQL injection is not filed under "search". It is filed under a
-        # parameter reaching a query, which is what a search box is -- so it
-        # arrives one step out, and the page has to say which of the two it was.
+        # SQL injection is not filed under "search" and a search box does not
+        # have to reach SQL. It arrives as an association, and the page has to
+        # say which of the two it was.
         self.assertTrue(out["PTN-INJ-01"], "reached only through sql-backed-param")
-        self.assertTrue(out["PTN-CLT-04"], "reached only through stored-then-rendered")
+
+    def test_a_topic_reached_through_a_parent_is_as_strong_as_one_chosen(self):
+        """`rest-api` is not a weaker answer for a GraphQL endpoint; it is a
+        true statement about it. Reporting it in the association tier would
+        understate the catalogue as badly as the old wording overstated it."""
+        out = self.run_js("""
+            const r = H.contextTopics(D, ["graphql"]);
+            const rows = {};
+            r.topics.forEach(function (t) { rows[t.topic] = { often: t.often, via: t.via }; });
+            return rows;
+        """)
+        reached = [t for t, row in out.items() if "rest-api" in row["via"]]
+        self.assertTrue(reached, "no topic is reached through the parent")
+        for topic in reached:
+            with self.subTest(topic=topic):
+                self.assertFalse(out[topic]["often"])
+
+    def test_the_deleted_edges_reach_nothing(self):
+        """Three relations were removed rather than relabelled. A selection that
+        still reached through one would mean the vocabulary and the page had
+        drifted apart -- and the page is where it would be believed."""
+        out = self.run_js("""
+            return {
+              login: H.contextClosure(D, ["login-form"]),
+              tenant: H.contextClosure(D, ["multi-tenant"]),
+              search: H.contextClosure(D, ["search"])
+            };
+        """)
+        self.assertEqual(out["login"]["often"], [])
+        self.assertEqual(out["login"]["parents"], [])
+        self.assertEqual(out["tenant"]["often"], [])
+        self.assertNotIn("stored-then-rendered", out["search"]["often"])
 
     def test_a_topic_is_listed_once_even_when_two_tags_reach_it(self):
         out = self.run_js("""
@@ -2370,11 +2433,57 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         text = self.text("#/chains/context/search")
         self.assertShows(text, "Matched because the context is")
         self.assertShows(text, "Free-text query surface")
-        # The implication is stated rather than applied silently: a reader who
+        # The relation is stated rather than applied silently: a reader who
         # never typed "sql-backed-param" is owed the reason SQL injection is here.
-        self.assertShows(text, "Also counted as chosen")
+        self.assertShows(text, "Often carried alongside")
         self.assertShows(text, "sql-backed-param")
         self.assertShows(text, "SQL injection")
+
+    def test_an_association_is_never_printed_as_something_that_follows(self):
+        """The sentence this change exists to remove. It said an edge was "true
+        of every surface carrying the first" over a relation where 19 of 20 were
+        not, and a reader had no way to tell which one they were reading."""
+        text = self.text("#/chains/context/search")
+        self.assertNotIn("true of every surface carrying", text)
+        self.assertNotIn("Also counted as chosen", text)
+        # And says what it is instead, on the same screen.
+        self.assertShows(text, "not implied by anything you chose")
+        self.assertShows(text, "may query no database at all")
+
+    def test_a_tag_a_selection_always_is_reads_as_certain(self):
+        """`graphql` carries the one relation in the file that is true of every
+        surface, so it is the one place the stronger wording is earned."""
+        text = self.text("#/chains/context/graphql")
+        self.assertShows(text, "Also chosen, because a surface you described always is one")
+        self.assertShows(text, "rest-api")
+
+    def test_the_weaker_tier_says_which_kind_of_reach_produced_it(self):
+        text = self.text("#/chains/context/search")
+        self.assertShows(text, "more through a tag often carried alongside")
+        self.assertShows(text, "not something your selection established")
+
+    def test_a_selection_with_no_relations_shows_neither_paragraph(self):
+        """`login-form` used to imply a session cookie, which its own
+        description contradicts. Nothing replaced the edge, so nothing should
+        appear where it used to be."""
+        text = self.text("#/chains/context/login-form")
+        self.assertNotIn("Often carried alongside", text)
+        self.assertNotIn("always is one", text)
+        self.assertShows(text, "Matched because the context is")
+
+    def test_a_chip_says_what_kind_of_thing_its_tag_names(self):
+        """52 tags in one list mixed six kinds of statement with nothing to tell
+        them apart. Grouping the selector is a later change; naming the kind is
+        what stops the list being unreadable in the meantime."""
+        page = self.open("#/chains/context")
+        for tag, kind in (("rest-api", "channel"),
+                          ("payment", "business function"),
+                          ("multi-tenant", "security context"),
+                          ("sql-backed-param", "processor"),
+                          ("stored-then-rendered", "observed behaviour")):
+            with self.subTest(tag=tag):
+                title = page.get_attribute('.chip[href$="/%s"]' % tag, "title")
+                self.assertIn("(" + kind + ")", title)
 
     def test_a_test_that_needs_no_predecessor_is_told_apart_from_one_that_does(self):
         text = self.text("#/chains/context/sql-backed-param")

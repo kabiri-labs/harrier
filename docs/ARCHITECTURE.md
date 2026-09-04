@@ -445,12 +445,13 @@ docs/
   VALIDATION.md     what the validator checks, and why each rule is mechanical
   ROADMAP.md        build state; updated in the same change as the work
   PIVOT.md          why the engagement board was removed, and what replaced it
+  DISCOVERY.md      what a surface tag names, and what a selection cannot claim
 
 pentest_navgrid/    the validator and the builder -- the only executable code
   chain.py          the derived attack graph; nothing about it is stored
   build.py          catalogue, derived indexes, and safe embedding into one file
   artefact/         the page itself: template.html, app.css, app.js
-  schema/           nine JSON Schemas, selected by a document's location
+  schema/           the JSON Schemas, selected by a document's location
 tests/              offline suite; mutation tests copy the repository itself
 
 standards/          published standards this project cross-references
@@ -462,7 +463,8 @@ standards/          published standards this project cross-references
 vocab/              controlled vocabularies
   domains.yaml      the frozen domain codes
   axes.yaml         the axis slug vocabularies
-  surfaces.yaml     attack-surface tags, with discovery hints
+  surfaces.yaml     attack-surface tags: the kind of thing each names, what it
+                    always also is, and what it is often found with
   dimensions.yaml   engines, browsers, delivery, platforms
 
 knowledge/          the taxonomy and the units

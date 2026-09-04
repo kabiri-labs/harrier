@@ -273,6 +273,60 @@ Results past the fortieth in a kind are now folded rather than withheld. Saying
 how many were not shown is not the same as being able to read them, and a reader
 looking for one entry has no way to make a substring narrower.
 
+0.27.0 makes the surface vocabulary say what kind of thing each tag names, and
+stops the selection page printing an association as a fact.
+
+52 tags sat in one flat list. `rest-api` is an interface, `payment` is what an
+operation is for, `multi-tenant` is how principals are separated,
+`sql-backed-param` is a guess about what interprets a value, and
+`stored-then-rendered` is something a tester saw happen -- every one a
+different kind of statement, with nothing to tell a reader which was which. Both
+consequences of that showed on the page in its own words. Selecting more
+could not narrow, because there was nothing to intersect on: *"Choosing more than
+one narrows nothing and adds."* And implication crossed from one kind to
+another, which is how a deployment property came to imply an input location.
+
+Every tag now declares a `dimension` -- channel, entry point, business function,
+security context, environment, processor, or observed behaviour -- chosen from
+the tag's description rather than its name. That distinction pays immediately:
+`rest-api` is described as *"a programmatic interface consumed by clients other
+than the rendered web application"*, so it is a channel that includes GraphQL,
+and the tag is misnamed rather than wrong.
+
+`emits` carried two meanings and the page printed the stronger one. The file's
+own header stated the rule -- *"An emitted tag must state something true of every
+surface carrying the emitting tag"* -- and of the 20 edges, 19 broke it. `search`
+implied a parameter reaching SQL, which the same file warns against two
+paragraphs earlier. `login-form` implied a session cookie while its own
+description covers *"SSO initiation and API token exchange"*, neither of which
+sets one. The page presented all of them under *"Also counted as chosen, because
+the tags above imply them"*.
+
+So the relation split rather than shrank. `parents` is true of every surface
+carrying the tag and stays inside one dimension; `graphql -> rest-api` is the
+only edge in the file that qualifies, and topics reached through it are reported
+as the answers they are. `often` records what such a surface commonly carries as
+well, may cross dimensions, and is reported as association wherever it appears.
+3 edges were deleted rather than relabelled, because relabelling would not have
+made them coherent. Deleting all 19 was the other option and was rejected:
+it would have taken `search` from 44 tests to 16 while fixing nothing that a
+truthful label does not fix.
+
+`often` is not closed transitively -- a search box is often backed by SQL, a SQL
+parameter is often an object identifier, and chaining those arrives at a claim
+nobody wrote. It is inherited down `parents`, which is a different operation and
+is sound.
+
+The reasoning is recorded in [`DISCOVERY.md`](DISCOVERY.md) rather than left to
+be re-derived, and the rule the vocabulary had always cited but never carried --
+`surfaces.yaml` pointed at `AUTHORING.md` for it, and `AUTHORING.md` said
+nothing about relations at all -- is now written in the file the pointer names.
+
+Nothing about the selection semantics changed: tags still union, the selector
+still lists all 52, and a selection still establishes no capability. Narrowing
+across dimensions is what the dimensions are for and is a change to what a
+selection means, which is worth making on its own.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.
