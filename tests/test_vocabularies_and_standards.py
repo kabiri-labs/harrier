@@ -130,6 +130,65 @@ class VocabulariesAreInternallyConsistent(SandboxCase):
         self.assertRejected("duplicate value in dimension engine")
 
 
+class SearchAliasesMustEarnTheirPlace(SandboxCase):
+    """An alias exists because catalogue titles name mechanisms and testers type
+    vulnerability classes. Both halves of that can move underneath it, and
+    neither failure announces itself: an alias whose expansion has been reworded
+    away simply answers nothing, silently, which is the failure the file was
+    added to fix.
+
+    So both directions are checked, and both are checked against the catalogue
+    rather than against the file's own consistency.
+    """
+
+    def test_an_expansion_nothing_carries_is_rejected(self):
+        def dangle(data):
+            data["aliases"][0]["expands_to"] = ["a phrase this catalogue never uses"]
+        self.box.edit("vocab/search_aliases.yaml", dangle)
+        self.assertRejected("which nothing in the catalogue carries")
+
+    def test_an_alias_reaching_nothing_new_is_rejected(self):
+        # The day a topic is renamed to carry the shorthand itself, the alias
+        # for it stops adding anything -- and would go on telling the reader
+        # their term had been expanded when the direct search had already
+        # answered.
+        def redundant(data):
+            data["aliases"].append(
+                {"term": "traversal", "expands_to": ["path traversal and file inclusion"]}
+            )
+        self.box.edit("vocab/search_aliases.yaml", redundant)
+        self.assertRejected("reaches nothing the term itself does not already reach")
+
+    def test_a_duplicate_term_is_rejected(self):
+        def duplicate(data):
+            data["aliases"].append(dict(data["aliases"][0]))
+        self.box.edit("vocab/search_aliases.yaml", duplicate)
+        self.assertRejected("duplicate alias term")
+
+    def test_an_alias_expanding_to_itself_is_rejected(self):
+        def loop(data):
+            data["aliases"][0]["expands_to"] = [data["aliases"][0]["term"]]
+        self.box.edit("vocab/search_aliases.yaml", loop)
+        self.assertRejected("expands to itself")
+
+    def test_an_alias_expanding_to_another_alias_is_rejected(self):
+        # Search takes one hop. A second expansion chained behind the first
+        # would never run, so the file would read as saying something it does
+        # not do.
+        def chain(data):
+            data["aliases"][0]["expands_to"] = [data["aliases"][1]["term"]]
+        self.box.edit("vocab/search_aliases.yaml", chain)
+        self.assertRejected("which is itself an alias term")
+
+    def test_the_shorthand_this_field_uses_is_not_left_out(self):
+        """The file's own reason for existing, pinned so it cannot quietly
+        shrink to whatever still happens to validate."""
+        aliases = {a["term"] for a in self.box.read("vocab/search_aliases.yaml")["aliases"]}
+        for term in ("idor", "bola", "lfi", "ssti", "ssrf", "xxe", "sqli", "csrf", "jwt"):
+            with self.subTest(term=term):
+                self.assertIn(term, aliases)
+
+
 class PayloadsStayCopyAndRun(SandboxCase):
     def test_an_undeclared_placeholder_is_rejected(self):
         def inject(data):

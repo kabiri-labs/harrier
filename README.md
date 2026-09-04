@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Pentest NavGrid 0.25.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Pentest NavGrid 0.26.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 393 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.25.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.26.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -61,7 +61,12 @@ Three deliberate ways in do not start there, because a tester sometimes arrives
 holding evidence rather than a scope sheet. **Search**: a unit may record the
 literal thing that makes it worth reaching for — *parameters named `file`,
 `path`, `page`, `tpl`* — and the search box reads that field, so typing `tpl`
-finds the traversal probe whose title and objective never mention it.
+finds the traversal probe whose title and objective never mention it. It also
+reads the shorthand this field uses rather than the names this catalogue files
+things under: titles here name mechanisms, so `IDOR` and `SSRF` and `SSTI` match
+no title at all, and each is carried as a spelling of the phrase that does. The
+page says which phrase it searched instead, and results found that way are kept
+apart from the ones the typed term found.
 **[Context](#what-it-looks-like)**: choosing the kind of surface in front of you
 lists the tests the catalogue files under it, which is the way in that needs
 neither an identifier nor a capability name. **[The chain

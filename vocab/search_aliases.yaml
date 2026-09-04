@@ -1,0 +1,125 @@
+# Search aliases -- the shorthand a tester types, and what this catalogue calls it.
+#
+# Catalogue titles name mechanisms rather than vulnerability classes. The tests
+# for what the industry calls IDOR are filed under `Object-level access control`,
+# and the unit inside it is `An object belonging to another account of the same
+# role`. That is deliberate and it stays: a title naming the mechanism is what
+# stops two topics inventing two names for one idea, and it is the rule the
+# domain vocabulary is built on. The cost is paid at the search box, where the
+# five letters a tester actually types reach nothing at all.
+#
+# An alias is a spelling, not a synonym in general. `term` is what gets typed;
+# `expands_to` holds the phrases this catalogue uses for the same thing, and each
+# one is searched exactly as if it had been typed instead. The result is reported
+# as an expansion and never merged into what the reader typed, because a hit the
+# reader did not ask for has to say so.
+#
+# What an alias may not do is widen. `rce` expands to the two places this
+# catalogue writes about code running on the server -- not to everything a
+# tester might reach once it does. An alias that starts naming consequences
+# instead of spellings has become a claim about what follows from what, and that
+# is the chain's job, not the search box's.
+#
+# Two rules the validator holds every entry to: an expansion must reach
+# something, and an alias as a whole must reach something the bare term does not.
+# The second is what stops the file accumulating aliases that were once needed
+# and are now noise -- when a title changes to carry the shorthand itself, the
+# alias for it fails and is removed rather than left to rot.
+version: 1
+aliases:
+  - term: idor
+    expands_to: [object-level access control]
+
+  - term: bola
+    expands_to: [object-level access control]
+
+  - term: bfla
+    expands_to: [function-level access control]
+
+  - term: privesc
+    expands_to: [privilege escalation]
+
+  - term: sqli
+    expands_to: [sql injection]
+
+  - term: ldapi
+    expands_to: [ldap injection]
+
+  - term: xpathi
+    expands_to: [xpath injection]
+
+  - term: ssti
+    expands_to: [server-side template injection]
+
+  - term: ssi
+    expands_to: [server-side include injection]
+    note: >
+      Three letters that are also a substring of `session`, `passive` and
+      `possible`, so the bare term reaches most of the catalogue. The expansion
+      is what puts the topic it stands for in front of the noise.
+
+  - term: cmdi
+    expands_to: [operating system command injection]
+
+  - term: rce
+    expands_to: [server-side code execution, operating system command injection]
+    note: >
+      The outcome and the topic that most often establishes it. Both, because a
+      tester typing this is as likely to be looking for what a confirmed result
+      means as for the test that produces it. Also a substring of `resource`
+      and `force`, which is what the bare term reaches instead.
+
+  - term: xxe
+    expands_to: [xml injection and entity expansion]
+
+  - term: crlf
+    expands_to: [mail header and command injection, line-break]
+    note: >
+      This catalogue files line-break injection under the header it is usually
+      injected into rather than under the character sequence.
+
+  - term: xss
+    expands_to: [cross-site scripting]
+
+  - term: csrf
+    expands_to: [cross-site request forgery]
+
+  - term: xsrf
+    expands_to: [cross-site request forgery]
+
+  - term: xssi
+    expands_to: [cross-site script inclusion]
+
+  - term: cors
+    expands_to: [cross-origin resource sharing]
+
+  - term: ssrf
+    expands_to: [server-side request forgery]
+
+  - term: lfi
+    expands_to: [path traversal and file inclusion]
+
+  - term: rfi
+    expands_to: [path traversal and file inclusion]
+
+  - term: hpp
+    expands_to: [parameter pollution]
+
+  - term: jwt
+    expands_to: [signed token verification, bearer token claim handling]
+    note: >
+      Split across two topics on purpose: whether a signature is verified is a
+      cryptography question, and what a verified token is then trusted to say is
+      a session one.
+
+  - term: mfa
+    expands_to: [multi-factor authentication]
+
+  - term: 2fa
+    expands_to: [multi-factor authentication]
+
+  - term: oidc
+    expands_to: [oauth 2.0 and openid connect]
+
+  - term: tls
+    expands_to: [transport layer configuration]

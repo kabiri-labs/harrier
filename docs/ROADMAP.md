@@ -239,6 +239,40 @@ wording is deliberate and is checked against the line in `PIVOT.md` that this
 product exists on the right side of: a route is charted from a capability, never
 available to a tester.
 
+0.26.0 makes the search box answer the words this field actually uses. Titles in
+this catalogue name mechanisms, which is the rule that stops two topics
+inventing two names for one idea and is not up for revision -- but it means the
+tests for what everyone calls IDOR are filed under `Object-level access
+control`, and the four letters a tester types reached nothing at all. Neither
+did `bola`, `lfi`, `ssti`, `ssrf`, `xxe`, `csrf`, `jwt`, `2fa` or `sqli`, and
+`xss` reached one capability whose identifier happens to contain it. The aliases
+in `vocab/search_aliases.yaml` close that: an alias is a spelling, not a
+synonym, and each expansion is searched as if the reader had typed it instead.
+The hits are reported as expansions and never merged into the ones the typed
+term found -- the same split the context page makes between a tag chosen and a
+tag implied.
+
+The validator holds every entry to both directions. An expansion reaching
+nothing is dead weight; an alias reaching nothing the bare term does not is
+noise, which is what an alias becomes the day a title is reworded to carry the
+shorthand itself. Neither would surface any other way: an alias that has stopped
+resolving simply answers nothing, silently, which is the failure the file was
+added to fix.
+
+Order changed with it, and every rule in it is lexical. A term standing as a
+word ranks above the same letters buried in a longer one, so `rce` no longer
+opens on the tests carrying `force` and `resource`; a kind whose best
+match stands as a word is listed before one where every match is buried, and a
+heading where they all are says so rather than presenting a count of
+coincidences. Within that, an identifier or a whole title outranks a match
+further down the page. None of it is a judgement about which test is worth more.
+A search box ordering by the catalogue's opinion of its own content would be
+making one, and that judgement is the reader's.
+
+Results past the fortieth in a kind are now folded rather than withheld. Saying
+how many were not shown is not the same as being able to read them, and a reader
+looking for one entry has no way to make a substring narrower.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.
