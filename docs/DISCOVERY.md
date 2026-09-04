@@ -149,9 +149,19 @@ is how the catalogue is asked which tests would.
 
 ## 5. What this change deliberately did not do
 
-**Grouped or intersecting selection.** The dimensions are declared and reach the
-page; the selector still lists 52 chips and still unions them. Narrowing across
-dimensions is a change to what a selection means and is worth making on its own.
+**Intersecting selection.** The selector is grouped by dimension as of 0.28.0,
+and the selection is still a union. Narrowing across dimensions was measured
+before it was built and cannot work at topic level: 82 topics carry a tag at
+all, they declare 2.17 of them on average, and 53 of those 82 speak about a
+single dimension, so the number of topics speaking about both `channel` and
+`entry_point` -- the ceiling
+on what such an intersection could ever exclude -- is 1, and for `channel` with
+`processor` it is 0. On `rest-api` + `object-id-param` + `multi-tenant` a strict
+intersection returns 1 topic against the union's 11.
+
+The rule is not what is wrong; the object is. A topic is a subject and usually
+describes one aspect of it, while a test is specific enough to be several kinds
+of thing at once. The intersection waits on unit-level mapping, below.
 
 **Unit-level mapping.** Tags are carried by the topic, so a selection still
 lists every test in a matched topic — including the ones the tag does not

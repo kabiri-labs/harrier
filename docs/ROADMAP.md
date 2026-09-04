@@ -327,6 +327,41 @@ still lists all 52, and a selection still establishes no capability. Narrowing
 across dimensions is what the dimensions are for and is a change to what a
 selection means, which is worth making on its own.
 
+0.28.0 puts the vocabulary in the seven groups 0.27.0 gave it names for. 52 tags
+in one grid asked a reader to hold the whole list to discover that `payment` and
+`sql-backed-param` are not the same kind of answer. Each group now carries what
+it names, and the two that need a caveat carry it where it is read rather than
+in a document: a processor is a hypothesis until a test confirms it, and an
+observed behaviour is something the tester saw rather than something this file
+asserts.
+
+Grouping is presentation, and the page says so under the groups. Seven labelled
+rows look like a filter where you pick one from each and get the intersection,
+which this page does not do -- every tag adds its own tests, as it always has.
+A layout that implies a semantics the code does not have is the same defect as
+prose that does, and it is worth as much care.
+
+This was meant to be that intersection, and the intersection was measured before
+it was built. It cannot work on this catalogue, and the reason is in the data
+rather than in the rule. 82 topics carry a surface tag at all, they declare 2.17
+of them on average, and 53 of those 82 speak about a single dimension; 22 speak
+about two, 6 about three, 1 about four. So the ceiling on what an intersection
+can ever exclude at topic
+level is set by how many topics speak about both dimensions at once, and that
+number is 1 for channel with entry point, 1 for channel with security context,
+and 0 for channel with processor. Measured on the flagship case -- `rest-api`
+and `object-id-param` and `multi-tenant` -- a strict intersection returns 1
+topic and 5 tests where the union returns 11 and 39, and a lenient one that
+declines to exclude a topic silent on a dimension returns 10 and 34. Unusable,
+or indistinguishable from what it replaced.
+
+The finer object is the unit, not the topic. A topic is a subject and usually
+describes one aspect of it; a test is specific, and `PTN-ACL-02-TENANT` is an
+object identifier and a tenancy boundary and a channel at once. `unit.schema.json`
+has permitted `surfaces` since it was written and no unit uses it, so the
+intersection waits for the mapping that gives it something to bite on rather
+than shipping as a control that moves 11 to 10.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.

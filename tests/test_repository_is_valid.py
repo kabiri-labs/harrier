@@ -354,3 +354,75 @@ class ThePublishedFiguresComeFromTheData(unittest.TestCase):
             notice,
         )
         self.assertIn(f"{self.counts['units_sketched']} are sketched", notice)
+
+
+class TheArgumentForNotIntersectingIsCheckedAgainstTheData(unittest.TestCase):
+    """`ROADMAP.md` and `DISCOVERY.md` decline to intersect a selection across
+    dimensions, and the reason they give is a measurement of this catalogue
+    rather than a preference.
+
+    Pinned so the argument fails when the ground under it moves. These are not
+    counts anyone publishes for their own sake -- if enough topics start
+    speaking about two dimensions at once, an intersection stops being useless
+    and the decision is due for a re-read. A silently stale justification is
+    worse than none, because it looks like it was checked.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        repo = Repository.load(REPO_ROOT)
+        cls.dimension = {
+            s["tag"]: s["dimension"]
+            for s in repo.vocab["surfaces"].data["surfaces"]
+        }
+        cls.tagged = {}
+        for doc in repo.topics:
+            clause = doc.data.get("surfaces") or {}
+            if clause.get("always"):
+                continue
+            tags = clause.get("any_of") or []
+            if tags:
+                cls.tagged[doc.data["id"]] = tags
+
+    def dimensions_of(self, tags):
+        return {self.dimension[t] for t in tags}
+
+    def test_most_topics_speak_about_one_dimension_only(self):
+        spread = collections.Counter(
+            len(self.dimensions_of(tags)) for tags in self.tagged.values()
+        )
+        self.assertEqual(len(self.tagged), 82)
+        self.assertEqual(dict(sorted(spread.items())), {1: 53, 2: 22, 3: 6, 4: 1})
+
+    def test_the_average_the_documents_publish_is_the_real_one(self):
+        total = sum(len(tags) for tags in self.tagged.values())
+        self.assertEqual(f"{total / len(self.tagged):.2f}", "2.17")
+
+    def test_the_ceiling_on_what_an_intersection_could_exclude(self):
+        """Two dimensions can only narrow each other where a topic speaks about
+        both. These three pairs are the ones the documents name."""
+        def both(a, b):
+            return sum(
+                1 for tags in self.tagged.values()
+                if {a, b} <= self.dimensions_of(tags)
+            )
+        self.assertEqual(both("channel", "entry_point"), 1)
+        self.assertEqual(both("channel", "security_context"), 1)
+        self.assertEqual(both("channel", "processor"), 0)
+
+    def test_the_documents_state_the_numbers_they_were_measured_from(self):
+        why = (
+            "the reason for not intersecting is a measurement; a document "
+            "stating a different one has stopped being the reason"
+        )
+        for name, phrases in (
+            ("ROADMAP", ("82 topics carry a surface tag at all",
+                         "53 of those 82 speak about a single dimension",
+                         "0 for channel with processor")),
+            ("DISCOVERY", ("82 topics carry a tag at\nall",
+                           "53 of those 82 speak about a\nsingle dimension")),
+        ):
+            text = (REPO_ROOT / "docs" / f"{name}.md").read_text(encoding="utf-8")
+            for phrase in phrases:
+                with self.subTest(document=name, phrase=phrase.split("\n")[0]):
+                    self.assertIn(phrase, text, why)
