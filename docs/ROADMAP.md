@@ -408,6 +408,36 @@ answered for by its topics, and what makes mapping a topic a few tests at a
 time safe is that a clause is written only where it differs: the tests without
 one keep inheriting, so nothing is lost half way through.
 
+0.30.0 puts the procedure above the orientation on a unit page, which reverses
+what stood there. The reason it stood the other way was real and is written in
+the code it replaces: a reader who cannot say where a controlled input comes to
+rest has nothing to point the sequence at. That is true of a first read, and it
+is not the read this page mostly gets.
+
+Measured across the 76 written units at 900px before the change: the oracle sat
+below the fold on 39 of the 47 that have one, the sequence on 54 of 72, the
+first false positive on 74 of 76, and `done when` on all 76. A tester who came
+back mid-test to check what counts as a positive found the assumptions instead,
+every time. After: 0 of 47 and 0 of 72, with the first false positive under on
+16. The measurement is the test, so a block quietly added above them fails
+rather than being noticed later.
+
+Orientation is one screen down rather than folded away. A first reader is
+reading the whole unit and a returning one is not, and neither is served by
+material that has to be opened before it can be read. Both groups now carry a
+heading that says which they are.
+
+Focus follows the route. Replacing the document and scrolling to the top left
+focus wherever the last click put it -- on a link that no longer exists, which
+browsers reset to the body -- so a reader on a keyboard tabbed through the whole
+header to reach what they had just opened, on every navigation. The
+destination's own heading takes it instead, which is what a page load would have
+done. It is focusable and not tabbable: a stop in the tab order that is not a
+control is its own defect.
+
+Ctrl/Cmd+K reaches the search box. One shortcut, and modified rather than bare,
+because a bare key fires while the reader is typing into the box it focuses.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.

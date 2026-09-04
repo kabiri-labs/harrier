@@ -2203,6 +2203,102 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         fold.locator("summary").click()
         self.assertTrue(fold.locator("a.card").first.is_visible())
 
+    def test_the_execution_fields_are_reachable_without_scrolling(self):
+        """The measurement this change was built on, kept as the check.
+
+        Before it, on a 900px viewport, the oracle sat below the fold on 39 of
+        the 47 written units that have one and the sequence on 54 of 72 — so a
+        tester who came back mid-test to see what counts as a positive found the
+        assumptions instead, every time. Asserted rather than described, because
+        the thing that would undo it is a block quietly added above them.
+        """
+        live = [
+            uid for uid, u in self.data["units"].items()
+            if u.get("status") in ("authored", "sketched")
+        ]
+        self.assertGreater(len(live), 50, "too few written units for this to mean anything")
+        below = {"Oracle": [], "Sequence": [], "First false positive": []}
+        for uid in sorted(live):
+            page = self.open("#/unit/" + uid)
+            tops = page.evaluate("""() => {
+              const out = {};
+              document.querySelectorAll('main .card .k').forEach(el => {
+                if (!(el.textContent in out)) {
+                  out[el.textContent] = el.getBoundingClientRect().top + window.scrollY;
+                }
+              });
+              return out;
+            }""")
+            for label in below:
+                if label in tops and tops[label] > 900:
+                    below[label].append(uid)
+        self.assertEqual(below["Oracle"], [])
+        self.assertEqual(below["Sequence"], [])
+        # The first false positive follows the sequence, so a long procedure can
+        # still push it under. A quarter of them at most, and never the oracle.
+        self.assertLess(len(below["First false positive"]), len(live) // 4)
+
+    def test_the_procedure_is_grouped_and_named_before_the_orientation(self):
+        page = self.open("#/unit/PTN-INJ-01-UNION")
+        headings = [h.strip() for h in page.locator("main h3").all_inner_texts()]
+        self.assertIn("Run this test", headings)
+        self.assertIn("Orientation", headings)
+        self.assertLess(headings.index("Run this test"), headings.index("Orientation"))
+
+    def test_the_orientation_is_moved_rather_than_hidden(self):
+        """One screen down, not folded away. A first reader is reading the whole
+        unit; a returning one is not, and neither is served by material that has
+        to be opened before it can be read."""
+        # A unit that carries all three: `PTN-INJ-01-UNION` has no triage or
+        # hypotheses, so it would pass this by having nothing to move.
+        text = self.text("#/unit/PTN-ACL-02-IMPACT")
+        for phrase in ("Where to start", "What this assumes", "Why this is a separate test"):
+            with self.subTest(phrase=phrase):
+                self.assertShows(text, phrase)
+        self.assertEqual(self.driver.count("main details.fold"), 0)
+
+    def test_an_outline_unit_shows_no_empty_procedure_heading(self):
+        """It has no procedure to head. The notice saying so is what the reader
+        gets instead, and it sits where the procedure would have been."""
+        page = self.open("#/unit/PTN-AUT-07-BINDING")
+        headings = [h.strip() for h in page.locator("main h3").all_inner_texts()]
+        self.assertNotIn("Run this test", headings)
+        self.assertShows(self.driver.text(), "This test is an outline")
+
+    def test_focus_follows_the_route_rather_than_staying_where_it_was(self):
+        """Replacing the document leaves focus on a link that no longer exists,
+        which browsers reset to the body — so a keyboard reader tabs through the
+        whole header to reach what they just opened, on every navigation."""
+        page = self.open("#/topic/PTN-INJ-01")
+        page.locator('main a[href^="#/unit/"]').first.focus()
+        before = self.driver.heading()
+        page.keyboard.press("Enter")
+        self.driver.wait_for_view(before)
+        focused = page.evaluate("""() => {
+          const el = document.activeElement;
+          return { tag: el.tagName, text: (el.textContent || '').trim().slice(0, 60) };
+        }""")
+        self.assertEqual(focused["tag"], "H2")
+        self.assertEqual(focused["text"], self.driver.heading().strip()[:60])
+
+    def test_the_focused_heading_is_not_put_into_the_tab_order(self):
+        """Focusable so the route can move focus to it; not tabbable, or every
+        reader would meet a stop that is not a control."""
+        page = self.open("#/unit/PTN-INJ-01-UNION")
+        self.assertEqual(page.get_attribute("main h2", "tabindex"), "-1")
+
+    def test_the_search_box_is_reachable_from_the_keyboard(self):
+        page = self.open("#/unit/PTN-INJ-01-UNION")
+        page.keyboard.press("Control+k")
+        self.assertEqual(page.evaluate("document.activeElement.id"), "q")
+
+    def test_the_shortcut_does_not_fire_without_its_modifier(self):
+        """A bare key would fire while the reader is typing into the box it
+        focuses."""
+        page = self.open("#/unit/PTN-INJ-01-UNION")
+        page.keyboard.press("k")
+        self.assertNotEqual(page.evaluate("document.activeElement.id"), "q")
+
     def test_a_search_result_for_a_payload_or_a_tool_reaches_its_own_page(self):
         """Both used to land on Standards: the router had no branch for either,
         so retrieval was broken for two of the kinds search advertises."""
@@ -2264,17 +2360,26 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertShows(outline, "this test is an outline")
         self.assertNotIn("this test is sketched", outline.lower())
 
-    def test_the_orientation_fields_are_rendered_before_the_procedure(self):
-        """Where to start comes before how to run it. A reader who cannot answer
-        the first has nothing to point the sequence at."""
+    def test_the_procedure_is_rendered_before_the_orientation(self):
+        """This asserts the reverse of what it used to, and the reversal is the
+        change rather than a concession to it.
+
+        What it asserted before was that where to start comes before how to run
+        the test, because a reader who cannot answer the first has nothing to
+        point the sequence at. That is a true description of a first read and
+        not of the read this page mostly gets: the cost of it was the oracle
+        sitting below the fold on most units that have one. The orientation is
+        still rendered in full, one screen down -- which is what the assertions
+        below keep, on a unit the newer order test does not use.
+        """
         page = self.open("#/unit/PTN-RES-01-PROBE")
         text = self.driver.text()
         for section in ("What this assumes", "Where to start", "Where the input lands"):
             self.assertShows(text, section)
         labels = [t.strip().lower() for t in page.locator("main .k").all_inner_texts()]
-        self.assertLess(labels.index("where to start"), labels.index("sequence"),
-                        "orientation is printed below the procedure it orients")
-        self.assertLess(labels.index("what this assumes"), labels.index("oracle"))
+        self.assertLess(labels.index("sequence"), labels.index("where to start"),
+                        "the procedure is printed below the orientation again")
+        self.assertLess(labels.index("oracle"), labels.index("what this assumes"))
 
     def test_a_recon_unit_shows_no_sink(self):
         """The schema forbids the field there; this is the page agreeing, so a
