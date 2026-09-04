@@ -8,5 +8,8 @@ objective: >-
   Establish which responses contain absolute URLs, and which of those the
   application composes from a value the request supplied.
 
+surfaces:
+  any_of: [reverse-proxy]
+
 requires:
   all_of: [recon.entrypoints.mapped]

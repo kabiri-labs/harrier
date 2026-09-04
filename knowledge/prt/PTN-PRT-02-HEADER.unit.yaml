@@ -7,6 +7,9 @@ objective: >-
   Determine whether a Host or forwarding header the tester sets changes the
   host the application composes into its output.
 
+surfaces:
+  any_of: [reverse-proxy]
+
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]

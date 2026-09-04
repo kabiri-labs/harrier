@@ -7,6 +7,9 @@ objective: >-
   Determine whether the identifier space of a confirmed access-control failure
   can be addressed at scale, rather than one identifier at a time.
 
+surfaces:
+  any_of: [object-id-param, path-param, rest-api, graphql]
+
 requires:
   all_of: [primitive.data.read.peer]
 yields: [primitive.data.read.bulk]

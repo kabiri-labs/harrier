@@ -7,6 +7,9 @@ objective: >-
   Determine whether the details supplied at registration travel over an
   unencrypted channel, which the sign-in form's protection does not cover.
 
+surfaces:
+  any_of: [registration]
+
 requires:
   all_of: [recon.entrypoints.mapped]
 motivated_by: [control.transport.plaintext]

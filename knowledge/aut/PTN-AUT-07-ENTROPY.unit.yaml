@@ -8,6 +8,9 @@ objective: >-
   generated unpredictably rather than derived from time, account data or a
   counter.
 
+surfaces:
+  any_of: [password-reset]
+
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]

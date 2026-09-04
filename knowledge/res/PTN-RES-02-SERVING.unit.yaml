@@ -7,6 +7,9 @@ objective: >-
   Determine whether the stored object is served with a content type and
   disposition that let it execute or render in a visitor's browser.
 
+surfaces:
+  any_of: [file-upload, file-download, stored-then-rendered]
+
 requires:
   all_of: [surface.upload.unrestricted]
 motivated_by: [surface.upload.pathcontrol, recon.platform.identified]

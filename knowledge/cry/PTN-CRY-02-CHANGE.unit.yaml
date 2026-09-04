@@ -7,6 +7,9 @@ objective: >-
   Determine whether a credential or contact detail submitted for change travels
   over an unencrypted channel.
 
+surfaces:
+  any_of: [password-change]
+
 requires:
   all_of: [recon.entrypoints.mapped]
 motivated_by: [control.transport.plaintext]
