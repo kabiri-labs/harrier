@@ -113,6 +113,15 @@ because relabelling them would not have made them coherent:
   input is stored and later rendered in another user's context. Its results may
   display stored content; the tag is about the storing surface.
 
+Both are reported per topic as well as per selection, and that is where the
+first attempt at this got it wrong. Correcting the paragraph above the results
+and leaving the reason line on each card alone left the page still saying
+*"Matched because the context is: Parameter reaching a SQL data store"* over a
+topic a search box had only been associated with -- the disclaimer two inches
+above it, saying the opposite. Every tag that reaches a topic now carries which
+of the three relations did it, and the card writes a separate sentence for each,
+because one sentence cannot be true of all three.
+
 `often` is not closed transitively, and the reason is worth stating: a search
 box is often backed by SQL, a SQL parameter is often an object identifier, and
 chaining those arrives at a claim nobody wrote. It **is** inherited down
