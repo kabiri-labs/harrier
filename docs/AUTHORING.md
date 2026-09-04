@@ -411,8 +411,18 @@ own tests has just said it does not have. Until then the ones without a clause
 inherit the whole list, so nothing is lost by mapping a topic a few units at a
 time.
 
-`always` on a unit is rejected. Whether a subject applies regardless of surface
-is decided once, by the topic.
+Three forms are rejected, and each for the same reason: a declaration the page
+does not read is one that silently does nothing while the file says otherwise.
+
+- **`always` on a unit.** Whether a subject applies regardless of surface is
+  decided once, by the topic.
+- **`all_of` or `none_of` on a unit.** The clause replaces its topic's and is
+  read as `any_of`. The schema takes four forms because a topic uses two of
+  them; a unit uses one.
+- **Any clause under a topic whose own clause is `always`.** A subject that
+  applies to every context has no surface for a test to differ from, and the
+  topic would be listed both as a specific result and among the universal ones.
+  If a test under such a topic needs a surface, the topic is not universal.
 
 ## 6. Volatile content carries a date
 

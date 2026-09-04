@@ -393,6 +393,16 @@ than from the topics down -- asked from the topic's clause alone, the mapping
 would have been written, validated, and unreachable, which is the failure this
 release is about repeated one level up.
 
+It also made three labels false, and the labels were the last thing to catch up
+with the mechanism rather than the first. A heading read "N topics declare a
+tag you chose" over topics that declare nothing of the sort; a card said "the
+context is" about a surface only one of the topic's tests claims; and the
+selector's per-tag count became a union in this same change while the sentence
+beside it went on calling it a count of declarations, which three tags now
+contradict on the page. Six topic-and-tag pairs are reached this way today. The
+heading says what it means, the card says which route reached it, and a test
+sweeps every tag rather than the one that showed the fault.
+
 19 tests across 5 topics carry a clause. The rest of the catalogue is still
 answered for by its topics, and what makes mapping a topic a few tests at a
 time safe is that a clause is written only where it differs: the tests without

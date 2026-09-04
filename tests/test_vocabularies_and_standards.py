@@ -7,7 +7,7 @@ later as many failures with no obvious common cause.
 import unittest
 
 from pentest_navgrid.validate import validate
-from tests.support import messages
+from tests.support import Sandbox, messages
 from tests.test_identifiers_and_axes import SandboxCase
 
 
@@ -291,6 +291,49 @@ class AParentClaimsMoreThanAnAssociation(SandboxCase):
             (s["tag"], t) for s in surfaces for t in (s.get("parents") or [])
         }
         self.assertEqual(parents, {("graphql", "rest-api")})
+
+
+class AUnitSurfaceMustBeAFormThePageReads(SandboxCase):
+    """The schema's surface clause takes four forms because a topic uses two of
+    them. A unit clause replaces its topic's and the page reads it as `any_of`,
+    so the other forms would be accepted in the file and ignored where they are
+    used -- a declaration that silently does nothing, which is the failure the
+    mapping exists to remove, moved into the mapping itself.
+    """
+
+    def test_a_form_the_page_does_not_read_is_rejected(self):
+        for form in ("all_of", "none_of"):
+            with self.subTest(form=form):
+                box = Sandbox()
+                self.addCleanup(box.close)
+                def narrow(data, form=form):
+                    data["surfaces"] = {form: ["file-upload"]}
+                box.edit("knowledge/res/PTN-RES-02-PROBE.unit.yaml", narrow)
+                problems = validate(box.root)
+                self.assertIn(f"surfaces.{form} on a unit", messages(problems))
+
+    def test_a_surface_under_a_universal_topic_is_rejected(self):
+        """A subject that applies to every context has no surface for a test to
+        differ from, and the build would list it both as a specific result and
+        among the universal ones."""
+        def declare(data):
+            data["surfaces"] = {"any_of": ["tls-endpoint"]}
+        self.box.edit("knowledge/cfg/PTN-CFG-01-MAP.unit.yaml", declare)
+        self.assertRejected("which applies to every context")
+
+    def test_no_unit_in_the_catalogue_sits_under_a_universal_topic(self):
+        """Asserted of the catalogue, not only of the gate."""
+        universal = {
+            d["id"] for d in
+            [self.box.read(str(p.relative_to(self.box.root)))
+             for p in self.box.root.glob("knowledge/*/*.topic.yaml")]
+            if (d.get("surfaces") or {}).get("always")
+        }
+        for path in self.box.root.glob("knowledge/*/*.unit.yaml"):
+            unit = self.box.read(str(path.relative_to(self.box.root)))
+            if unit.get("surfaces"):
+                with self.subTest(unit=unit["id"]):
+                    self.assertNotIn(unit["topic"], universal)
 
 
 class SearchAliasesMustEarnTheirPlace(SandboxCase):
