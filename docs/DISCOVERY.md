@@ -163,11 +163,19 @@ The rule is not what is wrong; the object is. A topic is a subject and usually
 describes one aspect of it, while a test is specific enough to be several kinds
 of thing at once. The intersection waits on unit-level mapping, below.
 
-**Unit-level mapping.** Tags are carried by the topic, so a selection still
-lists every test in a matched topic — including the ones the tag does not
-describe. `unit.schema.json` has permitted `surfaces` since the schema was
-written and no unit uses it; the build reads only the topic clause. Separate
-change, larger, and mostly content.
+**Unit-level mapping** began in 0.29.0, and the intersection above is what it
+unblocks. A test declares its own surface where its applicability differs from
+its subject's and then answers for itself; a test that declares none is still
+answered for by its subject and inherits the whole list. Selecting
+`multi-tenant` reached all five object-level access-control tests and now
+reaches the one that is about tenancy, with the other four folded under it
+rather than dropped.
+
+19 tests across 5 topics carry a clause; the rest of the catalogue is still
+answered for by its topics. What makes mapping a topic a few tests at a time
+safe is that a clause is written only where it differs — the tests without one
+keep inheriting, so nothing is lost half way through. See
+[`AUTHORING.md`](AUTHORING.md) section 5.
 
 **Renaming `rest-api`.** It means "machine-facing API" and says so in its label.
 Renaming a tag changes every URL carrying it, and the classification above is

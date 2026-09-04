@@ -7,6 +7,9 @@ objective: >-
   Determine whether a reset artefact issued for one account is refused when it
   is presented against another.
 
+surfaces:
+  any_of: [password-reset]
+
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]

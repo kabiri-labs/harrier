@@ -7,6 +7,9 @@ objective: >-
   Determine whether a recovery token or new credential travels over an
   unencrypted channel or a link that names one.
 
+surfaces:
+  any_of: [password-reset]
+
 requires:
   all_of: [recon.entrypoints.mapped]
 motivated_by: [control.transport.plaintext]

@@ -7,6 +7,9 @@ objective: >-
   Determine what evidence an authenticated caller must supply to change a
   credential or a contact detail that recovery depends on.
 
+surfaces:
+  any_of: [password-change]
+
 requires:
   all_of: [access.user]
 yields: [control.reauth.absent]

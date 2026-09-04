@@ -7,6 +7,9 @@ objective: >-
   Determine whether a reset artefact stops being accepted after its stated
   lifetime has passed.
 
+surfaces:
+  any_of: [password-reset]
+
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]

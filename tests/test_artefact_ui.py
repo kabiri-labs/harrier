@@ -1632,6 +1632,77 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
                 self.assertEqual(together, apart)
                 self.assertTrue(together, "this pair reaches nothing, so it proves nothing")
 
+    def test_a_test_declaring_its_own_surface_answers_for_itself(self):
+        """The defect this closes. `multi-tenant` returned all five object-level
+        access-control tests when one of them is about tenancy -- the tag was
+        carried by the subject, and the subject spans a contrast a single tag
+        cannot separate."""
+        out = self.run_js("""
+            const r = H.contextTopics(D, ["multi-tenant"]);
+            const hit = r.topics.filter(function (t) { return t.topic === "PTN-ACL-02"; })[0];
+            return { matched: hit.matched, broad: hit.broad };
+        """)
+        self.assertEqual([m["unit"] for m in out["matched"]], ["PTN-ACL-02-TENANT"])
+        self.assertEqual(sorted(out["broad"]), [
+            "PTN-ACL-02-IMPACT", "PTN-ACL-02-MAP",
+            "PTN-ACL-02-PEER", "PTN-ACL-02-WRITE",
+        ])
+
+    def test_a_test_declaring_nothing_is_still_answered_for_by_its_topic(self):
+        """The half that must not regress. Writing a clause on one test cannot
+        cost the others their topic's answer, or the mapping would remove more
+        than it adds."""
+        out = self.run_js("""
+            const r = H.contextTopics(D, ["multi-tenant"]);
+            const hit = r.topics.filter(function (t) { return t.topic === "PTN-ACL-02"; })[0];
+            return hit.matched;
+        """)
+        self.assertEqual(out, [{"unit": "PTN-ACL-02-TENANT", "precise": False}])
+        # It carries no clause of its own -- the topic's list is exactly its
+        # surface, so declaring one would have changed no answer.
+        self.assertIsNone(self.data["units"]["PTN-ACL-02-TENANT"].get("surfaces"))
+
+    def test_a_test_may_name_a_surface_its_topic_does_not(self):
+        """Unit-level mapping is more precise, not merely narrower. A bulk
+        export over an unencrypted channel is what `PTN-CRY-02-EXPORT` tests,
+        and its subject does not carry that tag."""
+        topic = self.data["topics"]["PTN-CRY-02"]["surfaces"]["any_of"]
+        self.assertNotIn("export-report", topic)
+        out = self.run_js("""
+            const r = H.contextTopics(D, ["export-report"]);
+            const hit = r.topics.filter(function (t) { return t.topic === "PTN-CRY-02"; })[0];
+            return hit ? hit.matched.map(function (m) { return m.unit; }) : null;
+        """)
+        self.assertEqual(out, ["PTN-CRY-02-EXPORT"])
+
+    def test_nothing_in_a_matched_topic_is_dropped(self):
+        """Folded, never lost. A test hidden because a tag missed is a test the
+        reader cannot discover was there, and they have just been sent to the
+        subject it sits under."""
+        out = self.run_js("""
+            const bad = [];
+            D.surfaces.forEach(function (s) {
+              H.contextTopics(D, [s.tag]).topics.forEach(function (row) {
+                const shown = row.matched.map(function (m) { return m.unit; })
+                  .concat(row.broad).sort();
+                const held = (D.topics[row.topic].units || []).slice().sort();
+                if (shown.join(",") !== held.join(",")) bad.push([s.tag, row.topic]);
+              });
+            });
+            return bad;
+        """)
+        self.assertEqual(out, [])
+
+    def test_a_topic_reaches_the_page_only_when_one_of_its_tests_does(self):
+        """A topic every one of whose tests has just said the selection does not
+        name its surface is a card with nothing in it."""
+        out = self.run_js("""
+            return H.contextTopics(D, D.surfaces.map(function (s) { return s.tag; }))
+              .topics.filter(function (r) { return r.matched.length === 0; })
+              .map(function (r) { return r.topic; });
+        """)
+        self.assertEqual(out, [])
+
     def test_a_topic_is_listed_once_even_when_two_tags_reach_it(self):
         out = self.run_js("""
             const seen = {}, dup = [];
@@ -2688,8 +2759,11 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
 
     def test_the_universal_topics_are_folded_rather_than_repeated(self):
         page = self.open("#/chains/context/search")
-        self.assertEqual(self.driver.count("details.fold"), 1)
-        summary = page.inner_text("details.fold > summary")
+        # Selected by what it is rather than by being the only fold on the page:
+        # a topic whose tests declare their own surfaces folds the rest of
+        # itself, and this one is not that.
+        self.assertEqual(self.driver.count("details.fold:not(.rest)"), 1)
+        summary = page.inner_text("details.fold:not(.rest) > summary")
         self.assertIn("every context", summary)
         self.assertIn(str(len(self.data["alwaysTopics"])), summary)
 

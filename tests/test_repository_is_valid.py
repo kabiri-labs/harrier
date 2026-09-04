@@ -426,3 +426,55 @@ class TheArgumentForNotIntersectingIsCheckedAgainstTheData(unittest.TestCase):
             for phrase in phrases:
                 with self.subTest(document=name, phrase=phrase.split("\n")[0]):
                     self.assertIn(phrase, text, why)
+
+
+class UnitLevelSurfacesAreWhatTheDocumentsSayTheyAre(unittest.TestCase):
+    """`ROADMAP.md` and `DISCOVERY.md` publish how far unit-level mapping has
+    got and what it changed. Both figures move as the mapping is written, which
+    is the reason to pin them: a document describing an earlier batch reads as
+    though it describes this one.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        repo = Repository.load(REPO_ROOT)
+        cls.units = {d.data["id"]: d.data for d in repo.units}
+        cls.topics = {d.data["id"]: d.data for d in repo.topics}
+
+    def clauses(self):
+        return {
+            uid: (u.get("surfaces") or {}).get("any_of")
+            for uid, u in self.units.items()
+            if u.get("surfaces")
+        }
+
+    def test_the_count_the_documents_publish_is_the_real_one(self):
+        mapped = self.clauses()
+        topics = {self.units[uid]["topic"] for uid in mapped}
+        self.assertEqual(len(mapped), 19)
+        self.assertEqual(len(topics), 5)
+        for name in ("ROADMAP", "DISCOVERY"):
+            text = (REPO_ROOT / "docs" / f"{name}.md").read_text(encoding="utf-8")
+            with self.subTest(document=name):
+                self.assertIn("19 tests across 5 topics carry a clause", text)
+
+    def test_the_example_both_documents_lead_with_still_holds(self):
+        """`multi-tenant` reaching one of five. If the clauses are ever rewritten
+        so that it does not, the sentence describing it has stopped being true
+        before anyone notices the page changed."""
+        clauses = self.clauses()
+        topic = set(self.topics["PTN-ACL-02"]["surfaces"]["any_of"])
+        self.assertIn("multi-tenant", topic)
+        tenancy = [
+            uid for uid in self.topics["PTN-ACL-02"]["order"]
+            if "multi-tenant" in (clauses.get(uid) or topic)
+        ]
+        self.assertEqual(tenancy, ["PTN-ACL-02-TENANT"])
+
+    def test_no_clause_repeats_its_topic(self):
+        """The validator rejects it; this says the catalogue is clean of it
+        rather than only that it would be caught."""
+        for uid, tags in self.clauses().items():
+            topic = (self.topics[self.units[uid]["topic"]].get("surfaces") or {})
+            with self.subTest(unit=uid):
+                self.assertNotEqual(set(tags), set(topic.get("any_of") or []))

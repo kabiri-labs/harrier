@@ -7,6 +7,9 @@ objective: >-
   Determine whether an object the caller does not own can be changed, rather
   than only read, by a request the caller composes.
 
+surfaces:
+  any_of: [object-id-param, path-param, rest-api, graphql]
+
 requires:
   all_of: [artifact.objectid.known, access.user]
 yields: [primitive.data.write.other]

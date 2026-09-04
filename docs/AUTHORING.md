@@ -379,6 +379,41 @@ deployment property does not imply an input location, and an edge that wants to
 say so is describing two different observations that belong on the surface
 separately. Apply both tags when both were seen.
 
+### A surface on a unit
+
+A topic's surface clause answers for every test under it. A test declares its
+own only where its applicability differs:
+
+> **Write a unit clause only where the unit's surface differs from its topic's,
+> and make it carry everything true of the unit rather than only what
+> distinguishes it.**
+
+The clause replaces the topic's for that test rather than adding to it. Four
+of `PTN-ACL-02`'s five tests declare `object-id-param, path-param, rest-api,
+graphql` — repeating the channels they share — because the one thing they are
+saying is that they are *not* about tenancy, and dropping the channels to say it
+would remove the topic's answer for them. The fifth is about tenancy, carries
+exactly the topic's list, and declares nothing: the topic already says it.
+
+A clause identical to its topic's is **rejected**. It changes no answer and
+makes the next reader believe a unit was considered when a script could have
+written it. That rejection is what stops the mechanical copy, rather than a
+reviewer having to notice one.
+
+A tag the topic does not carry is allowed and is the point. `PTN-CRY-02` is
+about assets in transit and does not declare `export-report`; the test in it
+about a bulk export does, and a reader choosing that tag reaches the test
+directly rather than the whole subject.
+
+Once **every** unit in a topic carries a clause, a tag the topic declares and
+none of them do is rejected: the subject would be claiming a surface each of its
+own tests has just said it does not have. Until then the ones without a clause
+inherit the whole list, so nothing is lost by mapping a topic a few units at a
+time.
+
+`always` on a unit is rejected. Whether a subject applies regardless of surface
+is decided once, by the topic.
+
 ## 6. Volatile content carries a date
 
 Payload files, tool entries and engine- or browser-specific notes carry a

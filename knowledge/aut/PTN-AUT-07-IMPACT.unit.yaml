@@ -6,6 +6,9 @@ title: "Whether the reset artefact sets another account's credential"
 objective: >-
   Determine whether a reset token that is predictable, long-lived or accepted
   after use sets the credential of an account the tester does not own.
+
+surfaces:
+  any_of: [password-reset]
 requires:
   all_of: [control.reset.weak]
 yields: [access.principal.other]

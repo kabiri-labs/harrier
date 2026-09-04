@@ -7,6 +7,9 @@ objective: >-
   Determine whether an object owned by a different account of the same role is
   served to a caller who does not own it.
 
+surfaces:
+  any_of: [object-id-param, path-param, rest-api, graphql]
+
 requires:
   all_of: [access.user, access.peer, artifact.objectid.known]
 yields: [primitive.data.read.peer]

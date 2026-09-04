@@ -7,6 +7,9 @@ objective: >-
   Determine whether a reset artefact that has already completed a reset, or
   that a newer issue has superseded, is refused on a second use.
 
+surfaces:
+  any_of: [password-reset]
+
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]

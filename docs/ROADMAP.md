@@ -362,6 +362,42 @@ has permitted `surfaces` since it was written and no unit uses it, so the
 intersection waits for the mapping that gives it something to bite on rather
 than shipping as a control that moves 11 to 10.
 
+0.29.0 lets a test answer for itself. A tag was carried by the topic, so
+selecting `multi-tenant` returned all five object-level access-control tests
+when one of them is about tenancy -- the page said so under every result, and
+saying so is not the same as fixing it.
+
+A test now declares its own surface where its applicability differs from its
+subject's, and the clause replaces the subject's for that test rather than
+adding to it. That is why four of `PTN-ACL-02`'s tests repeat the channels they
+share: the one thing they are saying is that they are not about tenancy, and
+dropping the channels to say it would take away the answer their subject was
+giving them. The fifth carries exactly the subject's list and declares nothing,
+because the subject already says it. `multi-tenant` now reaches that one, and
+the other four are folded under it rather than dropped -- a test hidden because
+a tag missed is a test the reader cannot discover was there.
+
+The rule is enforced rather than reviewed for. A clause identical to its
+topic's is rejected: it changes no answer, and it would let a script write what
+looks like consideration. `always` on a unit is rejected, because whether a
+subject applies regardless of surface is decided once. And once every test in a
+topic carries a clause, a tag the topic declares and none of them do is
+rejected -- the subject would be claiming a surface each of its own tests has
+just said it does not have.
+
+A test may name a tag its subject does not, and that is the case the mapping
+exists for rather than an exception to it. `PTN-CRY-02` is about assets in
+transit and carries no `export-report`; the test in it about a bulk export
+does. Reaching that needed the index to be built from the tests upward rather
+than from the topics down -- asked from the topic's clause alone, the mapping
+would have been written, validated, and unreachable, which is the failure this
+release is about repeated one level up.
+
+19 tests across 5 topics carry a clause. The rest of the catalogue is still
+answered for by its topics, and what makes mapping a topic a few tests at a
+time safe is that a clause is written only where it differs: the tests without
+one keep inheriting, so nothing is lost half way through.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.
