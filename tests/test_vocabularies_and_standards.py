@@ -159,6 +159,28 @@ class SearchAliasesMustEarnTheirPlace(SandboxCase):
         self.box.edit("vocab/search_aliases.yaml", redundant)
         self.assertRejected("reaches nothing the term itself does not already reach")
 
+    def test_an_expansion_spanning_two_fields_is_rejected(self):
+        """The gate mirrors the artefact, and the artefact scores each field on
+        its own.
+
+        The phrase is derived here rather than written down, so this keeps
+        testing the mechanism after the unit it is built from is reworded: the
+        last word of a title followed by the first of the objective under it is
+        in neither field, so a reader searching it gets nothing -- and a gate
+        that joined the fields into one blob would have accepted an alias
+        expanding to it.
+        """
+        unit = self.box.read("knowledge/cry/PTN-CRY-05-WRITE.unit.yaml")
+        phrase = (unit["title"].split()[-1] + " " + unit["objective"].split()[0]).lower()
+        self.assertNotIn(phrase, unit["title"].lower())
+        self.assertNotIn(phrase, unit["objective"].lower())
+
+        def spanning(data):
+            data["aliases"][0]["expands_to"] = [phrase]
+
+        self.box.edit("vocab/search_aliases.yaml", spanning)
+        self.assertRejected("which nothing in the catalogue carries")
+
     def test_a_duplicate_term_is_rejected(self):
         def duplicate(data):
             data["aliases"].append(dict(data["aliases"][0]))
