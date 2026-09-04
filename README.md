@@ -131,10 +131,10 @@ The Attack Chains view, entered from what is in front of you. A tester
 mid-engagement is not holding a WSTG identifier or a capability name; they are
 looking at an upload, a sort parameter, a token. Choosing the kind of surface
 lists the tests the catalogue files under it, says which tag put each topic
-there, and separates the tests nothing has to precede from the ones waiting on
-a capability another test establishes:
+there **and on what grounds**, and separates the tests nothing has to precede
+from the ones waiting on a capability another test establishes:
 
-![Tests selected by the kind of surface, each topic showing the tag that matched and each test what it still requires](docs/assets/test-paths.png)
+![A topic reached three ways at once: by the tag chosen, by one the choice always also is, and by one such a surface is often found with — each stated separately, with every test showing what it still requires](docs/assets/test-paths.png)
 
 The selection is a URL and nothing else. Nothing is stored, and a tag names a
 *kind* of surface rather than one you are looking at — the file still holds no

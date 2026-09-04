@@ -241,7 +241,28 @@ class AParentClaimsMoreThanAnAssociation(SandboxCase):
                 if surface["tag"] == "graphql":
                     surface["often"] = ["rest-api"]
         self.box.edit("vocab/surfaces.yaml", both)
-        self.assertRejected("as both a parent and an association")
+        self.assertRejected(
+            "graphql names rest-api as an association, and the parent relation "
+            "already makes it true"
+        )
+
+    def test_an_association_with_a_tag_a_parent_already_makes_certain_is_rejected(self):
+        """Checked against the whole ancestor closure rather than the directly
+        declared parents. With `a` parents `b` and `b` parents `c`, an authored
+        `a often c` used to pass here and then be dropped by the build, because
+        the closure had already made `c` certain -- accepted in the file and
+        discarded in the artefact, which is the worst of the two outcomes: the
+        vocabulary says something the page does not."""
+        def indirect(data):
+            by_tag = {s["tag"]: s for s in data["surfaces"]}
+            # websocket is a channel, so the parent rule itself is satisfied and
+            # only the association contradiction is left to catch.
+            by_tag["rest-api"]["parents"] = ["websocket"]
+            by_tag["graphql"]["often"] = ["websocket"]
+        self.box.edit("vocab/surfaces.yaml", indirect)
+        self.assertRejected(
+            "already makes it true of every surface carrying graphql"
+        )
 
     def test_the_edges_the_record_says_are_gone_are_gone(self):
         """Three were deleted rather than relabelled, because relabelling would

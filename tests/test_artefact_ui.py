@@ -1516,7 +1516,10 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
             const hit = r.topics.filter(function (t) { return t.topic === "PTN-ACL-02"; })[0];
             return hit || null;
         """)
-        self.assertEqual(out["via"], ["object-id-param", "rest-api"])
+        self.assertEqual(
+            [[v["tag"], v["how"]] for v in out["via"]],
+            [["object-id-param", "chosen"], ["rest-api", "chosen"]],
+        )
         self.assertFalse(out["often"])
 
     def test_a_topic_reached_only_through_an_association_is_marked_as_weaker(self):
@@ -1540,7 +1543,9 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         out = self.run_js("""
             const r = H.contextTopics(D, ["graphql"]);
             const rows = {};
-            r.topics.forEach(function (t) { rows[t.topic] = { often: t.often, via: t.via }; });
+            r.topics.forEach(function (t) {
+              rows[t.topic] = { often: t.often, via: t.via.map(function (v) { return v.tag; }) };
+            });
             return rows;
         """)
         reached = [t for t, row in out.items() if "rest-api" in row["via"]]
@@ -1548,6 +1553,39 @@ class ChoosingAContextSelectsTestsAndNothingElse(unittest.TestCase):
         for topic in reached:
             with self.subTest(topic=topic):
                 self.assertFalse(out[topic]["often"])
+
+    def test_every_tag_that_reached_a_topic_carries_which_relation_did_it(self):
+        """The tier a row lands in is not enough. A row in the stronger tier can
+        still be reached by an association as well as by the tag the reader
+        chose -- `graphql` reaches object-level access control through both --
+        and a card printing the two the same way would go on saying "the context
+        is" over a tag the selection never established."""
+        out = self.run_js("""
+            const r = H.contextTopics(D, ["graphql"]);
+            const hit = r.topics.filter(function (t) { return t.topic === "PTN-ACL-02"; })[0];
+            return hit.via;
+        """)
+        self.assertEqual(
+            [[v["tag"], v["how"]] for v in out],
+            [["graphql", "chosen"], ["object-id-param", "often"], ["rest-api", "always"]],
+        )
+
+    def test_no_tag_is_reported_under_a_relation_the_closure_does_not_give_it(self):
+        out = self.run_js("""
+            const bad = [];
+            D.surfaces.forEach(function (s) {
+              const closure = H.contextClosure(D, [s.tag]);
+              H.contextTopics(D, [s.tag]).topics.forEach(function (row) {
+                row.via.forEach(function (v) {
+                  const list = closure[v.how === "chosen" ? "selected"
+                    : v.how === "always" ? "parents" : "often"];
+                  if (list.indexOf(v.tag) < 0) bad.push([s.tag, v.tag, v.how]);
+                });
+              });
+            });
+            return bad;
+        """)
+        self.assertEqual(out, [])
 
     def test_the_deleted_edges_reach_nothing(self):
         """Three relations were removed rather than relabelled. A selection that
@@ -2438,6 +2476,58 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertShows(text, "Often carried alongside")
         self.assertShows(text, "sql-backed-param")
         self.assertShows(text, "SQL injection")
+
+    def test_a_card_never_says_the_context_is_a_tag_only_associated_with_it(self):
+        """The sentence a reader actually reads, next to each topic.
+
+        Correcting the paragraph above the results and leaving this one alone
+        left the page still asserting, one line lower, that a search box *is* a
+        parameter reaching a SQL data store. The disclaimer was two inches away
+        and said the opposite.
+        """
+        page = self.open("#/chains/context/search")
+        card = page.locator('.card:has-text("SQL injection")').first
+        text = " ".join(card.inner_text().split())
+        self.assertIn("Often carried by such a surface", text)
+        self.assertNotIn("Matched because the context is: Parameter reaching a SQL", text)
+
+    def test_a_card_separates_the_three_reasons_a_topic_can_be_here(self):
+        """`graphql` reaches object-level access control by all three at once:
+        the tag chosen, the tag it always also is, and one it is merely often
+        found with. One line for all three cannot be true of all three."""
+        page = self.open("#/chains/context/graphql")
+        card = page.locator('.card:has-text("Object-level access control")').first
+        text = " ".join(card.inner_text().split())
+        self.assertIn("Matched because the context is: GraphQL endpoint", text)
+        self.assertIn("And always also is: Structured machine-facing API", text)
+        self.assertIn(
+            "Often carried by such a surface, and not implied by your selection: "
+            "Direct object reference in a request",
+            text,
+        )
+
+    def test_no_card_anywhere_presents_an_association_as_the_context(self):
+        """Swept over every tag rather than the two that happen to show it, so a
+        relation added later cannot reintroduce the wording."""
+        bad, read = [], 0
+        for surface in self.data["surfaces"]:
+            if not surface["often"]:
+                continue
+            page = self.open("#/chains/context/" + surface["tag"])
+            labels = {
+                s["label"] for s in self.data["surfaces"] if s["tag"] in surface["often"]
+            }
+            for block in page.locator(".why").all_inner_texts():
+                line = " ".join(block.split())
+                if not line.startswith("Matched because the context is:"):
+                    continue
+                read += 1
+                for label in labels:
+                    if label in line:
+                        bad.append((surface["tag"], label))
+        self.assertEqual(bad, [])
+        # A selector that stopped matching would make this pass by reading none.
+        self.assertGreater(read, 20, "no reason lines were examined at all")
 
     def test_an_association_is_never_printed_as_something_that_follows(self):
         """The sentence this change exists to remove. It said an edge was "true
