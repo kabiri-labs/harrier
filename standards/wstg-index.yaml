@@ -102,9 +102,9 @@ cases:
   - PTN-AUT-04-MAP
   - PTN-AUT-04-DIFF
   - PTN-AUT-04-REPLAY
-  authored: 0
+  authored: 3
   sketched: 0
-  outline: 3
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-05
   title: Testing for Vulnerable Remember Password

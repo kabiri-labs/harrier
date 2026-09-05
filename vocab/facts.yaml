@@ -185,6 +185,16 @@ facts:
       what the vendor documents and what the deployment still accepts are two
       different things, and the second is what a test establishes.
 
+  - id: recon.authstates.mapped
+    label: Authentication states and their transitions recorded
+    tier: topic
+    description: >
+      The states a caller passes through between anonymous and authenticated,
+      and the request that drives each transition, have been recorded. What
+      makes a skipped, repeated or reordered step recognisable when it happens:
+      without it, a response that should not have been reachable looks like an
+      ordinary one.
+
   - id: recon.names.mapped
     label: In-scope names and addresses recorded
     tier: engagement

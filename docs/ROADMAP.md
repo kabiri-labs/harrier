@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 306 |
+| Units — outlined | 303 |
 | Units — sketched | 40 |
-| Units — authored | 47 |
+| Units — authored | 50 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -599,6 +599,22 @@ than a test. Where the client will not designate an account, the mechanism is
 already established by the scope unit and the finding is recorded as
 demonstrated in principle and not performed -- a materially different sentence,
 and the honest one.
+
+`PTN-AUT-04`, authentication bypass, is the fourth, and it made a pattern
+visible that is worth recording once rather than per topic. Its `-MAP` unit
+established nothing, exactly as `PTN-AUT-02`'s did -- and so do 32 of the
+catalogue's recon units, across 11 domains. They are most of what the published
+figure counts as *tests declaring no capability*. A recon unit that yields
+nothing is not merely undeclared: it means the topic's own axis, the phase
+sequence its `order` sets out, exists in the file and not in the graph, so
+nothing connects the inventory to the units that use it. Authoring one forces
+the fact that closes that, which is why writing depth keeps adding capabilities
+rather than only filling fields.
+
+Two more of them here: `recon.authstates.mapped` at topic tier, and the same
+judgement as before -- the units that use it declare it a motivation rather than
+a prerequisite, because a bypass attempt is worth offering slightly early and
+never worth hiding from a reader who has not drawn the state map yet.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
