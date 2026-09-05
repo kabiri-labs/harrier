@@ -1,6 +1,6 @@
 id: PTN-AUT-06-VALIDATION
 topic: PTN-AUT-06
-status: outline
+status: authored
 role: stage
 title: "How strictly a submitted answer is compared"
 objective: >-
@@ -11,3 +11,63 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.recovery.guessable]
+
+hypotheses:
+  - "The comparison was made forgiving so that support would field fewer calls, and forgiveness is exactly what shrinks the space."
+  - "The answer is normalised before storage and compared after, so the tolerance is invisible in the interface."
+  - "A substring or prefix match was chosen to tolerate typing, which turns one answer into every string containing it."
+
+triage:
+  - "A recovery form that accepts an answer without saying it was wrong, which hides the boundary."
+  - "Guidance telling the user not to worry about capitalisation, which states the tolerance outright."
+  - "An answer field with no length constraint, where a one-character submission is worth trying."
+
+sink: >-
+  The comparison the application performs between the stored answer and the
+  submitted one.
+
+enter_when:
+  - "An answer is known for an account the tester owns, because every probe here is a variation of it."
+
+oracle:
+  positive: "A submission that is not the stored answer is accepted -- differing in case, in whitespace, in accent, or by being a fragment of it."
+  negative: "Only the stored answer exactly as set is accepted, across every variation tried."
+  inconclusive: "Wrong answers stop being distinguishable from right ones -- a throttle, a generic response -- before the variations were covered."
+
+sequence:
+  - "Set a known answer on an owned account, chosen so its variations are distinguishable: mixed case, an accent, more than one word."
+  - "Submit it varied one dimension at a time -- case, leading and trailing space, internal spacing, accent, a fragment."
+  - "Record which variations are accepted, because each accepted one multiplies the answers an attacker's single guess covers."
+  - "Where a fragment is accepted, shorten it until it is refused, and record the shortest accepted length."
+
+first_false_positive: >-
+  A variation appearing to be accepted because the flow proceeds regardless and
+  refuses later. Establish first what a wrong answer looks like by submitting a
+  clearly wrong one, then compare every result against that.
+
+false_positives:
+  - "A tolerance that is the browser trimming the field rather than the server accepting a variation."
+  - "An acceptance from a session that had already passed this step earlier in the flow."
+
+preconditions:
+  - "The answer for the account under test was set by the tester, so every variation is measured against a known value."
+  - "What a wrong answer looks like has been established."
+
+evidence:
+  - "The set answer, the variations submitted, and which were accepted."
+  - "Where a fragment was accepted, the shortest one, which is the figure that states how much the space shrank."
+
+done_when: >-
+  Every variation dimension has been submitted once against a known answer and
+  recorded as accepted or refused, with the shortest accepted fragment
+  identified where fragments are accepted at all.
+
+safety: >-
+  Every submission goes against an account the tester owns, with an answer the
+  tester set. Submitting variations against a real user's question is guessing
+  at that person's answer, and it spends whatever attempts their account is
+  allowed -- which the rate unit in this topic measures rather than consumes.
+  Nothing here is submitted against an account whose answer the tester does not
+  already know.
+
+tools: [burp-repeater]

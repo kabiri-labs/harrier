@@ -156,9 +156,9 @@ cases:
   - PTN-AUT-06-VALIDATION
   - PTN-AUT-06-RATE
   - PTN-AUT-06-IMPACT
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-09
   title: Testing for Weak Password Change or Reset Functionalities

@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 299 |
+| Units — outlined | 295 |
 | Units — sketched | 40 |
-| Units — authored | 54 |
+| Units — authored | 58 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -632,6 +632,22 @@ browser enforces, a value the browser forgets -- all three read as the
 application revoking something. Every offer in these units is made from a client
 that was never told to forget the secret, which is what turns three tests of
 obedience into three tests of a server-side record.
+
+`PTN-AUT-06`, knowledge-based recovery, is the sixth, and its policy unit is
+where a line had to be drawn that the rest of the domain does not need. The
+question *are these answers obtainable* invites research on a real person, and
+the unit refuses it: what is assessed is the offered question set and the size
+of each answer space as a category -- a colour, a month, a first name -- against
+the attempts the rate unit measured. A question is weak because of what it asks
+for, and demonstrating that against somebody's actual life is neither necessary
+nor something an engagement asked for.
+
+Its impact unit ends with a credential changed, which is the same standard the
+lockout impact is held to: an owned account, or one the client designated in
+writing and which is restored afterwards. The step that sends a message is a
+stop rather than a formality, because a recovery driven against a real person's
+account puts a takeover message in their inbox and takes their access away at
+the end of it.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
