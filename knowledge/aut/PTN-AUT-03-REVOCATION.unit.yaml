@@ -1,6 +1,6 @@
 id: PTN-AUT-03-REVOCATION
 topic: PTN-AUT-03
-status: outline
+status: authored
 role: stage
 title: "Clearing of an applied lockout"
 objective: >-
@@ -11,3 +11,64 @@ requires:
   all_of: [control.lockout.enforced]
   any_of: [access.anon]
 yields: [control.limit.absent]
+
+hypotheses:
+  - "A successful sign-in clears the counter, so an attacker holding one account has an unbounded budget against the rest."
+  - "The recovery flow clears it as a convenience, which hands the reset to anyone who can name the account."
+  - "The counter is cleared on a schedule short enough that waiting is cheaper than defeating it."
+
+triage:
+  - "A recovery or forgotten-password flow reachable while the account is locked."
+  - "A support or self-service unlock the account holder can trigger without proving anything new."
+  - "A message naming a wait -- try again in fifteen minutes -- which states the window rather than concealing it."
+
+sink: >-
+  The counter the application clears, and what it accepts as a reason to clear
+  it.
+
+enter_when:
+  - "A lockout has been applied on the tester's own account and its refusal is recognisable."
+
+oracle:
+  positive: "An action available to an unauthenticated caller restores attempts against the locked account before the counter's own window elapses."
+  negative: "Nothing an unauthenticated caller can do restores attempts, and only the window or an authenticated action clears the counter."
+  inconclusive: "The window elapsed during the attempt, so what restored the attempts is not established."
+
+sequence:
+  - "Measure the window first, with a locked account left alone, so every later result can be compared against it."
+  - "Lock the account again and try each unauthenticated action once: the recovery flow, a self-service unlock, a fresh session."
+  - "After each, re-attempt a failing credential and read whether the answer is about the credential again."
+  - "Where attempts resume ahead of the window, record which action did it and how much earlier."
+
+first_false_positive: >-
+  Attempts resuming because the window elapsed while the actions were being
+  tried. The window is measured first for exactly this reason, and any
+  restoration within it is only credited to an action when the clock says it
+  came early.
+
+false_positives:
+  - "A recovery flow that appears to clear the lockout because it issues a new session, while the counter itself is untouched."
+  - "An unlock that requires something only the real account holder has, which is the control working rather than failing."
+
+preconditions:
+  - "The counter's own clearing window has been measured, or nothing here can be attributed."
+  - "The recovery flow can be exercised against an address the tester controls."
+
+evidence:
+  - "The measured window, and for each action the time attempts resumed relative to it."
+  - "The action that cleared the counter, with the request that triggered it."
+
+done_when: >-
+  Every unauthenticated action reachable against a locked account has been
+  tried once and recorded as clearing the counter or not, against a window that
+  was measured rather than assumed.
+
+safety: >-
+  The tester's own account throughout, including every recovery message this
+  sends: triggering recovery against an address belonging to somebody else
+  sends mail to a real person, repeatedly, for a question that an owned account
+  answers just as well. Where the only unlock is one support staff perform, ask
+  what it requires rather than approximating it by asking them to perform it,
+  and record the route as unmeasured instead.
+
+tools: [burp-repeater]

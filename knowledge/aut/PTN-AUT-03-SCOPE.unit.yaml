@@ -1,6 +1,6 @@
 id: PTN-AUT-03-SCOPE
 topic: PTN-AUT-03
-status: outline
+status: authored
 role: stage
 title: "What the failure counter is keyed on"
 objective: >-
@@ -11,3 +11,64 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.lockout.enforced]
+
+hypotheses:
+  - "The counter is keyed on the source address, because that was the value nearest to hand when it was written."
+  - "A forwarded-for header is trusted for the key, which makes the key caller-supplied without anyone deciding it should be."
+  - "The counter is per session, so discarding the session discards the count."
+
+triage:
+  - "A header the deployment plausibly trusts for the client address: X-Forwarded-For, X-Real-IP, CF-Connecting-IP."
+  - "A session or correlation identifier the client sends and the server does not verify."
+  - "A username field that accepts variants of one account -- differing case, a trailing dot, an alternative domain form."
+
+sink: >-
+  The value the counter is stored against.
+
+enter_when:
+  - "Something has been shown to intervene after repeated failures, or there is no counter to key."
+
+oracle:
+  positive: "Attempts against one account stop after a countable number of failures, and what does and does not restore them identifies the value the counter is keyed on."
+  negative: "Attempts stop and nothing the caller varies restores them, so the counter is keyed on something the caller does not supply."
+  inconclusive: "Attempts never stop, so there is no counter to key -- which is the rate unit's answer rather than this one's."
+
+sequence:
+  - "Reach the counter once on the tester's own account, and record what the refusal looks like."
+  - "Vary one caller-supplied value at a time -- source address, forwarded-for header, session, the spelling of the account -- and re-attempt after each."
+  - "Where attempts resume, the value changed is the key; where they do not, that value is ruled out and the next is tried."
+  - "Record the key and whether it is caller-supplied, which is what decides whether the counter defends anything."
+
+first_false_positive: >-
+  Attempts resuming because a time window expired rather than because the value
+  changed. Note the window from the rate unit first, and re-attempt without
+  changing anything to confirm the counter is still applied before crediting
+  any variation with lifting it.
+
+false_positives:
+  - "A different route being reached after the change, so the attempts resume because the counter was never applied there."
+  - "A load balancer sending the varied request to an instance holding its own counter."
+
+preconditions:
+  - "A counter has been demonstrated, and the time it takes to clear on its own is known."
+  - "The account is the tester's own, because reaching the counter is what locking out means."
+
+evidence:
+  - "The value the counter is keyed on, and the variation that demonstrated it."
+  - "The values ruled out, each with the attempt that failed to restore access."
+
+done_when: >-
+  Every caller-supplied value in the request has been varied once against an
+  applied counter and recorded as restoring attempts or not -- or the counter
+  could not be reached, and that is recorded instead.
+
+safety: >-
+  One account, the tester's own, and it stays locked out for as long as this
+  unit runs -- which is the reason it is not somebody else's. Each variation
+  applies the counter again, so this is the unit in the topic that spends the
+  most lockouts, and every one of them lands on an account whose loss costs
+  nobody anything. Where the key turns out to be the source address, do not
+  rotate through addresses to prove it a second time: one demonstration is the
+  finding, and a rotation is the attack.
+
+tools: [burp-repeater]

@@ -1,6 +1,6 @@
 id: PTN-AUT-03-RATE
 topic: PTN-AUT-03
-status: outline
+status: authored
 role: stage
 title: "Throttling of repeated authentication attempts"
 objective: >-
@@ -11,3 +11,66 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.limit.absent]
+
+hypotheses:
+  - "The browser form is throttled and the API behind it is not, because the limit was added to the page rather than to the credential check."
+  - "A limit exists per address, which slows one attacker and stops none."
+  - "The delay is applied by the client while the server answers at full speed."
+
+triage:
+  - "A second authentication route: a mobile endpoint, a legacy path, /api/login beside the form."
+  - "A response time that grows with the attempt number, which is a throttle rather than a counter."
+  - "A CAPTCHA or challenge that appears after some number of failures, which is a limit with a different shape."
+
+sink: >-
+  The credential check the attempt reaches, which may be behind more than one
+  route.
+
+enter_when:
+  - "An authentication route has been found and an account the tester owns can be failed against."
+
+oracle:
+  positive: "Failed attempts against one account continue to be answered on their merits, at the same rate, past any number the tester is willing to send."
+  negative: "Attempts stop being answered on their merits after a countable number -- a delay, a challenge, or a refusal that is not about the credential."
+  inconclusive: "The route stops answering for a reason that is not the counter, such as the whole host refusing, so what intervened is unknown."
+
+sequence:
+  - "Fail against an account the tester owns, one attempt at a time, recording the response and its timing."
+  - "Continue past the number any published policy states, because the published number and the enforced one are different claims."
+  - "Repeat on every authentication route found, because a limit on the form says nothing about the API behind it."
+  - "Where something intervenes, record what it was and after how many, which is the figure the rest of the topic rests on."
+
+first_false_positive: >-
+  A response that slows because the network did, read as a throttle. Record the
+  timing of a successful attempt in the same run: a throttle that is real
+  applies to the failures and not to it.
+
+false_positives:
+  - "A challenge that appears for every caller rather than after failures, which is a control on the route and not a counter."
+  - "A block from an intermediary rather than the application, which moves when the address does."
+
+preconditions:
+  - "The account is the tester's own, and a locked-out account can be recovered without asking the client for help."
+  - "Every authentication route is inside the engagement's scope, stated per route."
+
+evidence:
+  - "Per route: the number of failures sent, what intervened, and after how many."
+  - "The timing series, which is what separates a throttle from a counter."
+
+done_when: >-
+  Every authentication route found has been failed against until something
+  intervened or the tester's chosen ceiling was reached, with the number and
+  the intervention recorded for each -- or the routes not attempted are named
+  with the reason.
+
+safety: >-
+  On an account the tester owns, and on one account only. Failing repeatedly is
+  how a lockout is applied, so doing this to a real user's account denies them
+  their access -- which this catalogue records as an outcome in its own right,
+  and which is the subject of the impact unit in this topic rather than a side
+  effect of measuring here. Choose the ceiling before starting rather than
+  during: an open-ended sweep against a route with no limit is a load test
+  nobody agreed to, and the number that answers this unit is the one where
+  something intervened, not the largest number sent.
+
+tools: [burp-repeater]

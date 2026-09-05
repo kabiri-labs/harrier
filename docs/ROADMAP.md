@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 310 |
+| Units — outlined | 306 |
 | Units — sketched | 40 |
-| Units — authored | 43 |
+| Units — authored | 47 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -584,6 +584,21 @@ real user's lockout budget rather than a service account's, which is a thing to
 establish before attempting rather than after. `-IMPACT` reads rather than
 writes: a management interface is where the destructive functions are, and the
 account was left in place precisely because somebody believed it was harmless.
+
+`PTN-AUT-03`, anti-automation and lockout, is the third in the batch and the one
+`PTN-AUT-01` was waiting on: its rate unit is where the attempt budget that the
+credential-policy impact reasons about is actually measured. Nothing in the
+graph moved -- its four units already carried their chain fields -- so this is
+depth and nothing else.
+
+Its impact unit denies a real person their access on purpose, and it is the one
+in this catalogue that most needs the word no: one account the client named in
+writing, once, and only when the route to clear the lockout is already known,
+because applying a denial without knowing how to lift it is an outage rather
+than a test. Where the client will not designate an account, the mechanism is
+already established by the scope unit and the finding is recorded as
+demonstrated in principle and not performed -- a materially different sentence,
+and the honest one.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
