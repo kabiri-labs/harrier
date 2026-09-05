@@ -9,7 +9,7 @@ Units**, and derives the attack-chain continuations each success may open.
 
 > **Pentest NavGrid 0.33.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 393 Test Units exist. The depth
-> behind them is not: 64 units are written to full procedural depth and 40 are
+> behind them is not: 68 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
 > means in numbers](#what-exists-today-and-what-does-not) is below, not buried at
 > the end.
@@ -355,9 +355,9 @@ stale in this file without the suite failing.
 | Claimed by a Pentest NavGrid topic | 108 of 108 resolvable |
 | Topics | 106, across 14 domains |
 | Test Units | 393 |
-| Written to full procedural depth | **64** |
+| Written to full procedural depth | **68** |
 | Sketched | 40 |
-| Outline only | 289 |
+| Outline only | 285 |
 
 Three chains are now written end to end rather than one: SQL injection under
 `WSTG-INPV-05`, cross-site scripting under `WSTG-INPV-01`, `WSTG-INPV-02` and
@@ -366,18 +366,18 @@ the standard's own test case through its Test Units to a stated business outcome
 
 | Chain | |
 |---|---|
-| Capabilities | 190 |
-| Derived unit-to-unit edges | 779 |
+| Capabilities | 191 |
+| Derived unit-to-unit edges | 780 |
 | — of them escalations between capabilities | 420 |
-| — another technique for the same test | 127 |
+| — another technique for the same test | 128 |
 | — a general prerequisite, not a step | 232 |
-| Tests with a potential continuation | 316 |
+| Tests with a potential continuation | 317 |
 | Tests that establish an impact | 14 |
 | Tests that stop short | 26 |
-| Tests declaring no capability | 37 |
-| Capabilities used by no test, impacts excluded | 20 of 190 |
-| Capabilities no test reaches at all | 1 of 190 |
-| Capabilities with a charted route to an impact | 123 of 179 |
+| Tests declaring no capability | 36 |
+| Capabilities used by no test, impacts excluded | 20 of 191 |
+| Capabilities no test reaches at all | 1 of 191 |
+| Capabilities with a charted route to an impact | 123 of 180 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.
@@ -403,7 +403,7 @@ than claimed, and nothing is invented to fill the gap.
 
 **The controls are no longer the largest gap.** `primitive → impact` is
 written: 1 of 33 `primitive.*` capabilities is declared as a use by nothing --
-the blind oracle, deliberately -- and 123 of 179 capabilities have a charted
+the blind oracle, deliberately -- and 123 of 180 capabilities have a charted
 route to an impact.
 `control → impact` is most of the way there: 11 of 59 `control.*` facts are
 established by a test and consumed by nothing, down from 36.

@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 289 |
+| Units — outlined | 285 |
 | Units — sketched | 40 |
-| Units — authored | 64 |
+| Units — authored | 68 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -668,6 +668,26 @@ named `PTN-AUT-07-BINDING` as its outline, and failed the day that unit was
 written to depth rather than the day the heading broke -- which is verbatim the
 comment its sibling two tests below carries about the same mistake. It now takes
 the first outline the catalogue holds, as that sibling does.
+
+`PTN-AUT-08`, alternative authentication channels, is the eighth, and its map
+unit is the third in the domain that established nothing --
+`recon.authchannels.mapped` closes it, at topic tier, on the same reasoning as
+the two before it.
+
+Its probe unit is where the domain's one social boundary had to be written down.
+A support-operated path authenticates on what a person can verify over a
+telephone, which is by construction less than a credential -- so it belongs in
+the inventory and is the one channel the unit does not exercise: doing so means
+asking a person to authenticate somebody, which is social engineering rather
+than a request. It is recorded from what the process documents unless the client
+has arranged otherwise.
+
+Its write unit is the first in this batch that changes something rather than
+reading it, and the choice of action is the safety control: the smallest guarded
+action whose effect is observable and reversible on an owned account, reversed
+afterwards. Where the only guarded actions are irreversible, the bypass is
+already established by the unit above it and this one is recorded as not
+performed rather than performed carefully.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase

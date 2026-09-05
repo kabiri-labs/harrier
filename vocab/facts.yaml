@@ -195,6 +195,16 @@ facts:
       without it, a response that should not have been reachable looks like an
       ordinary one.
 
+  - id: recon.authchannels.mapped
+    label: Channels authenticating the same account recorded
+    tier: topic
+    description: >
+      Every route through which one account can be authenticated has been
+      recorded -- the browser application, any mobile or machine interface, and
+      any support-operated path. What makes a comparison between them possible:
+      until the set is written down, the weaker channel is the one nobody
+      thought to look at.
+
   - id: recon.names.mapped
     label: In-scope names and addresses recorded
     tier: engagement

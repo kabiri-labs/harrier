@@ -1,6 +1,6 @@
 id: PTN-AUT-08-PROBE
 topic: PTN-AUT-08
-status: outline
+status: authored
 role: stage
 title: "Whether a secondary channel enforces weaker requirements"
 objective: >-
@@ -9,5 +9,67 @@ objective: >-
 
 requires:
   all_of: [recon.channels.mapped]
+motivated_by: [recon.authchannels.mapped]
 yields: [control.channel.weaker]
 closes: [control.channel.weaker]
+
+hypotheses:
+  - "The second factor was added to the browser flow and not to the endpoint the mobile client calls."
+  - "The channel was built before the requirement existed and nobody revisited it."
+  - "The channel trusts something the primary one verifies -- a device registration, a stored token -- because it was written for a client that always had it."
+
+triage:
+  - "An endpoint returning a session for a credential alone, where the browser flow asks for more."
+  - "A channel whose sign-in has no second step at all."
+  - "A version prefix, /v1 beside /v2, where the older one is still answered."
+
+sink: >-
+  The credential check each channel performs before issuing a session.
+
+enter_when:
+  - "More than one channel authenticating the same account has been recorded, with what each demands."
+
+oracle:
+  positive: "One channel issues a session for an owned account on strictly less evidence than another demands for the same account."
+  negative: "Every channel demands the same evidence, including the second factor and any device or approval step."
+  inconclusive: "A channel cannot be exercised -- outside scope, or requiring a client the engagement does not have -- so its requirements are documented rather than observed."
+
+sequence:
+  - "Sign in on an owned account through the primary channel and record every step it demanded."
+  - "Do the same on each secondary channel, offering only the credential first and adding steps only when refused."
+  - "Compare the sets: the finding is a channel that stopped asking earlier, not one that asked differently."
+  - "Where a channel demands less, confirm the session it issued is for the same account by reading something only that account sees."
+
+first_false_positive: >-
+  A channel that appears to demand less because the second factor was satisfied
+  moments earlier and is remembered. Exercise each channel from a client holding
+  nothing, and after any remembered-device state has been cleared, or the
+  comparison measures memory rather than requirements.
+
+false_positives:
+  - "A channel authenticating a different account store that happens to accept the same name, which the map's credential-change check separates."
+  - "A step skipped because the account has not enrolled in it, which is the enrolment state rather than the channel."
+
+preconditions:
+  - "The account is the tester's own and is enrolled in every step the primary channel demands, or the comparison is against a requirement that was never going to fire."
+  - "Each channel exercised is within the engagement's scope, stated per host and path."
+
+evidence:
+  - "Per channel: the steps demanded, in order, and the request that issued the session."
+  - "The difference, stated as the step one channel demanded and another did not."
+
+done_when: >-
+  Every in-scope channel has been exercised on the same owned account and its
+  demanded steps recorded -- or the channels not exercised are named with the
+  reason and their requirements marked as documented rather than observed.
+
+safety: >-
+  One owned account across every channel, which is what makes the comparison
+  meaningful and keeps it harmless. A support-operated path is the one to leave
+  alone: exercising it means asking a person to authenticate somebody, which is
+  social engineering rather than a request, and it is recorded from what the
+  process documents unless the client has arranged otherwise. Nothing is
+  exercised on a channel the scope does not name, however plainly it belongs to
+  the same deployment.
+
+tools: [burp-repeater]
