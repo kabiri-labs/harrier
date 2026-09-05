@@ -1,6 +1,6 @@
 id: PTN-AUT-02-MAP
 topic: PTN-AUT-02
-status: outline
+status: authored
 role: stage
 kind: recon
 title: "Inventory of components that ship with vendor accounts"
@@ -11,3 +11,41 @@ objective: >-
 
 requires:
   all_of: [recon.platform.identified]
+yields: [recon.vendoraccounts.mapped]
+
+hypotheses:
+  - "The component nobody names in the architecture diagram is the one that was installed once and never revisited."
+  - "A management interface on a second port belongs to a product the application team does not consider theirs."
+  - "A vendor account survives because it was believed to be unprivileged, so nobody argued for removing it."
+
+triage:
+  - "Login pages whose markup, favicon or copyright line names a product rather than the application."
+  - "Management interfaces answering on 8080, 8443, 9990, 15672 or a path such as /manager, /admin, /console."
+  - "Error pages and headers naming a framework, an appliance or an embedded server."
+
+enter_when:
+  - "The platform and its components have been identified, or the inventory is a list of guesses."
+
+sequence:
+  - "List every component the fingerprinting found, including the ones that answer on their own port or path."
+  - "For each, consult the vendor's own documentation for the accounts it creates at install."
+  - "Record the component, its version where known, and what the vendor documents -- account names only, never a credential pair copied into the engagement's notes."
+  - "Mark each entry with whether the deployment could plausibly have removed the account, which is what orders the probing."
+
+first_false_positive: >-
+  A product page describing a demonstration or evaluation build rather than the
+  edition deployed. Vendors ship different defaults per edition, and an
+  inventory built from the wrong one aims the next unit at accounts that were
+  never created.
+
+preconditions:
+  - "The vendor documentation for the identified version is reachable, or the entry is recorded as unverified rather than guessed."
+
+evidence:
+  - "The component list, each with the signal that identified it and the version where one was established."
+  - "For each entry, the vendor's own reference for the accounts it documents -- a citation, not a copied credential."
+
+done_when: >-
+  Every identified component has an entry recording either the accounts its
+  vendor documents or that no documentation for the deployed version could be
+  reached, so the next unit knows what it is aiming at and what it is not.

@@ -175,6 +175,16 @@ facts:
       unlikely to have edited, which is what a version-specific decision may
       safely rest on.
 
+  - id: recon.vendoraccounts.mapped
+    label: Components shipping vendor accounts recorded
+    tier: topic
+    description: >
+      Which of the identified products, frameworks and appliances are known to
+      ship with an account the vendor created rather than the operator. An
+      inventory of where to look, not a claim that any such account survives:
+      what the vendor documents and what the deployment still accepts are two
+      different things, and the second is what a test establishes.
+
   - id: recon.names.mapped
     label: In-scope names and addresses recorded
     tier: engagement

@@ -1,6 +1,6 @@
 id: PTN-AUT-02-IMPACT
 topic: PTN-AUT-02
-status: outline
+status: authored
 role: stage
 title: "Reach of an accepted vendor credential"
 objective: >-
@@ -11,3 +11,64 @@ objective: >-
 requires:
   all_of: [access.principal.other]
 yields: [access.role.elevated]
+
+hypotheses:
+  - "The account was left because of what the vendor's documentation says it can do, not because of what this deployment granted it."
+  - "The component's roles and the application's are two systems, and the account holds a role in the one nobody reviewed."
+  - "A management interface exposes a function -- a deployment, a script console, a query runner -- that is a higher privilege than any role name suggests."
+
+triage:
+  - "A menu entry the ordinary application never shows: user administration, a console, a deployment or import screen."
+  - "A settings page naming other accounts, which is the boundary this account was believed not to cross."
+  - "An API the component exposes to the same session, where the interface's own restrictions may not be repeated."
+
+sink: >-
+  The functions the component authorises for the session this credential
+  opened.
+
+enter_when:
+  - "A vendor credential has been accepted and a session held."
+
+oracle:
+  positive: "A function the engagement's own granted role cannot reach is exercised, or read, from the session this credential opened."
+  negative: "Every function the session reaches is one the granted role already had, across the component's interface and the API behind it."
+  inconclusive: "The session ends before the surface is covered -- an idle timeout, or a single-session limit taking it away."
+
+sequence:
+  - "Enumerate what the session is offered, then what it is authorised for, because the second is larger than the first often enough to matter."
+  - "Ask the component's own API with this session, not only its interface: the restrictions on a menu are not always repeated behind it."
+  - "For each function beyond the granted role, read rather than exercise wherever reading settles the question."
+  - "Record the highest reach demonstrated and stop; a second demonstration of the same level adds nothing."
+
+first_false_positive: >-
+  A screen that renders for this session and refuses at the action, which reads
+  as reach the session does not have. The claim is what the component
+  authorises, so confirm at the request rather than at the menu.
+
+false_positives:
+  - "A function that appears because the interface hides on role and the request is refused server-side."
+  - "Reach that belongs to the engagement's own granted role, which this session also holds if the two share a store."
+
+preconditions:
+  - "The reach of the engagement's own granted role is already recorded, or there is nothing to compare this session against."
+
+evidence:
+  - "The functions reached beyond the granted role, each with the request that demonstrates it."
+  - "The comparison this rests on: what the granted role could already do."
+
+done_when: >-
+  Every function the session is authorised for has been recorded as within or
+  beyond the granted role, across the interface and the API behind it -- or the
+  parts not covered are named with the reason.
+
+safety: >-
+  Read rather than write wherever reading settles the question. A management
+  interface is where the destructive functions are, and this account was left in
+  place because somebody believed it was harmless: a deployment screen, a script
+  console or a query runner will do exactly what it is asked. Nothing here
+  changes a configuration, deploys anything, or creates or removes an account.
+  Where only an action would prove the reach, put that to the client rather than
+  performing it, and record the reach as demonstrated to the point of the
+  refusal instead.
+
+tools: [burp-repeater]

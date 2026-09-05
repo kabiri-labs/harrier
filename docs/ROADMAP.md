@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 313 |
+| Units — outlined | 310 |
 | Units — sketched | 40 |
-| Units — authored | 40 |
+| Units — authored | 43 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -563,6 +563,27 @@ What this does not do is finish a chain. The topic is authored end to end within
 itself and stops at `access.principal.other`; the unit that consumes that is
 `PTN-AUT-02-IMPACT`, still an outline. Three chains reach a stated outcome, not
 four.
+
+`PTN-AUT-02`, default and seeded credentials, follows it in the same batch and
+takes that step: its impact unit is the only consumer of
+`access.principal.other`, so writing it is what continues the chain rather than
+starting another one beside it.
+
+It needed one fact. `PTN-AUT-02-MAP` is a recon unit that established nothing,
+which meant the topic declared a `phase` axis -- map, then probe, then impact --
+that existed in the file and not in the graph: nothing connected the inventory
+to the unit that uses it. `recon.vendoraccounts.mapped` is that connection, at
+topic tier because it is consumed inside the topic that produces it and nowhere
+else.
+
+The safety fields carry most of the judgement again. `-PROBE` is one attempt per
+documented pair, stopping at the first acceptance, because the alternative is
+credential spraying with a different name -- and where the component
+authenticates against the application's own store, a failed attempt spends a
+real user's lockout budget rather than a service account's, which is a thing to
+establish before attempting rather than after. `-IMPACT` reads rather than
+writes: a management interface is where the destructive functions are, and the
+account was left in place precisely because somebody believed it was harmless.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
