@@ -463,14 +463,19 @@ fix does not close, and that is an outcome an engagement reports rather than a
 control it records. Naming it says where the work goes; registering it says the
 work is not done.
 
-The page carries the distinction rather than leaving it to be inferred. The
-capability's own page says no test in this catalogue establishes it and prints
-the reason it was written anyway; the chain map gives it a fifth shade, read
-against `unused` rather than against `impact`, because "nothing goes on from
-here" and "nothing arrives here yet" are different facts about the chart; and
-the status page counts it beside the dead ends rather than inside them. The
-published totals are labelled the same way, so a denominator that now includes
-a concept no test reaches cannot be read as coverage.
+Every surface carries the distinction rather than leaving it to be inferred.
+The capability's own page says no test in this catalogue establishes it and
+prints the reason it was written anyway; the chain map gives it a fifth shade,
+read against `unused` rather than against `impact`, because "nothing goes on
+from here" and "nothing arrives here yet" are different facts about the chart;
+the status page counts it beside the dead ends rather than inside them; and
+`pentest-navgrid chain --fact` says the same thing, because the two states have
+the same three empty lists and the sentence written for the second one --
+*a chain reaching it stops here* -- asserts a chain reaches it. Every one of
+those reads the register rather than inferring from what is empty, which is the
+only thing that tells the two apart. The published totals are labelled the same
+way, so a denominator that now includes a concept no test reaches cannot be read
+as coverage.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase

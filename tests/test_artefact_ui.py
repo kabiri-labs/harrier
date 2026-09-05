@@ -3197,17 +3197,42 @@ class TheChainMapIsTheWholeCatalogueAtOnce(unittest.TestCase):
                          sorted(f["name"] for f in self.data["families"]))
         self.assertEqual([col["name"] for col in self.map], order)
 
-    def test_the_four_states_partition_the_capabilities(self):
+    def test_the_states_partition_the_capabilities(self):
         total = sum(sum(col["tally"].values()) for col in self.map)
         self.assertEqual(total, len(self.data["facts"]))
+
+    def test_the_map_reads_the_register_when_it_is_called_without_a_document(self):
+        """The defect this is written against: the index of what is registered
+        was built beside the page rather than from the catalogue, so every
+        exported function -- these tests included -- saw nothing and shaded a
+        registered outcome as an ordinary one. The page and the measurement were
+        two different pictures, and the comparison below passed because both of
+        its sides came from the half that was wrong.
+
+        Asserted here rather than only in the browser, because the browser is
+        the half that was already right.
+        """
+        listed = {f for e in self.data["uncovered"] for f in e["facts"]}
+        self.assertTrue(listed, "nothing is registered, so this proves nothing")
+        states = {cell["fact"]: cell["state"]
+                  for col in self.map for cell in col["cells"]}
+        self.assertEqual({f for f, st in states.items() if st == "unwritten"}, listed)
 
     def test_the_shading_agrees_with_the_figures_published_beside_it(self):
         """The picture and the numbers on the status page come from one source.
         Two ways of counting the same thing is one of them being wrong."""
         tally = {k: sum(col["tally"][k] for col in self.map)
-                 for k in ("impact", "routed", "short", "unused")}
+                 for k in ("impact", "routed", "short", "unused", "unwritten")}
+        listed = {f for e in self.data["uncovered"] for f in e["facts"]}
         self.assertEqual(tally["unused"], len(self.data["deadEnds"]))
-        self.assertEqual(tally["impact"], len(self.data["impacts"]))
+        self.assertEqual(tally["unwritten"], len(listed))
+        # An outcome written ahead of the tests is counted as that rather than
+        # as an outcome, so the two figures have to add back up to the set the
+        # status page publishes.
+        self.assertEqual(
+            tally["impact"] + len(listed & set(self.data["impacts"])),
+            len(self.data["impacts"]),
+        )
         routed = run_in_node("""
             let n = 0;
             Object.keys(D.facts).forEach(function (f) {
