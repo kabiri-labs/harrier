@@ -2086,7 +2086,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         """Against `unused` rather than against `impact`: both are places the
         chart is not, and "nothing goes on from here" is a different fact about
         the catalogue than "nothing arrives here yet"."""
-        page = self.open("#/chains")
+        page = self.open("#/status")
         listed = [f for e in self.data["uncovered"] for f in e["facts"]]
         self.assertTrue(listed, "nothing is registered, so this proves nothing")
         for fid in listed:
@@ -2108,6 +2108,55 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         # honest rather than double counting.
         self.assertFalse(listed & set(self.data["deadEnds"]))
 
+    def test_the_model_page_publishes_both_registers_with_their_reasons(self):
+        """A count of where the model stops is a figure a reader cannot
+        interrogate: 20 capabilities nothing uses reads as 20 things left
+        undone, and most of them are dead ends for good. Which is which is
+        written down per cause in the repository, and until this it was the one
+        part of the model that never left it.
+
+        Swept over both registers rather than asserted on the entry that
+        prompted it: what would undo this is a third cause added to a register
+        and never rendered.
+        """
+        text = self.text("#/status")
+        self.assertShows(text, "Where the model stops, and why")
+        entries = (self.data["unconsumed"] or []) + (self.data["uncovered"] or [])
+        self.assertGreater(len(entries), 1, "too few entries for this to mean anything")
+        flat = " ".join(text.split())
+        for entry in entries:
+            with self.subTest(cause=entry["cause"]):
+                self.assertShows(flat, entry["cause"])
+                # The authored reason, not a paraphrase and not a truncation.
+                self.assertShows(flat, " ".join(entry["reason"].split()))
+                for fid in entry["facts"]:
+                    self.assertShows(flat, fid)
+
+    def test_the_two_registers_are_reported_apart_from_each_other(self):
+        """They answer opposite questions -- nothing goes on from here, and
+        nothing arrives here yet -- so one list carrying both would leave a
+        reader unable to tell which they are looking at."""
+        text = " ".join(self.text("#/status").split())
+        first = text.index("Established, and nothing goes on from it")
+        second = text.index("Written down, and no test reaches it yet")
+        self.assertLess(first, second)
+        listed = {f for e in self.data["unconsumed"] for f in e["facts"]}
+        other = {f for e in self.data["uncovered"] for f in e["facts"]}
+        self.assertTrue(listed and other)
+        self.assertFalse(listed & other)
+
+    def test_every_registered_capability_is_a_link_to_its_own_page(self):
+        """A capability named in a reason and not reachable from it is a list
+        the reader has to search for by hand."""
+        page = self.open("#/status")
+        entries = (self.data["unconsumed"] or []) + (self.data["uncovered"] or [])
+        for entry in entries:
+            for fid in entry["facts"]:
+                with self.subTest(fact=fid):
+                    self.assertGreaterEqual(
+                        page.locator('a.chip[href="#/capability/' + fid + '"]').count(), 1
+                    )
+
     def test_the_status_page_partitions_every_test_by_where_its_chain_goes(self):
         text = self.text("#/status")
         reach = self.data["reach"]
@@ -2121,11 +2170,15 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
     def test_neither_general_view_claims_an_ordering_it_has_not_earned(self):
         """Both say it, because both could be read as a progression: the matrix
         by having axes, and the map by having columns."""
-        matrix = self.text("#/status").lower()
-        self.assertNotIn("a chain runs left to right", matrix)
-        self.assertIn("not the stages of an attack", matrix)
+        page = self.text("#/status").lower()
+        self.assertNotIn("a chain runs left to right", page)
+        self.assertIn("not the stages of an attack", page)
 
-        chart = self.text("#/chains").lower()
+        # One page carries both now. The disclaimers are still two, because the
+        # two pictures invite the misreading differently -- the matrix by
+        # having axes, the map by having columns -- and a single sentence for
+        # both would sit next to whichever it was not written for.
+        chart = page
         self.assertIn("not by any claim about how an attack proceeds", chart)
         # The column order is a measurement, so the picture prints the edges
         # that run against it rather than leaving them out of the picture.
@@ -2198,14 +2251,18 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertTrue(rows)
         self.assertNotIn("access.host", "\n".join(rows))
 
-    def test_the_chains_page_leads_with_the_destinations(self):
-        """A page named for chains opened on a picture of every capability in
-        the file -- a glossary, shaded by coverage. Both belong here; the order
-        is the claim."""
-        text = self.text("#/chains")
-        ends = text.lower().index("where chains end")
-        chart = text.lower().index("the chart, at the scale of the whole catalogue")
-        self.assertLess(ends, chart)
+    def test_the_chains_page_is_the_two_ways_into_a_route(self):
+        """It used to open on a picture of every capability in the file -- a
+        glossary, shaded by coverage -- and this asserted that the destinations
+        came first. The glossary has left the page, so what is asserted is what
+        is left: the surface in front of you, then the outcome you are heading
+        for. Ordered from what a tester is holding to what they are aiming at,
+        because only one of the two is in the room with them."""
+        text = self.text("#/chains").lower()
+        here = text.index("start from what you are looking at")
+        ends = text.index("where chains end")
+        self.assertLess(here, ends)
+        self.assertNotIn("the chart, at the scale of the whole catalogue", text)
 
     def test_following_a_destination_from_the_chains_page_reaches_a_route(self):
         """End to end, the way a reader meets it: the promise on one page and
@@ -2455,14 +2512,24 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         self.assertIn("where to start", labels)
         self.assertNotIn("where the input lands", labels)
 
-    def test_the_chains_page_shows_the_map_and_not_the_matrix(self):
-        """The page is named for routes. The family matrix counts tests per pair
-        of families, which is a statement about the catalogue, and it said so in
-        its own second sentence while sitting here."""
-        page = self.open("#/chains")
+    def test_the_model_page_carries_the_picture_and_the_chains_page_does_not(self):
+        """The map is a glossary of every capability shaded by how much of the
+        catalogue is written, which is a statement about the catalogue rather
+        than a route. It sat on the page named for routes, and the comment that
+        put it there said so without acting on it.
+
+        What the chains page keeps is the two ways into a route: the surface in
+        front of you, and the outcome you are heading for.
+        """
+        page = self.open("#/status")
         self.assertEqual(page.locator(".mcol").count(), 7)
         self.assertEqual(page.locator(".mcell").count(), len(self.data["facts"]))
-        self.assertEqual(page.locator("table.matrix").count(), 0)
+        chains = self.open("#/chains")
+        self.assertEqual(chains.locator(".mcell").count(), 0)
+        self.assertEqual(chains.locator("table.matrix").count(), 0)
+        text = self.driver.text()
+        self.assertShows(text, "Start from what you are looking at")
+        self.assertShows(text, "Where chains end")
 
     def test_the_matrix_is_on_the_catalogue_page_and_names_both_axes(self):
         """A legend under a table is read after the table has been misread."""
@@ -2525,11 +2592,11 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         testing stickiness the moment anything is added or removed there --
         which is how it read a heading sitting at its natural position as a
         heading that had come unstuck."""
-        page = self.open("#/chains")
+        page = self.open("#/status")
         for width in (1280, 700):
             with self.subTest(width=width):
                 page.set_viewport_size({"width": width, "height": 800})
-                self.open("#/chains")
+                self.open("#/status")
                 # Far enough into the map that its columns are being read, and
                 # its headings can only still be at the top of the viewport by
                 # sticking there.
@@ -2574,7 +2641,7 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         page.set_viewport_size({"width": 1280, "height": 900})
 
     def test_the_map_filter_narrows_the_picture_and_gives_it_back(self):
-        page = self.open("#/chains")
+        page = self.open("#/status")
         every = page.locator(".mcell").count()
         page.fill("#mapfilter", "session")
         self.driver.wait_for_render(
@@ -2591,11 +2658,11 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
     def test_a_cell_of_the_map_opens_the_capability_it_stands_for(self):
         """The map is the way in: every cell is a link to the page that answers
         what this capability opens and what establishes it."""
-        page = self.open("#/chains")
+        page = self.open("#/status")
         first = page.locator(".mcell").first
         fact = first.get_attribute("href").split("/")[-1]
         first.click()
-        self.driver.wait_for_view("Attack chains")
+        self.driver.wait_for_view("Catalogue status and model")
         self.assertIn("capability", self.driver.hash())
         self.assertShows(self.driver.text(), "Required by")
         self.assertIn(fact.split("%2E")[0][:6].lower(), self.driver.text().lower())
@@ -3083,15 +3150,33 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
             [0, 0, ""],
         )
 
-    def test_the_capability_map_is_still_on_the_page_it_was_on(self):
-        """Kept rather than moved. It is where the catalogue's own gaps are
-        reported, and burying the honesty behind a friendlier view is the one
-        way this change could make the product worse."""
-        page = self.open("#/chains")
+    def test_moving_the_map_did_not_bury_what_it_reported(self):
+        """This asserted that the map stayed where it was, and the objection it
+        was written against is the right one: burying the honesty behind a
+        friendlier view is the one way that change could make the product
+        worse. The map has moved, so what that objection protects is asserted
+        directly instead of through the location that used to carry it.
+
+        The page it moved to is the one whose subject is what the catalogue does
+        and does not contain, it now reports strictly more than the map did --
+        every gap the validator knows about, with the reason it is open -- and
+        none of it is behind something the reader has to open first.
+        """
+        page = self.open("#/status")
+        self.assertEqual(self.driver.count(".chainmap"), 1)
+        text = self.driver.text()
+        self.assertShows(text, "Where the model stops, and why")
+        # Not folded away, on either the map or the reasons beside it.
+        self.assertEqual(page.locator("main details").count(), 0)
+        # And one click from the page a reader lands on looking for routes.
+        chains = self.open("#/chains")
+        self.assertEqual(chains.locator('main a[href="#/status"]').count(), 1)
+        chains.locator('main a[href="#/status"]').first.click()
+        self.driver.wait_for_view("Attack chains")
         self.assertEqual(self.driver.count(".chainmap"), 1)
         self.assertEqual(
             page.evaluate("document.querySelector('nav a.on').textContent"),
-            "Attack Chains",
+            "About",
         )
 
     def test_no_link_is_nested_inside_another(self):

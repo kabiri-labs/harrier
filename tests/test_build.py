@@ -256,6 +256,32 @@ class TheCatalogueTravelsWithTheFile(unittest.TestCase):
         self.assertEqual(len(self.embedded["units"]), counts["units"])
         self.assertEqual(len(self.embedded["topics"]), counts["topics"])
 
+    def test_both_gap_registers_travel_with_it_as_they_were_written(self):
+        """The identifiers alone would be a count the reader cannot
+        interrogate. The prose under each cause is the part that says whether a
+        gap is open because the work is outstanding or because there is nothing
+        there to write, and those are opposite readings of one number -- so it
+        is carried rather than summarised, and checked against the file rather
+        than against a copy of it."""
+        import yaml
+
+        vocab = yaml.safe_load(
+            (REPO_ROOT / "vocab" / "facts.yaml").read_text(encoding="utf-8")
+        )
+        for name in ("unconsumed", "uncovered"):
+            with self.subTest(register=name):
+                written = vocab[name]
+                carried = self.embedded[name]
+                self.assertEqual(
+                    [e["cause"] for e in carried], [e["cause"] for e in written]
+                )
+                for got, want in zip(carried, written):
+                    self.assertEqual(got["facts"], sorted(want["facts"]))
+                    # Collapsed like every other block scalar that reaches the
+                    # page: the YAML carries the file's line breaks, which are
+                    # not the document's.
+                    self.assertEqual(got["reason"], " ".join(want["reason"].split()))
+
     def test_every_card_a_unit_names_is_embedded(self):
         # A card behind a link the reader cannot follow is a card they do not have.
         for unit in self.embedded["units"].values():

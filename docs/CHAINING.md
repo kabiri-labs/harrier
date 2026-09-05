@@ -282,7 +282,8 @@ continuation, 14 establish an impact, 26 stop short, and 39 declare no
 capability at all — a partition, and the four sum to the catalogue. Phase 5
 charted reconnaissance through to primitives and stopped there; primitive to
 impact is largely unwritten. `pentest-navgrid chain` reports the split and the artefact
-reports it on the Attack Chains page, because a reader meeting a dozen dead ends
+reports it on the catalogue status and model page -- with the register entry
+that says why each one is open -- because a reader meeting a dozen dead ends
 should be told it is the chart's reach rather than inferring the catalogue is
 broken.
 
