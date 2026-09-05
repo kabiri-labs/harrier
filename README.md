@@ -184,14 +184,17 @@ through one of a test's conditions and leaves the rest outstanding. It is a
 statement about what this file charts, never about a target.
 
 A separate page answers what the catalogue contains rather than where a route
-goes, and that is where the model is inspected. It states every gap the
-validator knows about **with the reason it is open**, per cause, in the words
-the repository records: a capability tests establish and nothing goes on to use,
-and one written down before any test reaches it. A count of either is a figure a
-reader cannot interrogate — 20 capabilities nothing uses reads as 20 things left
-undone, and most of them are dead ends for good, which is a different claim:
+goes, and that is where the model is inspected. It states the registered gaps
+**with the reason each is open**, per cause, in the words the repository
+records: a capability tests establish and nothing goes on to use, and one
+written down before any test reaches it. A count on its own is a figure a reader
+cannot interrogate — 20 capabilities nothing uses reads as 20 things left
+undone, and most of them are dead ends for good, which is a different claim. The
+page says what each register covers and accounts for the rest beside it, because
+a register that looked like it covered everything would be that same figure one
+level up:
 
-![The model page: both gap registers, each cause with the written reason it is open and the capabilities it covers](docs/assets/model-status.png)
+![The model page: the registered gaps, the first cause with the written reason it is open and the capabilities it covers](docs/assets/model-status.png)
 
 Under those, the capability map. Every capability in the file, in a column for
 the kind of thing it is, shaded by how far the chart reaches from it — green

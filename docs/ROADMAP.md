@@ -505,6 +505,18 @@ writing a consumer for it would draw an edge the evidence does not support.
 That distinction has been written down per cause since the register existed,
 and it was the one part of the model that never left the repository.
 
+What the page says about its own coverage is narrower than the first draft of
+it. The `unconsumed` gate ratchets chain-tier facts, because the tier is what
+says an edge through a capability is an escalation -- so 8 of the 20 dead ends
+are topic-tier and outside it. Printing the figure of 20 above a section that
+explained 12 and claimed to explain every gap was the same uninterrogable
+number one level up. The remainder is now derived on the page and carries the
+smaller claim its tier already makes: a topic-tier fact is consumed inside the
+topic that produces it, so one nothing consumes is a technique whose result no
+sibling declares rather than a chain that stopped. That it is not ratcheted is
+stated where it is listed, and the suite asserts the two groups partition the
+published figure exactly.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.

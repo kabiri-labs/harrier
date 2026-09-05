@@ -2132,6 +2132,41 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
                 for fid in entry["facts"]:
                     self.assertShows(flat, fid)
 
+    def test_every_capability_the_figure_counts_is_accounted_for_below_it(self):
+        """The defect this is written against, which is the one this whole
+        section exists to remove, reproduced one level up.
+
+        The table says 20 capabilities no test uses. The register explains the
+        chain-tier ones, because that is the only tier its gate ratchets, and
+        the copy above it claimed to explain every gap — so a reader met 20 and
+        was shown 12, with nothing said about the difference. The remainder is
+        derived on the page now, and this asserts the two groups partition the
+        figure exactly rather than merely both being present.
+        """
+        registered = {f for e in self.data["unconsumed"] for f in e["facts"]}
+        dead = set(self.data["deadEnds"])
+        rest = dead - registered
+        self.assertTrue(registered and rest, "one of the groups is empty here")
+        self.assertEqual(registered | rest, dead)
+
+        page = self.open("#/status")
+        flat = " ".join(self.driver.text().split())
+        self.assertShows(flat, "Established, and not covered by that register · "
+                               + str(len(rest)))
+        for fid in sorted(rest):
+            with self.subTest(fact=fid):
+                self.assertGreaterEqual(
+                    page.locator('a.chip[href="#/capability/' + fid + '"]').count(), 1
+                )
+
+    def test_the_page_does_not_claim_the_registers_cover_every_gap(self):
+        """They cover the tiers their gates ratchet, and saying otherwise is
+        the same false figure in words."""
+        flat = " ".join(self.text("#/status").split()).lower()
+        self.assertNotIn("every gap the validator knows about", flat)
+        # And the tier that is not ratcheted says so where it is listed.
+        self.assertShows(flat, "it is not ratcheted")
+
     def test_the_two_registers_are_reported_apart_from_each_other(self):
         """They answer opposite questions -- nothing goes on from here, and
         nothing arrives here yet -- so one list carrying both would leave a
