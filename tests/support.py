@@ -134,10 +134,15 @@ class Sandbox:
         rejected, and neither is what the test is about, so the register is
         recomputed from whatever the fixture now holds rather than patched.
 
+        The uncovered register is disturbed by the pruning itself: a fact no
+        unit names is exactly what that register is for, and it is also exactly
+        what the filter below removes -- so every entry in it names something
+        that no longer exists by the time the fixture is done.
+
         This means a sandbox reached through `add_unit` or `add_topic` cannot
-        test the register itself -- the fixture would satisfy the gate on its
-        way past. The register's own tests edit `vocab/facts.yaml` directly for
-        that reason, and this method is not on that path.
+        test either register itself -- the fixture would satisfy the gate on its
+        way past. Their own tests edit `vocab/facts.yaml` directly for that
+        reason, and this method is not on that path.
         """
         path = self.path("vocab/facts.yaml")
         if not path.is_file():
@@ -156,6 +161,13 @@ class Sandbox:
                 referenced.update(names or [])
         vocab = yaml.safe_load(path.read_text(encoding="utf-8"))
         vocab["facts"] = [f for f in vocab["facts"] if f["id"] in referenced]
+
+        # Dropped rather than recomputed, and the difference is worth stating:
+        # the filter above keeps only facts a unit names, so after it there is
+        # no unreferenced fact left for the register to be about. Recomputing
+        # would always produce nothing; saying so is shorter and does not read
+        # as a calculation whose result happens to be empty.
+        vocab.pop("uncovered", None)
 
         dead = sorted(
             fact["id"]

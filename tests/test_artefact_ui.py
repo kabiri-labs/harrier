@@ -820,11 +820,16 @@ class RoutesToAnImpactAreTheSameGraphWalkedBackwards(unittest.TestCase):
         """)
         self.assertGreater(result["reported"], 0)
         self.assertEqual(result["earned"], [])
-        self.assertEqual(
-            result["impactsWithNoRoute"], [],
-            "an outcome this catalogue charts no way to is a gap in the catalogue, "
-            "and this test is where it should be noticed",
+        # An outcome this catalogue charts no way to is a gap in the catalogue,
+        # and this is where it should be noticed. It may now be written down
+        # rather than absent -- but only written down: the set has to be exactly
+        # the registered ones, so neither an unregistered gap nor a stale entry
+        # gets past here.
+        registered = sorted(
+            f for entry in self.data["uncovered"] for f in entry["facts"]
+            if f.startswith("impact.")
         )
+        self.assertEqual(result["impactsWithNoRoute"], registered)
 
     def test_the_list_of_starts_names_every_start_the_drawings_use(self):
         """The page draws a few routes and lists every capability a route to
@@ -2041,6 +2046,67 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
         # also 59, which fails the check while the page says exactly the right
         # thing.
         self.assertNotIn(f"{dead + impacts} — impacts excluded", text)
+
+    # --- a concept written ahead of the tests ----------------------------
+
+    def test_a_capability_no_test_reaches_says_so_rather_than_reporting_a_search(self):
+        """"No route is charted within five steps" is true of a fact nothing in
+        the catalogue names, and it is the wrong sentence: it reports the result
+        of a search, which reads as a route that might be six steps long. The
+        register knows the difference, and the page has to say which one it is
+        looking at."""
+        entry = self.data["uncovered"][0]
+        fid = entry["facts"][0]
+        text = self.text("#/capability/" + fid)
+        self.assertShows(text, "No test in this catalogue establishes this")
+        self.assertNotIn("within five steps", text)
+        # The authored reason, not a paraphrase of it.
+        self.assertShows(text, " ".join(entry["reason"].split()[:8]))
+
+    def test_every_registered_capability_says_it_on_its_own_page(self):
+        """A sweep rather than the one entry that prompted it: what would undo
+        this is a second entry added to the register and never rendered."""
+        listed = [f for e in self.data["uncovered"] for f in e["facts"]]
+        self.assertTrue(listed, "nothing is registered, so this proves nothing")
+        for fid in listed:
+            with self.subTest(fact=fid):
+                self.assertShows(self.text("#/capability/" + fid),
+                                 "No test in this catalogue establishes this")
+
+    def test_an_outcome_nothing_reaches_is_not_listed_as_two_zeroes(self):
+        """It sits in the same list as the outcomes tests do arrive at. Reported
+        by the numbers it happens to have, it reads as an oversight rather than
+        as a decision that was written down."""
+        fid = self.data["uncovered"][0]["facts"][0]
+        self.assertIn(fid, self.data["impacts"])
+        row = self.open("#/chains").locator('a[href="#/capability/' + fid + '"]').first
+        self.assertShows(row.inner_text(), "no test reaches it yet")
+
+    def test_the_map_shades_it_apart_from_the_outcomes_tests_reach(self):
+        """Against `unused` rather than against `impact`: both are places the
+        chart is not, and "nothing goes on from here" is a different fact about
+        the catalogue than "nothing arrives here yet"."""
+        page = self.open("#/chains")
+        listed = [f for e in self.data["uncovered"] for f in e["facts"]]
+        self.assertTrue(listed, "nothing is registered, so this proves nothing")
+        for fid in listed:
+            with self.subTest(fact=fid):
+                cell = page.locator('.mcell[href="#/capability/' + fid + '"]').first
+                self.assertIn("unwritten", cell.get_attribute("class"))
+        self.assertShows(self.driver.text(),
+                         "modelled, and no test in this catalogue names it yet")
+
+    def test_the_status_page_counts_it_apart_from_the_dead_ends(self):
+        """One number covering both would answer neither question. A capability
+        tests establish and none uses is a gap in the chart; one no test names
+        at all is a gap in the catalogue."""
+        text = self.text("#/status")
+        listed = {f for e in self.data["uncovered"] for f in e["facts"]}
+        self.assertShows(text, "Capabilities no test reaches yet")
+        self.assertShows(text, "Capabilities no test uses")
+        # And the two sets really are disjoint, which is what makes two rows
+        # honest rather than double counting.
+        self.assertFalse(listed & set(self.data["deadEnds"]))
 
     def test_the_status_page_partitions_every_test_by_where_its_chain_goes(self):
         text = self.text("#/status")

@@ -158,8 +158,16 @@ empty.
 - `closes` names only facts this unit is the sole producer of.
 - An authored `test` or `recon` unit yields something. A unit that establishes
   nothing cannot be reached from anywhere and leads nowhere.
-- Every declared fact is referenced by at least one unit. Vocabulary must not
-  outrun use.
+- **The reference gate.** Every declared fact is named by at least one unit, or
+  is registered under `uncovered` in `vocab/facts.yaml` with the cause it
+  belongs to. It used to be a flat refusal — vocabulary must not outrun use —
+  and that refused two different things with one sentence: a fact nobody
+  noticed, and the only honest way to write down where the catalogue is going.
+  A registered fact says on its own page that no test in this catalogue
+  establishes it, and is counted apart from the ones tests do reach.
+- A fact in the `uncovered` register that a unit has since started naming is
+  rejected, the same ratchet the `unconsumed` register carries: it can shrink
+  by a test arriving, never by the entry being forgotten.
 - No fact id is declared twice.
 - Every fact declares a `tier`, and it is one of the three.
 - **The producer gate.** Every fact something requires has at least one unit
@@ -179,11 +187,14 @@ empty.
   rejected. The register names the gaps that are open, and an entry outliving
   its gap turns it into a list of suppressions.
 
-The two gates are deliberately not symmetrical in what they permit. A fact with
+The three gates are deliberately not symmetrical in what they permit. A fact with
 no producer is a hole and is refused outright, because from the outside it reads
 exactly like a route nobody has taken yet. A fact with no consumer is where the
-chart honestly stops, so it is recorded rather than refused — what is refused is
-recording nothing.
+chart honestly stops, and a fact nothing mentions at all is where the catalogue
+has not arrived yet; both are recorded rather than refused — what is refused is
+recording nothing. The asymmetry is the point: a broken chain and an unwritten
+one look identical from outside and mean opposite things, so only one of them
+may be written down.
 
 ## 6. Reading the graph
 
@@ -260,11 +271,13 @@ validator rejects anything requiring one, and it is shown as where a chain is
 reportable result where the chart simply does not go on. Folding impacts into
 that count would inflate it and would describe arriving as failing to arrive.
 
-It is no longer the common case. 20 of 187
+It is no longer the common case. 20 of 188
 capabilities are established by a test and used by none, including 1 of 33
 `primitive.*` and 11 of 59 `control.*`. The chain-tier ones among them are
 registered under `unconsumed` with the cause they belong to, so the count moves
-only when a gap is worked on. Of 393 tests, 314 have a potential
+only when a gap is worked on. A third state is counted apart from both: 1 of 188
+is named by no test at all, registered under `uncovered`, and is where the
+catalogue has not arrived rather than where the chart stops. Of 393 tests, 314 have a potential
 continuation, 14 establish an impact, 26 stop short, and 39 declare no
 capability at all — a partition, and the four sum to the catalogue. Phase 5
 charted reconnaissance through to primitives and stopped there; primitive to

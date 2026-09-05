@@ -1418,9 +1418,18 @@ facts:
 
   # The outcomes a confirmed capability reaches. Written together, because the
   # set has to partition what the catalogue's primitives actually obtain: a
-  # capability whose outcome is not here is one the chain still cannot finish,
-  # and an outcome nothing reaches is a claim about a catalogue that does not
-  # exist. Every one of them is terminal -- requiring an impact is rejected.
+  # capability whose outcome is not here is one the chain still cannot finish.
+  # Every one of them is terminal -- requiring an impact is rejected.
+  #
+  # This block used to end by saying that an outcome nothing reaches is a claim
+  # about a catalogue that does not exist. That was the reason the vocabulary
+  # could not name a destination before a route to it was written, and it was
+  # the wrong half of the problem: the claim is not made by the entry, it is
+  # made by the entry being indistinguishable from the ones tests do reach. An
+  # outcome no test establishes is now written here and listed in the
+  # `uncovered` register at the foot of this file, which is what makes it
+  # countable, visible on the page, and impossible to leave lying there once a
+  # test arrives.
 
   - id: impact.data.disclosed
     label: Data the caller should not hold is read
@@ -1479,6 +1488,17 @@ facts:
       A transaction settles at a figure the business did not set, or an amount
       owed is not collected. Separate from entitlement because it is a loss on
       a ledger, and a report says so differently.
+
+  - id: impact.persistence.retained
+    label: Access outlives the remediation
+    tier: chain
+    description: >
+      A way back into the application survives the fix: an account the caller
+      registered for themselves, a token or grant minted while they held a
+      session, a recovery address or second factor bound to somebody else's
+      login. What separates this from holding a session is that rotating the
+      credential that was abused does not close it -- the way back was issued
+      by the application and is now its own.
 
 # The unconsumed register -- the mirror of the producer gate.
 #
@@ -1541,3 +1561,46 @@ unconsumed:
       that both a new orphan and a use written for this one fail.
     facts:
       - primitive.blind.oracle
+
+# The uncovered register -- the mirror of the reference gate.
+#
+# Until this register existed, a fact no unit named at all was rejected: an
+# unreachable fact is vocabulary nobody can use. That is true of a fact nobody
+# noticed, and it also refused the only honest way to say *this is where the
+# catalogue is going next*. The two are not the same thing, and the gate could
+# not tell them apart, so the model could never be ahead of the tests -- a
+# concept existed exactly when a test happened to reach it, which makes the
+# vocabulary a description of today's coverage rather than of the domain.
+#
+# Listing rather than forbidding, the same trade the `unconsumed` register
+# makes above: a growing catalogue honestly has concepts no test reaches *yet*.
+# What is not honest is for that to be invisible -- for an outcome nothing
+# reaches to sit on the page looking exactly like the ones tests arrive at.
+# Each is recorded under the cause it belongs to, adding one is a deliberate
+# entry rather than a silent pass, and the artefact says on the capability's
+# own page that no test in this catalogue establishes it.
+#
+# The half that stops this becoming a place to park vocabulary: an entry for a
+# fact something has since started naming is *rejected*. The register can only
+# shrink by a test arriving, never by the entry being forgotten.
+#
+# What this does not relax: a fact a unit `requires` that nothing establishes
+# is still rejected. That is a broken chain rather than an unwritten one, and
+# it reads from the outside exactly like a route nobody has taken yet -- which
+# is the confusion this whole file exists to prevent.
+uncovered:
+  - cause: an-outcome-the-catalogue-is-heading-for
+    reason: >-
+      Written before a route to it exists, because the destination is the part
+      that can be decided now and the tests are the part that cannot. The
+      catalogue's tests around account registration, recovery binding and second
+      factor enrolment establish that a control is absent or defeated, and they
+      stop there -- `control.registration.unverified` and `control.reauth.absent`
+      are both in the unconsumed register above for exactly that reason. What
+      those defeats leave behind is a way back in that the fix does not close,
+      and that is an outcome an engagement reports rather than a control it
+      records. Naming it here says where that work goes; it is listed here
+      because saying so is not the same as having done it, and the entry is
+      rejected the moment a test yields the fact.
+    facts:
+      - impact.persistence.retained

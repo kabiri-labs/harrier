@@ -621,11 +621,32 @@ class TheChainArrivesSomewhere(unittest.TestCase):
         )
         self.assertEqual(orphans, self.WITHOUT_AN_OUTCOME)
 
-    def test_every_outcome_is_reachable_from_a_test(self):
-        """An impact nothing establishes is a claim about a catalogue that does
-        not exist, and it would sit in the matrix looking like coverage."""
+    def test_every_outcome_is_reachable_from_a_test_or_registered_as_not_yet(self):
+        """An impact nothing establishes would sit in the matrix looking like
+        coverage, and that is still what this refuses. What changed is that it
+        may now be written down instead: the `uncovered` register is the only
+        thing that excuses one, it names the reason, and the artefact prints it.
+
+        Asserted in both directions on purpose. An unreachable outcome outside
+        the register fails, and a registered outcome that something does
+        establish fails too -- an entry that outlives its gap is how a register
+        of what is unwritten turns into a place to park vocabulary.
+        """
+        import yaml
+
+        registered = {
+            f
+            for entry in yaml.safe_load(
+                (REPO_ROOT / "vocab" / "facts.yaml").read_text(encoding="utf-8")
+            )["uncovered"]
+            for f in entry["facts"]
+        }
         for impact in self.chain.impacts():
-            self.assertTrue(self.chain.producers.get(impact), impact)
+            with self.subTest(impact=impact):
+                if impact in registered:
+                    self.assertFalse(self.chain.producers.get(impact), impact)
+                else:
+                    self.assertTrue(self.chain.producers.get(impact), impact)
 
     def test_an_outcome_topic_declares_no_surface(self):
         """It is not reached by going somewhere. It is reached by holding
@@ -792,3 +813,169 @@ class TheRegisterDescribesThisCatalogue(unittest.TestCase):
     def test_every_registered_fact_is_established_by_something(self):
         for fid in sorted(self._listed()):
             self.assertTrue(self.chain.producers.get(fid), fid)
+
+
+class ConceptsMayBeWrittenAheadOfTheTests(SandboxCase):
+    """The reference gate, which used to be a flat refusal.
+
+    A fact no unit named was rejected outright -- an unreachable fact is
+    vocabulary nobody can use -- and that one sentence refused two different
+    things: a fact nobody noticed, and the only honest way to write down where
+    the catalogue is going. The register separates them, with the same two
+    halves the `unconsumed` register has: an unrecorded gap is still rejected,
+    and an entry whose gap has closed is rejected too.
+    """
+
+    REGISTERED = "impact.persistence.retained"
+
+    def test_a_fact_nothing_names_and_nothing_registers_is_rejected(self):
+        def drop(vocab):
+            for entry in vocab["uncovered"]:
+                if self.REGISTERED in entry["facts"]:
+                    entry["facts"].remove(self.REGISTERED)
+            vocab["uncovered"] = [e for e in vocab["uncovered"] if e["facts"]]
+            if not vocab["uncovered"]:
+                vocab.pop("uncovered")
+
+        self.box.edit("vocab/facts.yaml", drop)
+        self.assertRejected(
+            f"{self.REGISTERED} is declared but no unit requires, yields or is "
+            f"motivated by it, and it is not in the uncovered register"
+        )
+
+    def test_an_entry_for_a_gap_that_has_closed_is_rejected(self):
+        """The half that stops the register becoming a place to park vocabulary.
+        A test arriving is the only thing that may remove an entry."""
+        self.box.edit(
+            "knowledge/biz/PTN-BIZ-08-IMPACT.unit.yaml",
+            lambda u: u.update(yields=["impact.money.lost", self.REGISTERED]),
+        )
+        self.assertRejected(f"the uncovered register still lists {self.REGISTERED}")
+
+    def test_a_motivation_alone_closes_the_gap(self):
+        """Naming, not establishing. The gate asks whether the catalogue has
+        arrived at the concept at all, and a unit that names it as a motivation
+        has -- so the entry has to go even though nothing yields it yet."""
+        self.box.edit(
+            "knowledge/biz/PTN-BIZ-08-IMPACT.unit.yaml",
+            lambda u: u.update(motivated_by=[self.REGISTERED]),
+        )
+        self.assertRejected(f"the uncovered register still lists {self.REGISTERED}")
+
+    def test_registering_a_fact_outside_the_vocabulary_is_rejected(self):
+        self.box.edit(
+            "vocab/facts.yaml",
+            lambda v: v["uncovered"][0]["facts"].append("impact.invented.here"),
+        )
+        self.assertRejected("the uncovered register names unknown fact impact.invented.here")
+
+    def test_one_gap_under_two_causes_is_rejected(self):
+        def twice(vocab):
+            vocab["uncovered"].append({
+                "cause": "a-second-reason-for-the-same-thing",
+                "reason": "A second entry naming a fact the first already names, which is "
+                          "the shape that splits one gap across two reasons nobody reads.",
+                "facts": [self.REGISTERED],
+            })
+
+        self.box.edit("vocab/facts.yaml", twice)
+        self.assertRejected(f"{self.REGISTERED} appears in the uncovered register under both")
+
+    def test_two_entries_may_not_share_a_cause(self):
+        def clash(vocab):
+            vocab["uncovered"].append({
+                "cause": vocab["uncovered"][0]["cause"],
+                "reason": "The same cause stated twice, which splits the facts that share "
+                          "it and leaves the second reason where nobody reads it.",
+                "facts": ["impact.money.lost"],
+            })
+
+        self.box.edit("vocab/facts.yaml", clash)
+        self.assertRejected("duplicate cause")
+
+
+class TheRegisterDoesNotExcuseABrokenChain(SandboxCase):
+    """The boundary the register must not move, tested from both sides.
+
+    A fact a unit requires that nothing establishes is a hole, and it reads from
+    the outside exactly like a route nobody has taken yet -- which is precisely
+    what the uncovered register is for. So the one way this change could go
+    wrong is the register being usable to silence that. It cannot: a required
+    fact is a named fact, so the entry is rejected as a gap that has closed
+    while the producer gate goes on rejecting the hole.
+    """
+
+    ORPHAN = "recon.entrypoints.mapped"
+
+    def _break_the_producer(self):
+        # The only unit establishing the entry-point inventory, which most of
+        # the catalogue is conditioned on.
+        self.box.edit(
+            "knowledge/rcn/PTN-RCN-03-MAP.unit.yaml",
+            lambda u: u.update(yields=["recon.hosts.enumerated"]),
+        )
+
+    def test_the_producer_gate_still_rejects_it(self):
+        self._break_the_producer()
+        self.assertRejected(f"{self.ORPHAN} is required but no unit establishes it")
+
+    def test_registering_it_does_not_silence_the_producer_gate(self):
+        self._break_the_producer()
+        self.box.edit(
+            "vocab/facts.yaml",
+            lambda v: v["uncovered"][0]["facts"].append(self.ORPHAN),
+        )
+        problems = validate(self.box.root)
+        text = messages(problems)
+        self.assertIn(f"{self.ORPHAN} is required but no unit establishes it", text)
+        # And the attempt is itself reported, rather than passing quietly.
+        self.assertIn(f"the uncovered register still lists {self.ORPHAN}", text)
+
+
+class TheUncoveredRegisterDescribesThisCatalogue(unittest.TestCase):
+    """Against the real files, for the reason its sibling above is: the register
+    is the figure the README, the roadmap and the artefact all publish, so it
+    has to equal what the catalogue actually holds."""
+
+    @classmethod
+    def setUpClass(cls):
+        import yaml
+
+        cls.chain = Chain.load(REPO_ROOT)
+        cls.register = yaml.safe_load(
+            (REPO_ROOT / "vocab" / "facts.yaml").read_text(encoding="utf-8")
+        )["uncovered"]
+
+    def _listed(self):
+        return {f for entry in self.register for f in entry["facts"]}
+
+    def _named_by_a_unit(self):
+        named = set()
+        for unit in self.chain.units.values():
+            requires = unit.get("requires") or {}
+            named |= set(requires.get("all_of") or [])
+            named |= set(requires.get("any_of") or [])
+            named |= set(unit.get("yields") or [])
+            named |= set(unit.get("motivated_by") or [])
+        return named
+
+    def test_it_names_exactly_the_facts_no_unit_names(self):
+        self.assertEqual(self._listed(), set(self.chain.facts) - self._named_by_a_unit())
+
+    def test_nothing_is_in_both_registers(self):
+        """The two registers answer opposite questions -- nothing consumes it,
+        and nothing names it -- so a fact in both would mean one of them is
+        wrong about the same fact."""
+        import yaml
+
+        unconsumed = yaml.safe_load(
+            (REPO_ROOT / "vocab" / "facts.yaml").read_text(encoding="utf-8")
+        )["unconsumed"]
+        self.assertFalse(
+            self._listed() & {f for entry in unconsumed for f in entry["facts"]}
+        )
+
+    def test_every_entry_carries_a_reason_that_is_written_rather_than_a_label(self):
+        for entry in self.register:
+            with self.subTest(cause=entry["cause"]):
+                self.assertGreater(len(entry["reason"].split()), 40, entry["cause"])
