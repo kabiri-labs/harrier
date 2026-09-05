@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Pentest NavGrid 0.31.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Pentest NavGrid 0.32.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 393 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.31.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.32.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -183,16 +183,26 @@ being locked out. The step count is a lower bound and says so — a route travel
 through one of a test's conditions and leaves the rest outstanding. It is a
 statement about what this file charts, never about a target.
 
-The same view carries the capability map. Every capability in the file, in a
-column for the kind of thing it is, shaded by how far the chart reaches from it
-— green where a charted route arrives at an outcome, grey where it runs out,
-and a dashed edge where the concept is written down and no test names it yet.
-That last shade is read against the grey rather than against the outcomes:
-*nothing goes on from here* and *nothing arrives here yet* are different facts
-about the catalogue, and one shade for both would answer neither. Each cell
-opens on the tests that establish it and the tests that declare it a
-prerequisite. The columns are ordered by where the catalogue's own edges run,
-and the 24 that run the other way are named on the page:
+A separate page answers what the catalogue contains rather than where a route
+goes, and that is where the model is inspected. It states every gap the
+validator knows about **with the reason it is open**, per cause, in the words
+the repository records: a capability tests establish and nothing goes on to use,
+and one written down before any test reaches it. A count of either is a figure a
+reader cannot interrogate — 20 capabilities nothing uses reads as 20 things left
+undone, and most of them are dead ends for good, which is a different claim:
+
+![The model page: both gap registers, each cause with the written reason it is open and the capabilities it covers](docs/assets/model-status.png)
+
+Under those, the capability map. Every capability in the file, in a column for
+the kind of thing it is, shaded by how far the chart reaches from it — green
+where a charted route arrives at an outcome, grey where it runs out, and a
+dashed edge where the concept is written down and no test names it yet. That
+last shade is read against the grey rather than against the outcomes: *nothing
+goes on from here* and *nothing arrives here yet* are different facts about the
+catalogue, and one shade for both would answer neither. Each cell opens on the
+tests that establish it and the tests that declare it a prerequisite. The
+columns are ordered by where the catalogue's own edges run, and the 24 that run
+the other way are named on the page:
 
 ![The chain map: every capability in a column for its family, with a key naming five states — charted, stops short, unused, an outcome, and one written ahead of the tests — and the Impact column's tally carrying that last one](docs/assets/attack-chains.png)
 

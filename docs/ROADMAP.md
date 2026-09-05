@@ -477,6 +477,34 @@ only thing that tells the two apart. The published totals are labelled the same
 way, so a denominator that now includes a concept no test reaches cannot be read
 as coverage.
 
+0.32.0 separates running a test from inspecting the model, which was the
+alternative to renaming the navigation and is why the navigation is unchanged.
+
+`#/chains` carried three things: the surface selector, the outcomes a chain is
+meant to end at, and a picture of every capability in the file shaded by how
+much of the catalogue is written. The third is not a chain, and the comment
+that put it there said so without acting on it. The first two are the two ways
+into a route -- what is in front of you, and what you are heading for -- and
+they stay. The picture moves to `#/status`, whose subject already was what this
+file does and does not contain, and which already carried the family matrix
+ordered the same way.
+
+The objection to moving it was written down as a test: burying the honesty
+behind a friendlier view is the one way this could make the product worse. It
+is answered rather than dropped. The page it moved to now reports strictly more
+than the map did -- both gap registers, each cause with the reason it is open,
+in the words the repository records -- none of it is folded away, and the
+chains page links straight to it. The test asserts those properties instead of
+the location that used to stand for them.
+
+Publishing the registers is the substance of the release. A count of where the
+model stops is a figure a reader cannot interrogate: 20 capabilities nothing
+uses reads as 20 things left undone, and 11 of them are dead ends for good --
+absent misuse detection removes a cost rather than granting a capability, and
+writing a consumer for it would draw an edge the evidence does not support.
+That distinction has been written down per cause since the register existed,
+and it was the one part of the model that never left the repository.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.
