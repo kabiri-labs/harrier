@@ -438,6 +438,40 @@ control is its own defect.
 Ctrl/Cmd+K reaches the search box. One shortcut, and modified rather than bare,
 because a bare key fires while the reader is typing into the box it focuses.
 
+0.31.0 lets the vocabulary be written ahead of the tests. A fact no unit named
+was rejected -- an unreachable fact is vocabulary nobody can use -- and that one
+sentence refused two different things: a fact nobody noticed, and the only
+honest way to say where the catalogue is going. A concept therefore existed
+exactly when a test happened to reach it, which makes the vocabulary a
+description of today's coverage rather than of the domain.
+
+An `uncovered` register replaces the refusal, with the same two-sided ratchet
+the `unconsumed` register carries: a fact nothing names and nothing registers
+is still rejected, so a gap cannot arrive silently, and an entry for a fact
+something has since started naming is rejected too, so the register shrinks by
+a test arriving rather than by an entry being forgotten. What did not move is
+the producer gate. A fact a unit *requires* that nothing establishes stays a
+broken chain, because from outside it reads exactly like a route nobody has
+taken yet -- and that confusion is the one this file exists to prevent.
+
+The first entry is `impact.persistence.retained`, an outcome: access that
+outlives the remediation. The catalogue's tests around registration, recovery
+binding and second-factor enrolment establish that a control is absent or
+defeated and stop there -- two of them are in the `unconsumed` register for
+exactly that reason. What those defeats leave behind is a way back in that the
+fix does not close, and that is an outcome an engagement reports rather than a
+control it records. Naming it says where the work goes; registering it says the
+work is not done.
+
+The page carries the distinction rather than leaving it to be inferred. The
+capability's own page says no test in this catalogue establishes it and prints
+the reason it was written anyway; the chain map gives it a fifth shade, read
+against `unused` rather than against `impact`, because "nothing goes on from
+here" and "nothing arrives here yet" are different facts about the chart; and
+the status page counts it beside the dead ends rather than inside them. The
+published totals are labelled the same way, so a denominator that now includes
+a concept no test reaches cannot be read as coverage.
+
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
 5's, and the one every local chain in the artefact is derived from.

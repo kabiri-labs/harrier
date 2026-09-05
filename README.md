@@ -7,7 +7,7 @@ An offline execution companion for web application security testing standards.
 It breaks broad standard test cases into atomic, separately addressable **Test
 Units**, and derives the attack-chain continuations each success may open.
 
-> **Pentest NavGrid 0.30.0 is an early public alpha.** The WSTG decomposition is broad —
+> **Pentest NavGrid 0.31.0 is an early public alpha.** The WSTG decomposition is broad —
 > every resolvable identifier is claimed, and 393 Test Units exist. The depth
 > behind them is not: 36 units are written to full procedural depth and 40 are
 > sketched, and what a defeated control permits is largely unwritten. [What that
@@ -15,7 +15,7 @@ Units**, and derives the attack-chain continuations each success may open.
 > the end.
 
 [![licence](https://img.shields.io/badge/licence-Apache--2.0-green)](LICENSE)
-[![version](https://img.shields.io/badge/version-0.30.0-blue)](docs/ROADMAP.md)
+[![version](https://img.shields.io/badge/version-0.31.0-blue)](docs/ROADMAP.md)
 [![WSTG](https://img.shields.io/badge/WSTG-109%20pinned-informational)](standards/wstg.yaml)
 [![ASVS](https://img.shields.io/badge/ASVS-5.0.0%20pinned-informational)](standards/asvs.yaml)
 [![CWE](https://img.shields.io/badge/CWE-4.20%20pinned-informational)](standards/cwe.yaml)
@@ -185,12 +185,16 @@ statement about what this file charts, never about a target.
 
 The same view carries the capability map. Every capability in the file, in a
 column for the kind of thing it is, shaded by how far the chart reaches from it
-— green where a charted route arrives at an outcome, grey where it runs out.
-Each cell opens on the tests that establish it and the tests that declare it a
+— green where a charted route arrives at an outcome, grey where it runs out,
+and a dashed edge where the concept is written down and no test names it yet.
+That last shade is read against the grey rather than against the outcomes:
+*nothing goes on from here* and *nothing arrives here yet* are different facts
+about the catalogue, and one shade for both would answer neither. Each cell
+opens on the tests that establish it and the tests that declare it a
 prerequisite. The columns are ordered by where the catalogue's own edges run,
 and the 24 that run the other way are named on the page:
 
-![The chain map: every capability in a column for its family, shaded by how far the chart reaches from it](docs/assets/attack-chains.png)
+![The chain map: every capability in a column for its family, with a key naming five states — charted, stops short, unused, an outcome, and one written ahead of the tests — and the Impact column's tally carrying that last one](docs/assets/attack-chains.png)
 
 ## Try it
 
@@ -349,7 +353,7 @@ the standard's own test case through its Test Units to a stated business outcome
 
 | Chain | |
 |---|---|
-| Capabilities | 187 |
+| Capabilities | 188 |
 | Derived unit-to-unit edges | 776 |
 | — of them escalations between capabilities | 420 |
 | — another technique for the same test | 124 |
@@ -358,11 +362,20 @@ the standard's own test case through its Test Units to a stated business outcome
 | Tests that establish an impact | 14 |
 | Tests that stop short | 26 |
 | Tests declaring no capability | 39 |
-| Capabilities used by no test, impacts excluded | 20 of 187 |
+| Capabilities used by no test, impacts excluded | 20 of 188 |
+| Capabilities no test reaches at all | 1 of 188 |
 | Capabilities with a charted route to an impact | 123 of 177 |
 
 The four test counts partition the catalogue exactly, which is what stops any one
 of them from quietly coming to mean something else.
+
+The last three rows count three different things and are kept apart on purpose.
+A capability tests establish and none goes on to use is where the **chart**
+stops. One no test names at all is where the **catalogue** has not arrived yet —
+written because the model may be ahead of the tests, and registered so that
+being ahead is countable rather than invisible. And a charted route is the only
+one of the three that is a claim about reach, which is why its denominator
+excludes the outcomes a route is meant to end at.
 
 **Depth runs in three tiers, and every page says which one it is looking at.**
 An **outline** Test Unit carries an identifier, a falsifiable objective, its
@@ -413,6 +426,18 @@ belongs to, and the validator rejects two things: a dead end that is not listed,
 so a new one cannot arrive silently, and an entry for a capability something has
 since started consuming, so the list can only shrink by the gap being closed.
 12 are open, in 2 causes.
+
+A second register does the same for the opposite gap. A concept no test names at
+all used to be rejected outright — vocabulary must not outrun use — which also
+refused the only honest way to write down where the catalogue is going, so a
+concept existed exactly when a test happened to reach it. It is now written and
+listed under `uncovered` with the same two-sided ratchet, and the page says on
+the capability's own screen that no test here establishes it. 1 is open, in 1
+cause: an outcome where access outlives the remediation, which the tests around
+registration and recovery binding stop short of. What did not change is the
+opposite case — a capability a test *requires* and nothing establishes is still
+refused, because a broken chain and an unwritten one look identical from outside
+and mean opposite things.
 
 This is recorded rather than filled in. Generating plausible edges would make the
 matrix look complete and every route on it untrustworthy — an edge nobody thought
