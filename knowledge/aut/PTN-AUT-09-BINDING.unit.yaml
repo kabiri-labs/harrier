@@ -1,6 +1,6 @@
 id: PTN-AUT-09-BINDING
 topic: PTN-AUT-09
-status: outline
+status: authored
 role: stage
 title: "Binding of the one-time value to the requesting session"
 objective: >-
@@ -10,3 +10,61 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.mfa.bypassable]
+
+hypotheses:
+  - "The value is looked up by itself, so whichever session presents it is the one it completes."
+  - "The account travels beside the value in the request, which makes the binding the caller's to state."
+  - "The value is bound to the account and not to the session, so a second sign-in for the same account can consume it."
+
+triage:
+  - "A prompt that carries the account in a hidden field beside the code."
+  - "A code that arrives by a channel the caller can trigger for any account, such as a message to a number the flow accepts."
+  - "A step reachable in a fresh session, which suggests the value rather than the session is what is looked up."
+
+sink: >-
+  The lookup that decides which pending sign-in this value completes.
+
+enter_when:
+  - "Two accounts the tester owns are enrolled, or the substitution has nothing to substitute."
+
+oracle:
+  positive: "A value issued for one sign-in completes a different one -- a second session for the same account, or a sign-in for the other owned account."
+  negative: "The value is refused in every session other than the one it was issued to."
+  inconclusive: "The value expires or is consumed before the second submission, so the binding is untested rather than sound."
+
+sequence:
+  - "Start a sign-in on the first owned account and capture the value without submitting it."
+  - "Start a second sign-in for the same account in a separate client and submit the captured value there."
+  - "Start a sign-in for the second owned account and submit the first account's value against it."
+  - "Confirm each apparent success at a function only that account reaches, and record which account the session belongs to."
+
+first_false_positive: >-
+  A second session appearing to complete because both clients shared state --
+  the same cookie jar, the same remembered device. Each submission comes from a
+  client holding nothing from the other, or the two sessions are one.
+
+false_positives:
+  - "A success on the account the value was issued for, where the substituted identifier was ignored -- binding working rather than failing."
+  - "A value accepted twice because it was reissued identically rather than reused."
+
+preconditions:
+  - "Two enrolled accounts the tester owns, and two clients holding nothing from each other."
+  - "The value's lifetime is known, so an expiry is not read as a binding."
+
+evidence:
+  - "The value, the sign-in it was issued for, and the sign-in it was submitted into."
+  - "The function confirming which account the resulting session belongs to."
+
+done_when: >-
+  The value has been submitted into a second session for the same account and
+  into a sign-in for the other owned account, with each outcome confirmed at a
+  guarded function -- or the case not reachable is named with the reason.
+
+safety: >-
+  Both accounts are the tester's own. A binding failure completes somebody's
+  sign-in, so the account it would complete is one whose loss costs nobody
+  anything -- and a value belonging to a real user is that person's second
+  factor however it was obtained. Nothing here triggers a factor delivery to an
+  address or number the tester does not control.
+
+tools: [burp-repeater]

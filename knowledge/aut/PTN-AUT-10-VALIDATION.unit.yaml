@@ -1,6 +1,6 @@
 id: PTN-AUT-10-VALIDATION
 topic: PTN-AUT-10
-status: outline
+status: authored
 role: stage
 title: "How the authorization request's return location is matched"
 objective: >-
@@ -12,3 +12,64 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]
 yields: [control.oauth.flow]
+
+hypotheses:
+  - "The registration was written with a trailing wildcard so that development and production could share one entry."
+  - "The comparison is a prefix match, which makes every path and every subdomain under the registered one a valid return."
+  - "The matching tolerates a fragment, a userinfo part or an encoded separator, because it compares strings rather than parsed locations."
+
+triage:
+  - "A redirect_uri parameter in the authorization request, which is the value being matched."
+  - "A registered location ending in a path rather than a complete one, which is where a prefix match shows."
+  - "An error naming the mismatch, which tells you what the comparison looked at."
+
+sink: >-
+  The comparison between the registered return location and the one the request
+  asks for.
+
+enter_when:
+  - "An authorization request can be composed, and a location the tester controls or an in-scope location is available to point at."
+
+oracle:
+  positive: "The authorization server accepts a return location that is not one the client registered, and issues the response to it."
+  negative: "Every variation is refused, and only an exactly registered location receives the response."
+  inconclusive: "The variation is refused for a reason that is not the location -- an unknown client, a missing scope -- so the matching is untested."
+
+sequence:
+  - "Establish the registered location from a normal flow, which is the string every variation is measured against."
+  - "Vary it one dimension at a time: an added path segment, a different subdomain, a changed port, a fragment, an encoded separator."
+  - "For each, read whether the authorization server refuses or proceeds, and where it proceeds, where the response was sent."
+  - "Record the narrowest variation accepted, which states how loose the matching is."
+
+first_false_positive: >-
+  A variation that appears accepted because the authorization server rendered
+  its consent page before validating. Acceptance is the response arriving at the
+  varied location, not the flow beginning -- many servers validate at redemption
+  and show the page regardless.
+
+false_positives:
+  - "A refusal caused by a scope or client error introduced by the variation rather than by the location."
+  - "A response arriving at a location that turns out to be registered, which the normal flow's own record settles."
+
+preconditions:
+  - "The locations pointed at are in scope or controlled by the tester, and never a third party's."
+  - "A normal flow has been recorded, so the registered location is known rather than guessed."
+
+evidence:
+  - "The registered location, each variation tried, and the outcome."
+  - "For any acceptance, the request and where the response was delivered."
+
+done_when: >-
+  Every variation dimension has been tried once and recorded as refused or
+  accepted, with the narrowest acceptance identified -- or the dimensions not
+  tried are named with the reason.
+
+safety: >-
+  Every location pointed at is one the tester controls or one the scope names.
+  Directing an authorization response to a third party's host sends a
+  credential to somebody outside the engagement, which is not a test result but
+  a disclosure -- and it cannot be taken back. Where a variation would deliver
+  to a host that is neither, it is recorded as untried rather than tried
+  carefully.
+
+tools: [burp-repeater]

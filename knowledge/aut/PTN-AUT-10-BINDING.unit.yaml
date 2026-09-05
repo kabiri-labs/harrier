@@ -1,6 +1,6 @@
 id: PTN-AUT-10-BINDING
 topic: PTN-AUT-10
-status: outline
+status: authored
 role: stage
 title: "Binding of the authorization response to the request that started it"
 objective: >-
@@ -11,3 +11,62 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]
 yields: [control.oauth.flow]
+
+hypotheses:
+  - "The state parameter is sent and not checked, because it was added to satisfy a review rather than to be verified."
+  - "The relying party redeems whatever code arrives at its return location, since arriving there is treated as evidence."
+  - "The verifier for a code challenge is accepted from the request rather than compared against the one the flow started with."
+
+triage:
+  - "A state parameter that is absent, constant, or predictable between flows."
+  - "A return endpoint that accepts a code with no session of its own."
+  - "A code challenge present in the request with no verifier compared at redemption."
+
+sink: >-
+  The relying party's check that this response belongs to a flow it started for
+  this caller.
+
+enter_when:
+  - "A complete flow can be driven on an owned account, and a second flow started independently."
+
+oracle:
+  positive: "A response from one flow is accepted by the relying party in a session that did not start it, establishing that session as the account the response belongs to."
+  negative: "The relying party refuses a response whose flow it did not start, at every point one can be injected."
+  inconclusive: "The response cannot be delivered into the second session cleanly, so the binding is untested."
+
+sequence:
+  - "Drive a complete flow on the first owned account and capture the response before the relying party consumes it."
+  - "In a separate client, start a flow and stop at the point the response would arrive."
+  - "Deliver the captured response into that second flow, and read whether the relying party redeems it."
+  - "Confirm at a function only the first account reaches, which is what shows whose session was established."
+
+first_false_positive: >-
+  A redemption that appears to succeed because the second client already held a
+  session. Each client holds nothing at the start, or the session confirmed
+  afterwards may be the one that was already there.
+
+false_positives:
+  - "A refusal that is the code's own single use rather than the binding, where the first flow had already redeemed it."
+  - "An acceptance in a session that was started for the same account, which is the binding being satisfied rather than absent."
+
+preconditions:
+  - "Two owned accounts, or one account and two independent clients, depending on which binding is being tested."
+  - "The code has not been redeemed, so single use is not mistaken for binding."
+
+evidence:
+  - "The captured response, the flow it came from, and the flow it was delivered into."
+  - "The function confirming which account the resulting session belongs to."
+
+done_when: >-
+  The response has been injected into a flow it did not belong to at each point
+  the flow accepts one, with each outcome confirmed at a guarded function -- or
+  the injection point not reachable is named.
+
+safety: >-
+  Both flows are the tester's own. A response captured from somebody else's flow
+  is that person's credential in transit, and injecting one is signing in as
+  them rather than testing a binding: the two owned accounts show the same
+  mechanism. Nothing here is captured from a network position the engagement did
+  not grant.
+
+tools: [burp-repeater]

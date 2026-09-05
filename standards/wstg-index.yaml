@@ -198,9 +198,9 @@ cases:
   - PTN-AUT-09-ENTROPY
   - PTN-AUT-09-BINDING
   - PTN-AUT-09-IMPACT
-  authored: 0
+  authored: 5
   sketched: 0
-  outline: 5
+  outline: 0
   resolvable: true
 - id: WSTG-ATHZ-01
   title: Testing Directory Traversal File Include
@@ -266,9 +266,9 @@ cases:
   - PTN-AUT-10-SCOPE
   - PTN-AUT-10-REVOCATION
   - PTN-AUT-10-IMPACT
-  authored: 0
+  authored: 5
   sketched: 0
-  outline: 5
+  outline: 0
   resolvable: true
 - id: WSTG-BUSL-01
   title: Test Business Logic Data Validation

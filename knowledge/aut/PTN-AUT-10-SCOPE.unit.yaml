@@ -1,6 +1,6 @@
 id: PTN-AUT-10-SCOPE
 topic: PTN-AUT-10
-status: outline
+status: authored
 role: stage
 title: "Enforcement of the granted scope at the resource"
 objective: >-
@@ -10,3 +10,62 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [primitive.check.bypassed]
+
+hypotheses:
+  - "The resource verifies the token and stops there, because verification and authorisation were written as one step."
+  - "The scope is enforced by the client's own interface, which decides what to offer rather than what is permitted."
+  - "A scope name exists in the consent screen and nowhere in the resource, because the two were specified separately."
+
+triage:
+  - "A consent screen listing scopes, which is the set to test against."
+  - "An endpoint the interface never calls with a read-only token."
+  - "A token that decodes to show its granted scopes, which states what should be refused."
+
+sink: >-
+  The resource's check that this token's scope permits this operation.
+
+enter_when:
+  - "A token can be obtained on an owned account with a scope narrower than the full set."
+
+oracle:
+  positive: "An operation outside the token's granted scope is performed with it, and its effect or its response confirms it."
+  negative: "Every operation outside the granted scope is refused with the token that lacks it."
+  inconclusive: "The narrower token cannot be obtained, so what the resource enforces is untested."
+
+sequence:
+  - "Obtain a token on an owned account with the narrowest scope the flow will grant."
+  - "List the operations the wider scopes permit, from the consent screen and the resource's own description."
+  - "Attempt each with the narrow token, reading rather than writing wherever reading settles it."
+  - "Record which operations the resource permitted beyond the granted scope."
+
+first_false_positive: >-
+  An operation that succeeds because it was never scoped -- open to any
+  authenticated caller. The claim is that a scope was not enforced, so the
+  operation chosen has to be one the consent screen or the documentation says a
+  wider scope is for.
+
+false_positives:
+  - "A success with a token the flow silently granted more scope to than was asked for, which the decoded token settles."
+  - "A refusal that is the account's own permission rather than the token's scope."
+
+preconditions:
+  - "The account is the tester's own, and a token with a restricted scope can actually be issued."
+  - "The token's granted scope has been read from the token or the response rather than assumed from the request."
+
+evidence:
+  - "The token's granted scope, as issued."
+  - "Each operation attempted, whether it belongs to a wider scope, and the response."
+
+done_when: >-
+  Every operation the wider scopes name has been attempted once with the narrow
+  token and recorded as permitted or refused -- or the operations not attempted
+  are named with the reason.
+
+safety: >-
+  The tester's own account and its own data. Where an operation outside the
+  scope would write, prefer the read that settles the same question, and where
+  only a write would, choose the smallest reversible one and reverse it. A scope
+  failure is a check that is missing rather than data that must be taken: the
+  finding is the refusal that did not happen.
+
+tools: [burp-repeater]

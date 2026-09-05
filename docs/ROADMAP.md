@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 285 |
+| Units — outlined | 275 |
 | Units — sketched | 40 |
-| Units — authored | 68 |
+| Units — authored | 78 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -688,6 +688,29 @@ action whose effect is observable and reversible on an owned account, reversed
 afterwards. Where the only guarded actions are irreversible, the bypass is
 already established by the unit above it and this one is recorded as not
 performed rather than performed carefully.
+
+`PTN-AUT-09` and `PTN-AUT-10` finish the domain: multi-factor authentication and
+the OAuth 2.0 and OpenID Connect flows, nine units between them, and nothing in
+the graph moved for either.
+
+`PTN-AUT-09-ENTROPY` is the one unit in the batch that deliberately computes
+rather than demonstrates. The space a one-time value is drawn from is compared
+against the submissions the application allows on paper: sending them to prove
+it is guessing a code, and against an owned account it proves nothing the
+arithmetic already said. Its impact unit does not obtain a credential either --
+it tests what the second factor adds to one already held legitimately, and
+where the credential is not held the finding from the units above stands
+without the demonstration.
+
+`PTN-AUT-10-VALIDATION` carries the batch's one irreversible risk. Pointing an
+authorization response at a host outside the engagement sends a credential to
+somebody who is not part of it, and it cannot be recalled -- so every location
+tried is one the tester controls or one the scope names, and a variation that
+would deliver anywhere else is recorded as untried rather than tried carefully.
+
+That completes `AUT`: 42 units across 10 topics, every one written to full
+procedural depth. The domain held 42 outlines and no performable test when this
+batch began.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase

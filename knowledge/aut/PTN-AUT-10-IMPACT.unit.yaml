@@ -1,12 +1,74 @@
 id: PTN-AUT-10-IMPACT
 topic: PTN-AUT-10
-status: outline
+status: authored
 role: stage
 title: "Whether the flow defect yields another user's session"
 objective: >-
   Determine whether a code, token or assertion obtained through the flow's
   defect is accepted by the relying party as a different user, rather than
   being rejected at redemption.
+
 requires:
   all_of: [control.oauth.flow]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The relying party trusts the identifier in the assertion without checking which issuer or which audience it came from."
+  - "The account is matched on an address the assertion carries, which is a claim the provider may not have verified."
+  - "The defect delivers a credential and the relying party's redemption is the only thing that would have caught it, and it does not."
+
+triage:
+  - "A relying party that links accounts by address rather than by the provider's own subject identifier."
+  - "A flow that accepts an assertion from more than one provider, where the audience is what separates them."
+  - "A redemption that succeeds with no back-channel call, which means nothing was verified with the issuer."
+
+sink: >-
+  The relying party's decision about which account this response authenticates.
+
+enter_when:
+  - "A defect has been established: a loose return location, or a response accepted into a flow it did not belong to."
+  - "The second account is one the tester owns, or the client designated it in writing."
+
+oracle:
+  positive: "The relying party establishes a session as the second account from a response obtained through the defect, confirmed at a function only that account reaches."
+  negative: "The redemption is refused, or establishes a session as the account the response actually belongs to."
+  inconclusive: "The redemption cannot be completed for a reason established beforehand, so what it would have accepted is unknown."
+
+sequence:
+  - "Obtain the response by the route the earlier unit established, and no other."
+  - "Redeem it at the relying party from a client holding nothing."
+  - "Read which account the resulting session belongs to, at a function only that account reaches."
+  - "Sign out, and record that the session was ended."
+
+first_false_positive: >-
+  A session read as the wrong account because the interface shows a name the
+  assertion carried rather than the account it signed in. Confirm at a function
+  that returns the account's own data, not at a header that echoes a claim.
+
+false_positives:
+  - "A session as the account the response really belonged to, which is the flow working."
+  - "A success owed to a session the client already held, which a clean client rules out."
+
+preconditions:
+  - "The second account is the tester's own, or designated in writing by the client."
+  - "The defect is already established, so this unit demonstrates a consequence rather than searching for one."
+
+evidence:
+  - "The defect used, from the unit that established it, and the response obtained by it."
+  - "The function confirming whose session was established, and the sign-out."
+
+done_when: >-
+  The response has been redeemed and the resulting session's account confirmed
+  at one guarded function, then ended -- or the reason the redemption was not
+  attempted is written down.
+
+safety: >-
+  The session this establishes belongs to somebody, so the account is the
+  tester's own or one the client designated in writing, and it is ended rather
+  than left open. Nothing is done with it beyond the single confirmation: the
+  finding is that the relying party accepted the response, and reading the
+  account's data adds nothing to it. Where the defect would require pointing a
+  response at a host that is neither in scope nor the tester's, this is recorded
+  as not attempted -- the earlier unit's finding stands without it.
+
+tools: [burp-repeater]

@@ -1,6 +1,6 @@
 id: PTN-AUT-10-REVOCATION
 topic: PTN-AUT-10
-status: outline
+status: authored
 role: stage
 title: "Effect of withdrawing a grant on tokens already issued"
 objective: >-
@@ -10,3 +10,61 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.session.persists]
+
+hypotheses:
+  - "Withdrawal removes the grant record and leaves the issued tokens, because the two live in different places."
+  - "The resource verifies the token's signature and expiry and consults nothing about the grant behind it."
+  - "Only the refresh token is revoked, so the access token lasts out its own lifetime regardless."
+
+triage:
+  - "A connected-applications page offering to remove access, which is the withdrawal to exercise."
+  - "An access token with a lifetime long enough for the question to matter."
+  - "A resource that accepts a token with no round trip to the authorization server."
+
+sink: >-
+  The check, if any, that the resource makes against the grant behind the token
+  it was handed.
+
+enter_when:
+  - "A grant exists on an owned account with a token captured under it."
+
+oracle:
+  positive: "A token issued before the withdrawal is still accepted by the resource afterwards, within its own lifetime."
+  negative: "The token is refused after the withdrawal, at the resource as well as at the authorization server."
+  inconclusive: "The token expired on its own before the withdrawal could be tested, so what refused it is unknown."
+
+sequence:
+  - "Establish a grant on an owned account and capture both the access token and the refresh token."
+  - "Record the access token's remaining lifetime, so the window for the test is known."
+  - "Withdraw the grant through the interface the application offers."
+  - "Offer the access token to the resource, and the refresh token to the token endpoint, recording each outcome."
+
+first_false_positive: >-
+  A refusal that is the access token's own expiry rather than the withdrawal.
+  The remaining lifetime is recorded before the withdrawal for exactly this
+  reason, and a refusal after it has passed says nothing.
+
+false_positives:
+  - "A refusal from the client's interface rather than from the resource, which is the application declining to call rather than the resource declining to answer."
+  - "A token that stops working because the session that carried it ended, which a direct call rules out."
+
+preconditions:
+  - "The account is the tester's own, and the grant may be withdrawn and re-established."
+  - "The access token's remaining lifetime is known."
+
+evidence:
+  - "The withdrawal, with the time it was performed."
+  - "The token offered afterwards, its remaining lifetime at that moment, and the response."
+
+done_when: >-
+  Both tokens have been offered after the withdrawal and within the access
+  token's own lifetime, with each outcome recorded -- or the reason the window
+  was missed is written down.
+
+safety: >-
+  The tester's own account and its own grant, withdrawn and re-established
+  rather than left removed. Nothing here withdraws a grant belonging to somebody
+  else: doing so takes an integration away from a real user to answer a question
+  an owned grant answers identically.
+
+tools: [burp-repeater]
