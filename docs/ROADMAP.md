@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 295 |
+| Units — outlined | 289 |
 | Units — sketched | 40 |
-| Units — authored | 58 |
+| Units — authored | 64 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -648,6 +648,26 @@ writing and which is restored afterwards. The step that sends a message is a
 stop rather than a formality, because a recovery driven against a real person's
 account puts a takeover message in their inbox and takes their access away at
 the end of it.
+
+`PTN-AUT-07`, credential change and reset flows, is the seventh and the largest:
+six units, and the topic whose units carry their own surface clauses from
+0.29.0. Nothing in the graph moved.
+
+Five of the six run entirely on accounts the tester owns, and the reason is the
+same each time: a reset flow that fails ends with somebody's credential set. The
+binding unit needs two owned accounts rather than one real target; the entropy
+unit collects its sample against the tester's own mailboxes rather than by
+triggering recovery for other people's accounts, which would fill a stranger's
+inbox with reset mail; the expiry unit waits rather than borrowing an artefact
+that is already outstanding. The sixth is the impact, held to the standard the
+other two takeover units in this domain are.
+
+Writing it broke a test, and the break is worth recording because the repository
+had already learnt this once. `test_an_outline_unit_shows_no_empty_procedure_heading`
+named `PTN-AUT-07-BINDING` as its outline, and failed the day that unit was
+written to depth rather than the day the heading broke -- which is verbatim the
+comment its sibling two tests below carries about the same mistake. It now takes
+the first outline the catalogue holds, as that sibling does.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase

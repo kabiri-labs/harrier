@@ -171,9 +171,9 @@ cases:
   - PTN-AUT-07-REVOCATION
   - PTN-AUT-07-VALIDATION
   - PTN-AUT-07-IMPACT
-  authored: 0
+  authored: 6
   sketched: 0
-  outline: 6
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-10
   title: Testing for Weaker Authentication in Alternative Channel

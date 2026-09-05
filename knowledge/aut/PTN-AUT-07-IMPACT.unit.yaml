@@ -1,6 +1,6 @@
 id: PTN-AUT-07-IMPACT
 topic: PTN-AUT-07
-status: outline
+status: authored
 role: stage
 title: "Whether the reset artefact sets another account's credential"
 objective: >-
@@ -9,6 +9,70 @@ objective: >-
 
 surfaces:
   any_of: [password-reset]
+
 requires:
   all_of: [control.reset.weak]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The weakness the earlier units found is the whole of the flow's protection, so nothing else stands between the artefact and the credential."
+  - "The step that would notice -- a notification, a second factor, a confirmation from the old address -- is on the sign-in path and not on this one."
+  - "The reset completes silently, so the account holder learns of it when they next try to sign in."
+
+triage:
+  - "A reset that ends in a credential-setting form rather than in a message to the account."
+  - "A flow that sends no notification to the old address when the credential changes."
+  - "A second factor at sign-in that the reset landing does not repeat."
+
+sink: >-
+  The credential the reset flow writes for the account the artefact names.
+
+enter_when:
+  - "One of predictability, lifetime or reuse has been established on this flow."
+  - "The client has designated the account this may be demonstrated against, in writing."
+
+oracle:
+  positive: "The credential of the designated account is set through the weakness, and it signs in as that account."
+  negative: "The flow stops before the credential is set -- a step the artefact alone does not satisfy, or a check the earlier weakness does not defeat."
+  inconclusive: "The flow stops for a reason established beforehand, so what would have blocked it is unknown."
+
+sequence:
+  - "Confirm the designated account signs in normally, which is the before-state the claim rests on."
+  - "Obtain or compose the artefact by the route the earlier unit established, and no other."
+  - "Present it and set a credential, then sign in with it once to confirm."
+  - "Restore the account: set it back or hand it to the client, and record that this was done."
+
+first_false_positive: >-
+  A reset that appears to have taken because the flow reported success. The
+  claim is a session as that account, so it is confirmed at a sign-in and at a
+  function the account reaches -- and if the sign-in fails, nothing was set.
+
+false_positives:
+  - "A success against an account that turned out to share a mailbox with an owned one."
+  - "A session that opens but asks for a second factor at the first function that matters, which is the flow stopping later rather than not at all."
+
+preconditions:
+  - "The client has designated the account in writing and knows its credential will change."
+  - "A route to restore the account is agreed before anything is set."
+
+evidence:
+  - "The weakness used, from the unit that established it, and the artefact obtained by it."
+  - "The before-state sign-in, the credential set, the sign-in confirming it, and the restoration."
+
+done_when: >-
+  The designated account's credential has been set through the established
+  weakness and the account restored, with each step recorded -- or the reason
+  the demonstration was not attempted is written down instead.
+
+safety: >-
+  This unit takes an account away from the person who holds it, and it proceeds
+  only against one the client has designated in writing, once, with the
+  restoration agreed before anything is set. One account, never a list. Nothing
+  is done with the session beyond the single sign-in that confirms it: the
+  finding is that the credential could be set, and reading the account's data
+  adds nothing to that while costing the person their privacy as well as their
+  access. Where the client will not designate an account, the weakness is
+  already established by the units above and this is recorded as demonstrated in
+  principle and not performed.
+
+tools: [burp-repeater]

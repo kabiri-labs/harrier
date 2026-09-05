@@ -1,6 +1,6 @@
 id: PTN-AUT-07-EXPIRY
 topic: PTN-AUT-07
-status: outline
+status: authored
 role: stage
 title: "Lifetime of the reset artefact"
 objective: >-
@@ -14,3 +14,62 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.reset.weak]
+
+hypotheses:
+  - "The lifetime is stated in the message and enforced nowhere, because the message was written by one person and the check by another."
+  - "The expiry is stored with the artefact and compared against a clock that was never set."
+  - "The artefact is invalidated when a newer one is issued rather than by age, so an unused one lasts as long as nobody asks again."
+
+triage:
+  - "A message stating how long the link is good for, which is the claim to measure against."
+  - "An expiry encoded in the artefact itself, readable once decoded."
+  - "A flow that reissues freely, where the previous artefact's fate is the question."
+
+sink: >-
+  The comparison, if there is one, between the artefact's age and a limit.
+
+enter_when:
+  - "A reset artefact has been delivered for an owned account and its stated lifetime is known."
+
+oracle:
+  positive: "The artefact completes a reset after the point its stated lifetime ends."
+  negative: "The artefact is refused once the stated lifetime has passed, and refused by the application rather than by a flow that had moved on."
+  inconclusive: "The stated lifetime has not elapsed and no shorter route to the boundary was found, so enforcement is untested rather than absent."
+
+sequence:
+  - "Record the stated lifetime, from the message, from the artefact's own contents, and from any policy the application publishes."
+  - "Hold the artefact unused for longer than that, without triggering the flow again, because a reissue would change what is being measured."
+  - "Present it and read whether the reset completes, confirming with a sign-in rather than with the flow's own success page."
+  - "Where the lifetime is too long to wait out, alter any in-artefact expiry instead and record which route was taken."
+
+first_false_positive: >-
+  An artefact refused after the wait because a later issue superseded it rather
+  than because it aged. Trigger nothing else for that account during the wait,
+  and where the flow was re-triggered, this measures single use rather than
+  lifetime.
+
+false_positives:
+  - "A refusal that is the flow's session having expired rather than the artefact, which a fresh flow distinguishes."
+  - "A success measured on the flow's confirmation page rather than on a sign-in."
+
+preconditions:
+  - "The account is the tester's own and the message reaches an address the tester controls."
+  - "No other trigger for that account occurs during the wait."
+
+evidence:
+  - "The stated lifetime, where it is stated, and the time between issue and presentation."
+  - "The sign-in that confirms whether the credential changed."
+
+done_when: >-
+  The artefact has been presented after the stated lifetime, or with an
+  in-artefact expiry altered where waiting was not possible, and the outcome
+  recorded -- or the reason neither route was available is written down.
+
+safety: >-
+  The tester's own account, whose credential this changes on a positive result.
+  Waiting is the substance of this unit, and the shortcut worth refusing is
+  taking an artefact belonging to somebody else and holding it instead: that
+  measures the same mechanism against a real person's account and ends by
+  setting their credential.
+
+tools: [burp-repeater]

@@ -1,6 +1,6 @@
 id: PTN-AUT-07-REVOCATION
 topic: PTN-AUT-07
-status: outline
+status: authored
 role: stage
 title: "Single use of the reset artefact"
 objective: >-
@@ -14,3 +14,60 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.reset.weak]
+
+hypotheses:
+  - "Nothing marks the artefact used, because the flow ends by redirecting rather than by writing anything down."
+  - "Issuing a new artefact adds a row rather than replacing one, so every artefact ever issued is still valid."
+  - "The artefact is invalidated at the end of the flow, and the flow can be abandoned after the credential is set."
+
+triage:
+  - "A confirmation page reachable by going back, which suggests the flow's end is a redirect rather than a state change."
+  - "A flow that can be triggered again while an artefact is outstanding."
+  - "A reset link that still renders its form after the reset completed."
+
+sink: >-
+  The record, if any, that marks an artefact spent or superseded.
+
+enter_when:
+  - "A reset has been completed on an owned account with an artefact the tester still holds."
+
+oracle:
+  positive: "An artefact already used, or superseded by a newer issue, completes a second reset."
+  negative: "A used artefact and a superseded one are both refused, and refused by the application rather than by a flow that had moved on."
+  inconclusive: "The second presentation fails for a reason established beforehand, such as the artefact having aged out during the first use."
+
+sequence:
+  - "Complete a reset on an owned account and keep the artefact."
+  - "Present it again, from a client holding nothing from the first flow, and read whether a second reset completes."
+  - "Separately, trigger the flow twice without using the first artefact, then present the first."
+  - "Confirm each outcome with a sign-in, because the flow's success page is not the credential."
+
+first_false_positive: >-
+  A second use appearing to succeed because the form renders again. Rendering is
+  not resetting: the confirmation is the sign-in with whatever the second
+  attempt set, and without it a cached page reads as a defect.
+
+false_positives:
+  - "A refusal that is the artefact's lifetime rather than its use, which the expiry unit separates."
+  - "A second success on an artefact that was reissued identically, which is one artefact rather than two."
+
+preconditions:
+  - "The account is the tester's own, and its credential may be changed more than once."
+  - "The artefact's lifetime is known, so an aged refusal is not read as single use."
+
+evidence:
+  - "The artefact, the first reset it completed, and the second presentation with its outcome."
+  - "For the supersession case, both artefacts and which was presented."
+
+done_when: >-
+  Both cases have been tested -- an artefact used once and an artefact
+  superseded by a newer issue -- with each outcome confirmed by a sign-in, or
+  the case not reachable named with the reason.
+
+safety: >-
+  The tester's own account, whose credential is set twice in the course of this.
+  Nothing here holds an artefact belonging to anybody else: a used artefact that
+  still works is a second takeover of the same account, and demonstrating that
+  on a real user's is performing it rather than showing it.
+
+tools: [burp-repeater]

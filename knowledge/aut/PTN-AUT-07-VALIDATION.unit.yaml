@@ -1,6 +1,6 @@
 id: PTN-AUT-07-VALIDATION
 topic: PTN-AUT-07
-status: outline
+status: authored
 role: stage
 title: "Evidence required to change a credential in an authenticated session"
 objective: >-
@@ -14,3 +14,61 @@ requires:
   all_of: [access.user]
 yields: [control.reauth.absent]
 closes: [control.reauth.absent]
+
+hypotheses:
+  - "Holding the session is treated as evidence enough, because the session was checked at the door and the change is behind the door."
+  - "The current credential is asked for by the form and not required by the endpoint."
+  - "The recovery address can be changed with less evidence than the credential, which makes it the cheaper way to the same place."
+
+triage:
+  - "A change form asking for the current credential, which is a claim the endpoint may not enforce."
+  - "A security or profile page where the recovery address is edited inline."
+  - "A second factor demanded at sign-in and absent from this page."
+
+sink: >-
+  The endpoint that writes the new credential or the new recovery address.
+
+enter_when:
+  - "A session is held on an account the tester owns and the change surfaces can be reached."
+
+oracle:
+  positive: "The change completes with the evidence the form asks for removed from the request -- no current credential, no second factor, no fresh proof."
+  negative: "Every removal is refused, and the endpoint demands what the form asks for rather than trusting the session."
+  inconclusive: "The change is refused for a reason that is not the missing evidence, such as a policy rejecting the new value."
+
+sequence:
+  - "Perform the change normally and record the request in full."
+  - "Replay it with the current credential removed, then with it wrong, reading whether either completes."
+  - "Repeat for the recovery address, which is the cheaper route to the same outcome and is often guarded less."
+  - "Where a second factor exists at sign-in, record whether this endpoint demands one at all."
+
+first_false_positive: >-
+  A change that appears to complete because the response says so. Confirm by
+  signing in with the new value, or by reading the recovery address back --
+  a form that reports success is not a record that changed.
+
+false_positives:
+  - "A refusal that is the credential policy rejecting the new value rather than the endpoint demanding evidence."
+  - "A success on a session that had re-authenticated moments earlier for another reason, which the endpoint may be honouring."
+
+preconditions:
+  - "The account is the tester's own, since the test changes its credential and its recovery address."
+  - "A normal change has been recorded, or there is no request to strip."
+
+evidence:
+  - "The full change request, and each stripped variant with its outcome."
+  - "The confirmation for each success: a sign-in, or the recovery address read back."
+
+done_when: >-
+  Both surfaces -- the credential and the recovery address -- have been
+  attempted with each piece of evidence removed in turn and each outcome
+  recorded, or the surface not reachable is named with the reason.
+
+safety: >-
+  The tester's own account, whose credential and recovery address both change in
+  the course of this, and both are set back at the end. The recovery address is
+  the field to be most careful with: pointing a real account's recovery at an
+  address the tester controls is a takeover left in place, so it is done only on
+  an owned account and only to an address the tester already owns.
+
+tools: [burp-repeater]
