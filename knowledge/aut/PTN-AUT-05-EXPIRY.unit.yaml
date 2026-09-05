@@ -1,6 +1,6 @@
 id: PTN-AUT-05-EXPIRY
 topic: PTN-AUT-05
-status: outline
+status: authored
 role: stage
 title: "Enforcement of the persistent secret's lifetime"
 objective: >-
@@ -10,3 +10,62 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.persistent.weak]
+
+hypotheses:
+  - "The lifetime is expressed to the browser and nowhere else, so deleting the expiry leaves the value working."
+  - "The expiry is carried inside the value and read without being verified."
+  - "The server has no record of when it issued the value, so it has nothing to compare a lifetime against."
+
+triage:
+  - "A cookie carrying an Expires or Max-Age far in the future, which is a client-side instruction."
+  - "An expiry field inside the value itself, readable once it is decoded."
+  - "A policy page stating how long a signed-in session lasts, which is the claim this measures against."
+
+sink: >-
+  The check, if there is one, that compares the value's age against a limit.
+
+enter_when:
+  - "A persistent secret has been issued to an account the tester owns and its stated lifetime is known."
+
+oracle:
+  positive: "The value is accepted after the point its stated lifetime ends, or after the client-side expiry is removed or extended."
+  negative: "The value is refused once its stated lifetime has passed, and removing the client-side expiry does not extend it."
+  inconclusive: "The stated lifetime has not elapsed and no shorter route to the boundary was found, so the enforcement is untested rather than absent."
+
+sequence:
+  - "Record the stated lifetime, from the cookie, from the value's own contents, and from any policy the application publishes."
+  - "Strip the client-side expiry and offer the value: a lifetime the browser alone enforces disappears here."
+  - "Where the expiry is inside the value, alter it and offer that -- an expiry read without verification moves."
+  - "Where neither applies, hold the value until the stated lifetime passes and offer it then."
+
+first_false_positive: >-
+  A value refused after the wait for a reason that is not its age -- a
+  credential change, a deployment, a session limit reached in between. Confirm
+  with a value issued at the same time and used earlier, or the refusal is
+  attributed to a clock it may have nothing to do with.
+
+false_positives:
+  - "An expiry that appears enforced because the browser dropped the cookie, when the server would still have accepted it."
+  - "A value refused because a parallel session limit displaced it rather than because it expired."
+
+preconditions:
+  - "The account is the tester's own, and the stated lifetime is short enough to wait out or reachable by altering the value."
+
+evidence:
+  - "The stated lifetime and where it is stated."
+  - "The offer after the boundary, and the response -- with the time between issue and offer recorded."
+
+done_when: >-
+  The value has been offered with the client-side expiry removed, with any
+  in-value expiry altered, and after the stated lifetime where that was
+  reachable -- each outcome recorded, or the route not taken named with the
+  reason.
+
+safety: >-
+  The tester's own account. This unit is mostly waiting, and the temptation it
+  removes is worth naming: shortening the wait by altering another account's
+  value would test the same mechanism against somebody else's session, which is
+  a different act entirely. Where the lifetime is too long to wait out inside
+  the engagement, record it as unmeasured rather than approximating it.
+
+tools: [burp-repeater]

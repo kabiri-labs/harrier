@@ -175,6 +175,36 @@ facts:
       unlikely to have edited, which is what a version-specific decision may
       safely rest on.
 
+  - id: recon.vendoraccounts.mapped
+    label: Components shipping vendor accounts recorded
+    tier: topic
+    description: >
+      Which of the identified products, frameworks and appliances are known to
+      ship with an account the vendor created rather than the operator. An
+      inventory of where to look, not a claim that any such account survives:
+      what the vendor documents and what the deployment still accepts are two
+      different things, and the second is what a test establishes.
+
+  - id: recon.authstates.mapped
+    label: Authentication states and their transitions recorded
+    tier: topic
+    description: >
+      The states a caller passes through between anonymous and authenticated,
+      and the request that drives each transition, have been recorded. What
+      makes a skipped, repeated or reordered step recognisable when it happens:
+      without it, a response that should not have been reachable looks like an
+      ordinary one.
+
+  - id: recon.authchannels.mapped
+    label: Channels authenticating the same account recorded
+    tier: topic
+    description: >
+      Every route through which one account can be authenticated has been
+      recorded -- the browser application, any mobile or machine interface, and
+      any support-operated path. What makes a comparison between them possible:
+      until the set is written down, the weaker channel is the one nobody
+      thought to look at.
+
   - id: recon.names.mapped
     label: In-scope names and addresses recorded
     tier: engagement

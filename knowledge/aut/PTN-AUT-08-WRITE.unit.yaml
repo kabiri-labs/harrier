@@ -1,12 +1,75 @@
 id: PTN-AUT-08-WRITE
 topic: PTN-AUT-08
-status: outline
+status: authored
 role: stage
 title: "An action completed through the weaker channel"
 objective: >-
   Determine whether a session established under the secondary channel's lesser
   requirements performs an action the primary channel would have demanded more
   evidence for.
+
 requires:
   all_of: [control.channel.bypass]
 yields: [primitive.check.bypassed]
+
+hypotheses:
+  - "The step-up requirement is enforced by the page that offers the action rather than by the endpoint that performs it."
+  - "The channel that skipped the step exposes the same endpoint, so the guard is on the route rather than on the action."
+  - "The action's own check asks whether the caller is authenticated and not how recently or on what evidence."
+
+triage:
+  - "An action the primary channel asks for fresh proof before: a credential change, a payee, a transfer, a permission."
+  - "The same action reachable through the secondary channel's own interface or API."
+  - "A step-up prompt that appears in one client and not in the other for the same operation."
+
+sink: >-
+  The endpoint that performs the guarded action, and whatever it checks before
+  performing it.
+
+enter_when:
+  - "The primary channel has been shown to honour a session the weaker channel issued."
+  - "An action the primary channel guards with a step-up has been identified."
+
+oracle:
+  positive: "The guarded action completes from the weaker channel's session, and its effect is visible afterwards through the primary channel."
+  negative: "The action is refused, or demands the step the weaker channel skipped before it will complete."
+  inconclusive: "The action cannot be attempted without a change the engagement will not make, so whether it would complete is unknown."
+
+sequence:
+  - "Choose the smallest guarded action whose effect is observable and reversible on an owned account."
+  - "Attempt it from the weaker channel's session, with nothing added."
+  - "Read the effect through the primary channel rather than trusting the response."
+  - "Reverse it, and record that the reversal succeeded."
+
+first_false_positive: >-
+  A response reporting success for an action the application queued and later
+  refused. The confirmation is the state read back through the other channel,
+  which is also what makes the reversal verifiable.
+
+false_positives:
+  - "An action that was never guarded by a step-up, so completing it shows nothing about the bypass."
+  - "A success attributable to a step-up satisfied earlier in the same session, which a clean client rules out."
+
+preconditions:
+  - "The account is the tester's own and the chosen action is reversible on it."
+  - "The step-up the primary channel demands for this action has been observed rather than assumed."
+
+evidence:
+  - "The action, the step-up the primary channel demands for it, and the request that performed it without."
+  - "The state read back afterwards, and the reversal."
+
+done_when: >-
+  One guarded action has been attempted from the weaker channel's session, its
+  outcome confirmed by reading the state back, and any effect reversed -- or the
+  reason no reversible guarded action was available is written down.
+
+safety: >-
+  One action, the smallest that demonstrates the point, on the tester's own
+  account, reversible, and reversed. This is the unit in the topic that changes
+  something rather than reading it, so the choice of action is the safety
+  control: not a payment, not a permission grant, not anything whose reversal
+  depends on somebody else. Where the only guarded actions are irreversible, the
+  bypass is already established by the unit above and this is recorded as not
+  performed rather than performed carefully.
+
+tools: [burp-repeater]

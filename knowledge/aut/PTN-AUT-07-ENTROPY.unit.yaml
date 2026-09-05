@@ -1,6 +1,6 @@
 id: PTN-AUT-07-ENTROPY
 topic: PTN-AUT-07
-status: outline
+status: authored
 role: stage
 title: "Predictability of the reset artefact"
 objective: >-
@@ -15,3 +15,64 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.reset.weak]
+
+hypotheses:
+  - "The artefact is a hash of the account and the issue time, which is short, unique, and computable by anyone who knows both."
+  - "A short numeric code was chosen so it could be read over the telephone, and its space was never compared against the attempts allowed."
+  - "The generator is the language's ordinary random rather than its cryptographic one, which is a difference nothing in the interface shows."
+
+triage:
+  - "A reset code short enough to type: four, six or eight digits."
+  - "A link whose token decodes, or whose length is a round number of hexadecimal characters."
+  - "Two tokens issued seconds apart that share a prefix, which is a timestamp in disguise."
+
+sink: >-
+  The artefact the application will later accept as proof that the caller
+  reached the account's mailbox.
+
+enter_when:
+  - "The recovery flow can be triggered repeatedly for accounts the tester owns, delivering to addresses the tester controls."
+
+oracle:
+  positive: "The construction is identified, and an artefact composed for a second owned account is accepted for it without that account's flow having delivered one."
+  negative: "Artefacts collected across accounts and across time share no structure, and nothing composed is accepted."
+  inconclusive: "A structure is visible but no composed artefact was accepted, so whether the remainder is predictable is unknown."
+
+sequence:
+  - "Trigger the flow several times for one owned account and once for a second, collecting every artefact."
+  - "Compare them for a field that tracks time, the account, or a counter -- and for a shared prefix, which is the commonest form of both."
+  - "Where a numeric code is issued, record its length, which states the space rather than describing it."
+  - "Compose an artefact for the second owned account from the structure found, and offer it."
+
+first_false_positive: >-
+  Two artefacts sharing a prefix because the flow reissued the same one rather
+  than generating a second. Trigger the flow with enough time between calls that
+  a reissue window has passed, or the structure found is one value seen twice.
+
+false_positives:
+  - "An artefact that decodes into a structure supplied by the framework, with an unpredictable field inside it."
+  - "A code accepted for the second account because that account's own flow had been triggered and delivered one."
+
+preconditions:
+  - "Two accounts the tester owns, each delivering to an address the tester controls."
+  - "The flow can be triggered enough times to collect a sample without a limit stopping it."
+
+evidence:
+  - "The collected artefacts, with what varies between issues and between accounts."
+  - "The composed artefact and the response to offering it -- the structure, never an artefact belonging to an account that is not the tester's."
+
+done_when: >-
+  Artefacts from at least two owned accounts and several issues have been
+  compared, a structure recorded or ruled out, and any structure found tested by
+  composing one -- or the reason it could not be composed is written down.
+
+safety: >-
+  Owned accounts, delivering to addresses the tester controls, on both sides of
+  the comparison. Every trigger sends a real message, so the sample is collected
+  against the tester's own mailboxes rather than by triggering recovery for
+  other people's accounts -- which fills a stranger's inbox with reset mail and
+  is a nuisance the engagement did not agree to. A composed artefact is composed
+  for an owned account: computing one for a real user is the attack the next
+  unit describes, not this measurement.
+
+tools: [burp-repeater]

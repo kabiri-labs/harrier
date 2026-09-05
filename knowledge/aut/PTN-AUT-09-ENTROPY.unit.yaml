@@ -1,6 +1,6 @@
 id: PTN-AUT-09-ENTROPY
 topic: PTN-AUT-09
-status: outline
+status: authored
 role: stage
 title: "Guessability of the one-time value"
 objective: >-
@@ -10,3 +10,62 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.mfa.bypassable]
+
+hypotheses:
+  - "Six digits was chosen because that is what such codes look like, and the attempt limit was chosen separately."
+  - "The value's lifetime is long enough that the space matters, because the window was set for people who are slow rather than for attackers who are not."
+  - "Wrong submissions are not counted, so the space is covered by whoever is willing to send it."
+
+triage:
+  - "A code short enough to read aloud: four or six characters."
+  - "A message stating how long the code is valid, which is the window the space is measured against."
+  - "A step that returns to the prompt on a wrong value rather than ending the attempt."
+
+sink: >-
+  The comparison between the submitted value and the one the application
+  issued.
+
+enter_when:
+  - "An owned enrolled account can be driven to the second-factor prompt repeatedly."
+
+oracle:
+  positive: "The space, stated from the observed length and alphabet, is smaller than the submissions the application allows within the value's lifetime."
+  negative: "The space is larger than what the attempts and the lifetime together permit, so covering it is not possible through this step."
+  inconclusive: "Either the attempt limit or the lifetime could not be measured, so the comparison has one side."
+
+sequence:
+  - "Record the value's length and alphabet from several issues on an owned account."
+  - "Record its stated lifetime, from the message and from any policy the application publishes."
+  - "Measure how many wrong submissions the step accepts before it intervenes, and whether restarting clears the count."
+  - "State the space against the attempts the lifetime allows -- the arithmetic is the finding, and it is done rather than approached by guessing."
+
+first_false_positive: >-
+  A space judged small from one issued value's appearance. Digits in one sample
+  do not mean digits only: collect several before stating an alphabet, or the
+  arithmetic rests on one observation.
+
+false_positives:
+  - "An attempt limit that appears absent because the counter is per issued value and a new one was requested each time."
+  - "A lifetime read from the message rather than measured, where the application enforces a shorter one."
+
+preconditions:
+  - "The account is the tester's own and enrolled, and the prompt can be reached repeatedly."
+  - "A ceiling on wrong submissions is chosen before starting."
+
+evidence:
+  - "The observed length and alphabet across several issues, and the stated and measured lifetime."
+  - "The attempt count before intervention, and the arithmetic comparing the space against it."
+
+done_when: >-
+  Length, alphabet, lifetime and attempt allowance have each been recorded from
+  observation, and the comparison between the space and the allowed attempts
+  stated -- or the quantity that could not be measured is named.
+
+safety: >-
+  This unit computes rather than covers. The space is compared against the
+  attempts on paper: sending the submissions to demonstrate it is guessing a
+  code, and against the tester's own account it proves nothing the arithmetic
+  did not already say. Wrong submissions here can lock the account, so the
+  ceiling is chosen before starting and the account is the tester's own.
+
+tools: [burp-repeater]

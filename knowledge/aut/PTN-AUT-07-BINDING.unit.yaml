@@ -1,6 +1,6 @@
 id: PTN-AUT-07-BINDING
 topic: PTN-AUT-07
-status: outline
+status: authored
 role: stage
 title: "Binding of the reset artefact to one account"
 objective: >-
@@ -14,3 +14,62 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The artefact is looked up to check it is valid and the account comes from the request, because those are two lines and only one of them was written."
+  - "The account travels in a field beside the artefact, which makes the binding the caller's to state."
+  - "The binding exists in the mail that delivered the link and nowhere in the request that uses it."
+
+triage:
+  - "A reset form carrying the account as a hidden field beside the token."
+  - "A reset endpoint taking both an artefact and an identifier as parameters."
+  - "A link whose token is opaque while the account is in the query string."
+
+sink: >-
+  The lookup that decides which account this artefact resets.
+
+enter_when:
+  - "A reset artefact has been delivered for an account the tester owns, and a second owned account exists to present it against."
+
+oracle:
+  positive: "An artefact issued for one account completes a reset on a different account."
+  negative: "Presenting the artefact against any account other than the one it was issued for is refused."
+  inconclusive: "The submission fails for a reason that is not the binding -- an expired artefact, a flow that had to be restarted -- so the binding is untested."
+
+sequence:
+  - "Trigger the flow for the first owned account and capture the artefact fresh."
+  - "Present it in the reset request with the account changed to the second owned account."
+  - "Where the account is not in the request, change it wherever the flow carries it: the form field, the session the flow started, the address the link was opened from."
+  - "Read whether the credential changed, and on which account, by signing in with what was set."
+
+first_false_positive: >-
+  A reset that appears to succeed because the flow reports success without
+  having changed anything. The proof is the sign-in afterwards, and against the
+  account the artefact was redirected to rather than the one it was issued for.
+
+false_positives:
+  - "A success on the original account because the substituted identifier was ignored, which is binding working rather than failing."
+  - "An artefact accepted because both accounts share a mailbox, which is one account with two names."
+
+preconditions:
+  - "Two accounts the tester owns, whose credentials may both be changed."
+  - "The artefact is fresh, so an expiry cannot be mistaken for a binding."
+
+evidence:
+  - "The artefact, the account it was issued for, and the request presenting it against the other."
+  - "The sign-in that shows which account's credential changed."
+
+done_when: >-
+  The artefact has been presented against a second owned account through every
+  place the flow carries the identity, and each outcome recorded -- or the
+  reason a substitution could not be made is written down.
+
+safety: >-
+  Both accounts are the tester's own, which is what makes this safe to run at
+  all: a binding failure sets somebody's credential, so the account it would be
+  set on has to be one whose loss costs nobody anything. Never substitute a real
+  user's account to see whether the artefact takes -- a positive result there is
+  a takeover performed rather than a weakness demonstrated, and the second owned
+  account proves the same thing.
+
+tools: [burp-repeater]

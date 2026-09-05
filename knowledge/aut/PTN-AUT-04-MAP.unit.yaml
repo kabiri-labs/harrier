@@ -1,6 +1,6 @@
 id: PTN-AUT-04-MAP
 topic: PTN-AUT-04
-status: outline
+status: authored
 role: stage
 kind: recon
 title: "The authentication states and the transitions between them"
@@ -12,3 +12,41 @@ objective: >-
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
+yields: [recon.authstates.mapped]
+
+hypotheses:
+  - "A state exists that the interface never shows, because it was added for a flow that was later withdrawn."
+  - "The transition is driven by a value the response carries rather than by the server remembering where the caller was."
+  - "A second client -- a mobile application, a legacy endpoint -- drives the same states through different requests."
+
+triage:
+  - "A parameter naming a step or stage: step, phase, state, next, stage_id."
+  - "A hidden field carried from one request to the next that names where the caller is."
+  - "A redirect chain between the credential and the landing page, each hop a state worth naming."
+
+enter_when:
+  - "An authentication route has been found and can be driven end to end on an account the tester owns."
+
+sequence:
+  - "Sign in normally with the proxy recording, and name each request between anonymous and authenticated."
+  - "For each, record what changes in the caller's possession afterwards -- a cookie, a token, a header the next request must carry."
+  - "Drive any second route the same way, because a second client often reaches the same states through different requests."
+  - "Write the states and the transition that reaches each, so a later response can be recognised as one that skipped a step."
+
+first_false_positive: >-
+  A redirect chain read as a sequence of states when it is one transition
+  rendered in several hops. A state is somewhere the caller can be left; a hop
+  the client follows automatically is not, and the two look alike in a proxy
+  log until the chain is broken deliberately.
+
+preconditions:
+  - "An account the tester owns can complete the flow, or the states after the credential are not observable."
+
+evidence:
+  - "The state list, with the request that drives each transition and what the caller holds afterwards."
+  - "For each route driven, whether it reaches the same states through the same requests."
+
+done_when: >-
+  Every authentication route found has been driven end to end and its states
+  recorded with the transition into each -- or the routes not driven are named
+  with the reason.

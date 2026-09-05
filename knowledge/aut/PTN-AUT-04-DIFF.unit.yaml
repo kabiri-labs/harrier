@@ -1,6 +1,6 @@
 id: PTN-AUT-04-DIFF
 topic: PTN-AUT-04
-status: outline
+status: authored
 role: variant
 title: "Whether the caller supplies the value the decision is read from"
 objective: >-
@@ -10,4 +10,65 @@ objective: >-
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
+motivated_by: [recon.authstates.mapped]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The decision was written once on the server and once in the client, and the client's copy is the one the next request carries."
+  - "A field naming the outcome travels back to the server because it was easier than looking it up again."
+  - "A state the map recorded can be entered directly, because the transition checks where the caller says they are rather than where they were."
+
+triage:
+  - "A response field naming the outcome: authenticated, isAdmin, success, role, or a status the client acts on."
+  - "A parameter the request carries that the map showed the server never set."
+  - "A step whose response is the input to the next request, which is the server delegating its memory to the caller."
+
+sink: >-
+  The value the application reads when deciding whether this caller is
+  authenticated.
+
+enter_when:
+  - "The states have been recorded, or there is no reference to compare a response against."
+
+oracle:
+  positive: "A request the caller composed reaches a state whose response is the authenticated one, without the credential the map showed that state requires."
+  negative: "Every value the caller can vary is refused, and the authenticated state is reached only through the transition the map recorded."
+  inconclusive: "The response differs but its meaning cannot be established, so whether the state was entered is unknown."
+
+sequence:
+  - "Take two recorded exchanges that differ in exactly one thing: one that authenticated and one that did not."
+  - "Diff them, and list every value present in the first that the caller could supply in the second."
+  - "Vary one at a time, keeping everything else identical, and read whether the response is the authenticated state rather than merely a different one."
+  - "Confirm by using what the response issued: a state that renders and refuses at the next request was not entered."
+
+first_false_positive: >-
+  A response that looks authenticated because it renders the authenticated page
+  while the session behind it is anonymous. The proof is the next request, not
+  this one: use whatever the response issued, against a function only an
+  authenticated caller reaches.
+
+false_positives:
+  - "A cached copy of an authenticated response served to an anonymous request, which is a caching finding rather than a bypass."
+  - "A state that renders for anyone by design, which the map records as unauthenticated."
+
+preconditions:
+  - "Two exchanges are recorded from the same route, one authenticated and one not."
+  - "The account used to record the authenticated exchange is the tester's own."
+
+evidence:
+  - "The two requests and the single value that differs between them."
+  - "The follow-up request that proves the state was entered rather than rendered."
+
+done_when: >-
+  Every caller-suppliable value found in the diff has been varied once and its
+  outcome recorded, with any apparent success confirmed by a follow-up request
+  -- or the values not tried are named with the reason.
+
+safety: >-
+  The tester's own account supplies the authenticated reference, and any state
+  reached this way is used only to prove it was reached. A bypass that works is
+  an unauthenticated caller acting as somebody: stop at the first function that
+  demonstrates it, read rather than write, and do not use the state to reach
+  other people's data because the demonstration is already complete.
+
+tools: [burp-repeater]

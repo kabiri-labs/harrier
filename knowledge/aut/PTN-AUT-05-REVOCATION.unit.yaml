@@ -1,6 +1,6 @@
 id: PTN-AUT-05-REVOCATION
 topic: PTN-AUT-05
-status: outline
+status: authored
 role: stage
 title: "Invalidation on sign-out and on credential change"
 objective: >-
@@ -10,3 +10,62 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.persistent.weak]
+
+hypotheses:
+  - "Sign-out clears the session and leaves the persistent secret, because they are two mechanisms and only one of them is what sign-out was written for."
+  - "The credential change rotates the password and not the thing that re-authenticates without it."
+  - "Revocation is by cookie deletion, which is an instruction to the browser rather than a state change on the server."
+
+triage:
+  - "A sign-out that returns to the landing page already signed in, which is the mechanism doing its job at the wrong moment."
+  - "A security page listing devices or sessions, which is where a revocation that exists would be exposed."
+  - "A credential-change flow that says nothing about other sessions."
+
+sink: >-
+  The record, if any, that the application consults to decide the secret is no
+  longer good.
+
+enter_when:
+  - "A persistent secret has been issued to an account the tester owns and captured before the event being tested."
+
+oracle:
+  positive: "A secret captured before the event authenticates as its account after it."
+  negative: "The secret is refused after every event tried, and the refusal is the application declining it rather than the browser withholding it."
+  inconclusive: "The secret cannot be replayed cleanly, so whether the event revoked it is unknown."
+
+sequence:
+  - "Capture the secret while signed in on an owned account, in a client that keeps it independently of the browser."
+  - "Sign out through the interface, then offer the captured secret from that separate client."
+  - "Repeat for a credential change, and for any explicit revocation the application offers -- sign out everywhere, remove a device."
+  - "For each event, record whether the secret still authenticates and, where it does, as which account."
+
+first_false_positive: >-
+  Sign-out appearing to revoke because the browser dropped the cookie. Every
+  offer here comes from a client that was never told to forget it, or the test
+  measures the browser's obedience rather than the server's record.
+
+false_positives:
+  - "A refusal that is the session limit rather than the revocation, where signing in again displaced the secret."
+  - "A secret that stops working after a credential change because it encoded the old credential, which is a derivation finding rather than revocation."
+
+preconditions:
+  - "The secret can be replayed from a client independent of the browser that received it."
+  - "The account is the tester's own, since the credential change is part of the test."
+
+evidence:
+  - "For each event: the secret captured before it, the request offering it after, and the response."
+  - "Which events the application claims to revoke on, from its own interface, against which it actually does."
+
+done_when: >-
+  Sign-out, credential change and every explicit revocation the application
+  offers have each been tested with a secret captured beforehand, and the
+  outcome recorded for each -- or the events not reachable are named.
+
+safety: >-
+  The tester's own account throughout, which the credential change makes
+  non-negotiable: changing somebody else's credential to see whether their
+  persistent secret survives takes their access away to answer a question an
+  owned account answers identically. The captured secret is the tester's own and
+  is discarded at the end of the engagement rather than kept as a convenience.
+
+tools: [burp-repeater]

@@ -1,6 +1,6 @@
 id: PTN-AUT-04-REPLAY
 topic: PTN-AUT-04
-status: outline
+status: authored
 role: variant
 title: "Reuse of a captured authentication artefact"
 objective: >-
@@ -10,5 +10,66 @@ objective: >-
 requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
-motivated_by: [recon.traffic.captured]
+motivated_by: [recon.traffic.captured, recon.authstates.mapped]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The artefact is verified for signature and not for whether it has been seen before."
+  - "It carries no expiry of its own, so its window is however long the receiver keeps accepting it."
+  - "It is bound to the exchange it was issued in only by the client's willingness to discard it."
+
+triage:
+  - "A one-time value in the flow -- a code, a nonce, an assertion, a state parameter -- that the map showed travelling once."
+  - "An artefact carried in a redirect, which is a value that has already left the channel it was issued in."
+  - "A second endpoint that accepts the same artefact, such as an API accepting the browser flow's assertion."
+
+sink: >-
+  The endpoint that consumes the artefact and decides whether the exchange it
+  belongs to authenticates this caller.
+
+enter_when:
+  - "An authentication exchange on the tester's own account has been recorded with the artefact visible."
+
+oracle:
+  positive: "An artefact already consumed once is accepted a second time, or is accepted at an endpoint or after a delay its issue did not intend."
+  negative: "The artefact is refused on second use, at every endpoint that accepts it, and after the shortest delay tried."
+  inconclusive: "The second use fails for a reason that is not the artefact -- a changed session, a different route -- so what refused it is unknown."
+
+sequence:
+  - "Record one complete exchange on the tester's own account and keep the artefact it carried."
+  - "Replay it unchanged into a fresh, unrelated exchange and read whether it is accepted."
+  - "Where the first replay is refused, vary one dimension at a time: a second endpoint, a longer delay, a different client."
+  - "Record the boundary as the narrowest condition under which it was still accepted."
+
+first_false_positive: >-
+  A replay that appears to succeed because the tester's own session was still
+  active and answered the request. Replay from a client holding nothing --
+  fresh store, no cookies -- or the result says only that the earlier session
+  still worked.
+
+false_positives:
+  - "An artefact accepted because the endpoint reissues rather than verifies, which is a different mechanism and a different finding."
+  - "A success measured against a response that renders for anyone, rather than against a function only the principal reaches."
+
+preconditions:
+  - "The exchange belongs to an account the tester owns, and the artefact was captured from the tester's own traffic."
+  - "A client holding no prior state is available, or a replay proves nothing."
+
+evidence:
+  - "The artefact's context: where it was issued, where it was replayed, and how long afterwards."
+  - "The narrowest condition under which it was still accepted, and the request that shows it."
+
+done_when: >-
+  The artefact has been replayed unchanged and then under each varied dimension
+  once, with each outcome recorded -- or the dimensions not varied are named
+  with the reason.
+
+safety: >-
+  Only artefacts captured from the tester's own exchanges. An artefact belonging
+  to somebody else is that person's credential however it was obtained, and
+  replaying one is acting as them rather than testing whether it can be
+  replayed; where an artefact appears in traffic that is not the tester's,
+  record that it was observable and stop. Nothing here is captured from a
+  network position the engagement did not grant.
+
+tools: [burp-repeater]

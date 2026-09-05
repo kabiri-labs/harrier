@@ -1,12 +1,73 @@
 id: PTN-AUT-05-IMPACT
 topic: PTN-AUT-05
-status: outline
+status: authored
 role: stage
 title: "Whether the persistent token signs in as its owner"
 objective: >-
   Determine whether a remember-me token that is guessable, forgeable or
   outlives the revocation that should end it actually establishes a session as
   the account it was issued for.
+
 requires:
   all_of: [control.persistent.weak]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The token re-authenticates rather than resumes, so what it establishes is a full session rather than a partial one."
+  - "The session it opens carries the same privileges as one opened with the credential, because nothing marks how it was established."
+  - "A step that guards the credential path -- a second factor, a fresh-proof prompt -- is not on this path, which is why the path exists."
+
+triage:
+  - "A landing page that shows the account signed in without a credential having been offered."
+  - "A function that ordinarily asks for the credential again, which is where a re-authenticated session and a resumed one differ."
+  - "A second factor in the credential flow, absent from the persistent one."
+
+sink: >-
+  The session the application establishes when it accepts the token.
+
+enter_when:
+  - "A weakness in the token has been established: predictable, forgeable, or surviving an event that should have ended it."
+
+oracle:
+  positive: "Offering the token alone establishes a session acting as the account it belongs to, confirmed at a function only that account reaches."
+  negative: "The token is accepted but the session it opens cannot act as the account -- a partial state, or one that asks for the credential at the first function that matters."
+  inconclusive: "The session's reach cannot be established without performing something the engagement will not perform, so what it establishes is unknown."
+
+sequence:
+  - "Offer the token from a client holding nothing else and read what comes back."
+  - "Confirm at a function only the account reaches, because a page that renders is not a session that acts."
+  - "Compare against the credential path: which steps that path has that this one does not."
+  - "Record the reach and stop; a second demonstration adds nothing to the first."
+
+first_false_positive: >-
+  A landing page rendering the account's name, read as a session. The claim is
+  that the token acts as the account, so it is confirmed at a request the
+  application authorises rather than at a page it renders.
+
+false_positives:
+  - "A session that appears full because the tester's own browser still held one, which a client holding nothing rules out."
+  - "A reach that is the account's ordinary privilege rather than anything the token added."
+
+preconditions:
+  - "The token belongs to an account the tester owns, or the client has designated one in writing."
+  - "A client holding no prior state is available."
+
+evidence:
+  - "The token's weakness, from the unit that established it, and the request that offered it."
+  - "The function that confirmed the session, and which steps of the credential path this path skipped."
+
+done_when: >-
+  The token has been offered from a clean client and the resulting session's
+  reach confirmed at one function only the account reaches -- or the reason the
+  confirmation was not attempted is written down.
+
+safety: >-
+  The token is the tester's own unless the client designated otherwise in
+  writing. This is the unit where a weakness found earlier becomes a session
+  belonging to somebody, so it stops at the first function that demonstrates
+  the reach: read rather than write, do not go on to the account's data, and do
+  not use the session for anything the demonstration does not need. Where the
+  earlier units showed other accounts' tokens are predictable, that is the
+  finding -- computing one is not part of this test.
+
+tools: [burp-repeater]

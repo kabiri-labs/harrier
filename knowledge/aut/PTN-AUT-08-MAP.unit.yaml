@@ -1,6 +1,6 @@
 id: PTN-AUT-08-MAP
 topic: PTN-AUT-08
-status: outline
+status: authored
 role: stage
 kind: recon
 title: "Inventory of channels that authenticate the same account"
@@ -10,3 +10,40 @@ objective: >-
 
 requires:
   all_of: [recon.channels.mapped]
+yields: [recon.authchannels.mapped]
+
+hypotheses:
+  - "A channel exists that the web application's team does not consider theirs, which is why its requirements were never compared."
+  - "A legacy endpoint was kept for a client that has not been retired, and it authenticates the way that client expected."
+  - "A support path authenticates on what support staff can verify over a telephone, which is by construction less than a credential."
+
+triage:
+  - "A mobile or desktop client whose traffic reaches endpoints the browser never calls."
+  - "An API host, a versioned path, or a subdomain answering the same accounts."
+  - "Documentation, a help centre or a status page naming a way in the application does not link to."
+
+enter_when:
+  - "The clients and channels of the target have been recorded, or there is nothing to filter for authentication."
+
+sequence:
+  - "List every channel the recording found, and mark which of them accept a credential at all."
+  - "For each, establish whether it authenticates the same account store or a separate one, by signing in on an owned account."
+  - "Record what each demands: the credential, a second factor, a device, an approval by somebody else."
+  - "Note which channels the engagement's scope covers, per host and path, because a channel outside it is inventoried and not probed."
+
+first_false_positive: >-
+  A channel that appears to authenticate the same account because it accepts the
+  same name. Confirm with a credential change on an owned account: two stores
+  diverge the moment one of them is updated, and until then they look identical.
+
+preconditions:
+  - "An account the tester owns can be signed in on each channel being compared, or the comparison rests on documentation rather than observation."
+
+evidence:
+  - "The channel list, with what each demands and whether it shares the account store."
+  - "For each, the scope statement that covers it or the note that it does not."
+
+done_when: >-
+  Every channel found has been recorded with what it demands and whether it
+  authenticates the same account -- or the channels that could not be exercised
+  are named with the reason.

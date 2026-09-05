@@ -1,6 +1,6 @@
 id: PTN-AUT-03-IMPACT
 topic: PTN-AUT-03
-status: outline
+status: authored
 role: stage
 title: "Denial of service through the lockout itself"
 objective: >-
@@ -11,3 +11,67 @@ requires:
   all_of: [control.lockout.enforced]
 motivated_by: [artifact.accountlist]
 yields: [impact.account.denied]
+
+hypotheses:
+  - "The counter is keyed on the account, which is what makes it aimable at a person rather than at an attacker."
+  - "Nothing distinguishes an attacker's failure from the account holder's, so the control cannot refuse to fire."
+  - "The lockout was specified as a defence and never as something an outsider could trigger on purpose."
+
+triage:
+  - "A lockout that fires on the account rather than on the caller, which the scope unit will already have established."
+  - "An account name that is public: an address on a contact page, a name in a published directory."
+  - "A recovery flow that confirms an account exists, which is what makes a target choosable."
+
+sink: >-
+  The failure counter belonging to the account being denied.
+
+enter_when:
+  - "A counter has been demonstrated, keyed on the account rather than on the caller."
+  - "The client has named the account this may be demonstrated against, in writing, and knows it will be locked."
+
+oracle:
+  positive: "The designated account is refused its own correct credential after the attempts were made, and it was not refused before them."
+  negative: "The account signs in with its correct credential after the counter fired, so what the counter stopped was the attacker rather than the holder."
+  inconclusive: "The account cannot be signed into for a reason established before the attempts, so the refusal proves nothing."
+
+sequence:
+  - "Confirm the designated account signs in normally, which is the before-state the claim rests on."
+  - "Fail against it exactly as many times as the counter needs, and no more."
+  - "Sign in with its correct credential and record the refusal."
+  - "Clear the lockout by whatever route the revocation unit found, and confirm the account works again before finishing."
+
+first_false_positive: >-
+  An account that was already locked, or already unusable, when the attempts
+  began. The sign-in beforehand is what separates a demonstration from a
+  coincidence, and without it the refusal afterwards says nothing.
+
+false_positives:
+  - "A refusal that is the counter applied to the tester's own address rather than to the account, which the scope unit distinguishes."
+  - "A demonstration against an account nobody uses, which proves the mechanism and not the denial."
+
+preconditions:
+  - "The account is one the client designated for this, and a route to clear the lockout is known before it is applied."
+  - "The counter's key is established, or the demonstration may be denying the tester rather than the holder."
+
+evidence:
+  - "The sign-in before, the attempts, the refusal after, and the restoration."
+  - "The number of failures the denial cost, which is what makes it repeatable at will or not."
+
+done_when: >-
+  One designated account has been denied its own credential and then restored,
+  with the before-state, the attempt count and the restoration recorded -- or
+  the reason the demonstration was not attempted is written down instead.
+
+safety: >-
+  This unit denies a real person their access on purpose, and it is the one in
+  this catalogue that most needs the word no. It proceeds only against an
+  account the client has named in writing, only once, and only when the route
+  to clear the lockout is already known -- applying a denial without knowing how
+  to lift it is an outage rather than a test. One account, never a list: locking
+  many is the attack itself and is outside anything a test is for, however
+  plainly the mechanism generalises. Where the client will not designate an
+  account, the mechanism is already established by the scope unit and this is
+  recorded as demonstrated in principle and not performed, which is a
+  materially different sentence and the honest one.
+
+tools: [burp-repeater]

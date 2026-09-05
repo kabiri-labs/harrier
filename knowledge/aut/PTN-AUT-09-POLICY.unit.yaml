@@ -1,6 +1,6 @@
 id: PTN-AUT-09-POLICY
 topic: PTN-AUT-09
-status: outline
+status: authored
 role: stage
 title: "Which accounts and actions the second factor is demanded for"
 objective: >-
@@ -12,3 +12,60 @@ requires:
   all_of: [access.user]
 yields: [control.mfa.optional]
 closes: [control.mfa.optional]
+
+hypotheses:
+  - "It was shipped as an option and never made a requirement, because making it one would have locked out users who had not enrolled."
+  - "It is demanded at sign-in and not at the actions that change what sign-in protects."
+  - "A role that was created after the requirement was written is not covered by it, because coverage was listed rather than derived."
+
+triage:
+  - "A security page offering to enable the factor, which is an offer rather than a requirement."
+  - "An administrative or elevated role, which is where a requirement is most expected and least often checked."
+  - "Actions that change the credential, the recovery address, or a payee -- the ones a second factor exists for."
+
+sink: >-
+  The check that decides whether this caller, on this action, must present the
+  second factor.
+
+enter_when:
+  - "An account the tester owns can be enrolled and un-enrolled, or the coverage cannot be compared."
+
+oracle:
+  positive: "An account or an action reaches its end without the second factor being demanded, where the application's own description says it is required."
+  negative: "Every account class and every sensitive action the tester can reach demands the factor, matching what the application describes."
+  inconclusive: "A role or an action cannot be reached on an owned account, so its coverage is documented rather than observed."
+
+sequence:
+  - "Record what the application says it requires, from its security page and any policy it publishes."
+  - "Sign in on an owned account that has not enrolled, and record whether it is demanded, offered, or absent."
+  - "Enrol, then attempt each sensitive action, recording which demand the factor and which do not."
+  - "Repeat for each role the engagement grants, because coverage is often per role and stated for none."
+
+first_false_positive: >-
+  An action that appears not to demand the factor because it was demanded
+  moments earlier and is remembered for a window. Clear any remembered state
+  between attempts, or the coverage measured is one session's memory.
+
+false_positives:
+  - "A role that seems uncovered because the engagement's account for it was never enrolled, which is enrolment rather than policy."
+  - "An action that skips the factor because it was reached through a flow that had already stepped up."
+
+preconditions:
+  - "Accounts the tester owns exist for each role the engagement grants, or the comparison covers only the roles it has."
+
+evidence:
+  - "The application's own statement of what it requires, quoted from where it states it."
+  - "The table: account class and action against demanded, offered, or absent."
+
+done_when: >-
+  Every role the engagement grants and every sensitive action reachable on it
+  has been recorded as demanding the factor or not -- or the roles and actions
+  not reachable are named with the reason.
+
+safety: >-
+  Owned accounts, and enrolment changes made only on them. Un-enrolling an
+  account to see whether the requirement fires is a change to how that account
+  is protected, so it is not done to anybody else's -- and the owned account is
+  re-enrolled at the end rather than left as the test set it.
+
+tools: [burp-repeater]

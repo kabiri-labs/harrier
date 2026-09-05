@@ -2417,8 +2417,16 @@ class TheBuiltFileWorksInABrowser(unittest.TestCase):
 
     def test_an_outline_unit_shows_no_empty_procedure_heading(self):
         """It has no procedure to head. The notice saying so is what the reader
-        gets instead, and it sits where the procedure would have been."""
-        page = self.open("#/unit/PTN-AUT-07-BINDING")
+        gets instead, and it sits where the procedure would have been.
+
+        Taken from the catalogue rather than named, for the reason its sibling
+        below already records: naming one made this a test about a particular
+        unit, and it failed the day that unit was written to a deeper tier
+        rather than the day the heading broke.
+        """
+        uid = next(u for u in sorted(self.data["units"])
+                   if self.data["units"][u].get("status") == "outline")
+        page = self.open("#/unit/" + uid)
         headings = [h.strip() for h in page.locator("main h3").all_inner_texts()]
         self.assertNotIn("Run this test", headings)
         self.assertShows(self.driver.text(), "This test is an outline")

@@ -77,9 +77,9 @@ cases:
   - PTN-AUT-02-MAP
   - PTN-AUT-02-PROBE
   - PTN-AUT-02-IMPACT
-  authored: 0
+  authored: 3
   sketched: 0
-  outline: 3
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-03
   title: Testing for Weak Lock Out Mechanism
@@ -90,9 +90,9 @@ cases:
   - PTN-AUT-03-SCOPE
   - PTN-AUT-03-REVOCATION
   - PTN-AUT-03-IMPACT
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-04
   title: Testing for Bypassing Authentication Schema
@@ -102,9 +102,9 @@ cases:
   - PTN-AUT-04-MAP
   - PTN-AUT-04-DIFF
   - PTN-AUT-04-REPLAY
-  authored: 0
+  authored: 3
   sketched: 0
-  outline: 3
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-05
   title: Testing for Vulnerable Remember Password
@@ -115,9 +115,9 @@ cases:
   - PTN-AUT-05-EXPIRY
   - PTN-AUT-05-REVOCATION
   - PTN-AUT-05-IMPACT
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-06
   title: Testing for Browser Cache Weakness
@@ -143,9 +143,9 @@ cases:
   - PTN-AUT-01-VALIDATION
   - PTN-AUT-01-SIZE
   - PTN-AUT-01-IMPACT
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-08
   title: Testing for Weak Security Question Answer
@@ -156,9 +156,9 @@ cases:
   - PTN-AUT-06-VALIDATION
   - PTN-AUT-06-RATE
   - PTN-AUT-06-IMPACT
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-09
   title: Testing for Weak Password Change or Reset Functionalities
@@ -171,9 +171,9 @@ cases:
   - PTN-AUT-07-REVOCATION
   - PTN-AUT-07-VALIDATION
   - PTN-AUT-07-IMPACT
-  authored: 0
+  authored: 6
   sketched: 0
-  outline: 6
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-10
   title: Testing for Weaker Authentication in Alternative Channel
@@ -184,9 +184,9 @@ cases:
   - PTN-AUT-08-PROBE
   - PTN-AUT-08-IMPACT
   - PTN-AUT-08-WRITE
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-11
   title: Testing Multi-Factor Authentication (MFA)
@@ -198,9 +198,9 @@ cases:
   - PTN-AUT-09-ENTROPY
   - PTN-AUT-09-BINDING
   - PTN-AUT-09-IMPACT
-  authored: 0
+  authored: 5
   sketched: 0
-  outline: 5
+  outline: 0
   resolvable: true
 - id: WSTG-ATHZ-01
   title: Testing Directory Traversal File Include
@@ -266,9 +266,9 @@ cases:
   - PTN-AUT-10-SCOPE
   - PTN-AUT-10-REVOCATION
   - PTN-AUT-10-IMPACT
-  authored: 0
+  authored: 5
   sketched: 0
-  outline: 5
+  outline: 0
   resolvable: true
 - id: WSTG-BUSL-01
   title: Test Business Logic Data Validation

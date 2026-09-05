@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 317 |
+| Units — outlined | 275 |
 | Units — sketched | 40 |
-| Units — authored | 36 |
+| Units — authored | 78 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -516,6 +516,201 @@ topic that produces it, so one nothing consumes is a technique whose result no
 sibling declares rather than a chain that stopped. That it is not ratcheted is
 stated where it is listed, and the suite asserts the two groups partition the
 published figure exactly.
+
+0.33.0 is content rather than machinery, and it is the first of it since the
+retrieval work started. `PTN-AUT-01`, credential strength policy, goes from four
+outlines to four authored units -- the first executable tests in `AUT`, a domain
+holding 42 units of which none could be performed.
+
+The topic was chosen for what its `safety` fields have to say. Three of its four
+units *set* a credential on a running application and the fourth *guesses* one,
+so the real costs are locking a person out of their account, changing a real
+user's access, and turning a policy question into a credential-spraying sweep.
+`sketched` has no `safety` field, which would have left exactly the part that
+makes this topic dangerous unwritten -- so the tier was never in question.
+
+The mechanism worth having in writing is in `-SIZE`: bcrypt hashes the first 72
+bytes and discards the rest, so a long passphrase is exactly as strong as its
+first 72 bytes and nothing tells the user. The oracle is a sign-in with a strict
+prefix, because a maximum stated on the page is a claim and a truncated secret
+is a measurement.
+
+`-IMPACT` is ordered so the arithmetic comes before the attempt: the attempt
+budget is measured on the tester's own account, the permitted space is stated
+from what the policy units found, and where the space is larger than the budget
+the answer is already negative and no account is touched. A test that spends a
+real person's access to learn something the two numbers already say is not a
+test worth running.
+
+`-IMPACT` declares no motivation, and the first draft did. `control.limit.absent`
+looked like the right one -- knowing a limit is unenforced is what makes guessing
+worth reaching for -- until the edge count moved by twelve and naming the twelve
+showed what they were: a per-object upload size limit and an accumulated storage
+quota among them. The fact is true of every unenforced limit in the catalogue,
+which makes it too coarse to carry this motivation, and the unit measures the
+attempt budget itself in its first step rather than inheriting a claim about
+upload quotas. A fact narrow enough to say *authentication attempts are not
+throttled* would earn the edge; writing one belongs to `PTN-AUT-03`, which would
+have to produce it.
+
+One payload file, `payloads/credential/policy-probes.yaml`, and it is probes
+rather than guesses: values the tester sets on their own account to find the
+boundary. There is deliberately no list of candidate passwords anywhere in this
+repository, and `-IMPACT` -- the only unit that guesses -- is the one with no
+payload file at all.
+
+What this does not do is finish a chain. The topic is authored end to end within
+itself and stops at `access.principal.other`; the unit that consumes that is
+`PTN-AUT-02-IMPACT`, still an outline. Three chains reach a stated outcome, not
+four.
+
+`PTN-AUT-02`, default and seeded credentials, follows it in the same batch and
+takes that step: its impact unit is the only consumer of
+`access.principal.other`, so writing it is what continues the chain rather than
+starting another one beside it.
+
+It needed one fact. `PTN-AUT-02-MAP` is a recon unit that established nothing,
+which meant the topic declared a `phase` axis -- map, then probe, then impact --
+that existed in the file and not in the graph: nothing connected the inventory
+to the unit that uses it. `recon.vendoraccounts.mapped` is that connection, at
+topic tier because it is consumed inside the topic that produces it and nowhere
+else.
+
+The safety fields carry most of the judgement again. `-PROBE` is one attempt per
+documented pair, stopping at the first acceptance, because the alternative is
+credential spraying with a different name -- and where the component
+authenticates against the application's own store, a failed attempt spends a
+real user's lockout budget rather than a service account's, which is a thing to
+establish before attempting rather than after. `-IMPACT` reads rather than
+writes: a management interface is where the destructive functions are, and the
+account was left in place precisely because somebody believed it was harmless.
+
+`PTN-AUT-03`, anti-automation and lockout, is the third in the batch and the one
+`PTN-AUT-01` was waiting on: its rate unit is where the attempt budget that the
+credential-policy impact reasons about is actually measured. Nothing in the
+graph moved -- its four units already carried their chain fields -- so this is
+depth and nothing else.
+
+Its impact unit denies a real person their access on purpose, and it is the one
+in this catalogue that most needs the word no: one account the client named in
+writing, once, and only when the route to clear the lockout is already known,
+because applying a denial without knowing how to lift it is an outage rather
+than a test. Where the client will not designate an account, the mechanism is
+already established by the scope unit and the finding is recorded as
+demonstrated in principle and not performed -- a materially different sentence,
+and the honest one.
+
+`PTN-AUT-04`, authentication bypass, is the fourth, and it made a pattern
+visible that is worth recording once rather than per topic. Its `-MAP` unit
+established nothing, exactly as `PTN-AUT-02`'s did -- and so do 32 of the
+catalogue's recon units, across 11 domains. They are most of what the published
+figure counts as *tests declaring no capability*. A recon unit that yields
+nothing is not merely undeclared: it means the topic's own axis, the phase
+sequence its `order` sets out, exists in the file and not in the graph, so
+nothing connects the inventory to the units that use it. Authoring one forces
+the fact that closes that, which is why writing depth keeps adding capabilities
+rather than only filling fields.
+
+Two more of them here: `recon.authstates.mapped` at topic tier, and the same
+judgement as before -- the units that use it declare it a motivation rather than
+a prerequisite, because a bypass attempt is worth offering slightly early and
+never worth hiding from a reader who has not drawn the state map yet.
+
+`PTN-AUT-05`, persistent authentication, is the fifth, and nothing in the graph
+moved for it either -- depth only. What its four units share is a single
+discipline that the topic makes unavoidable: every one of them is about a secret
+that authenticates without a credential, so every one of them is written to be
+performed on the tester's own account and on no other. Composing a token for a
+real user, changing a real user's credential to see what survives it, shortening
+a wait by altering somebody else's value: each is the attack the unit above it
+is trying to predict, and each answers a question an owned account answers
+identically.
+
+The recurring false positive across the topic is the browser being measured
+instead of the server. A cookie the browser drops at sign-out, an expiry the
+browser enforces, a value the browser forgets -- all three read as the
+application revoking something. Every offer in these units is made from a client
+that was never told to forget the secret, which is what turns three tests of
+obedience into three tests of a server-side record.
+
+`PTN-AUT-06`, knowledge-based recovery, is the sixth, and its policy unit is
+where a line had to be drawn that the rest of the domain does not need. The
+question *are these answers obtainable* invites research on a real person, and
+the unit refuses it: what is assessed is the offered question set and the size
+of each answer space as a category -- a colour, a month, a first name -- against
+the attempts the rate unit measured. A question is weak because of what it asks
+for, and demonstrating that against somebody's actual life is neither necessary
+nor something an engagement asked for.
+
+Its impact unit ends with a credential changed, which is the same standard the
+lockout impact is held to: an owned account, or one the client designated in
+writing and which is restored afterwards. The step that sends a message is a
+stop rather than a formality, because a recovery driven against a real person's
+account puts a takeover message in their inbox and takes their access away at
+the end of it.
+
+`PTN-AUT-07`, credential change and reset flows, is the seventh and the largest:
+six units, and the topic whose units carry their own surface clauses from
+0.29.0. Nothing in the graph moved.
+
+Five of the six run entirely on accounts the tester owns, and the reason is the
+same each time: a reset flow that fails ends with somebody's credential set. The
+binding unit needs two owned accounts rather than one real target; the entropy
+unit collects its sample against the tester's own mailboxes rather than by
+triggering recovery for other people's accounts, which would fill a stranger's
+inbox with reset mail; the expiry unit waits rather than borrowing an artefact
+that is already outstanding. The sixth is the impact, held to the standard the
+other two takeover units in this domain are.
+
+Writing it broke a test, and the break is worth recording because the repository
+had already learnt this once. `test_an_outline_unit_shows_no_empty_procedure_heading`
+named `PTN-AUT-07-BINDING` as its outline, and failed the day that unit was
+written to depth rather than the day the heading broke -- which is verbatim the
+comment its sibling two tests below carries about the same mistake. It now takes
+the first outline the catalogue holds, as that sibling does.
+
+`PTN-AUT-08`, alternative authentication channels, is the eighth, and its map
+unit is the third in the domain that established nothing --
+`recon.authchannels.mapped` closes it, at topic tier, on the same reasoning as
+the two before it.
+
+Its probe unit is where the domain's one social boundary had to be written down.
+A support-operated path authenticates on what a person can verify over a
+telephone, which is by construction less than a credential -- so it belongs in
+the inventory and is the one channel the unit does not exercise: doing so means
+asking a person to authenticate somebody, which is social engineering rather
+than a request. It is recorded from what the process documents unless the client
+has arranged otherwise.
+
+Its write unit is the first in this batch that changes something rather than
+reading it, and the choice of action is the safety control: the smallest guarded
+action whose effect is observable and reversible on an owned account, reversed
+afterwards. Where the only guarded actions are irreversible, the bypass is
+already established by the unit above it and this one is recorded as not
+performed rather than performed carefully.
+
+`PTN-AUT-09` and `PTN-AUT-10` finish the domain: multi-factor authentication and
+the OAuth 2.0 and OpenID Connect flows, nine units between them, and nothing in
+the graph moved for either.
+
+`PTN-AUT-09-ENTROPY` is the one unit in the batch that deliberately computes
+rather than demonstrates. The space a one-time value is drawn from is compared
+against the submissions the application allows on paper: sending them to prove
+it is guessing a code, and against an owned account it proves nothing the
+arithmetic already said. Its impact unit does not obtain a credential either --
+it tests what the second factor adds to one already held legitimately, and
+where the credential is not held the finding from the units above stands
+without the demonstration.
+
+`PTN-AUT-10-VALIDATION` carries the batch's one irreversible risk. Pointing an
+authorization response at a host outside the engagement sends a credential to
+somebody who is not part of it, and it cannot be recalled -- so every location
+tried is one the tester controls or one the scope names, and a variation that
+would deliver anywhere else is recorded as untried rather than tried carefully.
+
+That completes `AUT`: 42 units across 10 topics, every one written to full
+procedural depth. The domain held 42 outlines and no performable test when this
+batch began.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase

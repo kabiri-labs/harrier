@@ -1,6 +1,6 @@
 id: PTN-AUT-09-VALIDATION
 topic: PTN-AUT-09
-status: outline
+status: authored
 role: stage
 title: "What the second-factor check accepts as satisfaction"
 objective: >-
@@ -10,3 +10,62 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.mfa.bypassable]
+
+hypotheses:
+  - "The step is a page in a sequence, and the sequence is driven by the client."
+  - "A response field naming the outcome travels back to the server, which makes the outcome the caller's to state."
+  - "The session is already authenticated before the step, so skipping the step skips nothing the server checks."
+
+triage:
+  - "A step whose response carries a field naming success, which the next request echoes."
+  - "A landing page reachable directly while the step is outstanding."
+  - "A remember-this-device option, which is a state the caller keeps and offers back."
+
+sink: >-
+  The value or state the application reads to decide the second factor was
+  presented.
+
+enter_when:
+  - "An owned account is enrolled and the step can be reached and recorded."
+
+oracle:
+  positive: "A session that has not presented the factor reaches a function only a fully authenticated session should, without the correct value being supplied."
+  negative: "Every route around the step is refused, and only the correct value advances the session."
+  inconclusive: "The state after the attempt cannot be established, so whether the step was satisfied is unknown."
+
+sequence:
+  - "Record the full exchange with the correct value, so the authenticated state is known."
+  - "Repeat the sign-in and, at the step, request the landing page directly rather than answering."
+  - "Replay the exchange with the step's own response altered where the client acts on it, and with any success field flipped."
+  - "Confirm each apparent success at a function only a fully authenticated session reaches, not at the page that rendered."
+
+first_false_positive: >-
+  A landing page that renders while the session is still partial. Rendering is
+  not authentication: the confirmation is a request the application authorises,
+  and a partial session is often allowed to see the shell around it.
+
+false_positives:
+  - "A success owed to a remembered device from an earlier sign-in, which a cleared client rules out."
+  - "A function that never required the second factor, which shows the session works rather than that the step was skipped."
+
+preconditions:
+  - "The account is the tester's own and is enrolled, so the step actually fires."
+  - "A client holding no remembered-device state is available."
+
+evidence:
+  - "The correct exchange, and each altered variant with its outcome."
+  - "The function that confirmed the session state, for any variant that appeared to succeed."
+
+done_when: >-
+  The step has been attempted by direct request, by altering the response the
+  client acts on, and by replaying the following request without it -- each
+  outcome recorded and any apparent success confirmed at a guarded function.
+
+safety: >-
+  The tester's own enrolled account. A session that reaches past the step is
+  used only to confirm it reached: read rather than write, stop at the first
+  guarded function, and do not use it for the account's data. Nothing here is
+  attempted against an account the tester is not enrolled on, because the
+  mechanism is a property of the step and an owned account exercises it exactly.
+
+tools: [burp-repeater]

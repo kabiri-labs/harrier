@@ -1,6 +1,6 @@
 id: PTN-AUT-05-ENTROPY
 topic: PTN-AUT-05
-status: outline
+status: authored
 role: stage
 title: "Predictability of the persistent secret"
 objective: >-
@@ -10,3 +10,62 @@ objective: >-
 requires:
   all_of: [access.user]
 yields: [control.persistent.weak]
+
+hypotheses:
+  - "The value was built from what was to hand -- the account name, a timestamp, a row identifier -- because it had to survive a restart and nothing was storing it."
+  - "It encodes rather than references, so it is readable rather than merely long."
+  - "It is a hash of something guessable, which is unpredictable-looking and not unpredictable."
+
+triage:
+  - "A cookie named remember, rememberme, persist, keep_signed_in, auth_token or similar."
+  - "A value that decodes: base64, hexadecimal, or a structure with separators."
+  - "A length that is suspiciously round, or a prefix that repeats between accounts."
+
+sink: >-
+  The stored value the application accepts later as proof of who the caller is.
+
+enter_when:
+  - "A persistent sign-in option exists and has been used on an account the tester owns."
+
+oracle:
+  positive: "The value's construction is identified, and a value the tester composes for a second owned account is accepted for it."
+  negative: "Values collected across accounts and repeats share no structure, and nothing composed from account data is accepted."
+  inconclusive: "A structure is visible but no composed value was accepted, so whether the remainder is predictable is unknown."
+
+sequence:
+  - "Collect the value from several sign-ins on the same owned account and from a second owned account."
+  - "Decode what decodes, and compare the sets for a field that tracks the account, the time, or a counter."
+  - "Compose a value for the second owned account from the structure found."
+  - "Offer it and read whether the session comes back as that account, which is what separates a structure from a prediction."
+
+first_false_positive: >-
+  A value that looks derived because it encodes an account identifier beside an
+  unpredictable part. Half a structure is not a prediction: the test is whether
+  a composed value is accepted, and a value that decodes tells you only where to
+  look.
+
+false_positives:
+  - "A repeated value across sign-ins because the earlier one was reissued rather than regenerated."
+  - "A structure that is the framework's serialisation rather than the application's secret, carrying an unpredictable field inside it."
+
+preconditions:
+  - "Two accounts the tester owns, or a composed value cannot be tested against anything."
+
+evidence:
+  - "The collected values, with what varies between accounts and between sign-ins."
+  - "The composed value and the response to offering it -- the structure, never the secret of an account that is not the tester's."
+
+done_when: >-
+  Values from at least two owned accounts and several sign-ins have been
+  compared, a structure recorded or ruled out, and any structure found tested by
+  composing a value -- or the reason it could not be composed is written down.
+
+safety: >-
+  Owned accounts on both sides of the comparison. A composed value that is
+  accepted is a session belonging to whoever it names, so it is composed for an
+  account the tester owns and never for a real user's -- guessing a real user's
+  token is the attack this test exists to predict, not the test. Where the
+  structure suggests other accounts' values are reachable, that is the finding,
+  and enumerating them is not part of it.
+
+tools: [burp-repeater]

@@ -1,12 +1,77 @@
 id: PTN-AUT-06-IMPACT
 topic: PTN-AUT-06
-status: outline
+status: authored
 role: stage
 title: "Whether the recovery answers complete a takeover"
 objective: >-
   Determine whether the knowledge answers an attacker can obtain or guess carry
   the recovery through to a credential the attacker sets, rather than stopping
   at a step that requires something only the owner holds.
+
 requires:
   all_of: [control.recovery.guessable]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The questions were added in front of a flow that already worked, so passing them is the whole of it."
+  - "A second factor guards the sign-in and not this path, which is why the path is worth taking."
+  - "The confirmation goes to an address the flow lets the caller change, which puts the last step in the attacker's hands too."
+
+triage:
+  - "A recovery flow that sets a credential directly after the questions rather than sending a link."
+  - "A step offering to update the recovery address before the identity is settled."
+  - "A second factor prompt on sign-in that the recovery landing does not repeat."
+
+sink: >-
+  The credential the recovery flow lets the caller set.
+
+enter_when:
+  - "The question set has been shown to ask for obtainable facts, or the comparison to accept far more than the stored answer."
+  - "The account is the tester's own, or the client has designated one in writing."
+
+oracle:
+  positive: "The flow completes to a credential the caller set, and that credential signs in as the account, without anything only the owner holds."
+  negative: "The flow stops at a step requiring something only the owner holds -- a message to an address the caller cannot read, a second factor, a support confirmation."
+  inconclusive: "The flow stops for a reason established before it began, so what would have blocked it is unknown."
+
+sequence:
+  - "Drive the recovery on an owned account, answering the questions, and record every step the flow presents."
+  - "At each step, record whether completing it needs something only the owner holds."
+  - "Where the flow reaches a credential-setting step, set one and confirm it signs in."
+  - "Compare the resulting session against the sign-in path: whether the second factor and any other step the credential path has are applied here."
+
+first_false_positive: >-
+  A flow that appears to complete because the tester could read the confirmation
+  message, when reading it was possible only because the address is theirs. The
+  claim is what an attacker who has the answers can do, so the step that sends
+  to an address is a stop unless the flow lets the caller change it first.
+
+false_positives:
+  - "A completion that used a support action the engagement arranged, which is a process finding rather than this one."
+  - "A session that appears full but asks for the credential at the first function that matters."
+
+preconditions:
+  - "The account is the tester's own, or designated in writing by the client."
+  - "The answers are known or obtainable without researching a real person."
+
+evidence:
+  - "Each step of the flow, with whether it needed something only the owner holds."
+  - "Where the flow completed, the sign-in that confirms the credential was set, and the steps the credential path has that this one skipped."
+
+done_when: >-
+  The flow has been driven to either a credential the caller set or the first
+  step requiring something only the owner holds, with each step recorded -- or
+  the reason it was not driven is written down.
+
+safety: >-
+  This unit ends with a credential changed, so it runs on an account the tester
+  owns unless the client designated another in writing -- and a designated one
+  is restored afterwards rather than left holding whatever the test set. Where
+  the flow would send a message, it goes to an address the tester controls: a
+  recovery driven against a real person's account puts a takeover message in
+  their inbox and takes their access away at the end. Where the answers for such
+  an account are not already known, they are not researched: the finding is that
+  the questions are obtainable, which the policy unit establishes without
+  touching anybody's life.
+
+tools: [burp-repeater]

@@ -1,12 +1,75 @@
 id: PTN-AUT-09-IMPACT
 topic: PTN-AUT-09
-status: outline
+status: authored
 role: stage
 title: "Whether sign-in completes without the second factor"
 objective: >-
   Determine whether an account whose second factor the tester does not hold is
   signed into anyway, either because the step is skippable or because it was
   never required of that account.
+
 requires:
   any_of: [control.mfa.bypassable, control.mfa.optional]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The weakness the earlier units found is the whole of what stood between the credential and the session."
+  - "The account was never enrolled, so the step that would have fired does not exist for it."
+  - "The session issued this way is indistinguishable from one that presented the factor, because nothing records how it was established."
+
+triage:
+  - "An account class the policy unit found uncovered, which needs no bypass at all."
+  - "A step the validation unit showed can be skipped, which needs no factor."
+  - "A function that ordinarily demands fresh proof, which is where the two kinds of session differ if they differ anywhere."
+
+sink: >-
+  The session the application establishes for a caller that did not present the
+  factor.
+
+enter_when:
+  - "The step has been shown skippable, or an account class has been shown not to require it."
+  - "The credential for the designated account is held legitimately, or there is nothing to sign in with."
+
+oracle:
+  positive: "A session is established as the designated account without the second factor, and it acts at a function only that account reaches."
+  negative: "The sign-in stops at the factor for that account, or the session it issues cannot act at any function the factor guards."
+  inconclusive: "The session's reach cannot be established without doing something the engagement will not do."
+
+sequence:
+  - "Confirm which route applies: an uncovered account class, or a skippable step."
+  - "Sign in on the designated account by that route alone, from a client holding nothing."
+  - "Confirm at one function only that account reaches, and record which route produced the session."
+  - "Sign out and record that the session was ended."
+
+first_false_positive: >-
+  A session that completed because the factor was remembered for that device
+  from an earlier legitimate sign-in. A client holding nothing is what separates
+  a bypass from a memory, and without it the result says only that the device
+  was trusted.
+
+false_positives:
+  - "An account that turned out to be enrolled but with a factor the engagement was given, which is a sign-in rather than a bypass."
+  - "A function reached that the second factor never guarded."
+
+preconditions:
+  - "The client has designated the account in writing, or it is one the tester owns."
+  - "The credential for it is held legitimately -- this unit does not obtain credentials, it tests what the factor adds to one."
+
+evidence:
+  - "The route used, from the unit that established it, and the sign-in request."
+  - "The guarded function that confirmed the session, and the sign-out."
+
+done_when: >-
+  A session has been established without the factor and confirmed at one guarded
+  function, then ended -- or the reason the demonstration was not attempted is
+  written down.
+
+safety: >-
+  This unit signs in as somebody, so it runs on an owned account or one the
+  client designated in writing, and the session is ended rather than left open.
+  It does not obtain the credential: it tests what the second factor adds to one
+  already held legitimately, and where the credential is not held the finding
+  from the units above stands on its own without this demonstration. One
+  account, never a survey of which accounts are unenrolled.
+
+tools: [burp-repeater]

@@ -1,6 +1,6 @@
 id: PTN-AUT-02-PROBE
 topic: PTN-AUT-02
-status: outline
+status: authored
 role: stage
 title: "Acceptance of a documented vendor credential"
 objective: >-
@@ -9,5 +9,69 @@ objective: >-
 
 requires:
   all_of: [recon.platform.identified]
-motivated_by: [recon.platform.confirmed]
+motivated_by: [recon.platform.confirmed, recon.vendoraccounts.mapped]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The account was left because it was believed to be unprivileged, which is a belief about the vendor's defaults rather than about this deployment."
+  - "Hardening was applied to the application and not to the component underneath it, because they were installed by different people."
+  - "The credential was changed on the primary interface and not on a second one that authenticates against the same store."
+
+triage:
+  - "A component from the inventory whose vendor documents an account created at install."
+  - "A management path -- /manager, /admin, /console -- answering with the product's own login rather than the application's."
+  - "A login that names the account for you, such as a username field pre-filled or a hint in the placeholder."
+
+sink: >-
+  The component's own authentication, which may be a different store from the
+  application's.
+
+enter_when:
+  - "The inventory names at least one component whose vendor documents an account."
+  - "The engagement's scope covers the component's own interface, which is often on a different port from the application."
+
+oracle:
+  positive: "A documented vendor pair is accepted and the response is the component's authenticated interface rather than its login."
+  negative: "Every documented pair for every inventoried component is refused, with the refusal distinguishable from a lockout or a throttle."
+  inconclusive: "Attempts stop being answered on their merits -- a lockout, a throttle, or a block -- before the inventory was exhausted."
+
+sequence:
+  - "Order the inventory by how little the component is likely to have been touched, which is where a default survives."
+  - "For each component, try each documented pair once, and read the response rather than the status."
+  - "Stop on the first acceptance for that component: a second success proves nothing the first did not."
+  - "Where a pair is refused, record whether the refusal was the component answering or a counter intervening, because those are different answers."
+
+first_false_positive: >-
+  A login that answers a wrong credential and a documented one identically,
+  which makes every pair look refused. Send one credential known to be wrong
+  and compare the two responses byte for byte before recording any negative.
+
+false_positives:
+  - "A component that accepts anything because it is running in a setup or first-run mode, which is a different finding and not a surviving default."
+  - "An acceptance against a demonstration instance reachable from the same host but outside the engagement's scope."
+
+preconditions:
+  - "The component's interface is inside the engagement's scope, stated per port and path rather than assumed from the application's."
+  - "Whether attempts here can lock the account is known, or the first attempt is the one that discovers it."
+
+evidence:
+  - "The component, the account name accepted, and the response that shows an authenticated interface -- the credential's shape, not the pair itself."
+  - "For each refusal, whether it came from the component or from a counter."
+
+done_when: >-
+  Every component in the inventory has been attempted with each pair its vendor
+  documents, and each outcome recorded as accepted, refused, or stopped by a
+  counter -- or the components left unattempted are named with the reason.
+
+safety: >-
+  One attempt per documented pair, and stop at the first acceptance. The
+  restraint is the whole discipline here: a sweep over many pairs is credential
+  spraying, it locks the account out where a counter exists, and locking a
+  vendor account can take a management interface away from the operators who
+  rely on it. Where the component authenticates against the application's own
+  store, a failed attempt spends a real user's budget rather than a service
+  account's -- so establish which store it is before attempting, not after.
+  Nothing is attempted outside the ports and paths the scope names, however
+  clearly the component belongs to the same deployment.
+
+tools: [burp-repeater]

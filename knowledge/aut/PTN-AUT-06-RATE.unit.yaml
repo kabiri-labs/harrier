@@ -1,6 +1,6 @@
 id: PTN-AUT-06-RATE
 topic: PTN-AUT-06
-status: outline
+status: authored
 role: stage
 title: "Throttling of answer submission"
 objective: >-
@@ -11,3 +11,63 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.limit.absent]
+
+hypotheses:
+  - "The limit was put on the sign-in form and not on the recovery flow, because recovery was written as a support feature rather than as an authentication path."
+  - "The counter is per session, so restarting the flow restarts it."
+  - "Wrong answers do not count because the step is treated as a form validation rather than as a credential check."
+
+triage:
+  - "A recovery flow that can be restarted freely from its first step."
+  - "A step that returns to the question rather than ending the flow on a wrong answer."
+  - "A lockout message on the sign-in form and none on this one, which states where the limit was thought to belong."
+
+sink: >-
+  The counter, if there is one, that the recovery step increments on a wrong
+  answer.
+
+enter_when:
+  - "A recovery flow reaches an answer prompt on an account the tester owns."
+
+oracle:
+  positive: "Wrong answers continue to be answered on their merits past any number the tester is willing to send, including across restarts of the flow."
+  negative: "Wrong answers stop being answered on their merits after a countable number -- a delay, a challenge, or a refusal that is not about the answer."
+  inconclusive: "The flow stops for a reason that is not the counter, so what intervened is unknown."
+
+sequence:
+  - "Submit wrong answers one at a time on an owned account, recording the response and its timing."
+  - "Where something intervenes, restart the flow from its first step and see whether the count survives."
+  - "Where it does not, the counter is per flow rather than per account, which is a limit that costs an attacker nothing."
+  - "Record the number, what intervened, and whether restarting cleared it."
+
+first_false_positive: >-
+  A refusal that is the account's sign-in lockout rather than this flow's
+  counter, reached because failed recovery counts there too. Check whether the
+  account can still sign in normally: if it cannot, the counter being measured
+  is not the one this unit is about.
+
+false_positives:
+  - "A generic response to every answer, right or wrong, read as a throttle when it is the flow declining to say anything."
+  - "An intervention from an intermediary rather than the application."
+
+preconditions:
+  - "The account is the tester's own, and the answer is known so a correct submission can distinguish a throttle from a refusal."
+  - "The ceiling on attempts is chosen before starting."
+
+evidence:
+  - "The number of wrong answers sent, what intervened, and after how many."
+  - "Whether restarting the flow cleared the count, with the request that shows it."
+
+done_when: >-
+  Wrong answers have been sent until something intervened or the chosen ceiling
+  was reached, and the restart behaviour recorded -- or the reason the flow
+  could not be driven is written down.
+
+safety: >-
+  One account, the tester's own, and a ceiling chosen before starting. Wrong
+  answers here can lock the account, so the account whose recovery is being
+  exhausted is one whose loss costs nobody anything -- and where the flow sends
+  mail on each attempt, every attempt is a message to an address the tester
+  controls rather than to a real person's inbox.
+
+tools: [burp-repeater]

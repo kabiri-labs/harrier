@@ -1,6 +1,6 @@
 id: PTN-AUT-08-IMPACT
 topic: PTN-AUT-08
-status: outline
+status: authored
 role: stage
 title: "Acceptance of a secondary channel's session by the primary one"
 objective: >-
@@ -10,3 +10,64 @@ objective: >-
 requires:
   all_of: [control.channel.weaker]
 yields: [control.channel.bypass]
+
+hypotheses:
+  - "The session is one store behind two front doors, so where it was issued is not recorded anywhere the primary channel can read."
+  - "The primary channel checks the session is valid and not how much evidence produced it."
+  - "The token is exchanged rather than reissued, which carries the weaker channel's provenance into the stronger one."
+
+triage:
+  - "A session cookie and an API token that decode to the same identifier."
+  - "An endpoint that exchanges one channel's token for the other's."
+  - "A single sign-out that ends both, which suggests one session behind two names."
+
+sink: >-
+  The session the primary channel accepts, and whatever it reads to decide it is
+  good.
+
+enter_when:
+  - "A channel has been shown to authenticate on less evidence than another."
+
+oracle:
+  positive: "A session issued by the weaker channel is accepted by the primary channel for a function the primary channel's own requirements guard."
+  negative: "The primary channel refuses the weaker channel's session, or accepts it only for functions that need no more than the weaker channel demanded."
+  inconclusive: "The session cannot be transferred cleanly between clients, so whether the primary channel would honour it is unknown."
+
+sequence:
+  - "Obtain a session on an owned account through the weaker channel alone."
+  - "Present it to the primary channel from a client holding nothing else."
+  - "Ask for a function the primary channel guards with the step the weaker channel skipped, which is where the two differ."
+  - "Record whether the function is authorised, not whether the page renders."
+
+first_false_positive: >-
+  A primary-channel page rendering for the transferred session while the
+  function behind it refuses. The claim is that the session is honoured, so it
+  is confirmed at a request the application authorises rather than at a page it
+  serves.
+
+false_positives:
+  - "Acceptance by a function that never needed the skipped step, which shows the session is valid rather than that the guard was bypassed."
+  - "A session that works because the tester's browser still held one, which a clean client rules out."
+
+preconditions:
+  - "The account is the tester's own, and it is enrolled in the step the weaker channel skips."
+  - "A client holding no prior state is available."
+
+evidence:
+  - "The session as issued by the weaker channel, and the primary-channel request that used it."
+  - "The function chosen, and why it is one the skipped step was there to guard."
+
+done_when: >-
+  The weaker channel's session has been presented to the primary channel and
+  tested against at least one function the skipped step guards, with the
+  outcome recorded -- or the reason it could not be presented is written down.
+
+safety: >-
+  The tester's own account throughout. This unit demonstrates that a guard can
+  be walked around, and the demonstration is complete at the first function
+  that shows it: read rather than write, and do not use the bypassed session for
+  anything the finding does not need. Nothing here is done on an account that is
+  not the tester's, because the mechanism is a property of the channels and an
+  owned account shows it exactly as well.
+
+tools: [burp-repeater]

@@ -1,6 +1,6 @@
 id: PTN-AUT-06-POLICY
 topic: PTN-AUT-06
-status: outline
+status: authored
 role: stage
 title: "Discoverability of the answers the question set asks for"
 objective: >-
@@ -11,3 +11,62 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon]
 yields: [control.recovery.guessable]
+
+hypotheses:
+  - "The question set was copied from another product rather than chosen, so it asks what such sets have always asked."
+  - "A question's answer space is small enough to enumerate regardless of who the person is -- a colour, a month, a make of car."
+  - "The application itself publishes the answer, because the same fact is a profile field somewhere else in it."
+
+triage:
+  - "The question list offered at registration or on the security page, which is the whole population to assess."
+  - "A profile, directory or public page in the same application carrying a field a question asks for."
+  - "A free-text option letting the user write their own question, which moves the weakness rather than removing it."
+
+sink: >-
+  The answer the application will later accept in place of the credential.
+
+enter_when:
+  - "The set of questions the application offers can be listed, on an owned account or before authenticating."
+
+oracle:
+  positive: "A question in the offered set asks for a fact the application itself publishes, or one whose answer space is small enough to enumerate within the attempts the rate unit found."
+  negative: "Every offered question asks for something the application does not publish and whose answer space is larger than the attempts allowed."
+  inconclusive: "The full set cannot be listed, so what it asks for is known only in part."
+
+sequence:
+  - "List every question the application offers, including any it only shows after a choice."
+  - "For each, ask whether this application publishes the fact anywhere a caller can reach -- a profile, a listing, a public page."
+  - "For each remaining one, state the size of its answer space as a category rather than about any person: a colour, a month, a first name."
+  - "Compare the smallest space against the attempts the rate unit found, which is what turns a category into a finding."
+
+first_false_positive: >-
+  A question judged weak because the tester could answer it for themselves. The
+  claim is about the question, not about one person's answer, so the assessment
+  is of the offered set and its answer spaces -- researching an individual is a
+  different activity and not this one.
+
+false_positives:
+  - "A user-written question that happens to be strong, read as evidence the set is strong when the set is whatever users write."
+  - "A question whose space looks large but whose plausible answers are few, which is the size that matters."
+
+preconditions:
+  - "The offered set can be enumerated without submitting answers against an account that is not the tester's."
+
+evidence:
+  - "The full question list, with the answer space stated for each as a category."
+  - "For any fact the application itself publishes, where it publishes it."
+
+done_when: >-
+  Every question the application offers has been recorded with its answer space
+  and with whether the application publishes the fact -- or the part of the set
+  that could not be listed is named.
+
+safety: >-
+  This is an assessment of a question set, not research on a person. Nothing
+  here collects facts about a real user from public sources: the finding is that
+  a question asks for something obtainable, and demonstrating it against
+  somebody's actual life is neither necessary nor something the engagement asked
+  for. Where the application publishes a fact one of its own questions asks for,
+  cite the page rather than the person's value.
+
+tools: [burp-repeater]

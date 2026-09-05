@@ -1,6 +1,6 @@
 id: PTN-AUT-01-POLICY
 topic: PTN-AUT-01
-status: outline
+status: authored
 role: stage
 title: "The weakest accepted credential"
 objective: >-
@@ -11,3 +11,64 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]
 yields: [control.credential.weak]
+
+hypotheses:
+  - "The published rule is client-side and the server accepts what the client would have refused."
+  - "A strength meter is being read as a gate; a meter that turns red and still submits is scoring, not enforcing."
+  - "One rule is enforced and the rest are described -- most often a minimum length, with composition claimed and unchecked."
+
+triage:
+  - "minlength, maxlength and pattern attributes on the credential field."
+  - "A strength meter, zxcvbn or similar, scoring as the field is typed."
+  - "Policy text on /register or /account/password that names rules the field does not carry."
+
+sink: >-
+  The credential the application stores for the account, after whatever the
+  server applies to it.
+
+enter_when:
+  - "A surface that sets a credential has been found, and an account on it is the tester's own."
+
+oracle:
+  positive: "A credential the published policy forbids is accepted and can then be used to sign in."
+  negative: "Every probe the policy forbids is refused by the server, including with the client's own validation removed."
+  inconclusive: "The form accepts the value and the sign-in cannot be attempted, so what was stored is unknown."
+
+sequence:
+  - "Read the published rule, then disable the client's validation and send the single-character probe to the server."
+  - "Walk the probe file until one is accepted: length alone, variety alone, then the account's own name."
+  - "Sign in with each accepted value, because a form that accepts is not a server that stored."
+  - "Record the weakest value that both set and signed in, which is the enforced policy."
+
+first_false_positive: >-
+  The form accepting a value the server later refuses at sign-in. Acceptance at
+  the setting surface proves the field was not validated; it does not prove the
+  credential works, and only the sign-in separates the two.
+
+false_positives:
+  - "A strength meter turning red while the form submits anyway -- that is a score, not a rule."
+  - "An error from a rule that is not the one being probed, such as a reuse check firing on the tester's earlier probe."
+
+preconditions:
+  - "The account is the tester's own, or the client has agreed in writing to a credential change on the one being used."
+
+evidence:
+  - "The weakest value accepted, the surface it was set on, and the sign-in that proves it was stored."
+  - "The published rule it contradicts, quoted from the page that states it."
+
+done_when: >-
+  Every probe in the file has been sent and its outcome recorded as accepted,
+  refused, or accepted-then-refused-at-sign-in -- or the reason the sign-in could
+  not be attempted is written down.
+
+safety: >-
+  Every probe is set on an account the tester owns. Changing the credential on
+  an account belonging to somebody else takes their access away, which is a
+  decision for the client rather than a step in a procedure, and the sign-in
+  that confirms each probe is against that same owned account. Nothing here is
+  sent to a login form as a guess: that is a different test, it spends a real
+  user's lockout budget, and the lockout is a control this catalogue records
+  rather than a cost worth paying to learn a policy.
+
+payloads: payloads/credential/policy-probes.yaml
+tools: [burp-repeater]
