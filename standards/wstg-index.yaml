@@ -115,9 +115,9 @@ cases:
   - PTN-AUT-05-EXPIRY
   - PTN-AUT-05-REVOCATION
   - PTN-AUT-05-IMPACT
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-06
   title: Testing for Browser Cache Weakness

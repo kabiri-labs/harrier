@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 303 |
+| Units — outlined | 299 |
 | Units — sketched | 40 |
-| Units — authored | 50 |
+| Units — authored | 54 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -615,6 +615,23 @@ Two more of them here: `recon.authstates.mapped` at topic tier, and the same
 judgement as before -- the units that use it declare it a motivation rather than
 a prerequisite, because a bypass attempt is worth offering slightly early and
 never worth hiding from a reader who has not drawn the state map yet.
+
+`PTN-AUT-05`, persistent authentication, is the fifth, and nothing in the graph
+moved for it either -- depth only. What its four units share is a single
+discipline that the topic makes unavoidable: every one of them is about a secret
+that authenticates without a credential, so every one of them is written to be
+performed on the tester's own account and on no other. Composing a token for a
+real user, changing a real user's credential to see what survives it, shortening
+a wait by altering somebody else's value: each is the attack the unit above it
+is trying to predict, and each answers a question an owned account answers
+identically.
+
+The recurring false positive across the topic is the browser being measured
+instead of the server. A cookie the browser drops at sign-out, an expiry the
+browser enforces, a value the browser forgets -- all three read as the
+application revoking something. Every offer in these units is made from a client
+that was never told to forget the secret, which is what turns three tests of
+obedience into three tests of a server-side record.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase
