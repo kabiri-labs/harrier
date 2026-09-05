@@ -1,6 +1,6 @@
 id: PTN-AUT-01-VALIDATION
 topic: PTN-AUT-01
-status: outline
+status: authored
 role: stage
 title: "Consistency of enforcement across credential-setting surfaces"
 objective: >-
@@ -12,3 +12,64 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]
 yields: [control.credential.weak]
+
+hypotheses:
+  - "The three surfaces were written at different times, and the rule was copied rather than shared."
+  - "Registration is the one that gets the attention, because it is the one a visitor sees."
+  - "The reset flow was added for support staff and enforces the least, because its job was to unblock somebody."
+
+triage:
+  - "/register, /signup, /account/password and /password/reset answering on the same host."
+  - "An admin or support screen that sets a credential on behalf of a user."
+  - "An API endpoint that sets the same credential as one of the browser forms."
+
+sink: >-
+  The credential the application stores, reached through whichever surface set
+  it.
+
+enter_when:
+  - "More than one surface that sets a credential has been found."
+  - "The weakest value one of them accepts is already known, which is what the others are compared against."
+
+oracle:
+  positive: "One credential-setting surface accepts a value another refuses, for the same account."
+  negative: "Every surface refuses the same set of values, including the ones only the weakest surface was expected to take."
+  inconclusive: "A surface cannot be reached on the tester's own account -- an admin reset, most often -- so its rule is unknown rather than equal."
+
+sequence:
+  - "List every surface that sets this credential, including the API behind each form and any support-side reset."
+  - "Take the weakest value one surface accepted and offer it to each of the others, on the same account."
+  - "Sign in after each acceptance, because the surfaces may differ in what they store as well as in what they take."
+  - "Record per surface which values were accepted, so the answer is a table rather than a verdict."
+
+first_false_positive: >-
+  Two surfaces that disagree because one was sent a value the other had already
+  stored, and a reuse rule refused it. Re-run the disagreement with a value
+  neither has seen before the difference is recorded as a policy difference.
+
+false_positives:
+  - "A surface that refuses because the session is stale rather than because the value is weak."
+  - "A rate limit on one flow reading as a rejection of the value."
+
+preconditions:
+  - "Every surface being compared can be reached on an account the tester owns."
+
+evidence:
+  - "The table: one row per surface, one column per probe, and the outcome in each cell."
+  - "For each disagreement, the two requests that differ and the responses to them."
+
+done_when: >-
+  Every credential-setting surface found has been sent the same probe set and
+  its outcomes recorded -- or the surfaces that could not be reached are named
+  with the reason, so the comparison says how complete it is.
+
+safety: >-
+  All of it on an account the tester owns, on every surface. A reset flow is the
+  one to be most careful with: triggering it against an address the tester does
+  not control sends mail to a real person, and doing it repeatedly to compare
+  rules is a nuisance the client did not agree to. Where a support-side reset
+  can only be exercised by staff, ask rather than approximate it, and record the
+  surface as unmeasured instead of guessing that it matches.
+
+payloads: payloads/credential/policy-probes.yaml
+tools: [burp-repeater]

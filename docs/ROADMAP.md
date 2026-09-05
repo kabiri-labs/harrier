@@ -105,9 +105,9 @@ work read as phase 2's:
 | **WSTG identifiers mapped to a domain** | **109 of 109** |
 | **WSTG identifiers covered by a topic** | **108 of 108** |
 | Topics | 106 |
-| Units — outlined | 317 |
+| Units — outlined | 313 |
 | Units — sketched | 40 |
-| Units — authored | 36 |
+| Units — authored | 40 |
 | Units — charted | 393 |
 
 *Mapped* means the ordered procedure resolved the identifier, which phase 0
@@ -516,6 +516,53 @@ topic that produces it, so one nothing consumes is a technique whose result no
 sibling declares rather than a chain that stopped. That it is not ratcheted is
 stated where it is listed, and the suite asserts the two groups partition the
 published figure exactly.
+
+0.33.0 is content rather than machinery, and it is the first of it since the
+retrieval work started. `PTN-AUT-01`, credential strength policy, goes from four
+outlines to four authored units -- the first executable tests in `AUT`, a domain
+holding 42 units of which none could be performed.
+
+The topic was chosen for what its `safety` fields have to say. Three of its four
+units *set* a credential on a running application and the fourth *guesses* one,
+so the real costs are locking a person out of their account, changing a real
+user's access, and turning a policy question into a credential-spraying sweep.
+`sketched` has no `safety` field, which would have left exactly the part that
+makes this topic dangerous unwritten -- so the tier was never in question.
+
+The mechanism worth having in writing is in `-SIZE`: bcrypt hashes the first 72
+bytes and discards the rest, so a long passphrase is exactly as strong as its
+first 72 bytes and nothing tells the user. The oracle is a sign-in with a strict
+prefix, because a maximum stated on the page is a claim and a truncated secret
+is a measurement.
+
+`-IMPACT` is ordered so the arithmetic comes before the attempt: the attempt
+budget is measured on the tester's own account, the permitted space is stated
+from what the policy units found, and where the space is larger than the budget
+the answer is already negative and no account is touched. A test that spends a
+real person's access to learn something the two numbers already say is not a
+test worth running.
+
+`-IMPACT` declares no motivation, and the first draft did. `control.limit.absent`
+looked like the right one -- knowing a limit is unenforced is what makes guessing
+worth reaching for -- until the edge count moved by twelve and naming the twelve
+showed what they were: a per-object upload size limit and an accumulated storage
+quota among them. The fact is true of every unenforced limit in the catalogue,
+which makes it too coarse to carry this motivation, and the unit measures the
+attempt budget itself in its first step rather than inheriting a claim about
+upload quotas. A fact narrow enough to say *authentication attempts are not
+throttled* would earn the edge; writing one belongs to `PTN-AUT-03`, which would
+have to produce it.
+
+One payload file, `payloads/credential/policy-probes.yaml`, and it is probes
+rather than guesses: values the tester sets on their own account to find the
+boundary. There is deliberately no list of candidate passwords anywhere in this
+repository, and `-IMPACT` -- the only unit that guesses -- is the one with no
+payload file at all.
+
+What this does not do is finish a chain. The topic is authored end to end within
+itself and stops at `access.principal.other`; the unit that consumes that is
+`PTN-AUT-02-IMPACT`, still an outline. Three chains reach a stated outcome, not
+four.
 
 Every topic now carries units, which was phase 3's job. The number to watch from
 here is charted units — those carrying `requires` and `yields` — which is phase

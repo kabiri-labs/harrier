@@ -143,9 +143,9 @@ cases:
   - PTN-AUT-01-VALIDATION
   - PTN-AUT-01-SIZE
   - PTN-AUT-01-IMPACT
-  authored: 0
+  authored: 4
   sketched: 0
-  outline: 4
+  outline: 0
   resolvable: true
 - id: WSTG-ATHN-08
   title: Testing for Weak Security Question Answer

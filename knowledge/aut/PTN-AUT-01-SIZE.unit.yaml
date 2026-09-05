@@ -1,6 +1,6 @@
 id: PTN-AUT-01-SIZE
 topic: PTN-AUT-01
-status: outline
+status: authored
 role: stage
 title: "Handling of an over-long credential"
 objective: >-
@@ -12,3 +12,63 @@ requires:
   all_of: [recon.entrypoints.mapped]
   any_of: [access.anon, access.user]
 yields: [control.credential.weak]
+
+hypotheses:
+  - "bcrypt hashes the first 72 bytes and discards the rest, so a passphrase is exactly as strong as its first 72 bytes."
+  - "A column width was chosen before the hash was, and the value is cut to fit it."
+  - "The maximum the page states and the maximum the storage imposes are two different numbers, and only one of them is enforced honestly."
+
+triage:
+  - "A maxlength attribute on the credential field, which is a claim about the client rather than the server."
+  - "Policy text stating a maximum length at all -- a hashed credential has no reason to have one."
+  - "A passphrase-friendly interface, where a long value is the expected case rather than the odd one."
+
+sink: >-
+  The bytes the hashing function receives, which may be fewer than the bytes the
+  form accepted.
+
+enter_when:
+  - "A surface that sets a credential can be exercised on an account the tester owns."
+
+oracle:
+  positive: "A credential is set at full length and a strict prefix of it signs in."
+  negative: "Every prefix is refused and only the full value signs in, or the over-long value was refused at the setting surface with the limit stated."
+  inconclusive: "The value is accepted and the sign-in cannot be attempted, so whether it was cut is unknown."
+
+sequence:
+  - "Set a value one byte past the stated maximum, or 200 bytes where none is stated."
+  - "Sign in with the full value to confirm it was stored at all."
+  - "Sign in with the first 72 bytes, which is where bcrypt cuts, and then bisect if that fails but a shorter prefix works."
+  - "Record the boundary as the length of the shortest prefix that signs in."
+
+first_false_positive: >-
+  A prefix that signs in because the application trims trailing whitespace, not
+  because it truncated. Compose the probe so its bytes are all significant and
+  no boundary falls on a space, and the two stop looking alike.
+
+false_positives:
+  - "A sign-in that succeeds from a session the earlier attempt left behind rather than from the credential offered."
+  - "A prefix accepted because the value was normalised rather than cut -- the same length, different bytes."
+
+preconditions:
+  - "The account is the tester's own, and its credential can be set and reset freely."
+
+evidence:
+  - "The value set, the shortest prefix that signed in, and its length in bytes."
+  - "Whether the form stated a maximum, and whether that number matches the boundary found."
+
+done_when: >-
+  The shortest signing-in prefix is identified and its byte length recorded, or
+  every prefix tried is recorded as refused with the full value confirmed as the
+  only one that works.
+
+safety: >-
+  On an account the tester owns, and reset afterwards: an account left holding a
+  200-byte probe value is one the client cannot easily use again. The sign-in
+  attempts here are against that same owned account, so the repeated failures
+  while bisecting spend the tester's own lockout budget rather than a real
+  user's -- which is the reason the account has to be the tester's rather than a
+  convenient one.
+
+payloads: payloads/credential/policy-probes.yaml
+tools: [burp-repeater]

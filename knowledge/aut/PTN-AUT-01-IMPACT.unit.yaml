@@ -1,12 +1,79 @@
 id: PTN-AUT-01-IMPACT
 topic: PTN-AUT-01
-status: outline
+status: authored
 role: stage
 title: "Whether a credential the policy permits opens an account"
 objective: >-
   Determine whether a credential the published policy accepts is one an
   attacker reaches within the attempts the application allows, which is the
   difference between a policy that reads badly and one that costs an account.
+
 requires:
   all_of: [control.credential.weak]
 yields: [access.principal.other]
+
+hypotheses:
+  - "The attempt budget and the permitted credential space were decided by different people, and nobody compared the two numbers."
+  - "A counter that resets on a successful sign-in gives an attacker who holds one account an unbounded budget against the others."
+  - "The limit is per address rather than per account, so it is a limit on one attacker rather than on the attack."
+
+triage:
+  - "A response that distinguishes a wrong credential from an unknown account, which halves the work before this test begins."
+  - "A lockout message naming the number of attempts left."
+  - "A second authentication route -- an API, a mobile client, a legacy endpoint -- that may not share the counter."
+
+sink: >-
+  The credential the sign-in compares against the stored one.
+
+enter_when:
+  - "The enforced policy is known, so the space a permitted credential is drawn from can be stated rather than assumed."
+  - "The client has named an account this may be attempted against, in writing."
+
+oracle:
+  positive: "A sign-in succeeds on the designated account with a credential the tester did not hold beforehand and the policy permits."
+  negative: "The permitted space is exhausted within the measured budget with no sign-in, or the budget stops the attempt before the space is covered."
+  inconclusive: "The counter's behaviour changed during the attempt -- a reset, a different limit on a second route -- so what the budget was is unknown."
+
+sequence:
+  - "Measure the budget on the tester's own account: fail repeatedly until something stops it, and record what and after how many."
+  - "State the space the enforced policy permits, from the weakest value the policy units found."
+  - "Compare the two numbers first: where the space is larger than the budget, the answer is negative and no attempt is made."
+  - "Only where the comparison says otherwise, attempt the designated account and stop at the first success."
+
+first_false_positive: >-
+  A sign-in that succeeds because the credential was one the tester had already
+  set on that account during the earlier units. Use an account no probe has
+  touched, or the test proves only that the tester remembers their own value.
+
+false_positives:
+  - "A counter that appears absent because it is per-address and the attempt came from a fresh one."
+  - "An account already locked by an earlier unit, so every attempt fails for a reason that is not the credential."
+
+preconditions:
+  - "The client has designated the account, in writing, and knows attempts will be made against it."
+  - "The budget has been measured on the tester's own account first, so the designated one is not what discovers the lockout."
+
+evidence:
+  - "The measured budget: what stopped the attempts, after how many, and whether it recovered."
+  - "The arithmetic -- the permitted space against that budget -- which is what decided whether an attempt was made at all."
+  - "Where a sign-in succeeded, the account, the credential's shape rather than its value, and the response that proves the session."
+
+done_when: >-
+  The budget is measured and recorded, the permitted space is stated, and either
+  a sign-in succeeded or the number of attempts made against the designated
+  account is recorded with the reason they stopped.
+
+safety: >-
+  This is the one unit in the topic that touches an account the tester does not
+  own, and it does not proceed without the client naming that account in
+  writing. Two costs are real and are the reason for the order above. Repeated
+  failures lock accounts out, which denies a real user their access and is an
+  outcome this catalogue records as an impact in its own right -- so the budget
+  is measured on the tester's own account, never discovered on somebody else's.
+  And the comparison comes before the attempt: where the permitted space is
+  larger than the budget the answer is already negative, and running the
+  attempt anyway spends a real person's access to learn nothing. Never attempt
+  more than one account: a sweep across many is mass exploitation rather than a
+  test, whatever the scope note says.
+
+tools: [burp-repeater]
