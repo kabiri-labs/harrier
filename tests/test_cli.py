@@ -211,6 +211,44 @@ class TheCommandLineDescribesTheSameModelAsThePage(unittest.TestCase):
         out = self.chain("--fact", "primitive.blind.oracle")
         self.assertIn("no test declares a use for this", out)
 
+    def test_a_capability_no_test_reaches_is_not_described_as_one_a_chain_stops_at(self):
+        """The two states have the same three empty lists and mean opposite
+        things. "A chain reaching it stops here" asserts a chain reaches it,
+        which is false of a concept written before any test names it -- and it
+        was what this printed, because the sentence was reached by inferring
+        from the empty lists rather than by reading the register.
+
+        Both directions, so the fix cannot be a wider sentence that happens to
+        cover both: the registered capability must not get the dead-end line,
+        and the real dead end must still get it.
+        """
+        from pentest_navgrid.chain import Chain
+
+        registered = sorted(Chain.load(REPO_ROOT).uncovered)
+        self.assertTrue(registered, "nothing is registered, so this proves nothing")
+        for fid in registered:
+            with self.subTest(fact=fid):
+                out = self.chain("--fact", fid)
+                self.assertIn("no test in this catalogue names this", out)
+                self.assertNotIn("a chain reaching it stops here", out)
+                self.assertIn("no test reaches it yet", out)
+        self.assertIn(
+            "a chain reaching it stops here",
+            self.chain("--fact", "primitive.blind.oracle"),
+        )
+
+    def test_the_reason_a_concept_was_written_early_is_printed_rather_than_summarised(self):
+        """The register carries authored prose saying why the entry exists. A
+        line saying only that the gap is open would leave the reader with the
+        one thing they cannot look up."""
+        from pentest_navgrid.chain import Chain
+
+        chain = Chain.load(REPO_ROOT)
+        fid = sorted(chain.uncovered)[0]
+        printed = " ".join(self.chain("--fact", fid).split())
+        opening = " ".join(chain.uncovered[fid].split()[:10])
+        self.assertIn(opening, printed)
+
     def test_a_test_whose_result_leads_nowhere_says_so(self):
         out = self.chain("PTN-INJ-11-TIME")
         self.assertIn("terminal:", out)
